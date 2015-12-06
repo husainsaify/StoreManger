@@ -106,7 +106,7 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     //Class to fetch json data from the Backend
-    private class productTask extends AsyncTask<String,String,String>{
+    private class productTask extends AsyncTask<String,String,List<ProductPojo>>{
         @Override
         protected void onPreExecute() {
             //show PB
@@ -114,7 +114,7 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected List<ProductPojo> doInBackground(String... params) {
             /*
             * Fetch the Product list from the web
             * */
@@ -128,16 +128,19 @@ public class ProductActivity extends AppCompatActivity {
 
             //request the Backend
             String jsonString = GetJson.request(DataUrl.GET_PRODUCT,dataUrl,"POST");
-            return jsonString;
+
+            //parse Json and store it in "productList"
+            productList = JsonParser.productParser(jsonString);
+
+            return productList;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            //parse Json and store it in "productList"
-            productList = JsonParser.productParser(s);
+        protected void onPostExecute(List<ProductPojo> list) {
+
 
             //set "ProductList" to "ListView"
-            updateListView(productList);
+            updateListView(list);
 
             //Hide PB
             Functions.toggleProgressBar(pb);

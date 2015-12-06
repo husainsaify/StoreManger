@@ -11,5 +11,6 @@ public class DataUrl {
             ADD_CATEGORY = SERVER + "co/storemanger/addCategory.php",
             GET_CATEGORY = SERVER + "co/storemanger/categoryList.php",
             ADD_PRODUCT = SERVER + "co/storemanger/addProduct.php",
-            GET_PRODUCT = SERVER + "co/storemanger/productList.php";
+            GET_PRODUCT = SERVER + "co/storemanger/productList.php",
+            IMAGE_BASE_URL = SERVER + "co/storemanger/";
 }

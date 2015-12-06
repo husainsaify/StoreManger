@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.hackerkernel.storemanager.HomeActivity">
+    <item android:id="@+id/action_logout"
+          android:title="@string/logout"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+      <item android:id="@+id/action_add_category"
+            android:title="@string/add_category"
+            android:orderInCategory="200"
+            android:icon="@drawable/ic_add_white"
+            app:showAsAction="always"/>
+</menu>

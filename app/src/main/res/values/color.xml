@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primaryColor">#2196F3</color>
+    <color name="primaryColorDark">#1E88E5</color>
+    <color name="darkColor">#000000</color>
+    <color name="lightColor">#FFFFFF</color>
+    <color name="opacBackground">#a3ffffff</color>
+    <color name="dangerColor">#F44336</color>
+    <color name="sucessColor">#4CAF50</color>
+</resources>

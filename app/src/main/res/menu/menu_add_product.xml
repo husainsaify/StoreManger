@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.hackerkernel.storemanager.AddProductActivity">
+    <item
+        android:id="@+id/action_cancel"
+        android:icon="@drawable/ic_cancel"
+        android:orderInCategory="100"
+        android:title="@string/cancel"
+        android:visible="true"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_ok"
+        android:icon="@drawable/ic_ok"
+        android:orderInCategory="200"
+        android:title="@string/add"
+        android:visible="true"
+        app:showAsAction="always"/>
+</menu>

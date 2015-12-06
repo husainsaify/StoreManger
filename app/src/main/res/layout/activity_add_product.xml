@@ -1,0 +1,158 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.hackerkernel.storemanager.AddProductActivity">
+
+    <!-- toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/tool_bar"/>
+    <!-- / toolbar -->
+
+    <!-- container for views -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="false">
+
+        <!--  Main container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/Addp_linerlayout_margin"
+            android:layout_marginRight="@dimen/Addp_linerlayout_margin"
+            android:orientation="vertical"
+            android:weightSum="4">
+
+            <!-- Image container -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:id="@+id/productImage"/>
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="@string/select_image"
+                    android:id="@+id/productSelectImage"/>
+
+            </LinearLayout>
+            <!-- / image Container -->
+
+            <!-- Product Info (Container) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_prod_name"
+                    android:id="@+id/productName"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_prod_code"
+                    android:id="@+id/productCode"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/productCostPrice"
+                    android:hint="@string/enter_cp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:id="@+id/productSellingPrice"
+                    android:hint="@string/enter_sp"/>
+
+            </LinearLayout>
+            <!-- / Product Info (Container) -->
+
+            <!-- size and quantity (Container) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <!-- size container -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:id="@+id/productSizeLayout">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/size"
+                        android:id="@+id/productSize"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+                <!-- /size container -->
+
+                <!-- quantity container -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:id="@+id/productQuantityLayout">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/quantity"
+                        android:id="@+id/productQuantity"
+                        android:inputType="number"/>
+
+                </LinearLayout>
+                <!-- / quantity container -->
+
+
+            </LinearLayout>
+            <!-- / size and quantity (Container) -->
+        </LinearLayout>
+        <!-- / main container -->
+
+    </ScrollView>
+    <!-- / container for views -->
+
+    <!-- button to add more -->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/load_more"
+        android:id="@+id/loadMore"/>
+    <!-- /button to add more -->
+</LinearLayout>

@@ -7,4 +7,5 @@
     <color name="opacBackground">#a3ffffff</color>
     <color name="dangerColor">#F44336</color>
     <color name="sucessColor">#4CAF50</color>
+    <color name="greyColor">#cccccc</color>
 </resources>

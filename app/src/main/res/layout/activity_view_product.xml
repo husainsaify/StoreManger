@@ -42,29 +42,26 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/pName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Adda touch one"
                     android:textAppearance="?android:textAppearanceLarge" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/pCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:text="GT 567" />
+                    android:layout_alignParentStart="true"/>
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/pTimeAgo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:text="4 hours ago" />
+                    android:layout_alignParentRight="true"/>
 
             </RelativeLayout>
             <!-- / ProductName, ProductCode, TimeAgo -->
@@ -81,13 +78,13 @@
                 <TableRow>
 
                     <TextView
-                        android:text="Size"
+                        android:text="@string/size"
                         android:textAppearance="?android:textAppearanceLarge"
                         android:textColor="@color/primaryColor" />
 
                     <TextView
                         android:gravity="right"
-                        android:text="Quantity"
+                        android:text="@string/quantity"
                         android:textAppearance="?android:textAppearanceLarge"
                         android:textColor="@color/primaryColor" />
                 </TableRow>
@@ -102,30 +99,12 @@
 
                 <TableRow>
 
-                    <TextView android:text="7" />
+                    <TextView android:id="@+id/pSize" />
 
                     <TextView
-                        android:gravity="right"
-                        android:text="5" />
+                        android:id="@+id/pQuantity"
+                        android:gravity="right" />
                 </TableRow>
-
-                <TableRow>
-
-                    <TextView android:text="7" />
-
-                    <TextView
-                        android:gravity="right"
-                        android:text="5" />
-                </TableRow>
-                <TableRow>
-
-                    <TextView android:text="7" />
-
-                    <TextView
-                        android:gravity="right"
-                        android:text="5" />
-                </TableRow>
-
 
             </TableLayout>
             <!-- Size & category -->
@@ -142,7 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:textAppearanceLarge"
-                    android:text="400 - 300 = 100"
+                    android:id="@+id/pProfit"
                     android:layout_marginBottom="5dp"
                     />
 

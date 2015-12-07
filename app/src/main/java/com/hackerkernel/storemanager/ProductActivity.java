@@ -2,7 +2,6 @@ package com.hackerkernel.storemanager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +21,6 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +82,7 @@ public class ProductActivity extends AppCompatActivity {
                 intent.putExtra("pName",product.getProductName());
                 intent.putExtra("pCode", product.getProductCode());
                 intent.putExtra("pId", product.getProductId());
-
+                intent.putExtra("pImageAddress",product.getProductImage());
                 startActivity(intent);
             }
         });

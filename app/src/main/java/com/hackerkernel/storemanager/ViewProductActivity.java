@@ -1,5 +1,6 @@
 package com.hackerkernel.storemanager;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +43,7 @@ public class ViewProductActivity extends AppCompatActivity {
     @Bind(R.id.pProfit) TextView productProfit;
 
     HashMap<String,String> productMap;
+    ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +76,9 @@ public class ViewProductActivity extends AppCompatActivity {
         //set views
         productName.setText(pName);
         productCode.setText(pCode);
+
+        pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.pleasewait));
 
         //fetch extra product data
         new getProductTask().execute();
@@ -113,6 +118,10 @@ public class ViewProductActivity extends AppCompatActivity {
 
     //fetch poroduct details
     class getProductTask extends AsyncTask<String,String,HashMap<String,String>>{
+        @Override
+        protected void onPreExecute() {
+            pd.show();
+        }
 
         @Override
         protected HashMap<String,String> doInBackground(String... params) {
@@ -152,6 +161,8 @@ public class ViewProductActivity extends AppCompatActivity {
                 //Display the Error to user
                 Functions.errorAlert(context,getString(R.string.oops),hashMap.get("message"));
             }
+
+            pd.dismiss();
         }
     }
 }

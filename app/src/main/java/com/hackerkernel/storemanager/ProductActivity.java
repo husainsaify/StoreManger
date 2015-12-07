@@ -1,10 +1,14 @@
 package com.hackerkernel.storemanager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +22,8 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +35,7 @@ import butterknife.ButterKnife;
 public class ProductActivity extends AppCompatActivity {
     //Global variable
     private static final String TAG = ProductActivity.class.getSimpleName();
+    private final Context context = this;
 
     private String  categoryId,
             categoryName,
@@ -62,7 +69,11 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         //fetch Json data from the Backend and Parse it into a ListView
         new productTask().execute();
     }
@@ -97,7 +108,7 @@ public class ProductActivity extends AppCompatActivity {
 
     //This method will Adapte a List into a ListView
     private void updateListView(List<ProductPojo> list){
-        if(list.size() > 0){
+        if(list != null){
             ProductAdapter productAdapter = new ProductAdapter(ProductActivity.this,R.layout.product_list_layout,list);
             listView.setAdapter(productAdapter);
         }else{
@@ -132,16 +143,50 @@ public class ProductActivity extends AppCompatActivity {
             //parse Json and store it in "productList"
             productList = JsonParser.productParser(jsonString);
 
+            /*
+            * CHECK WEATHER SOME DATA HAS RETURN
+            * (Means user has added some files or not)
+            * */
+
+            //if their is some Data to fetch Images
+            if(productList != null){
+                //code to fetch Images
+                for (ProductPojo productPojo : productList){
+
+                    //check image is empty or not
+                    if(!productPojo.getProductImage().isEmpty()){
+                        //generate a Full Url for image
+                        String imageUrl = DataUrl.IMAGE_BASE_URL + productPojo.getProductImage();
+                        Log.d(TAG,"HUS: "+imageUrl);
+                        //fetch image from the web
+                        try{
+                            InputStream in = (InputStream) new URL(imageUrl).getContent();
+
+                            //Make the content into a bitmap
+                            Bitmap bitmap = BitmapFactory.decodeStream(in);
+
+                            //set bitmap to ProductPojo
+                            productPojo.setBitmap(bitmap);
+
+                            in.close();
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }else{
+                        //convert a Drawable into a Bitmap
+                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder_product);
+                        productPojo.setBitmap(bitmap);
+                    }
+                }
+            }
+
             return productList;
         }
 
         @Override
         protected void onPostExecute(List<ProductPojo> list) {
-
-
             //set "ProductList" to "ListView"
             updateListView(list);
-
             //Hide PB
             Functions.toggleProgressBar(pb);
         }

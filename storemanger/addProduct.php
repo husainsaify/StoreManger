@@ -74,6 +74,9 @@ $result = array();
 			$decodemage = base64_decode($image);
 			$filename = "IMG_".time().".jpg";
 
+			//replace all the space with a underscore in $cName
+			$cName = str_replace(" ", "_", $cName);
+
 			//make a dir if not exits
 			if(!is_dir("pic/{$userId}/{$cName}")){
 				mkdir("pic/{$userId}/");

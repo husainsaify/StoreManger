@@ -38,7 +38,7 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
 
         productName.setText(productPojo.getProductName());
         productCode.setText(productPojo.getProductCode());
-
+        productImage.setImageBitmap(productPojo.getBitmap());
         return view;
     }
 }

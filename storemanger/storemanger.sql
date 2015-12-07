@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2015 at 12:29 AM
+-- Generation Time: Dec 07, 2015 at 01:50 AM
 -- Server version: 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -65,15 +65,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`id`, `name`, `image`, `code`, `size`, `quantity`, `user_id`, `category_id`, `category_name`, `time`) VALUES
-(3, 'relaxo', 'pic/1/kids shoes/IMG_1449389106.jpg', 'gt 45', '1,', '1,', 1, 1, 'kids shoes', '1449389106'),
-(4, 'Adda pink', '', 'get yr', '28,45,10,', '28,45,10,', 1, 1, 'kids shoes', '1449393730'),
-(5, 'action', '', 'gt 46', '7,', '7,', 1, 1, 'kids shoes', '1449393965'),
-(6, 'action', '', 'gt 47', '7,', '7,', 1, 1, 'kids shoes', '1449393976'),
-(7, 'action zero touch', 'pic/1/kids shoes/IMG_1449394180.jpg', 'gt gg', '4,5,6,', '4,5,6,', 1, 1, 'kids shoes', '1449394180'),
-(8, 'relaxo', 'pic/1/ladies shoes/IMG_1449394366.jpg', 'gt 40', '5,', '5,', 1, 2, 'ladies shoes', '1449394366'),
-(9, 'test', '', 'test', '1,', '1,', 1, 2, 'ladies shoes', '1449394589'),
-(10, 'hellow rowl', '', 'gt 444', '1,', '1,', 1, 2, 'ladies shoes', '1449394790'),
-(11, 'test2', 'pic/1/ladies shoes/IMG_1449394820.jpg', 'test3', '1,', '1,', 1, 2, 'ladies shoes', '1449394820');
+(1, 'Relaxo', 'pic/1/ladies_shoes/IMG_1449448740.jpg', '5656', '3,4,5,', '3,4,5,', 1, 2, 'ladies_shoes', '1449448740'),
+(2, 'Action', '', '453', '1,', '1,', 1, 2, 'ladies shoes', '1449448903'),
+(3, 'adda', 'pic/1/ladies_shoes/IMG_1449449378.jpg', '56eee', '3,', '3,', 1, 2, 'ladies_shoes', '1449449378');
 
 -- --------------------------------------------------------
 
@@ -165,7 +159,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `register`
 --

@@ -1,6 +1,8 @@
 package com.hackerkernel.storemanager.pojo;
 
 
+import android.graphics.Bitmap;
+
 public class ProductPojo {
     private boolean returned;
     private String  message,
@@ -8,6 +10,8 @@ public class ProductPojo {
                     productName,
                     productImage,
                     productCode;
+    //a bitmap to store Images
+    private Bitmap bitmap;
 
     public boolean isReturned() {
         return returned;
@@ -55,5 +59,13 @@ public class ProductPojo {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

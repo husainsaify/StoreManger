@@ -50,4 +50,6 @@
     <string name="enter_sp">Enter selling price</string>
     <string name="pcode_more_then_2">Product code must be more then 2 characters</string>
     <string name="size_quantity_canot_empty">Size &amp; Quantity cannot be empty</string>
+    <!-- Product Activity -->
+    <string name="refresh">Refresh</string>
 </resources>

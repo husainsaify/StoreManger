@@ -2,13 +2,10 @@ package com.hackerkernel.storemanager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +19,6 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,11 +64,11 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Do all the stuff and Set Result to ListView
+        refreshList();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    public void refreshList(){
         //fetch Json data from the Backend and Parse it into a ListView
         new productTask().execute();
     }
@@ -91,6 +86,7 @@ public class ProductActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            refreshList(); //refresh view
             return true;
         }
 

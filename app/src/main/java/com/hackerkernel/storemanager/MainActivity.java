@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -116,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
             //make a request to the web
             String response = GetJson.request(DataUrl.LOGIN_URL, data, "POST");
+            Log.d(TAG,"HUS: "+response);
             return response;
         }
 

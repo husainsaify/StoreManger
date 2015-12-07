@@ -33,7 +33,8 @@
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".AddCategoryActivity"
             android:label="@string/title_activity_add_category"
@@ -43,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.HomeActivity" />
         </activity>
+
         <activity
             android:name=".ProductActivity"
             android:label="@string/title_activity_product"
@@ -52,6 +54,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.HomeActivity" />
         </activity>
+
         <activity
             android:name=".AddProductActivity"
             android:label="@string/title_activity_add_product"
@@ -61,7 +64,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.ProductActivity" />
         </activity>
-        <activity android:name=".ViewProductActivity"></activity>
+
+        <activity
+            android:name=".ViewProductActivity"
+            android:parentActivityName=".ProductActivity"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.ProductActivity"
+                />
+        </activity>
     </application>
 
 </manifest>

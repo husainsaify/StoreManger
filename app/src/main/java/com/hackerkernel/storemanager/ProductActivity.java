@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -66,6 +67,24 @@ public class ProductActivity extends AppCompatActivity {
 
         //Do all the stuff and Set Result to ListView
         refreshList();
+
+        //When user click on of the item from the list
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Get item where user has clicked
+                ProductPojo product = (ProductPojo) listView.getItemAtPosition(position);
+
+                //Send to ViewProductActivity
+                Intent intent = new Intent(ProductActivity.this,ViewProductActivity.class);
+                intent.putExtra("pName",product.getProductName());
+                intent.putExtra("pCode",product.getProductCode());
+                intent.putExtra("pId",product.getProductId());
+                intent.putExtra("pImage",product.getBitmap());
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void refreshList(){

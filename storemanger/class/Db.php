@@ -8,6 +8,13 @@ class Db{
             $_db = "storemanager",
             $_error = false;
 
+    /*private static $_con = null,
+            $_host = "mysql1.000webhost.com",
+            $_user = "a5121264_husai",
+            $_pass = "fttrisha",
+            $_db = "a5121264_store",
+            $_error = false;*/
+
     //established connection to the database
     private function setConnection(){
         try{

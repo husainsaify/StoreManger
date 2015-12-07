@@ -196,3 +196,22 @@ function check_product_code_is_unique($code,$userId){
     ),array("=","="));
     return $c <= 0 ? true : false;
 }
+
+function check_productId_is_valid($productId,$userId){
+    $c = Db::rowCount("product",array(
+        "id" => $productId,
+        "user_id" => $userId
+    ),array("=","="));
+
+    return $c == 1 ? true : false;
+}
+
+//remove last Empty item from array
+function remove_last_empty_item($item = array()){
+    $count = count($item);
+    //unset index
+    $index = $count - 1;
+    unset($item[$index]);
+
+    return $item;
+}

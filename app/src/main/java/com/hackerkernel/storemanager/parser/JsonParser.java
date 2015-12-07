@@ -12,7 +12,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * json parser to parse json
@@ -148,6 +150,50 @@ public class JsonParser {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "Exception " + e);
+            return null;
+        }
+    }
+
+    //fetch product data
+    public static HashMap<String,String> SingleProductParser(String jsonString){
+        HashMap<String,String> hashMap = new HashMap<>();
+        try {
+            JSONObject jo = new JSONObject(jsonString);
+            //put return & message in hashMap
+            hashMap.put("return", String.valueOf(jo.getBoolean("return")));
+            hashMap.put("message",jo.getString("message"));
+
+            //return is success add more item to hashMap
+            if(hashMap.get("return").equals("true")){
+                //add more item
+                hashMap.put("cp",jo.getString("cp"));
+                hashMap.put("sp",jo.getString("sp"));
+                hashMap.put("time",jo.getString("time"));
+                //fetch Size & quantity
+                JSONArray sizeJsonArray = jo.getJSONArray("size");
+                JSONArray quantityJsonArray = jo.getJSONArray("quantity");
+                String size = "",quantity = "";
+
+                //generate a size & quanity string Ex "7\n8\n9\n"
+                for (int i = 0; i < sizeJsonArray.length(); i++) {
+                    size += sizeJsonArray.get(i);
+                    quantity += quantityJsonArray.get(i);
+
+                    if (i < sizeJsonArray.length()){
+                        size += "\n";
+                        quantity += "\n";
+                    }
+                }
+
+                //add size & quantity to hashmap
+                hashMap.put("size",size);
+                hashMap.put("quantity",quantity);
+            }
+
+            //return the hashMap
+            return hashMap;
+        } catch (JSONException e) {
+            e.printStackTrace();
             return null;
         }
     }

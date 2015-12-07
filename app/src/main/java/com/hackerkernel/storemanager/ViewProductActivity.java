@@ -11,10 +11,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.model.GetJson;
+import com.hackerkernel.storemanager.parser.JsonParser;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -26,7 +29,8 @@ public class ViewProductActivity extends AppCompatActivity {
     private String  pName,
                     pCode,
                     pId,
-                    pImageAddress;
+                    pImageAddress,
+                    userId;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.imageView) ImageView imageView;
@@ -37,6 +41,7 @@ public class ViewProductActivity extends AppCompatActivity {
     @Bind(R.id.pQuantity) TextView productQuantity;
     @Bind(R.id.pProfit) TextView productProfit;
 
+    HashMap<String,String> productMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,11 @@ public class ViewProductActivity extends AppCompatActivity {
         pCode = getIntent().getExtras().getString("pCode");
         pId = getIntent().getExtras().getString("pId");
         pImageAddress = getIntent().getExtras().getString("pImageAddress");
+
+        //get userId
+        DataBase db = new DataBase(this);
+        userId = db.getUserID();
+
         //Toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(pName);
@@ -64,10 +74,9 @@ public class ViewProductActivity extends AppCompatActivity {
         //set views
         productName.setText(pName);
         productCode.setText(pCode);
-        productTimeAgo.setText("4 horse ago");
-        productSize.setText("7\n8\n9\n");
-        productQuantity.setText("9\n8\n7\n");
-        productProfit.setText("400 - 300 = 100");
+
+        //fetch extra product data
+        new getProductTask().execute();
     }
 
     //Fetch Image
@@ -98,6 +107,50 @@ public class ViewProductActivity extends AppCompatActivity {
                 //Scale bitmap
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    //fetch poroduct details
+    class getProductTask extends AsyncTask<String,String,HashMap<String,String>>{
+
+        @Override
+        protected HashMap<String,String> doInBackground(String... params) {
+            //make request to the web to fetch data
+            HashMap<String,String> hashMap = new HashMap<>();
+            hashMap.put("userId",userId);
+            hashMap.put("productId",pId);
+
+            //convert hashmap into url encoded String
+            String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
+
+            //fetch data from the Backend
+            String jsonString = GetJson.request(DataUrl.GET_SINGLE_PRODUCT,dataUrl,"POST");
+
+            //parse JSON
+            productMap = JsonParser.SingleProductParser(jsonString);
+
+            return productMap;
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<String,String> hashMap) {
+            if (hashMap.get("return").equals("true")){
+                //set Views
+                productTimeAgo.setText(hashMap.get("time"));
+                //find out profit
+                int cp = Integer.parseInt(hashMap.get("cp"));
+                int sp = Integer.parseInt(hashMap.get("sp"));
+                int profit = sp - cp;
+
+                String profitStack = sp + " - "+ cp + " = "+profit;
+
+                productProfit.setText(profitStack);
+                productSize.setText(hashMap.get("size"));
+                productQuantity.setText(hashMap.get("quantity"));
+            }else{
+                //Display the Error to user
+                Functions.errorAlert(context,getString(R.string.oops),hashMap.get("message"));
             }
         }
     }

@@ -7,9 +7,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hackerkernel.storemanager.URL.DataUrl;
 
@@ -28,10 +27,16 @@ public class ViewProductActivity extends AppCompatActivity {
                     pCode,
                     pId,
                     pImageAddress;
-    private Bitmap pImage;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.imageView) ImageView imageView;
+    @Bind(R.id.pName) TextView productName;
+    @Bind(R.id.pCode) TextView productCode;
+    @Bind(R.id.pTimeAgo) TextView productTimeAgo;
+    @Bind(R.id.pSize) TextView productSize;
+    @Bind(R.id.pQuantity) TextView productQuantity;
+    @Bind(R.id.pProfit) TextView productProfit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +61,13 @@ public class ViewProductActivity extends AppCompatActivity {
             imageView.setImageResource(R.drawable.placeholder_product);
         }
 
-
+        //set views
+        productName.setText(pName);
+        productCode.setText(pCode);
+        productTimeAgo.setText("4 horse ago");
+        productSize.setText("7\n8\n9\n");
+        productQuantity.setText("9\n8\n7\n");
+        productProfit.setText("400 - 300 = 100");
     }
 
     //Fetch Image

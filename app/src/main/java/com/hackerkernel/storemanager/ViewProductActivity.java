@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +30,6 @@ public class ViewProductActivity extends AppCompatActivity {
         pName = getIntent().getExtras().getString("pName");
         pCode = getIntent().getExtras().getString("pCode");
         pId = getIntent().getExtras().getString("pId");
-        pImage = (Bitmap) getIntent().getExtras().get("pImage");
 
         //Toolbar
         setSupportActionBar(toolbar);
@@ -38,11 +38,7 @@ public class ViewProductActivity extends AppCompatActivity {
 
 
         //set text
-        text.setText(pCode+"\n"+pId);
-
-        //image
-        imageView.setImageBitmap(pImage);
-
+        text.setText(pCode + "\n" + pId);
 
     }
 }

@@ -143,42 +143,6 @@ public class ProductActivity extends AppCompatActivity {
             //parse Json and store it in "productList"
             productList = JsonParser.productParser(jsonString);
 
-            /*
-            * CHECK WEATHER SOME DATA HAS RETURN
-            * (Means user has added some files or not)
-            * */
-
-            //if their is some Data to fetch Images
-            if(productList != null){
-                //code to fetch Images
-                for (ProductPojo productPojo : productList){
-
-                    //check image is empty or not
-                    if(!productPojo.getProductImage().isEmpty()){
-                        //generate a Full Url for image
-                        String imageUrl = DataUrl.IMAGE_BASE_URL + productPojo.getProductImage();
-                        Log.d(TAG,"HUS: "+imageUrl);
-                        //fetch image from the web
-                        try{
-                            InputStream in = (InputStream) new URL(imageUrl).getContent();
-
-                            //Make the content into a bitmap
-                            Bitmap bitmap = BitmapFactory.decodeStream(in);
-
-                            //set bitmap to ProductPojo
-                            productPojo.setBitmap(bitmap);
-
-                            in.close();
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }else{
-                        //convert a Drawable into a Bitmap
-                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder_product);
-                        productPojo.setBitmap(bitmap);
-                    }
-                }
-            }
 
             return productList;
         }

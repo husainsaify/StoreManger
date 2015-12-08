@@ -80,7 +80,6 @@ public class ProductActivity extends AppCompatActivity {
                 //Send to ViewProductActivity
                 Intent intent = new Intent(ProductActivity.this,ViewProductActivity.class);
                 intent.putExtra("pName",product.getProductName());
-                intent.putExtra("pCode", product.getProductCode());
                 intent.putExtra("pId", product.getProductId());
                 intent.putExtra("pImageAddress",product.getProductImage());
                 startActivity(intent);

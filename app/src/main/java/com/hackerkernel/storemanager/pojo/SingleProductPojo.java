@@ -15,8 +15,6 @@ public class SingleProductPojo {
                     time,
                     message;
 
-    private Bitmap imageBitmap;
-
     public boolean getReturned() {
         return returned;
     }
@@ -89,14 +87,6 @@ public class SingleProductPojo {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public Bitmap getImageBitmap() {
-        return imageBitmap;
-    }
-
-    public void setImageBitmap(Bitmap imageBitmap) {
-        this.imageBitmap = imageBitmap;
     }
 
     public String getImageAddress() {

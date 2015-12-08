@@ -46,6 +46,7 @@ public class ViewProductActivity extends AppCompatActivity {
     //Pojo for product
     SingleProductPojo productPojo;
     ProgressDialog pd;
+    DataBase db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +54,11 @@ public class ViewProductActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         String pName = getIntent().getExtras().getString("pName");
-        String pCode = getIntent().getExtras().getString("pCode");
         pId = getIntent().getExtras().getString("pId");
         String pImageAddress = getIntent().getExtras().getString("pImageAddress");
 
         //get userId
-        DataBase db = new DataBase(this);
+        db = new DataBase(this);
         userId = db.getUserID();
 
         //Toolbar
@@ -66,39 +66,22 @@ public class ViewProductActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(pName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //instantiates the SingleProductPojo
-        productPojo = new SingleProductPojo();
-        //add item to productPojo
-        productPojo.setName(pName);
-        productPojo.setCode(pCode);
-        productPojo.setId(pId);
-        productPojo.setImageAddress(pImageAddress);
 
         //check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
             //fetch the Image and display it
             new getImageTask().execute(pImageAddress);
-
-            //store the image in "productPojo"
-            productPojo.setImageBitmap(imageBitmap);
         }else{
             //Show the placeHolder image
             imageView.setImageResource(R.drawable.placeholder_product);
         }
 
-        //set views
-        productName.setText(pName);
-        productCode.setText(pCode);
-
+        //create ProgressDialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
 
-        Log.d(TAG, "HUS: 1");
         //fetch extra product data
         new getProductTask().execute();
-        Log.d(TAG, "HUS: 4");
-        //add this product to the database
-        db.addProduct(productPojo);
     }
 
     //Fetch Image
@@ -108,7 +91,6 @@ public class ViewProductActivity extends AppCompatActivity {
         protected Bitmap doInBackground(String... params) {
             //generate Image Full url
             String imageUrl = DataUrl.IMAGE_BASE_URL + params[0];
-            Log.d(TAG,"HUS: 2");
             //fetch Image from the server
             try {
                 InputStream in = (InputStream) new URL(imageUrl).getContent();
@@ -126,7 +108,6 @@ public class ViewProductActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            Log.d(TAG,"HUS: 3");
             if (bitmap != null){
                 //store bitmap in "imageBitmap" global variable for later reference
                 imageBitmap = bitmap;
@@ -180,6 +161,8 @@ public class ViewProductActivity extends AppCompatActivity {
             //success
             if (product.getReturned()){
                 //set Views
+                productName.setText(product.getName());
+                productCode.setText(product.getCode());
                 productTimeAgo.setText(product.getTime());
                 //find out profit
                 int cp = Integer.parseInt(product.getCp());
@@ -196,6 +179,9 @@ public class ViewProductActivity extends AppCompatActivity {
                 Functions.errorAlert(context,getString(R.string.oops),product.getMessage());
             }
             pd.dismiss();
+
+            //add this product to the database
+            db.addProduct(productPojo);
         }
     }
 }

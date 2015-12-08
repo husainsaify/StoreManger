@@ -168,6 +168,10 @@ public class JsonParser {
             //return is success add more item to productPojo
             if(product.getReturned()){
                 //add more item
+                product.setId(jo.getString("id"));
+                product.setName(jo.getString("name"));
+                product.setImageAddress(jo.getString("image"));
+                product.setCode(jo.getString("code"));
                 product.setCp(jo.getString("cp"));
                 product.setSp(jo.getString("sp"));
                 product.setTime(jo.getString("time"));

@@ -5,9 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
@@ -19,7 +17,7 @@ public class DataBase extends SQLiteOpenHelper {
     //create a tag vide
     private static final String TAG = DataBase.class.getSimpleName();
     //database version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
     //database name
     private static final String DATABASE_NAME = "storemanager.db";
     //table structure
@@ -68,7 +66,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         //table for product
         String CREATE_PRODUCT_TABLE = "CREATE TABLE "+ TABLE_PRODUCT + "("+
-                COL_P_ID + " integer primary key not null,"+
+                COL_P_ID +" integer not null,"+
                 COL_P_NAME + " text not null,"+
                 COL_P_IMAGE_ADDRESS + " text not null,"+
                 COL_P_CODE + " text not null,"+
@@ -108,7 +106,7 @@ public class DataBase extends SQLiteOpenHelper {
         db = this.getWritableDatabase();
         //store values
         ContentValues cv = new ContentValues();
-        /*cv.put(COL_P_ID,product.getId());
+        cv.put(COL_P_ID,product.getId());
         cv.put(COL_P_NAME,product.getName());
         cv.put(COL_P_IMAGE_ADDRESS,product.getImageAddress());
         cv.put(COL_P_CODE,product.getCode());
@@ -116,20 +114,11 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_QUANTITY,product.getQuantity());
         cv.put(COL_P_SP, product.getSp());
         cv.put(COL_P_CP, product.getCp());
-        cv.put(COL_P_TIME, product.getTime());*/
-
-        cv.put(COL_P_ID,product.getId());
-        cv.put(COL_P_NAME,"test");
-        cv.put(COL_P_IMAGE_ADDRESS,"test");
-        cv.put(COL_P_CODE,"test");
-        cv.put(COL_P_SIZE,"test");
-        cv.put(COL_P_QUANTITY,"test");
-        cv.put(COL_P_SP,"test");
-        cv.put(COL_P_CP,"test");
-        cv.put(COL_P_TIME,"test");
-        //insert into table
+        cv.put(COL_P_TIME, product.getTime());
+        //insert into productTable
         db.insert(TABLE_PRODUCT,null,cv);
         db.close();
+
     }
 
     //check user
@@ -198,6 +187,7 @@ public class DataBase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //drop table if factory version upgrads
         db.execSQL("DROP TABLE IF EXISTS "+ TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS "+ TABLE_PRODUCT);
         //execute onCreate method
         onCreate(db);
     }

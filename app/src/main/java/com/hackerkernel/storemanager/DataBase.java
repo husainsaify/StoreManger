@@ -116,7 +116,7 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_CP, product.getCp());
         cv.put(COL_P_TIME, product.getTime());
         //insert into productTable
-        db.insert(TABLE_PRODUCT,null,cv);
+        db.insert(TABLE_PRODUCT, null, cv);
         db.close();
 
     }
@@ -131,6 +131,23 @@ public class DataBase extends SQLiteOpenHelper {
             db.close();
             return false;
         }
+        cursor.close();
+        db.close();
+        return true;
+    }
+
+    //check  product exits in the database
+    public boolean productExits(String productId){
+        db = this.getReadableDatabase();
+        String q = "select * from "+ TABLE_PRODUCT +" where "+ COL_P_ID +" = ?";
+        Cursor cursor = db.rawQuery(q,new String[] {productId});
+        //if product not found
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            db.close();
+            return false;
+        }
+        //if product found
         cursor.close();
         db.close();
         return true;

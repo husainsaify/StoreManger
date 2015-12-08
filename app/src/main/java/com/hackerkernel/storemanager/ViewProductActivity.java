@@ -80,6 +80,13 @@ public class ViewProductActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
 
+        //check product exits in database or not
+        if(db.productExits(pId)){
+            Log.d(TAG,"HUS: product exits");
+        }else{
+            Log.d(TAG,"HUS: product does not exits");
+        }
+
         //fetch extra product data
         new getProductTask().execute();
     }

@@ -48,6 +48,9 @@ if(isset($_POST["userId"]) && isset($_POST["productId"])){
 
 
     if(!Db::getError()){
+        //create dateTime from time stamp
+        $dateTime = date("h:i d/m/y", $product[0]["time"]);
+
         //generate size array
         //more the
         $sizeArray = explode(",",$product[0]["size"]);
@@ -62,7 +65,7 @@ if(isset($_POST["userId"]) && isset($_POST["productId"])){
         $result["code"] = $product[0]["code"];
         $result["size"] = remove_last_empty_item($sizeArray);
         $result["quantity"] = remove_last_empty_item($quanityArray);
-        $result["time"] = time_ago($product[0]["time"]);
+        $result["time"] = $dateTime;
         $result["cp"] = $product[0]["CP"];
         $result["sp"] = $product[0]["SP"];
     }else{

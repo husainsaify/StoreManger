@@ -7,9 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.LoginPojo;
+import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 /**
  * Database class to insert user in the database
@@ -28,10 +28,22 @@ public class DataBase extends SQLiteOpenHelper {
                                 COL_EMAIL = "email",
                                 COL_PHONE = "phone",
                                 COL_PASSWORD = "password",
-                                COL_REGISTERE_AT = "register_at",
+                                COL_REGISTER_AT = "register_at",
                                 COL_LAST_BILL_PAID = "last_bill_paid",
                                 COL_NEXT_DUE_DATE = "next_due_date",
                                 COL_ACTIVE = "active";
+    //product Table structure
+    private static final String TABLE_PRODUCT = "product",
+                                COL_P_ID = "p_id",
+                                COL_P_NAME = "p_name",
+                                COL_P_IMAGE_ADDRESS = "p_image_address",
+                                COL_P_CODE = "p_code",
+                                COL_P_SIZE = "p_size",
+                                COL_P_QUANTITY = "p_quantity",
+                                COL_P_CP = "p_cp",
+                                COL_P_SP = "p_sp",
+                                COL_P_TIME = "p_time";
+
     //create a database variable
     SQLiteDatabase db;
 
@@ -41,21 +53,32 @@ public class DataBase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_USER_TABLE = "CREATE TABLE "+ TABLE_USER +" (" +
+        String CREATE_USER_TABLE = "CREATE TABLE "+ TABLE_USER +"(" +
                 COL_ID +" integer primary key not null," +
                 COL_NAME +" text not null," +
                 COL_EMAIL +" text not null," +
                 COL_PHONE +" text not null," +
                 COL_PASSWORD +" text not null," +
-                COL_REGISTERE_AT+" text not null," +
+                COL_REGISTER_AT +" text not null," +
                 COL_LAST_BILL_PAID +" text not null," +
                 COL_NEXT_DUE_DATE +" text not null," +
                 COL_ACTIVE +" text not null" +
                 ")";
 
-        db.execSQL(CREATE_USER_TABLE);
+        //table for product
+        String CREATE_PRODUCT_TABLE = "CREATE TABLE "+ TABLE_PRODUCT + "("+
+                COL_P_ID + " integer primary key not null,"+
+                COL_P_NAME + " text,"+
+                COL_P_IMAGE_ADDRESS + " text,"+
+                COL_P_CODE + " text,"+
+                COL_P_SIZE + " text,"+
+                COL_P_QUANTITY + " text,"+
+                COL_P_CP + " text,"+
+                COL_P_SP + " text,"+
+                COL_P_TIME + " text)";
 
-        Log.d(TAG, "Table Created");
+        db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_PRODUCT_TABLE);
     }
 
     //insert user information in the database
@@ -68,15 +91,34 @@ public class DataBase extends SQLiteOpenHelper {
         values.put(COL_EMAIL, user.getEmail());
         values.put(COL_PHONE, user.getPhone());
         values.put(COL_PASSWORD, user.getPassword());
-        values.put(COL_REGISTERE_AT, user.getRegisterAt());
+        values.put(COL_REGISTER_AT, user.getRegisterAt());
         values.put(COL_LAST_BILL_PAID, user.getLastBillPaid());
         values.put(COL_NEXT_DUE_DATE, user.getNextDueDate());
         values.put(COL_ACTIVE, user.getActive());
 
         //insert into the database
-        db.insert(TABLE_USER,null,values);
+        db.insert(TABLE_USER, null, values);
         db.close();
-        Log.d(TAG,"Record inserted in the database");
+    }
+
+    //Method to insert new Product in product table
+    public void addProduct(SingleProductPojo product){
+        db = this.getWritableDatabase();
+        //store values
+        ContentValues cv = new ContentValues();
+        cv.put(COL_P_ID,product.getId());
+        cv.put(COL_P_NAME,product.getName());
+        cv.put(COL_P_IMAGE_ADDRESS,product.getImageAddress());
+        cv.put(COL_P_CODE,product.getCode());
+        cv.put(COL_P_SIZE,product.getSize());
+        cv.put(COL_P_QUANTITY,product.getQuantity());
+        cv.put(COL_P_SP,product.getSp());
+        cv.put(COL_P_CP, product.getCp());
+        cv.put(COL_P_TIME,product.getTime());
+
+        //insert into database
+        db.insert(TABLE_PRODUCT,null,cv);
+        db.close();
     }
 
     //check user

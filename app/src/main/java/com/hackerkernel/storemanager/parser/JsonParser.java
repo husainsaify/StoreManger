@@ -6,6 +6,7 @@ import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
+import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -155,20 +156,22 @@ public class JsonParser {
     }
 
     //fetch product data
-    public static HashMap<String,String> SingleProductParser(String jsonString){
-        HashMap<String,String> hashMap = new HashMap<>();
+    public static SingleProductPojo SingleProductParser(String jsonString){
+        SingleProductPojo product = new SingleProductPojo();
         try {
             JSONObject jo = new JSONObject(jsonString);
-            //put return & message in hashMap
-            hashMap.put("return", String.valueOf(jo.getBoolean("return")));
-            hashMap.put("message",jo.getString("message"));
+            //put return & message into productPojo
 
-            //return is success add more item to hashMap
-            if(hashMap.get("return").equals("true")){
+            product.setReturned(jo.getBoolean("return"));
+            product.setMessage(jo.getString("message"));
+
+            //return is success add more item to productPojo
+            if(product.getReturned()){
                 //add more item
-                hashMap.put("cp",jo.getString("cp"));
-                hashMap.put("sp",jo.getString("sp"));
-                hashMap.put("time",jo.getString("time"));
+                product.setCp(jo.getString("cp"));
+                product.setSp(jo.getString("sp"));
+                product.setTime(jo.getString("time"));
+
                 //fetch Size & quantity
                 JSONArray sizeJsonArray = jo.getJSONArray("size");
                 JSONArray quantityJsonArray = jo.getJSONArray("quantity");
@@ -185,13 +188,13 @@ public class JsonParser {
                     }
                 }
 
-                //add size & quantity to hashmap
-                hashMap.put("size",size);
-                hashMap.put("quantity",quantity);
+                //add size & quantity to productPojo
+                product.setSize(size);
+                product.setQuantity(quantity);
             }
 
-            //return the hashMap
-            return hashMap;
+            //return the productPojo
+            return product;
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

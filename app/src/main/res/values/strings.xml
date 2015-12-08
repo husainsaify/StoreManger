@@ -52,4 +52,6 @@
     <string name="size_quantity_canot_empty">Size &amp; Quantity cannot be empty</string>
     <!-- Product Activity -->
     <string name="refresh">Refresh</string>
+    <!-- View product activity -->
+    <string name="unable_fetch_image">Failed in retrieving image</string>
 </resources>

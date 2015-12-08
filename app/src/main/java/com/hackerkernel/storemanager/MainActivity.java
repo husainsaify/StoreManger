@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
             //make a request to the web
             String response = GetJson.request(DataUrl.LOGIN_URL, data, "POST");
-            Log.d(TAG,"HUS: "+response);
             return response;
         }
 

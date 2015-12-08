@@ -93,8 +93,12 @@ public class ViewProductActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
 
+        Log.d(TAG, "HUS: 1");
         //fetch extra product data
         new getProductTask().execute();
+        Log.d(TAG, "HUS: 4");
+        //add this product to the database
+        db.addProduct(productPojo);
     }
 
     //Fetch Image
@@ -104,7 +108,7 @@ public class ViewProductActivity extends AppCompatActivity {
         protected Bitmap doInBackground(String... params) {
             //generate Image Full url
             String imageUrl = DataUrl.IMAGE_BASE_URL + params[0];
-
+            Log.d(TAG,"HUS: 2");
             //fetch Image from the server
             try {
                 InputStream in = (InputStream) new URL(imageUrl).getContent();
@@ -117,10 +121,12 @@ public class ViewProductActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return null;
             }
+
         }
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
+            Log.d(TAG,"HUS: 3");
             if (bitmap != null){
                 //store bitmap in "imageBitmap" global variable for later reference
                 imageBitmap = bitmap;
@@ -140,6 +146,7 @@ public class ViewProductActivity extends AppCompatActivity {
                 Log.e(TAG,"HUS: Unable to fetch image");
             }
         }
+
     }
 
     //fetch product details

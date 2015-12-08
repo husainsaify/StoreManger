@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.+'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.melnykov:floatingactionbutton:1.3.0'
+    debugCompile 'im.dino:dbinspector:3.2.1@aar'
 }

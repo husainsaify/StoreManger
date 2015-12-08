@@ -83,12 +83,24 @@ public class ViewProductActivity extends AppCompatActivity {
         //check product exits in database or not
         if(db.productExits(pId)){
             Log.d(TAG,"HUS: product exits");
+
+            //fetch product
+            SingleProductPojo p = db.getProduct(pId);
+            Log.d(TAG,"HUS: id "+p.getId());
+            Log.d(TAG,"HUS: name "+p.getName());
+            Log.d(TAG,"HUS: image address "+p.getImageAddress());
+            Log.d(TAG,"HUS: code "+p.getCode());
+            Log.d(TAG,"HUS: size "+p.getSize());
+            Log.d(TAG,"HUS: quantity "+p.getQuantity());
+            Log.d(TAG,"HUS: cp "+p.getCp());
+            Log.d(TAG,"HUS: sp "+p.getSp());
+            Log.d(TAG,"HUS: time "+p.getTime());
         }else{
             Log.d(TAG,"HUS: product does not exits");
         }
 
         //fetch extra product data
-        new getProductTask().execute();
+        //new getProductTask().execute();
     }
 
     //Fetch Image

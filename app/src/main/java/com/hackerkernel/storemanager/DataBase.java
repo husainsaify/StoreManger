@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
@@ -17,7 +18,7 @@ public class DataBase extends SQLiteOpenHelper {
     //create a tag vide
     private static final String TAG = DataBase.class.getSimpleName();
     //database version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     //database name
     private static final String DATABASE_NAME = "storemanager.db";
     //table structure
@@ -66,7 +67,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         //table for product
         String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "(" +
-                COL_P_ID + " integer not null," +
+                COL_P_ID + " integer primary key not null," +
                 COL_P_NAME + " text not null," +
                 COL_P_IMAGE_ADDRESS + " text not null," +
                 COL_P_CODE + " text not null," +
@@ -188,6 +189,7 @@ public class DataBase extends SQLiteOpenHelper {
     //Method to insert new Product in product table
     public void addProduct(SingleProductPojo product) {
         db = this.getWritableDatabase();
+
         //store values
         ContentValues cv = new ContentValues();
         cv.put(COL_P_ID, product.getId());
@@ -201,6 +203,7 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_TIME, product.getTime());
         //insert into productTable
         db.insert(TABLE_PRODUCT, null, cv);
+
         db.close();
 
     }
@@ -224,6 +227,10 @@ public class DataBase extends SQLiteOpenHelper {
             product.setCp(cursor.getString(6));
             product.setSp(cursor.getString(7));
             product.setTime(cursor.getString(8));
+
+            //close cursor & db
+            cursor.close();
+            db.close();
 
             //return the Product
             return product;

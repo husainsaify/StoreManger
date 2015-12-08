@@ -80,28 +80,42 @@ public class ViewProductActivity extends AppCompatActivity {
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
 
-        //check product exits in database or not
-        if(db.productExits(pId)){
-            Log.d(TAG,"HUS: product exits");
+        /*
+        * Check Product exits in database
+        * if exits Fetch data and display in views
+        * if not exits fetch it from Backend and then store it in local database
+        * */
 
+        if(db.productExits(pId)){ //product exits in local database
             //fetch product
-            SingleProductPojo p = db.getProduct(pId);
-            Log.d(TAG,"HUS: id "+p.getId());
-            Log.d(TAG,"HUS: name "+p.getName());
-            Log.d(TAG,"HUS: image address "+p.getImageAddress());
-            Log.d(TAG,"HUS: code "+p.getCode());
-            Log.d(TAG,"HUS: size "+p.getSize());
-            Log.d(TAG,"HUS: quantity "+p.getQuantity());
-            Log.d(TAG,"HUS: cp "+p.getCp());
-            Log.d(TAG,"HUS: sp "+p.getSp());
-            Log.d(TAG,"HUS: time "+p.getTime());
-        }else{
-            Log.d(TAG,"HUS: product does not exits");
-        }
+            SingleProductPojo fetchedProduct = db.getProduct(pId);
 
-        //fetch extra product data
-        //new getProductTask().execute();
+            //set "SingleProductPojo" to views
+            setProductViews(fetchedProduct);
+        }else{
+            //fetch product from backend
+            new getProductTask().execute();
+        }
     }
+
+    //method to view "SingleProductPojo to views"
+    private void setProductViews(SingleProductPojo product){
+        //set Views
+        productName.setText(product.getName());
+        productCode.setText(product.getCode());
+        productTimeAgo.setText(product.getTime());
+        //find out profit
+        int cp = Integer.parseInt(product.getCp());
+        int sp = Integer.parseInt(product.getSp());
+        int profit = sp - cp;
+
+        String profitStack = sp + " - "+ cp + " = "+profit;
+
+        productProfit.setText(profitStack);
+        productSize.setText(product.getSize());
+        productQuantity.setText(product.getQuantity());
+    }
+
 
     //Fetch Image
     class getImageTask extends AsyncTask<String,Void,Bitmap>{
@@ -179,20 +193,9 @@ public class ViewProductActivity extends AppCompatActivity {
         protected void onPostExecute(SingleProductPojo product) {
             //success
             if (product.getReturned()){
-                //set Views
-                productName.setText(product.getName());
-                productCode.setText(product.getCode());
-                productTimeAgo.setText(product.getTime());
-                //find out profit
-                int cp = Integer.parseInt(product.getCp());
-                int sp = Integer.parseInt(product.getSp());
-                int profit = sp - cp;
 
-                String profitStack = sp + " - "+ cp + " = "+profit;
-
-                productProfit.setText(profitStack);
-                productSize.setText(product.getSize());
-                productQuantity.setText(product.getQuantity());
+                //set "SingleProductPojo" to view
+                setProductViews(product);
             }else{
                 //Display the Error to user
                 Functions.errorAlert(context,getString(R.string.oops),product.getMessage());

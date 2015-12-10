@@ -170,7 +170,7 @@ public class DataBase extends SQLiteOpenHelper {
     //************************************ TABLE_PRODUCT
 
     //check  product exits in the database
-    public boolean productExits(String productId) {
+    public boolean checkProduct(String productId) {
         db = this.getReadableDatabase();
         String q = "select * from " + TABLE_PRODUCT + " where " + COL_P_ID + " = ?";
         Cursor cursor = db.rawQuery(q, new String[]{productId});
@@ -236,6 +236,12 @@ public class DataBase extends SQLiteOpenHelper {
             return product;
         }
         return null;
+    }
+
+    //method to delete product from the database
+    public int deleteProduct(String productId){
+        db = this.getWritableDatabase();
+        return db.delete(TABLE_PRODUCT,COL_P_ID+"=?",new String[] {productId});
     }
 
     @Override

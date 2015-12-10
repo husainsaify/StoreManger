@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +18,14 @@ import android.widget.Toast;
 import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,6 +46,9 @@ public class ViewProductActivity extends AppCompatActivity {
     @Bind(R.id.pSize) TextView productSize;
     @Bind(R.id.pQuantity) TextView productQuantity;
     @Bind(R.id.pProfit) TextView productProfit;
+
+    //list
+    List<SimplePojo> deleteProductList;
 
     //Pojo for product
     SingleProductPojo productPojo;
@@ -86,7 +93,7 @@ public class ViewProductActivity extends AppCompatActivity {
         * if not exits fetch it from Backend and then store it in local database
         * */
 
-        if(db.productExits(pId)){ //product exits in local database
+        if(db.checkProduct(pId)){ //product exits in local database
             //fetch product
             SingleProductPojo fetchedProduct = db.getProduct(pId);
 
@@ -95,6 +102,46 @@ public class ViewProductActivity extends AppCompatActivity {
         }else{
             //fetch product from backend
             new getProductTask().execute();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_product,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_delete:
+                    deleteProduct();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteProduct() {
+        /*
+        * Delete the product
+        * - Local SQLite database
+        * - Backend
+        * */
+
+        //check product is store in database and then delete it
+        if(db.checkProduct(pId)){
+            //delete it from SQLite database
+            int result = db.deleteProduct(pId);
+            if(result == 1){
+                //delete product from the Backend
+                new deleteProductTask().execute();
+            }else{
+                Toast.makeText(context,getString(R.string.error_in_deleting_product),Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 
@@ -206,4 +253,43 @@ public class ViewProductActivity extends AppCompatActivity {
             db.addProduct(productPojo);
         }
     }
+
+    //class to delete product
+    class deleteProductTask extends AsyncTask<Void,Void,SimplePojo>{
+
+        @Override
+        protected SimplePojo doInBackground(Void... params) {
+            //create a hashmap of Productid & userid
+            HashMap<String,String> hashMap = new HashMap<>();
+            hashMap.put("userId",userId);
+            hashMap.put("productId",pId);
+
+            //convert hashmap to encoded url
+            String data = Functions.hashMapToEncodedUrl(hashMap);
+
+            String jsonString = GetJson.request(DataUrl.DELETE_PRODUCT,data,"POST");
+
+            //parse json
+            deleteProductList = JsonParser.SimpleParse(jsonString);
+
+            //parse result into pojo
+            SimplePojo deletePojo = deleteProductList.get(0);
+            return deletePojo;
+        }
+
+        @Override
+        protected void onPostExecute(SimplePojo deletePojo) {
+            //check result
+            if (deletePojo.getReturned()){
+                //success
+                Toast.makeText(context,getString(R.string.product_deleted_successfully),Toast.LENGTH_SHORT).show();
+                //exit the activity
+                finish();
+            }else{
+                //error
+                Functions.errorAlert(context,getString(R.string.oops),deletePojo.getMessage());
+            }
+        }
+    }
+
 }

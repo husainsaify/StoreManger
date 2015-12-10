@@ -54,4 +54,7 @@
     <string name="refresh">Refresh</string>
     <!-- View product activity -->
     <string name="unable_fetch_image">Failed in retrieving image</string>
+    <string name="delete">Delete</string>
+    <string name="product_deleted_successfully">Product deleted successFully</string>
+    <string name="error_in_deleting_product">Error in deleting product</string>
 </resources>

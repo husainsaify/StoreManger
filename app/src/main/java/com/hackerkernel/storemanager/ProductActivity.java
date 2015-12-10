@@ -58,8 +58,6 @@ public class ProductActivity extends AppCompatActivity {
         db = new DataBase(this);
         userId = db.getUserID();
 
-        Log.d(TAG,"HUS: categoryID: "+categoryId);
-
         //initalize list
         productList = new ArrayList<>();
 

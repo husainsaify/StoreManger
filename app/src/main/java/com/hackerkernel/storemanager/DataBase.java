@@ -241,7 +241,9 @@ public class DataBase extends SQLiteOpenHelper {
     //method to delete product from the database
     public int deleteProduct(String productId){
         db = this.getWritableDatabase();
-        return db.delete(TABLE_PRODUCT,COL_P_ID+"=?",new String[] {productId});
+        int result = db.delete(TABLE_PRODUCT,COL_P_ID+"=?",new String[] {productId});
+        db.close();
+        return result;
     }
 
     @Override

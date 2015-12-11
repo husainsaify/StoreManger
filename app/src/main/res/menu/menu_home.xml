@@ -1,14 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.hackerkernel.storemanager.HomeActivity">
-    <item android:id="@+id/action_logout"
-          android:title="@string/logout"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
-      <item android:id="@+id/action_add_category"
-            android:title="@string/add_category"
-            android:orderInCategory="200"
-            android:icon="@drawable/ic_add_white"
-            app:showAsAction="always"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.hackerkernel.storemanager.HomeActivity">
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="@string/refresh"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="200"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_add_category"
+        android:icon="@drawable/ic_add_white"
+        android:orderInCategory="300"
+        android:title="@string/add_category"
+        app:showAsAction="always" />
 </menu>

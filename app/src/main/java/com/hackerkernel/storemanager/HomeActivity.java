@@ -55,10 +55,6 @@ public class HomeActivity extends AppCompatActivity {
         //get userId
         userId = db.getUserID();
 
-        //call asysnc task to fetch data
-        FetchCategoryTask fetchCategoryTask = new FetchCategoryTask();
-        fetchCategoryTask.execute(userId);
-
         //when a item from the ListView is clicked
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -84,6 +80,9 @@ public class HomeActivity extends AppCompatActivity {
             Functions.closeAppWhenNoConnection(this);
         }
 
+        //Fetch category from the backend
+        new FetchCategoryTask().execute(userId);
+
     }
 
     @Override
@@ -98,9 +97,16 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
+            //refresh
+            case R.id.action_refresh:
+                //Fetch category from the backend
+                new FetchCategoryTask().execute(userId);
+                break;
+            //logout
             case R.id.action_logout:
                 Functions.logout(this); //logout
                 break;
+            //add new category
             case R.id.action_add_category:
                 //show the add category alertDialog
                 startActivity(new Intent(HomeActivity.this,AddCategoryActivity.class));

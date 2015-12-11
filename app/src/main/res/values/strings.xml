@@ -57,4 +57,8 @@
     <string name="delete">Delete</string>
     <string name="product_deleted_successfully">Product deleted successFully</string>
     <string name="error_in_deleting_product">Error in deleting product</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="search">Search</string>
+    <string name="product_name">Name or Code</string>
+    <string name="product_name_not_empty">Product name should not be empty</string>
 </resources>

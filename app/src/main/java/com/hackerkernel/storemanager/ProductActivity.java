@@ -66,8 +66,6 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Do all the stuff and Set Result to ListView
-        refreshList();
 
         //When user click on of the item from the list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -84,6 +82,13 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Do all the stuff and Set Result to ListView
+        refreshList();
     }
 
     public void refreshList(){

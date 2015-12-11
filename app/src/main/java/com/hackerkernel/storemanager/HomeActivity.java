@@ -111,6 +111,11 @@ public class HomeActivity extends AppCompatActivity {
                 //show the add category alertDialog
                 startActivity(new Intent(HomeActivity.this,AddCategoryActivity.class));
                 break;
+            //search
+            case R.id.action_search:
+                Intent intent = new Intent(HomeActivity.this,SearchActivity.class);
+                startActivity(intent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);

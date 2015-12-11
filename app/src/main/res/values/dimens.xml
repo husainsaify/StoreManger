@@ -10,5 +10,6 @@
     <dimen name="Addp_linerlayout_margin">20dp</dimen>
     <dimen name="Addp_linerlayout_top">10dp</dimen>
     <dimen name="Addp_view_bottom_margin">5dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

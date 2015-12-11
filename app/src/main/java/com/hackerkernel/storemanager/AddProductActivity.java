@@ -262,7 +262,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         addProductHashMap.put("pCP",cp);
         addProductHashMap.put("pSP",sp);
         addProductHashMap.put("pSize",sizeBuilder.toString());
-        addProductHashMap.put("pQuantity",sizeBuilder.toString());
+        addProductHashMap.put("pQuantity",quantityBuilder.toString());
 
         //convert addProductHashMap into encode url
         String dataUrl = Functions.hashMapToEncodedUrl(addProductHashMap);

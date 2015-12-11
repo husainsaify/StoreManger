@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -281,13 +282,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected String doInBackground(String... params) {
-            String jsonString = GetJson.request(DataUrl.ADD_PRODUCT,params[0],"POST");
-            return jsonString;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            super.onProgressUpdate(values);
+            return GetJson.request(DataUrl.ADD_PRODUCT,params[0],"POST");
         }
 
         @Override

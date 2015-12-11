@@ -74,41 +74,66 @@ $result = array();
 			$decodemage = base64_decode($image);
 			$filename = "IMG_".time().".jpg";
 
+			//create a categoryName without space for directory to store image
 			//replace all the space with a underscore in $cName
-			$cName = str_replace(" ", "_", $cName);
+			$dirCname = str_replace(" ", "_", $cName);
 
 			//make a dir if not exits
-			if(!is_dir("pic/{$userId}/{$cName}")){
+			if(!is_dir("pic/{$userId}/{$dirCname}")){
 				mkdir("pic/{$userId}/");
-				mkdir("pic/{$userId}/{$cName}");
+				mkdir("pic/{$userId}/{$dirCname}");
 			}
 			//upload image
-			file_put_contents("pic/{$userId}/{$cName}/{$filename}",$decodemage);
-			$imagePath = "pic/{$userId}/{$cName}/{$filename}";
+			file_put_contents("pic/{$userId}/{$dirCname}/{$filename}",$decodemage);
+			$imagePath = "pic/{$userId}/{$dirCname}/{$filename}";
 		}else{
 			$imagePath = "";
 		}
 
-
+		//generate keywords
+		$keywords = $name.' '.$code.' '.$cName;
+		
 		//insert into database
 		Db::insert("product",array(
 			"name" => $name,
 			"image" => $imagePath,
 			"code" => $code,
-			"size" => $sizeStack,
-			"quantity" => $quantityStack,
 			"CP" => $cp,
 			"SP" => $sp,
 			"user_id" => $userId,
 			"category_id" => $cId,
-			"category_name" => $cName,
-			"time" => time()
+			"time" => time(),
+			"keywords" => $keywords
 		));
 
+		//get the last Inserted productId
+		$productId = Db::lastInsertedId();
 
-		if(Db::getError() == false){
-			$result["message"] = "Success! Product added";
+		if(!Db::getError()){
+			/*
+				Insert Size & Quantity into SQ table
+			*/
+			//create a size array from Size stack
+			$sizeArray = explode(",", $sizeStack);
+			$size = remove_last_empty_item($sizeArray);
+
+			//create a quantity arra from quantity stack
+			$quantityArray = explode(",", $quantityStack);
+			$quantity = remove_last_empty_item($quantityArray);
+
+			//insert
+			foreach ($size as $key => $s) {
+				Db::insert("sq",array(
+					"size" => $s,
+					"quantity" => $quantity[$key],
+					"user_id" => $userId,
+					"product_id" => $productId
+				));
+			}
+			//show success message
+			$result["message"] = "Success";
 			$result["return"] = true;
+
 		}else{
 			$result["message"] = "Failed to insert into Database";
 			$result["return"] = false;

@@ -246,6 +246,14 @@ public class DataBase extends SQLiteOpenHelper {
         return result;
     }
 
+    //method to delete all product from the database
+    public int deleteAllProduct(){
+        db = this.getWritableDatabase();
+        int result = db.delete(TABLE_PRODUCT,null,null);
+        db.close();
+        return result;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //drop table if factory version upgrads

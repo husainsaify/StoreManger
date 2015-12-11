@@ -56,7 +56,7 @@ class Db{
     }
 
     //query method with bind functionality
-    private static function query($sql,$bindPrams = array()){
+    public static function query($sql,$bindPrams = array()){
         //get connection
         $con = self::getConnection();
         //set error to false
@@ -228,5 +228,10 @@ class Db{
         $stmt = self::query("SELECT * FROM {$tableName} WHERE {$whereString}",array_values($whereArray));
 
         return $stmt->rowCount();
+    }
+
+    //method to get the last inserted id
+    public static function lastInsertedId(){
+        return Db::getConnection()->lastInsertId();
     }
 }

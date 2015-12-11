@@ -69,6 +69,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(productIntent);
             }
         });
+
+        //delete all the product from database
+        db.deleteAllProduct();
     }
 
     @Override

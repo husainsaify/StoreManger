@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2015 at 08:48 AM
+-- Generation Time: Dec 11, 2015 at 09:13 PM
 -- Server version: 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -38,13 +38,7 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `user_id`, `name`, `time`) VALUES
-(1, 1, 'kids shoes', '1448696841'),
-(2, 1, 'ladies shoes', '1448702527'),
-(3, 1, 'adda ladies', '1449494563'),
-(4, 1, 'kids', '1449739903'),
-(5, 1, 'HELLO', '1449845847'),
-(6, 1, 'LELO', '1449846021'),
-(7, 1, 'esa ke tesi', '1449846508');
+(1, 1, 'relaxo', '1449860267');
 
 -- --------------------------------------------------------
 
@@ -57,14 +51,12 @@ CREATE TABLE `product` (
   `name` text NOT NULL,
   `image` text NOT NULL,
   `code` text NOT NULL,
-  `size` text NOT NULL,
-  `quantity` text NOT NULL,
   `CP` int(11) NOT NULL,
   `SP` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `category_name` text NOT NULL,
   `time` text NOT NULL,
+  `keywords` text NOT NULL,
   `active` varchar(1) NOT NULL DEFAULT 'y'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -72,10 +64,9 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `image`, `code`, `size`, `quantity`, `CP`, `SP`, `user_id`, `category_id`, `category_name`, `time`, `active`) VALUES
-(1, 'adda zero', 'pic/1/adda_ladies/IMG_1449729854.jpg', 'gt 55', '2,', '2,', 100, 200, 1, 3, 'adda_ladies', '1449729855', 'n'),
-(2, 'test', 'pic/1/adda_ladies/IMG_1449739955.jpg', 'xyz', '2,1,12,', '2,1,12,', 140, 200, 1, 3, 'adda_ladies', '1449739955', 'n'),
-(3, 'test', '', 'test', '1,', '1,', 80, 100, 1, 3, 'adda ladies', '1449742242', 'n');
+INSERT INTO `product` (`id`, `name`, `image`, `code`, `CP`, `SP`, `user_id`, `category_id`, `time`, `keywords`, `active`) VALUES
+(1, 'hy fashion', '', 'gt 556', 100, 200, 1, 1, '1449862329', 'hy fashion gt 556 relaxo', 'y'),
+(2, 'low fashion', 'pic/1/relaxo/IMG_1449863547.jpg', 'gt 5570', 100, 200, 1, 1, '1449863547', 'low fashion gt 5570 relaxo', 'y');
 
 -- --------------------------------------------------------
 
@@ -99,6 +90,31 @@ CREATE TABLE `register` (
 INSERT INTO `register` (`id`, `name`, `phone`, `email`, `description`, `time`) VALUES
 (1, 'husain', '8962239913', 'hsnsaify22@gmail.com', 'mediacal store', '1448702586'),
 (2, 'ali', '8962239913', 'hunkhusain@gmail.com', 'saify kids shoes', '1449255188');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sq`
+--
+
+CREATE TABLE `sq` (
+  `id` int(11) NOT NULL,
+  `size` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `sq`
+--
+
+INSERT INTO `sq` (`id`, `size`, `quantity`, `user_id`, `product_id`) VALUES
+(1, 1, 3, 1, 1),
+(2, 2, 2, 1, 1),
+(3, 3, 1, 1, 1),
+(4, 2, 4, 1, 2),
+(5, 5, 10, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -149,6 +165,12 @@ ALTER TABLE `register`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `sq`
+--
+ALTER TABLE `sq`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -162,17 +184,22 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `register`
 --
 ALTER TABLE `register`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `sq`
+--
+ALTER TABLE `sq`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `user`
 --

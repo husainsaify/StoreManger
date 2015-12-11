@@ -215,3 +215,9 @@ function remove_last_empty_item($item = array()){
 
     return $item;
 }
+
+//echo json
+function json($result = array()){
+    echo json_encode($result);
+    exit();
+}

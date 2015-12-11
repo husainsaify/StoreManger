@@ -39,47 +39,21 @@ if(isset($_POST["userId"]) && isset($_POST["productId"])){
         exit;
     }
 
-
-    //fetch all the product
-    $product = Db::fetch("product",array(
-        "user_id" => $userId,
-        "id" => $productId
-    ),array("=","="));
-
+    //delete the product
+    Db::update("product",array(
+        "active" => "n"
+    ),array("id","=",$productId));
 
     if(!Db::getError()){
-        //create dateTime from time stamp
-        $dateTime = date("d-m-Y", $product[0]["time"]);
-
-        //fetch Size & quantity
-        $q = Db::query("SELECT size,quantity FROM `sq` WHERE user_id=? AND product_id=?",array($userId,$productId));
-        $sqResult = $q->fetchAll(PDO::FETCH_ASSOC);
-
-        $sizeArray = array();
-        $quantityArray = array();
-        //create size and quantity array
-        foreach($sqResult as $key => $r){
-            $sizeArray[$key] = $r["size"];
-            $quantityArray[$key] = $r["quantity"];
-        }
-
-        //output the result json
-        $result["return"] = true;
+        //success
         $result["message"] = "Success";
-        $result["id"] = $product[0]["id"];
-        $result["name"] = $product[0]["name"];
-        $result["image"] = $product[0]["image"];
-        $result["code"] = $product[0]["code"];
-        $result["size"] = $sizeArray;
-        $result["quantity"] = $quantityArray;
-        $result["time"] = $dateTime;
-        $result["cp"] = $product[0]["CP"];
-        $result["sp"] = $product[0]["SP"];
+        $result["return"] = true;
     }else{
-        $result["return"] = false;
-        $result["message"] = "Failed to fetch products";
+        //error
+        $result["message"] = "Failed to delete product";
+        $result["return"]= false;
     }
-
+    
     echo json_encode($result);
     exit;
 

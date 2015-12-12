@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 07, 2015 at 11:36 PM
+-- Generation Time: Dec 12, 2015 at 08:48 AM
 -- Server version: 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -40,7 +40,11 @@ CREATE TABLE `category` (
 INSERT INTO `category` (`id`, `user_id`, `name`, `time`) VALUES
 (1, 1, 'kids shoes', '1448696841'),
 (2, 1, 'ladies shoes', '1448702527'),
-(3, 1, 'adda ladies', '1449494563');
+(3, 1, 'adda ladies', '1449494563'),
+(4, 1, 'kids', '1449739903'),
+(5, 1, 'HELLO', '1449845847'),
+(6, 1, 'LELO', '1449846021'),
+(7, 1, 'esa ke tesi', '1449846508');
 
 -- --------------------------------------------------------
 
@@ -60,20 +64,18 @@ CREATE TABLE `product` (
   `user_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `category_name` text NOT NULL,
-  `time` text NOT NULL
+  `time` text NOT NULL,
+  `active` varchar(1) NOT NULL DEFAULT 'y'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `image`, `code`, `size`, `quantity`, `CP`, `SP`, `user_id`, `category_id`, `category_name`, `time`) VALUES
-(1, 'Relaxo', 'pic/1/ladies_shoes/IMG_1449448740.jpg', '5656', '3,4,5,', '3,4,5,', 0, 0, 1, 2, 'ladies_shoes', '1449448740'),
-(2, 'Action', '', '453', '1,', '1,', 0, 0, 1, 2, 'ladies shoes', '1449448903'),
-(3, 'adda', 'pic/1/ladies_shoes/IMG_1449449378.jpg', '56eee', '3,', '3,', 0, 0, 1, 2, 'ladies_shoes', '1449449378'),
-(4, 'test Product', 'pic/1/ladies_shoes/IMG_1449477670.jpg', '67767', '1,', '1,', 0, 0, 1, 2, 'ladies_shoes', '1449477670'),
-(5, 'Adda zero touch', 'pic/1/adda_ladies/IMG_1449494642.jpg', 'ck 10', '10,15,', '10,15,', 0, 0, 1, 3, 'adda_ladies', '1449494643'),
-(6, 'One test', '', '676767', '1,', '1,', 100, 200, 1, 3, 'adda ladies', '1449521109');
+INSERT INTO `product` (`id`, `name`, `image`, `code`, `size`, `quantity`, `CP`, `SP`, `user_id`, `category_id`, `category_name`, `time`, `active`) VALUES
+(1, 'adda zero', 'pic/1/adda_ladies/IMG_1449729854.jpg', 'gt 55', '2,', '2,', 100, 200, 1, 3, 'adda_ladies', '1449729855', 'n'),
+(2, 'test', 'pic/1/adda_ladies/IMG_1449739955.jpg', 'xyz', '2,1,12,', '2,1,12,', 140, 200, 1, 3, 'adda_ladies', '1449739955', 'n'),
+(3, 'test', '', 'test', '1,', '1,', 80, 100, 1, 3, 'adda ladies', '1449742242', 'n');
 
 -- --------------------------------------------------------
 
@@ -160,12 +162,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `register`
 --

@@ -42,8 +42,9 @@ if(isset($_POST["userId"]) && isset($_POST["categoryId"])){
     //count product
     $count = Db::rowCount("product",array(
         "user_id" => $userId,
-        "category_id" => $categoryId
-    ),array("=","="));
+        "category_id" => $categoryId,
+        "active" => "y"
+    ),array("=","=","="));
 
     if($count <= 0){
         $result["return"] = true;
@@ -56,8 +57,9 @@ if(isset($_POST["userId"]) && isset($_POST["categoryId"])){
     //fetch all the product
     $product = Db::fetch("product",array(
         "user_id" => $userId,
-        "category_id" => $categoryId
-    ),array("=","="));
+        "category_id" => $categoryId,
+        "active" => "y"
+    ),array("=","=","="));
 
     if(!Db::getError()){
         //create a new product array with only that fields which are required

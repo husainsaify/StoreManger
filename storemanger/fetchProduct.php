@@ -49,7 +49,7 @@ if(isset($_POST["userId"]) && isset($_POST["productId"])){
 
     if(!Db::getError()){
         //create dateTime from time stamp
-        $dateTime = date("h:i d/m/y", $product[0]["time"]);
+        $dateTime = date("d-m-Y", $product[0]["time"]);
 
         //generate size array
         //more the

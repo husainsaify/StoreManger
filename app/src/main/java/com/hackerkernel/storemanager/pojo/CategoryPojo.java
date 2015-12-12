@@ -4,21 +4,10 @@ package com.hackerkernel.storemanager.pojo;
  * Category Pojo
  */
 public class CategoryPojo {
-    private int code;
     private boolean returned;
     private String message,
                     id,
-                    userId,
-                    name,
-                    time;
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
+                    name;
 
     public boolean isReturned() {
         return returned;
@@ -44,27 +33,11 @@ public class CategoryPojo {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 }

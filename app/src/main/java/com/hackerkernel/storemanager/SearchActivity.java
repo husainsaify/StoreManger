@@ -44,8 +44,6 @@ public class SearchActivity extends AppCompatActivity {
                     Functions.errorAlert(context,getString(R.string.oops),getString(R.string.product_name_not_empty));
                     return;
                 }
-
-                Log.d(TAG,"HUS: age bar");
             }
         });
     }

@@ -61,14 +61,33 @@ public class SearchActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String productName = pName.getText().toString().trim();
-                String productSize = pSize.getText().toString().trim();
+                String  productName = pName.getText().toString().trim(),
+                        productSize = pSize.getText().toString().trim(),
+                        productCategoryName = null,
+                        productCategoryId = null;
 
                 //check product Name is not empty
-                if (productName.isEmpty()){
-                    Functions.errorAlert(context,getString(R.string.oops),getString(R.string.product_name_not_empty));
+                if (productName.isEmpty()) {
+                    Functions.errorAlert(context, getString(R.string.oops), getString(R.string.product_name_not_empty));
                     return;
                 }
+
+                //get the position of categorySpinner which is selectecd
+                int position = categorySpinner.getSelectedItemPosition();
+                //some category is selected
+                if(position != 0){
+                    /*
+                    * Create new valid "categorySpinner" position for "categoryList"
+                    * because we have add a placeholder text in "select Category" in "categorySpinner"
+                    * */
+                    int newPosition = position - 1;
+                    //fetch CategoryName & CategoryId
+                    productCategoryName = categoryList.get(newPosition).getName();
+                    productCategoryId = categoryList.get(newPosition).getId();
+                }
+
+                Log.d(TAG,"HUS: name "+ productCategoryName);
+                Log.d(TAG,"HUS: id "+ productCategoryId);
             }
         });
 
@@ -114,4 +133,5 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    //
 }

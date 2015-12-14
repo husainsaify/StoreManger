@@ -20,7 +20,7 @@
 			}
 		}
 
-		$q .= "AND user_id='$user_id'";
+		$q .= "AND user_id='$user_id' AND active='y'";
 		//execute query
 		$stmt = Db::query($q,array());
 		//get the result count

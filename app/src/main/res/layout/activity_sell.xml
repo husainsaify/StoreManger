@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <!-- Toolbar -->
     <include
@@ -10,13 +11,131 @@
         layout="@layout/tool_bar" />
     <!-- /Toolbar -->
 
+    <!-- product search -->
     <AutoCompleteTextView
+        android:id="@+id/productSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/productSearch"
-        android:hint="@string/product_name"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        />
+        android:hint="@string/product_name">
+
+        <requestFocus />
+
+    </AutoCompleteTextView>
+    <!-- /product search -->
+
+    <!-- product info area -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- product image -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <!-- / product image -->
+
+        <!-- product info child -->
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="5dp">
+
+
+                <TextView
+                    android:id="@+id/pName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/primaryColor"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1">
+
+                    <!-- product code & date -->
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/pCode" />
+
+                        <TextView
+                            android:id="@+id/pDate"
+                            android:gravity="right" />
+                    </TableRow>
+
+                </TableLayout>
+
+                <!-- product size & Quantity  -->
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1">
+
+                    <TableRow>
+
+                        <TextView
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/size"
+                            android:textAppearance="?android:textAppearanceMedium" />
+
+                        <TextView
+                            android:textColor="@color/primaryColor"
+                            android:gravity="right"
+                            android:text="@string/quantity"
+                            android:textAppearance="?android:textAppearanceMedium" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView
+                            android:id="@+id/pSize" />
+
+                        <TextView
+                            android:id="@+id/pQuantity"
+                            android:gravity="right" />
+                    </TableRow>
+
+                </TableLayout>
+
+                <TextView
+                    android:textColor="@color/primaryColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:text="@string/sp_cp_profit"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pProfit"/>
+
+            </LinearLayout>
+        </ScrollView>
+        <!-- / product info child -->
+
+
+    </LinearLayout>
+    <!-- /product info area -->
 
 </LinearLayout>

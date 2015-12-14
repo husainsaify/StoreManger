@@ -9,9 +9,6 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 
 import com.hackerkernel.storemanager.adapter.ACProductAdapter;
-import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -59,6 +59,8 @@
     <string name="error_in_deleting_product">Error in deleting product</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="search">Search</string>
-    <string name="product_name">Name or Code</string>
+    <string name="product_name">Enter product Name or Code</string>
     <string name="product_name_not_empty">Product name should not be empty</string>
+    <string name="title_activity_sell">SellActivity</string>
+    <string name="sell">Sell</string>
 </resources>

@@ -14,5 +14,6 @@ public class DataUrl {
             GET_PRODUCT = SERVER + "co/storemanger/productList.php",
             IMAGE_BASE_URL = SERVER + "co/storemanger/",
             GET_SINGLE_PRODUCT = SERVER + "co/storemanger/fetchProduct.php",
-            DELETE_PRODUCT = SERVER + "co/storemanger/deleteProduct.php";
+            DELETE_PRODUCT = SERVER + "co/storemanger/deleteProduct.php",
+            AC_PRODUCT_SEARCH = SERVER + "co/storemanger/searchProduct.php";
 }

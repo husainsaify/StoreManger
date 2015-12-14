@@ -12,12 +12,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.CategoryAdapter;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
     @Bind(R.id.listView) ListView categoryListView;
     @Bind(R.id.progressBar) ProgressBar pb;
     @Bind(R.id.whenListIsEmpty)TextView whenListIsEmpty;
+    @Bind(R.id.fabSell) FloatingActionButton fabSell;
+
     private DataBase db;
     private String userId;
     private List<CategoryPojo> categoryList;
@@ -62,16 +66,23 @@ public class HomeActivity extends AppCompatActivity {
                 //store clicked item in CategoryPojo so that later we can get CategoryId and CategoryName
                 CategoryPojo categoryName = (CategoryPojo) categoryListView.getItemAtPosition(position);
                 //go to product activity
-                Intent productIntent = new Intent(HomeActivity.this,ProductActivity.class);
+                Intent productIntent = new Intent(HomeActivity.this, ProductActivity.class);
                 //set categoryId and CategoryName in intenet
-                productIntent.putExtra("categoryId",categoryName.getId());
-                productIntent.putExtra("categoryName",categoryName.getName());
+                productIntent.putExtra("categoryId", categoryName.getId());
+                productIntent.putExtra("categoryName", categoryName.getName());
                 startActivity(productIntent);
             }
         });
 
-        //delete all the product from database
-        db.deleteAllProduct();
+        //when fabSell button is clicke open the sells activity
+        fabSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open sell activity
+                Intent sellIntent = new Intent(HomeActivity.this,SellActivity.class);
+                startActivity(sellIntent);
+            }
+        });
     }
 
     @Override
@@ -155,8 +166,7 @@ public class HomeActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(fetchCategoryData);
 
             //get the response from the web using GetJson class
-            String response = GetJson.request(DataUrl.GET_CATEGORY,data,"POST");
-            return response;
+            return GetJson.request(DataUrl.GET_CATEGORY,data,"POST");
         }
 
         @Override

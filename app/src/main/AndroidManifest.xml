@@ -78,6 +78,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.HomeActivity" />
         </activity>
+        <activity
+            android:name=".SellActivity"
+            android:label="@string/title_activity_sell"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

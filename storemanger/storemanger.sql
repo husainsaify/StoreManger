@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2015 at 09:13 PM
+-- Generation Time: Dec 14, 2015 at 08:27 AM
 -- Server version: 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -66,7 +66,8 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`id`, `name`, `image`, `code`, `CP`, `SP`, `user_id`, `category_id`, `time`, `keywords`, `active`) VALUES
 (1, 'hy fashion', '', 'gt 556', 100, 200, 1, 1, '1449862329', 'hy fashion gt 556 relaxo', 'y'),
-(2, 'low fashion', 'pic/1/relaxo/IMG_1449863547.jpg', 'gt 5570', 100, 200, 1, 1, '1449863547', 'low fashion gt 5570 relaxo', 'y');
+(2, 'low fashion', 'pic/1/relaxo/IMG_1449863547.jpg', 'gt 5570', 100, 200, 1, 1, '1449863547', 'low fashion gt 5570 relaxo', 'y'),
+(3, 'medium fashion', '', 'gt 44', 500, 550, 1, 1, '1449864836', 'medium fashion gt 44 relaxo', 'y');
 
 -- --------------------------------------------------------
 
@@ -114,7 +115,10 @@ INSERT INTO `sq` (`id`, `size`, `quantity`, `user_id`, `product_id`) VALUES
 (2, 2, 2, 1, 1),
 (3, 3, 1, 1, 1),
 (4, 2, 4, 1, 2),
-(5, 5, 10, 1, 2);
+(5, 5, 10, 1, 2),
+(6, 3, 6, 1, 3),
+(7, 6, 12, 1, 3),
+(8, 12, 24, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -189,7 +193,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `register`
 --
@@ -199,7 +203,7 @@ ALTER TABLE `register`
 -- AUTO_INCREMENT for table `sq`
 --
 ALTER TABLE `sq`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `user`
 --

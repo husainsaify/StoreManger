@@ -2,6 +2,7 @@ package com.hackerkernel.storemanager.parser;
 
 import android.util.Log;
 
+import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
@@ -201,6 +202,49 @@ public class JsonParser {
             return product;
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    //ACProductSearch json parser
+    public static List<ACProductSearchPojo> ACProductSearchParser(String jsonString){
+        ACProductSearchPojo product = new ACProductSearchPojo();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            //set message and return
+            product.setMessage(jsonObject.getString("message"));
+            product.setReturned(jsonObject.getBoolean("return"));
+
+            List<ACProductSearchPojo> productList = new ArrayList<>();
+
+            //check we have a success or failed "return" and count is greater then > 0
+            if(product.getReturned() && jsonObject.getInt("count") > 0){
+
+                JSONArray ja = jsonObject.getJSONArray("result");
+
+                for (int i = 0; i < ja.length(); i++) {
+                    //get jsonObject
+                    JSONObject jo = ja.getJSONObject(i);
+
+                    //store stuff in Pojo
+                    ACProductSearchPojo p = new ACProductSearchPojo();
+                    p.setId(jo.getString("id"));
+                    p.setName(jo.getString("name"));
+                    p.setCode(jo.getString("code"));
+
+                    //add pojo to the list
+                    productList.add(p);
+                }
+            }else{
+                //log message for debugging
+                Log.d(TAG,"HUS: "+product.getMessage());
+            }
+
+            return productList;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(TAG,"HUS: "+e);
             return null;
         }
     }

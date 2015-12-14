@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Patterns;
@@ -119,5 +120,11 @@ public class Functions {
         }
 
         return sb.toString();
+    }
+
+    //method to check External is available to write
+    public static boolean isExternalStorageAvailable(){
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
     }
 }

@@ -1,15 +1,22 @@
 package com.hackerkernel.storemanager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.ACProductAdapter;
@@ -17,7 +24,14 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,9 +52,12 @@ public class SellActivity extends AppCompatActivity {
     @Bind(R.id.sizeHeader) TextView sizeHeader;
     @Bind(R.id.quantityHeader) TextView quantityHeader;
     @Bind(R.id.profitHeader) TextView profitHeader;
+    @Bind(R.id.pImage) ImageView pImage;
 
     private String userId;
     private String productId;
+    private String productName;
+    private String productImageAddress;
 
     DataBase db;
     SingleProductPojo productPojo;
@@ -68,11 +85,11 @@ public class SellActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //get the name of the item selected from AC
-                String name = adapter.getItem(position).getName();
+                productName = adapter.getItem(position).getName();
                 //store productId
                 productId = adapter.getItem(position).getId();
                 //set item to dropdown
-                productSearch.setText(name);
+                productSearch.setText(productName);
                 //fetch product
                 getProductData(productId);
             }
@@ -83,8 +100,9 @@ public class SellActivity extends AppCompatActivity {
     public void getProductData(String productId){
         //product available in sqlite database
         if(db.checkProduct(productId)){
-            //get data from Sqlite database
+            //get data from SQlite database
             SingleProductPojo product = db.getProduct(productId);
+
             setProductData(product);
         }else{
             //fetch product from the Backend
@@ -107,6 +125,86 @@ public class SellActivity extends AppCompatActivity {
         int profit = Integer.parseInt(product.getSp()) - Integer.parseInt(product.getCp());
         String profitStack = product.getSp() +" - "+ product.getCp() +" = "+profit;
         pProfit.setText(profitStack);
+
+        /*
+        * Code to set Product Image
+        * */
+        productImageAddress = product.getImageAddress();
+
+        //product image is not empty
+        //get Image from the web
+        if (!productImageAddress.isEmpty()){
+            try {
+                Bitmap productImage = new DownloadImageTask().execute(productImageAddress).get();
+                if(productImage != null){
+                    //set image to imageView
+                    pImage.setScaleType(ImageView.ScaleType.FIT_START);
+                    pImage.setImageBitmap(productImage);
+
+                    //save Image to sdcard
+                    saveImageToSD(productImage);
+
+                }else{
+                    //if null is returned instead of bitmap from DownloadImageTask
+                    Toast.makeText(getApplicationContext(),getString(R.string.unable_fetch_image),Toast.LENGTH_LONG).show();
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                Log.e(TAG,"HUS: "+e);
+            }
+        }else{
+            //display placeholder image
+            pImage.setImageResource(R.drawable.placeholder_product);
+        }
+    }
+
+    //method to save image to SDCard
+    public void saveImageToSD(Bitmap bitmap){
+        //check external storage
+        //External storage available to Write
+        if(Functions.isExternalStorageAvailable()){
+
+            OutputStream output;
+            String appName = getString(R.string.app_name);
+
+            //1. Get the external storage directory
+            File filePath = Environment.getExternalStorageDirectory();
+
+            //2. Create our subdirectory
+            File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+
+            //3. Create file name
+            String fileName = productName.replaceAll(" ","_").toLowerCase();
+
+            //3. Create the file
+            File file = new File(dir,"IMG_"+fileName+".jpg");
+
+            //4. store image
+            try{
+                output = new FileOutputStream(file);
+
+                //compress image
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,output);
+                output.flush();
+                output.close();
+
+                Log.d(TAG,"HUS: Uri "+ Uri.fromFile(file));
+
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.e(TAG,"HUS: "+e);
+            }
+            //4. return the Uri
+
+        }else{
+            //not Available
+            Toast.makeText(getApplicationContext(), R.string.external_storage_prblm,Toast.LENGTH_LONG).show();
+        }
+
     }
 
     //Fetch data from the backend
@@ -145,6 +243,27 @@ public class SellActivity extends AppCompatActivity {
 
             //hide progressBar
             Functions.toggleProgressBar(progressBar);
+        }
+    }
+
+    private class DownloadImageTask extends AsyncTask<String,Void,Bitmap>{
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            //generate Image Full url
+            String imageUrl = DataUrl.IMAGE_BASE_URL + params[0];
+            //fetch Image from the server
+            try {
+                InputStream in = (InputStream) new URL(imageUrl).getContent();
+                Bitmap bitmap = BitmapFactory.decodeStream(in);
+                in.close();
+
+                //return image to "onPostExecute"
+                return bitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 }

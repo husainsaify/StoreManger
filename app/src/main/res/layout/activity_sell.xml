@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
+            android:visibility="invisible"
             />
 
     </android.support.v7.widget.Toolbar>
@@ -111,13 +112,13 @@
 
                         <TextView
                             android:textColor="@color/primaryColor"
-                            android:text="@string/size"
+                            android:id="@+id/sizeHeader"
                             android:textAppearance="?android:textAppearanceMedium" />
 
                         <TextView
                             android:textColor="@color/primaryColor"
                             android:gravity="right"
-                            android:text="@string/quantity"
+                            android:id="@+id/quantityHeader"
                             android:textAppearance="?android:textAppearanceMedium" />
                     </TableRow>
 
@@ -138,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:textAppearanceMedium"
-                    android:text="@string/sp_cp_profit"/>
+                    android:id="@+id/profitHeader"/>
 
                 <TextView
                     android:layout_width="wrap_content"

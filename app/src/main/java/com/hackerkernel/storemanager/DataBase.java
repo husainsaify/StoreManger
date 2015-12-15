@@ -284,17 +284,6 @@ public class DataBase extends SQLiteOpenHelper {
         return null;
     }
 
-    public String getProductImageUriString(String productId){
-        db = this.getWritableDatabase();
-        String q = "SELECT "+COL_P_IMAGE_URI+" FROM "+TABLE_PRODUCT+" WHERE "+COL_P_ID+"=?";
-        Cursor cursor = db.rawQuery(q, new String[]{productId});
-
-        if(cursor.moveToFirst()){
-            return cursor.getString(0);
-        }
-        return null;
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //drop table if factory version upgrads

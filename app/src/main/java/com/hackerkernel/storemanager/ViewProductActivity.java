@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,6 +39,7 @@ public class ViewProductActivity extends AppCompatActivity {
     private String pId;
     private String userId;
     private Bitmap imageBitmap;
+    private Uri productImageUri;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.imageView) ImageView imageView;
@@ -76,8 +79,17 @@ public class ViewProductActivity extends AppCompatActivity {
 
         //check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
-            //fetch the Image and display it
-            new getImageTask().execute(pImageAddress);
+
+            //get the image Uri from the SQlite database
+            Uri imageUri = db.getProductImageUri(pId);
+
+            //display image which is stored in sdcard using uri
+            if(imageUri != null){
+                imageView.setImageURI(imageUri);
+            }else{
+                //fetch the Image and display it
+                new getImageTask().execute(pImageAddress);
+            }
         }else{
             //Show the placeHolder image
             imageView.setImageResource(R.drawable.placeholder_product);
@@ -178,6 +190,7 @@ public class ViewProductActivity extends AppCompatActivity {
                 in.close();
 
                 //return image to "onPostExecute"
+                Log.d(TAG,"HUS: downloded bitmap");
                 return bitmap;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -194,6 +207,15 @@ public class ViewProductActivity extends AppCompatActivity {
                 //display the image
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setImageBitmap(imageBitmap);
+
+                /*
+                * Store image to sdCard
+                * save image Uri to global varaible "productImageUri"
+                * so that we can store the image Uri in db
+                * */
+
+                productImageUri = Functions.saveImageToSD(context,imageBitmap);
+
             }else{
                 /*
                 * Seams their is some issue is retrieving image
@@ -251,6 +273,9 @@ public class ViewProductActivity extends AppCompatActivity {
 
             //add this product to the database
             db.addProduct(productPojo);
+
+            //add ProductImageUri to database
+            db.addProductImageUri(productPojo.getId(),productImageUri);
         }
     }
 
@@ -273,8 +298,7 @@ public class ViewProductActivity extends AppCompatActivity {
             deleteProductList = JsonParser.SimpleParse(jsonString);
 
             //parse result into pojo
-            SimplePojo deletePojo = deleteProductList.get(0);
-            return deletePojo;
+            return deleteProductList.get(0);
         }
 
         @Override

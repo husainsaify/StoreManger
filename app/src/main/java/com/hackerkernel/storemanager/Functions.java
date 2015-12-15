@@ -4,18 +4,27 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class Functions {
 
@@ -126,5 +135,59 @@ public class Functions {
     public static boolean isExternalStorageAvailable(){
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+    /*
+    * This method will take a bitmap and save it to the sdcad
+    * & return the Uri of the image
+    * */
+    //method to save image to SDCard
+    public static Uri saveImageToSD(Context context,Bitmap bitmap){
+        //check external storage
+        //External storage available to Write
+        if(Functions.isExternalStorageAvailable()){
+
+            OutputStream output;
+            String appName = context.getString(R.string.app_name);
+
+            //1. Get the external storage directory
+            File filePath = Environment.getExternalStorageDirectory();
+
+            //2. Create our subdirectory
+            File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+
+            //3. Create file name
+            Date date = new Date();
+            String fileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(date);
+
+            //3. Create the file
+            File file = new File(dir,"IMG_"+fileName+".jpg");
+
+            //4. store image
+            try{
+                output = new FileOutputStream(file);
+
+                //compress image
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
+                output.flush();
+                output.close();
+
+                //5. return image Uri
+                return Uri.fromFile(file);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                Log.e(TAG,"HUS: "+e);
+                return null;
+            }
+        }else{
+            //not Available
+            Toast.makeText(context.getApplicationContext(), R.string.external_storage_prblm, Toast.LENGTH_LONG).show();
+            return null;
+        }
+
     }
 }

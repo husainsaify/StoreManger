@@ -1,6 +1,6 @@
 package com.hackerkernel.storemanager.pojo;
 
-import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class SingleProductPojo {
     private boolean returned;
@@ -14,6 +14,7 @@ public class SingleProductPojo {
                     sp,
                     time,
                     message;
+    private String imageUri;
 
     public boolean getReturned() {
         return returned;
@@ -103,5 +104,13 @@ public class SingleProductPojo {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }

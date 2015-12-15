@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.support.v4.util.ArrayMap;
-import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
@@ -15,10 +15,10 @@ import com.hackerkernel.storemanager.pojo.SingleProductPojo;
  * Database class to insert user in the database
  */
 public class DataBase extends SQLiteOpenHelper {
-    //create a tag vide
+    //create a TAG
     private static final String TAG = DataBase.class.getSimpleName();
     //database version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     //database name
     private static final String DATABASE_NAME = "storemanager.db";
     //table structure
@@ -37,6 +37,7 @@ public class DataBase extends SQLiteOpenHelper {
             COL_P_ID = "p_id",
             COL_P_NAME = "p_name",
             COL_P_IMAGE_ADDRESS = "p_image_address",
+            COL_P_IMAGE_URI = "p_image_uri",
             COL_P_CODE = "p_code",
             COL_P_SIZE = "p_size",
             COL_P_QUANTITY = "p_quantity",
@@ -70,6 +71,7 @@ public class DataBase extends SQLiteOpenHelper {
                 COL_P_ID + " integer primary key not null," +
                 COL_P_NAME + " text not null," +
                 COL_P_IMAGE_ADDRESS + " text not null," +
+                COL_P_IMAGE_URI + " text not null," +
                 COL_P_CODE + " text not null," +
                 COL_P_SIZE + " text not null," +
                 COL_P_QUANTITY + " text not null," +
@@ -195,6 +197,7 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_ID, product.getId());
         cv.put(COL_P_NAME, product.getName());
         cv.put(COL_P_IMAGE_ADDRESS, product.getImageAddress());
+        cv.put(COL_P_IMAGE_URI, "");
         cv.put(COL_P_CODE, product.getCode());
         cv.put(COL_P_SIZE, product.getSize());
         cv.put(COL_P_QUANTITY, product.getQuantity());
@@ -221,12 +224,13 @@ public class DataBase extends SQLiteOpenHelper {
             product.setId(cursor.getString(0));
             product.setName(cursor.getString(1));
             product.setImageAddress(cursor.getString(2));
-            product.setCode(cursor.getString(3));
-            product.setSize(cursor.getString(4));
-            product.setQuantity(cursor.getString(5));
-            product.setCp(cursor.getString(6));
-            product.setSp(cursor.getString(7));
-            product.setTime(cursor.getString(8));
+            product.setImageUri(cursor.getString(3));
+            product.setCode(cursor.getString(4));
+            product.setSize(cursor.getString(5));
+            product.setQuantity(cursor.getString(6));
+            product.setCp(cursor.getString(7));
+            product.setSp(cursor.getString(8));
+            product.setTime(cursor.getString(9));
 
             //close cursor & db
             cursor.close();
@@ -252,6 +256,32 @@ public class DataBase extends SQLiteOpenHelper {
         int result = db.delete(TABLE_PRODUCT,null,null);
         db.close();
         return result;
+    }
+
+    //store product image Uri into database
+    /*
+    * This method will take productId and image Uri
+    * and store it in the prooduct table for later use
+    * */
+    public void addProductImageUri(String productId, Uri productUri){
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_P_IMAGE_URI, String.valueOf(productUri));
+        db.update(TABLE_PRODUCT, cv, COL_P_ID + "=?", new String[]{productId});
+        db.close();
+    }
+
+    //get product image uri from database
+    public Uri getProductImageUri(String productId){
+        db = this.getWritableDatabase();
+        String q = "SELECT "+COL_P_IMAGE_URI+" FROM "+TABLE_PRODUCT+" WHERE "+COL_P_ID+"=?";
+        Cursor cursor = db.rawQuery(q, new String[]{productId});
+
+        if(cursor.moveToFirst()){
+            String imageUri = cursor.getString(0);
+            return Uri.parse(imageUri);
+        }
+        return null;
     }
 
     @Override

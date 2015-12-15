@@ -58,6 +58,7 @@ public class SellActivity extends AppCompatActivity {
     private String productId;
     private String productName;
     private String productImageAddress;
+    private Uri productImageUri;
 
     DataBase db;
     SingleProductPojo productPojo;
@@ -142,7 +143,7 @@ public class SellActivity extends AppCompatActivity {
                     pImage.setImageBitmap(productImage);
 
                     //save Image to sdcard
-                    saveImageToSD(productImage);
+                    productImageUri = Functions.saveImageToSD(context,productImage);
 
                 }else{
                     //if null is returned instead of bitmap from DownloadImageTask
@@ -157,54 +158,6 @@ public class SellActivity extends AppCompatActivity {
             //display placeholder image
             pImage.setImageResource(R.drawable.placeholder_product);
         }
-    }
-
-    //method to save image to SDCard
-    public void saveImageToSD(Bitmap bitmap){
-        //check external storage
-        //External storage available to Write
-        if(Functions.isExternalStorageAvailable()){
-
-            OutputStream output;
-            String appName = getString(R.string.app_name);
-
-            //1. Get the external storage directory
-            File filePath = Environment.getExternalStorageDirectory();
-
-            //2. Create our subdirectory
-            File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-
-            //3. Create file name
-            String fileName = productName.replaceAll(" ","_").toLowerCase();
-
-            //3. Create the file
-            File file = new File(dir,"IMG_"+fileName+".jpg");
-
-            //4. store image
-            try{
-                output = new FileOutputStream(file);
-
-                //compress image
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,output);
-                output.flush();
-                output.close();
-
-                Log.d(TAG,"HUS: Uri "+ Uri.fromFile(file));
-
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.e(TAG,"HUS: "+e);
-            }
-            //4. return the Uri
-
-        }else{
-            //not Available
-            Toast.makeText(getApplicationContext(), R.string.external_storage_prblm,Toast.LENGTH_LONG).show();
-        }
-
     }
 
     //Fetch data from the backend

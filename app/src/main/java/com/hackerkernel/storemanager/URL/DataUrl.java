@@ -4,7 +4,7 @@ package com.hackerkernel.storemanager.URL;
  * CLass to feed URLS
  */
 public class DataUrl {
-    private static final String SERVER = "http://192.168.56.1/";
+    private static final String SERVER = "http://192.168.47.2/";
     public static final String
             REGISTER_URL = SERVER + "co/storemanger/register.php",
             LOGIN_URL = SERVER +  "co/storemanger/login.php",

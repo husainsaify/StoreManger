@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,8 +22,10 @@ import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -85,14 +86,29 @@ public class ViewProductActivity extends AppCompatActivity {
 
             //display image which is stored in sdcard using uri
             if(imageUri != null){
-                imageView.setImageURI(imageUri);
+
+                //check is image is available & not deleted from sdcard
+                String imageUriString = String.valueOf(imageUri);
+                File file = new File(URI.create(imageUriString).getPath());
+                
+                if(file.exists()){
+                    //if file is in sdcard
+                    imageView.setImageURI(imageUri);
+                    Log.d(TAG,"HUS: image avaible in sdcard");
+                }else{
+                    //deleted from sdcard
+                    new getImageTask().execute(pImageAddress); //fetch a new image from the web
+                    Log.d(TAG, "HUS: image not avaible in sdcard");
+                }
             }else{
                 //fetch the Image and display it
                 new getImageTask().execute(pImageAddress);
+                Log.d(TAG, "HUS: no image uri stored");
             }
         }else{
             //Show the placeHolder image
             imageView.setImageResource(R.drawable.placeholder_product);
+            Log.d(TAG, "HUS: showing placeholder image");
         }
 
         //create ProgressDialog
@@ -216,6 +232,8 @@ public class ViewProductActivity extends AppCompatActivity {
 
                 productImageUri = Functions.saveImageToSD(context,imageBitmap);
 
+                //add ProductImageUri to database
+                db.addProductImageUri(pId,productImageUri);
             }else{
                 /*
                 * Seams their is some issue is retrieving image
@@ -273,9 +291,6 @@ public class ViewProductActivity extends AppCompatActivity {
 
             //add this product to the database
             db.addProduct(productPojo);
-
-            //add ProductImageUri to database
-            db.addProductImageUri(productPojo.getId(),productImageUri);
         }
     }
 

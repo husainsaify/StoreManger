@@ -90,15 +90,15 @@ public class ViewProductActivity extends AppCompatActivity {
                 //check is image is available & not deleted from sdcard
                 String imageUriString = String.valueOf(imageUri);
                 File file = new File(URI.create(imageUriString).getPath());
-                
+
                 if(file.exists()){
                     //if file is in sdcard
                     imageView.setImageURI(imageUri);
-                    Log.d(TAG,"HUS: image avaible in sdcard");
+                    Log.d(TAG,"HUS: image available in sdcard");
                 }else{
                     //deleted from sdcard
                     new getImageTask().execute(pImageAddress); //fetch a new image from the web
-                    Log.d(TAG, "HUS: image not avaible in sdcard");
+                    Log.d(TAG, "HUS: image not available in sdcard deleted");
                 }
             }else{
                 //fetch the Image and display it

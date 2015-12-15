@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,10 +24,9 @@ import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
@@ -135,28 +133,38 @@ public class SellActivity extends AppCompatActivity {
         //product image is not empty
         //get Image from the web
         if (!productImageAddress.isEmpty()){
-            try {
-                Bitmap productImage = new DownloadImageTask().execute(productImageAddress).get();
-                if(productImage != null){
-                    //set image to imageView
-                    pImage.setScaleType(ImageView.ScaleType.FIT_START);
-                    pImage.setImageBitmap(productImage);
+            /*
+            * Get the image from Sdcard is available
+            * */
 
-                    //save Image to sdcard
-                    productImageUri = Functions.saveImageToSD(context,productImage);
+            //1. get image uri from database
+            Uri uri = db.getProductImageUri(productId);
 
+            //2. check image is avaialble in sdcard or not deleted
+            if(uri != null){
+                String imageUriString = String.valueOf(uri);
+                File file = new File(URI.create(imageUriString).getPath());
+
+                //3. if image available in sdcard
+                if(file.exists()){
+                    //4. Set image to view
+                    pImage.setImageURI(uri);
+                    Log.d(TAG, "HUS: image avaible in sdcard");
                 }else{
-                    //if null is returned instead of bitmap from DownloadImageTask
-                    Toast.makeText(getApplicationContext(),getString(R.string.unable_fetch_image),Toast.LENGTH_LONG).show();
+                    //5. image not available in sdcard deleted from sdcard
+                    new DownloadImageTask().execute(productImageAddress);
+                    Log.d(TAG, "HUS: image not available in sdcard deleted");
                 }
 
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-                Log.e(TAG,"HUS: "+e);
+            }else{
+                //download the image from the web
+                new DownloadImageTask().execute(productImageAddress);
+                Log.d(TAG, "HUS: no image uri stored");
             }
         }else{
             //display placeholder image
             pImage.setImageResource(R.drawable.placeholder_product);
+            Log.d(TAG, "HUS: showing placeholder image");
         }
     }
 
@@ -217,6 +225,16 @@ public class SellActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return null;
             }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            //set image to imageView
+            pImage.setScaleType(ImageView.ScaleType.FIT_START);
+            pImage.setImageBitmap(bitmap);
+
+            //save Image to sdcard
+            productImageUri = Functions.saveImageToSD(context,bitmap);
         }
     }
 }

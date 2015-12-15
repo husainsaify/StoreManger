@@ -157,7 +157,7 @@ function check_mobile($mobile){
 
 //check user is valid
 function check_user($userId){
-    $userCount = Db::rowCount("user",array("id" => $userId),array("="));
+    $userCount = Db::rowCount("user",array("id" => $userId,"active" => "y"),array("=","="));
     return $userCount <= 0 ? false : true;
 }
 

@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -137,6 +139,32 @@ public class SellActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_product, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.action_ok:
+                    //addProduct();
+                break;
+            case R.id.action_cancel: //when cancel button is pressed
+                //close AddProductActivty
+                finish();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 
     /*
     * This method will create 3 new EditText for size/quantity/product

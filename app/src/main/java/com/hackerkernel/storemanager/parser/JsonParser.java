@@ -182,7 +182,7 @@ public class JsonParser {
                 JSONArray quantityJsonArray = jo.getJSONArray("quantity");
                 String size = "",quantity = "";
 
-                //generate a size & quanity string Ex "7\n8\n9\n"
+                //generate a size & quantity string Ex "7,8,9,"
                 for (int i = 0; i < sizeJsonArray.length(); i++) {
                     size += sizeJsonArray.get(i);
                     quantity += quantityJsonArray.get(i);

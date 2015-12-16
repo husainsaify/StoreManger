@@ -83,6 +83,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(sellIntent);
             }
         });
+
+        db.deleteAllProduct();
+        db.deleteAllSQ();
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.v4.util.ArrayMap;
+import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
@@ -86,7 +87,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         //create SQ table
         String CREATE_SQ_TABLE = "CREATE TABLE "+TABLE_SQ+"(" +
-                COL_SQ_ID + " integer primary key not null," +
+                COL_SQ_ID + " integer primary key autoincrement," +
                 COL_SQ_SIZE + " integer not null," +
                 COL_SQ_QUANTITY + " integer not null," +
                 COL_SQ_USER_ID + " integer not null," +
@@ -242,6 +243,12 @@ public class DataBase extends SQLiteOpenHelper {
             product.setSp(cursor.getString(6));
             product.setTime(cursor.getString(7));
 
+            //get size and Quantity stack from Member methods "getSize" & "getQuanity"
+            String userId = this.getUserID(); //get userId from member method
+
+            product.setSize(this.getSize(userId, productId));
+            product.setQuantity(this.getQuantity(userId,productId));
+
             //close cursor & db
             cursor.close();
             db.close();
@@ -296,10 +303,9 @@ public class DataBase extends SQLiteOpenHelper {
 
     //********************************** TABLE SQ
     //this method is used to insert SQ
-    public boolean setSQ(String size,String quantity,String userId, String productId){
+    public boolean addSQ(String size,String quantity,String userId, String productId){
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(COL_SQ_ID,"");
         cv.put(COL_SQ_SIZE,size);
         cv.put(COL_SQ_QUANTITY,quantity);
         cv.put(COL_SQ_USER_ID,userId);
@@ -314,6 +320,63 @@ public class DataBase extends SQLiteOpenHelper {
         db.close();
         return true;
     }
+
+    /*
+    * getSize & getQuantity will return size | Quantity in StringStack
+    * This method will ge used by "db.getProduct" method
+    * */
+    private String getSize(String userId,String productId){
+        db = this.getReadableDatabase();
+        String q = "SELECT "+COL_SQ_SIZE+" FROM "+TABLE_SQ+" WHERE "+COL_SQ_USER_ID+"=? AND "+COL_SQ_PRODUCT_ID+"=?";
+        Cursor cursor = db.rawQuery(q, new String[]{userId, productId});
+        int i = 0;
+        if (cursor.moveToFirst()){
+            String size = "";
+            do{
+                i++;
+                size += cursor.getString(cursor.getColumnIndex(COL_SQ_SIZE));
+
+                if(i < cursor.getCount()){
+                    size += "\n";
+                }
+            }while (cursor.moveToNext());
+
+            db.close();
+            return size;
+        }
+        db.close();
+        return null;
+    }
+
+    private String getQuantity(String userId,String productId){
+        db = this.getReadableDatabase();
+        String q = "SELECT "+COL_SQ_QUANTITY+" FROM "+TABLE_SQ+" WHERE "+COL_SQ_USER_ID+"=? AND "+COL_SQ_PRODUCT_ID+"=?";
+        Cursor cursor = db.rawQuery(q, new String[]{userId, productId});
+        int i = 0;
+        if (cursor.moveToFirst()){
+            String quantity = "";
+            do{
+                i++;
+                quantity += cursor.getString(cursor.getColumnIndex(COL_SQ_QUANTITY));
+
+                if(i < cursor.getCount()){
+                    quantity += "\n";
+                }
+            }while (cursor.moveToNext());
+
+            db.close();
+            return quantity;
+        }
+        db.close();
+        return null;
+    }
+
+    public void deleteAllSQ(){
+        db = this.getWritableDatabase();
+        db.delete(TABLE_SQ,null,null);
+        db.close();
+    }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

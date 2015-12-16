@@ -116,7 +116,7 @@ public class ViewProductActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
 
         /*
-        * Check Product exits in database
+        * Check Product exits in local database
         * if exits Fetch data and display in views
         * if not exits fetch it from Backend and then store it in local database
         * */
@@ -289,8 +289,28 @@ public class ViewProductActivity extends AppCompatActivity {
             }
             pd.dismiss();
 
-            //add this product to the database
+            //add this product to the Local SQLite database
             db.addProduct(productPojo);
+
+            /*
+            * Get Size & Quantity from "productPojo"
+            * and store them in `SQ` Local database
+            * Convert This 2,3,4
+            * into
+            * Array 2
+            *       3
+            *       4
+            * */
+            String sizeArray[] = productPojo.getSize().split("\n");
+            String quantityArray[] = productPojo.getQuantity().split("\n");
+
+            for (int i = 0; i < sizeArray.length; i++) {
+                String size = sizeArray[i];
+                String quantity = quantityArray[i];
+
+                //insert into db
+                db.addSQ(size,quantity,userId,pId);
+            }
         }
     }
 

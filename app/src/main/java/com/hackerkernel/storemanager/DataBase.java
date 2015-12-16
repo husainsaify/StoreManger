@@ -18,7 +18,7 @@ public class DataBase extends SQLiteOpenHelper {
     //create a TAG
     private static final String TAG = DataBase.class.getSimpleName();
     //database version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 1;
     //database name
     private static final String DATABASE_NAME = "storemanager.db";
     //table structure
@@ -39,11 +39,17 @@ public class DataBase extends SQLiteOpenHelper {
             COL_P_IMAGE_ADDRESS = "p_image_address",
             COL_P_IMAGE_URI = "p_image_uri",
             COL_P_CODE = "p_code",
-            COL_P_SIZE = "p_size",
-            COL_P_QUANTITY = "p_quantity",
             COL_P_CP = "p_cp",
             COL_P_SP = "p_sp",
             COL_P_TIME = "p_time";
+
+    //table sq
+    private static final String TABLE_SQ = "sq",
+                                COL_SQ_ID = "id",
+                                COL_SQ_SIZE = "size",
+                                COL_SQ_QUANTITY = "quantity",
+                                COL_SQ_USER_ID = "user_id",
+                                COL_SQ_PRODUCT_ID = "product_id";
 
     //create a database variable
     SQLiteDatabase db;
@@ -73,15 +79,23 @@ public class DataBase extends SQLiteOpenHelper {
                 COL_P_IMAGE_ADDRESS + " text not null," +
                 COL_P_IMAGE_URI + " text not null," +
                 COL_P_CODE + " text not null," +
-                COL_P_SIZE + " text not null," +
-                COL_P_QUANTITY + " text not null," +
                 COL_P_CP + " text not null," +
                 COL_P_SP + " text not null," +
                 COL_P_TIME + " text not null" +
                 ")";
 
+        //create SQ table
+        String CREATE_SQ_TABLE = "CREATE TABLE "+TABLE_SQ+"(" +
+                COL_SQ_ID + " integer primary key not null," +
+                COL_SQ_SIZE + " integer not null," +
+                COL_SQ_QUANTITY + " integer not null," +
+                COL_SQ_USER_ID + " integer not null," +
+                COL_SQ_PRODUCT_ID + " integer not null" +
+                ")";
+
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_PRODUCT_TABLE);
+        db.execSQL(CREATE_SQ_TABLE);
     }
 
     //*************************** TABLE_USER
@@ -198,9 +212,6 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_NAME, product.getName());
         cv.put(COL_P_IMAGE_ADDRESS, product.getImageAddress());
         cv.put(COL_P_IMAGE_URI, "");
-        cv.put(COL_P_CODE, product.getCode());
-        cv.put(COL_P_SIZE, product.getSize());
-        cv.put(COL_P_QUANTITY, product.getQuantity());
         cv.put(COL_P_SP, product.getSp());
         cv.put(COL_P_CP, product.getCp());
         cv.put(COL_P_TIME, product.getTime());
@@ -226,11 +237,9 @@ public class DataBase extends SQLiteOpenHelper {
             product.setImageAddress(cursor.getString(2));
             product.setImageUri(cursor.getString(3));
             product.setCode(cursor.getString(4));
-            product.setSize(cursor.getString(5));
-            product.setQuantity(cursor.getString(6));
-            product.setCp(cursor.getString(7));
-            product.setSp(cursor.getString(8));
-            product.setTime(cursor.getString(9));
+            product.setCp(cursor.getString(5));
+            product.setSp(cursor.getString(6));
+            product.setTime(cursor.getString(7));
 
             //close cursor & db
             cursor.close();
@@ -284,11 +293,43 @@ public class DataBase extends SQLiteOpenHelper {
         return null;
     }
 
+    //********************************** TABLE SQ
+    //this method is used to insert SQ
+    public boolean setSQ(String size,String quantity,String userId, String productId){
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_SQ_ID,"");
+        cv.put(COL_SQ_SIZE,size);
+        cv.put(COL_SQ_QUANTITY,quantity);
+        cv.put(COL_SQ_USER_ID,userId);
+        cv.put(COL_SQ_PRODUCT_ID,productId);
+
+        long r = db.insert(TABLE_SQ,null,cv);
+        if(r == -1){
+            db.close();
+            return false;
+        }
+        //close db
+        db.close();
+        return true;
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //drop table if factory version upgrads
+        //drop table if factory version upgrade
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SQ);
+        //execute onCreate method
+        onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //drop table if factory version degrade
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SQ);
         //execute onCreate method
         onCreate(db);
     }

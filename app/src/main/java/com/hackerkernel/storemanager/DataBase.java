@@ -212,6 +212,7 @@ public class DataBase extends SQLiteOpenHelper {
         cv.put(COL_P_NAME, product.getName());
         cv.put(COL_P_IMAGE_ADDRESS, product.getImageAddress());
         cv.put(COL_P_IMAGE_URI, "");
+        cv.put(COL_P_CODE, product.getCode());
         cv.put(COL_P_SP, product.getSp());
         cv.put(COL_P_CP, product.getCp());
         cv.put(COL_P_TIME, product.getTime());

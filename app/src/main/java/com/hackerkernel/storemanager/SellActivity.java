@@ -425,6 +425,9 @@ public class SellActivity extends AppCompatActivity {
             if (pojo.getReturned()){
                 Toast.makeText(context,pojo.getMessage(),Toast.LENGTH_LONG).show();
 
+                //Delete product from the Local database(so that we can fetch new)
+                db.deleteProduct(productId);
+
                 //restart activity
                 Intent restartIntent = getIntent();
                 finish();

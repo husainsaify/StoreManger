@@ -262,7 +262,10 @@ public class DataBase extends SQLiteOpenHelper {
     //method to delete product from the database
     public int deleteProduct(String productId){
         db = this.getWritableDatabase();
+        //delete from TABLE_PRODUCT
         int result = db.delete(TABLE_PRODUCT,COL_P_ID+"=?",new String[] {productId});
+        //delete from TABLE_SQ
+        db.delete(TABLE_SQ,COL_SQ_PRODUCT_ID+"=?",new String[]{productId});
         db.close();
         return result;
     }
@@ -376,6 +379,7 @@ public class DataBase extends SQLiteOpenHelper {
         db.delete(TABLE_SQ,null,null);
         db.close();
     }
+
 
 
     @Override

@@ -1,6 +1,8 @@
 package com.hackerkernel.storemanager;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -28,6 +30,7 @@ import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.ACProductAdapter;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 import java.io.File;
@@ -75,13 +78,15 @@ public class SellActivity extends AppCompatActivity {
 
 
     private String userId;
-    private String productId;
+    private String productId = null;
     private String productName;
     private String productImageAddress;
     private Uri productImageUri;
 
     DataBase db;
     SingleProductPojo productPojo;
+
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +131,10 @@ public class SellActivity extends AppCompatActivity {
         quantityList.add(quantity);
         priceList.add(price);
 
+        //Create a progressDialog
+        pd = new ProgressDialog(context);
+        pd.setMessage(getString(R.string.pleasewait));
+
         //When Load more Button is clicked
         /*
         * generate a new Size/Quantity/price EditText
@@ -153,7 +162,7 @@ public class SellActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_ok:
-                    //addProduct();
+                    sellProduct();
                 break;
             case R.id.action_cancel: //when cancel button is pressed
                 //close AddProductActivty
@@ -164,6 +173,44 @@ public class SellActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    * This method will get all details from "sellActivity" and send it to the backend
+    * */
+    private void sellProduct() {
+        //check productId is not null
+        if(productId == null){
+            Functions.errorAlert(context, getString(R.string.oops), getString(R.string.please_select_product));
+            productSearch.setFocusable(true); //set productSearch to focus
+            return;
+        }
+
+        //generate size | quantity | product stack for sending it backend
+        StringBuilder sizeStack = new StringBuilder();
+        StringBuilder quantityStack = new StringBuilder();
+        StringBuilder priceStack = new StringBuilder();
+
+        //check size | quantity | price is not
+        for (int i = 0; i < sizeList.size(); i++) {
+            //get the values of size | quantity | price
+            String size = sizeList.get(i).getText().toString().trim();
+            String quantity = quantityList.get(i).getText().toString().trim();
+            String price = priceList.get(i).getText().toString().trim();
+
+            //check size | quantity | price is not empty
+            if(size.isEmpty() || quantity.isEmpty() || price.isEmpty()){
+                Functions.errorAlert(context,getString(R.string.oops),getString(R.string.fillin_all_fields));
+                return;
+            }else{
+                //Append values to size | product | quantity stack
+                sizeStack.append(size).append(",");
+                quantityStack.append(quantity).append(",");
+                priceStack.append(price).append(",");
+            }
+        }
+
+        //Call the SellProductTask to send all the values to Backend
+        new SellProductTask().execute(sizeStack.toString(),quantityStack.toString(),priceStack.toString());
+    }
 
 
     /*
@@ -343,6 +390,51 @@ public class SellActivity extends AppCompatActivity {
 
             //save Image to sdcard
             productImageUri = Functions.saveImageToSD(context,bitmap);
+        }
+    }
+
+    private class SellProductTask extends AsyncTask<String,Void,SimplePojo>{
+        @Override
+        protected void onPreExecute() {
+            //show progressDialog
+            pd.show();
+        }
+
+        @Override
+        protected SimplePojo doInBackground(String... params) {
+            //Create a hashmap
+            HashMap<String,String> hashmap = new HashMap<>();
+            hashmap.put("user_id",userId);
+            hashmap.put("product_id",productId);
+            hashmap.put("size",params[0]);
+            hashmap.put("quantity",params[1]);
+            hashmap.put("price",params[2]);
+            //convert it into a encoded url
+            String data = Functions.hashMapToEncodedUrl(hashmap);
+
+            String jsonString = GetJson.request(DataUrl.ADD_SELL, data, "POST");
+
+            //parse Json
+            List<SimplePojo> list = JsonParser.SimpleParse(jsonString);
+            assert list != null;
+            return list.get(0);
+        }
+
+        @Override
+        protected void onPostExecute(SimplePojo pojo) {
+            if (pojo.getReturned()){
+                Toast.makeText(context,pojo.getMessage(),Toast.LENGTH_LONG).show();
+
+                //restart activity
+                Intent restartIntent = getIntent();
+                finish();
+                startActivity(restartIntent);
+
+            }else{
+                Functions.errorAlert(context,getString(R.string.oops),pojo.getMessage());
+            }
+            //hide progressDialog
+            pd.hide();
         }
     }
 }

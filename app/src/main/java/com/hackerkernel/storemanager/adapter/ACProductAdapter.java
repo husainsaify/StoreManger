@@ -123,7 +123,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
             //get data from the backend
-            String jsonString = GetJson.request(DataUrl.AC_PRODUCT_SEARCH, data, "POST");
+            String jsonString = GetJson.request(DataUrl.PRODUCT_SEARCH, data, "POST");
             //parse json
             return JsonParser.ACProductSearchParser(jsonString);
         }

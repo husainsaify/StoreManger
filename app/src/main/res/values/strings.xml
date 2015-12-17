@@ -67,4 +67,7 @@
     <string name="external_storage_prblm">Their is a problem accessing your External Storage</string>
     <string name="price_per_unit">Price per unit</string>
     <string name="product_image">Product Image</string>
+    <string name="please_select_product">Please select a product</string>
+    <!-- Sell activity -->
+
 </resources>

@@ -159,66 +159,82 @@
     <!-- /product info area -->
 
     <!-- size / Quantity / price -->
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:weightSum="3"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:baselineAligned="false">
+        android:layout_weight="0.5">
 
-        <!-- size -->
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9"
-            android:id="@+id/sizeLayout">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:baselineAligned="false">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/size"/>
+            <!-- size -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:id="@+id/sizeLayout"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:hint="@string/size"
+                    android:id="@+id/size"/>
+
+            </LinearLayout>
+            <!-- /size -->
+
+            <!-- quantity -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:id="@+id/quantityLayout"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/quantity"
+                    android:id="@+id/quantity"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+            <!-- /quantity -->
+
+            <!-- price per unit -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.2"
+                android:id="@+id/priceLayout"
+                android:orientation="vertical">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/price_per_unit"
+                    android:id="@+id/price"
+                    android:inputType="number"/>
+
+            </LinearLayout>
+            <!-- /price per unit -->
 
         </LinearLayout>
-        <!-- /size -->
 
-        <!-- quantity -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.9"
-            android:id="@+id/quantityLayout">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/quantity"/>
-
-        </LinearLayout>
-        <!-- /quantity -->
-
-        <!-- price per unit -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.2"
-            android:id="@+id/priceLayout">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/price_per_unit"/>
-
-        </LinearLayout>
-        <!-- /price per unit -->
-
-    </LinearLayout>
+    </ScrollView>
     <!-- Size / quantity / price per unit -->
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/load_more"/>
+        android:text="@string/load_more"
+        android:id="@+id/loadMore"/>
 </LinearLayout>

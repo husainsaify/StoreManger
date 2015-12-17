@@ -8,11 +8,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +33,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
@@ -51,6 +58,19 @@ public class SellActivity extends AppCompatActivity {
     @Bind(R.id.quantityHeader) TextView quantityHeader;
     @Bind(R.id.profitHeader) TextView profitHeader;
     @Bind(R.id.pImage) ImageView pImage;
+
+    //size quantity price
+    @Bind(R.id.size) EditText size;
+    @Bind(R.id.quantity) EditText quantity;
+    @Bind(R.id.price) EditText price;
+    @Bind(R.id.sizeLayout) LinearLayout sizeLayout;
+    @Bind(R.id.quantityLayout) LinearLayout quantityLayout;
+    @Bind(R.id.priceLayout) LinearLayout priceLayout;
+    @Bind(R.id.loadMore) Button loadMore;
+    List<EditText> sizeList;
+    List<EditText> quantityList;
+    List<EditText> priceList;
+
 
     private String userId;
     private String productId;
@@ -93,6 +113,66 @@ public class SellActivity extends AppCompatActivity {
                 getProductData(productId);
             }
         });
+
+        //instanciate size/quantity/price list
+        sizeList = new ArrayList<>();
+        quantityList = new ArrayList<>();
+        priceList = new ArrayList<>();
+
+        // Add size/quantity/price editText to List
+        sizeList.add(size);
+        quantityList.add(quantity);
+        priceList.add(price);
+
+        //When Load more Button is clicked
+        /*
+        * generate a new Size/Quantity/price EditText
+        * Add them to Their layout
+        * Add them to their list
+        * */
+        loadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadMore(); //call loadMore method
+            }
+        });
+    }
+
+    /*
+    * This method will create 3 new EditText for size/quantity/product
+    * and append them to layout
+    *  */
+    public void loadMore(){
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //create a new Size / Quantity / price EditText
+        EditText size = new EditText(SellActivity.this);
+        EditText quantity = new EditText(SellActivity.this);
+        EditText price = new EditText(SellActivity.this);
+
+        //set their width and height
+        size.setLayoutParams(layoutParams);
+        quantity.setLayoutParams(layoutParams);
+        price.setLayoutParams(layoutParams);
+
+        //set inputType to number
+        size.setInputType(InputType.TYPE_CLASS_NUMBER);
+        quantity.setInputType(InputType.TYPE_CLASS_NUMBER);
+        price.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        //set their hint
+        size.setHint(getString(R.string.size));
+        quantity.setHint(getString(R.string.quantity));
+        price.setHint(getString(R.string.price_per_unit));
+
+        //add to list
+        sizeList.add(size);
+        quantityList.add(quantity);
+        priceList.add(price);
+
+        //append to layout
+        sizeLayout.addView(size);
+        quantityLayout.addView(quantity);
+        priceLayout.addView(price);
     }
 
     //method to fetch product

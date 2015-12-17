@@ -49,7 +49,8 @@
         android:layout_marginRight="10dp"
         android:layout_weight="0.5"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:baselineAligned="false">
 
         <!-- product image -->
         <LinearLayout
@@ -60,7 +61,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/pImage"/>
+                android:id="@+id/pImage"
+                android:contentDescription="@string/product_image" />
 
         </LinearLayout>
         <!-- / product image -->
@@ -98,7 +100,7 @@
 
                         <TextView
                             android:id="@+id/pDate"
-                            android:gravity="right" />
+                            android:gravity="end" />
                     </TableRow>
 
                 </TableLayout>
@@ -118,7 +120,7 @@
 
                         <TextView
                             android:textColor="@color/primaryColor"
-                            android:gravity="right"
+                            android:gravity="end"
                             android:id="@+id/quantityHeader"
                             android:textAppearance="?android:textAppearanceMedium" />
                     </TableRow>
@@ -130,7 +132,7 @@
 
                         <TextView
                             android:id="@+id/pQuantity"
-                            android:gravity="right" />
+                            android:gravity="end" />
                     </TableRow>
 
                 </TableLayout>
@@ -156,4 +158,67 @@
     </LinearLayout>
     <!-- /product info area -->
 
+    <!-- size / Quantity / price -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:weightSum="3"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:baselineAligned="false">
+
+        <!-- size -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:id="@+id/sizeLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/size"/>
+
+        </LinearLayout>
+        <!-- /size -->
+
+        <!-- quantity -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.9"
+            android:id="@+id/quantityLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/quantity"/>
+
+        </LinearLayout>
+        <!-- /quantity -->
+
+        <!-- price per unit -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:id="@+id/priceLayout">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_per_unit"/>
+
+        </LinearLayout>
+        <!-- /price per unit -->
+
+    </LinearLayout>
+    <!-- Size / quantity / price per unit -->
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/load_more"/>
 </LinearLayout>

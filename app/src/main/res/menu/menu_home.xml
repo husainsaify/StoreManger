@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.hackerkernel.storemanager.HomeActivity">
     <item
+        android:id="@+id/action_sale_tracker"
+        android:orderInCategory="50"
+        android:title="@string/sale_tracker"
+        app:showAsAction="never"
+        />
+    <item
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
         android:title="@string/refresh"

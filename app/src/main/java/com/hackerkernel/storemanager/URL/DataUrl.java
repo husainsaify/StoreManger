@@ -16,7 +16,8 @@ public class DataUrl {
             GET_SINGLE_PRODUCT = SERVER + "co/storemanger/fetchProduct.php",
             DELETE_PRODUCT = SERVER + "co/storemanger/deleteProduct.php",
             PRODUCT_SEARCH = SERVER + "co/storemanger/searchProduct.php",
-            ADD_SELL = SERVER + "co/storemanger/addSell.php";
+            ADD_SELL = SERVER + "co/storemanger/addSell.php",
+            SALES_TRACKER_DATE_LIST = SERVER + "co/storemanger/salesTrackerDatelist.php";
                 
 
         /*private static final String SERVER = "http://demo.hackerkernel.com/";

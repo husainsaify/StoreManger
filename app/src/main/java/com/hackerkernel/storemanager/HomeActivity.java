@@ -111,6 +111,10 @@ public class HomeActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
+            //sales Tracker
+            case R.id.action_sale_tracker:
+                startActivity(new Intent(HomeActivity.this,SaleTrackerActivity.class));
+                break;
             //refresh
             case R.id.action_refresh:
                 //Fetch category from the backend

@@ -124,14 +124,12 @@ public class SearchActivity extends AppCompatActivity {
                 lable.add(category.get(i).getName());
             }
 
-           ArrayAdapter<String> adapter = new ArrayAdapter<String>(SearchActivity.this,
-                   android.R.layout.simple_spinner_item,lable);
+           ArrayAdapter<String> adapter = new ArrayAdapter<>(SearchActivity.this,
+                   android.R.layout.simple_spinner_item, lable);
 
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             categorySpinner.setAdapter(adapter);
         }
     }
-
-    //
 }

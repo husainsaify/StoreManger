@@ -6,6 +6,7 @@ import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
@@ -14,9 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * json parser to parse json
@@ -244,7 +243,38 @@ public class JsonParser {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d(TAG,"HUS: "+e);
+            Log.d(TAG, "HUS: " + e);
+            return null;
+        }
+    }
+
+    public static List<STdatePojo> STdateParser(String jsonParser){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonParser);
+            STdatePojo STdate = new STdatePojo();
+            List<STdatePojo> list = new ArrayList<>();
+            //parse
+            STdate.setMessage(jsonObject.getString("message"));
+            STdate.setReturned(jsonObject.getBoolean("return"));
+
+            //check if we return true
+            if(jsonObject.getBoolean("return")){
+                JSONArray jsonArray = jsonObject.getJSONArray("date");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jo = jsonArray.getJSONObject(i);
+                    STdatePojo stdate = new STdatePojo();
+                    stdate.setDate(jo.getString("date"));
+                    stdate.setDateId(jo.getString("date_id"));
+
+                    //add to list
+                    list.add(stdate);
+                }
+            }else{
+                list.add(STdate);
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
             return null;
         }
     }

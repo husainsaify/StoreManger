@@ -71,16 +71,10 @@
     <string name="sale_tracker">Sales Tracker</string>
     <string name="title_activity_sale_tracker">SaleTrackerActivity</string>
     <string name="no_sales">It seems you haven\'t entered any sale</string>
-    <!-- Sell activity -->
-    <string-array name="country_arrays">
-        <item>Malaysia</item>
-        <item>United States</item>
-        <item>Indonesia</item>
-        <item>France</item>
-        <item>Italy</item>
-        <item>Singapore</item>
-        <item>New Zealand</item>
-        <item>India</item>
-    </string-array>
+    <string name="sp">Selling Price</string>
+    <string name="cp">Cost Price</string>
+    <string name="profit">Profit</string>
+    <string name="loss">Loss</string>
+    <string name="faild_to_load_sales_list">Failed to load salesTracker list</string>
 
 </resources>

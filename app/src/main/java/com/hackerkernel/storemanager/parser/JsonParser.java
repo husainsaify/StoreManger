@@ -1,12 +1,15 @@
 package com.hackerkernel.storemanager.parser;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
+import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
@@ -15,6 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -272,6 +277,49 @@ public class JsonParser {
             }else{
                 list.add(STdate);
             }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List<SalesTrackerPojo> SalesTrackerParser(Context context,String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            List<SalesTrackerPojo> list = new ArrayList<>();
+            //returned true or success
+            if(jsonObject.getBoolean("return")){
+                //add Total sales & cp
+                /*SalesTrackerPojo salesTacker = new SalesTrackerPojo();
+                salesTacker.setTotalSales(jsonObject.getString("total_sales"));
+                salesTacker.setTotalCp(jsonObject.getString("total_cp"));*/
+
+                //add products
+                JSONArray jsonArray = jsonObject.getJSONArray("data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jo = jsonArray.getJSONObject(i);
+                    SalesTrackerPojo current = new SalesTrackerPojo();
+                    current.setSellId(jo.getString("sell_id"));
+                    current.setQuantity(jo.getString("quantity"));
+                    current.setPrice_per(jo.getString("price_per"));
+                    current.setProductId(jo.getString("product_id"));
+                    current.setProductName(jo.getString("name"));
+                    current.setProductCode(jo.getString("code"));
+                    current.setProductCp(jo.getString("cp"));
+                    current.setProductSp(jo.getString("sp"));
+                    current.setCurrentCp(jo.getString("current_sales"));
+                    current.setCurrentSales(jo.getString("current_cp"));
+
+                    //add to the list
+                    list.add(current);
+                }
+            }else{//returned false
+                //show a error Toast message
+                Toast.makeText(context,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
+                Log.d(TAG,jsonObject.getString("message"));
+            }
+
             return list;
         } catch (JSONException e) {
             e.printStackTrace();

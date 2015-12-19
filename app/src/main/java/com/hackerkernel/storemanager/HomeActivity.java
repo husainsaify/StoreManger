@@ -53,7 +53,6 @@ public class HomeActivity extends AppCompatActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(getString(R.string.app_name));
 
-
         //instant DB
         db = new DataBase(this);
         //get userId

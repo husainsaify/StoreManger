@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.List;
 
 public class ProductAdapter extends ArrayAdapter<ProductPojo> {
-    public static final String TAG = ProductPojo.class.getSimpleName();
+    public static final String TAG = ProductAdapter.class.getSimpleName();
     private Context context;
     private List<ProductPojo> list;
 

@@ -1,5 +1,7 @@
 package com.hackerkernel.storemanager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,6 +27,7 @@ import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,6 +59,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
     private final Context context = SaleTrackerActivity.this;
 
     ProgressDialog pd;
+    AlertDialog.Builder builder; //a alert dialog to display product details
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +102,65 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 Toast.makeText(getApplication(), "Please select a date", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+        //when Sales Tracker listView is clicked
+        mSalesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SalesTrackerPojo current = mSalesList.get(position);
+                setAlertDialog(current);
+            }
+        });
+    }
+
+    public void setAlertDialog(SalesTrackerPojo c){
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.sales_tracker_alert_dialog,null);
+        //find view and from the layout
+        TextView name = (TextView) view.findViewById(R.id.pName),
+                 code = (TextView) view.findViewById(R.id.pCode),
+                 quantity = (TextView) view.findViewById(R.id.pQuantity),                 sp = (TextView) view.findViewById(R.id.pSp),
+                 cp = (TextView) view.findViewById(R.id.pCp),
+                 totalSales = (TextView) view.findViewById(R.id.pTotalSales),
+                 totalCp = (TextView) view.findViewById(R.id.pTotalCP),
+                 profitOrLossLabel = (TextView) view.findViewById(R.id.profitOrLossLabel),
+                 profitOrLoss = (TextView) view.findViewById(R.id.profitOrLoss);
+
+        //set values to the views
+        name.setText(c.getProductName());
+        code.setText(c.getProductCode());
+        quantity.setText(c.getQuantity());
+        sp.setText(c.getPrice_per());
+        cp.setText(c.getProductCp());
+        totalSales.setText(c.getCurrentSales());
+        totalCp.setText(c.getCurrentCp());
+
+        //cal profit or loss
+        int currentSale = Integer.parseInt(c.getCurrentSales());
+        int currentCp = Integer.parseInt(c.getCurrentCp());
+        int value;
+        if(currentCp > currentSale){//loss
+            //cal loss
+            value = currentCp - currentSale;
+            profitOrLossLabel.setText(getString(R.string.loss));
+        }else {
+            if (currentSale > currentCp) { //profit
+                //call profit
+                value = currentSale - currentCp;
+                profitOrLossLabel.setText(getString(R.string.profit));
+            } else { // neutral CP = sales
+                value = 0;
+                profitOrLossLabel.setText(getString(R.string.break_even));
+            }
+        }
+
+        profitOrLoss.setText(value+"");
+
+        builder = new AlertDialog.Builder(SaleTrackerActivity.this);
+        builder.setView(view);
+        builder.setPositiveButton(getString(R.string.ok),null);
+        builder.show();
     }
 
     //method to update total sales cp & profit & loss
@@ -209,7 +273,8 @@ public class SaleTrackerActivity extends AppCompatActivity {
                     mTotalSales = Integer.parseInt(jo.getString("total_sales"));
                     mTotalCP = Integer.parseInt(jo.getString("total_cp"));
                     //parse json for SalesTrackerList
-                    return JsonParser.SalesTrackerParser(SaleTrackerActivity.this,jsonString);
+                    mSalesList = JsonParser.SalesTrackerParser(SaleTrackerActivity.this,jsonString);
+                    return mSalesList;
                 }else{
                     /*
                     * store the error message in a Global variable

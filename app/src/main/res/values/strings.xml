@@ -59,7 +59,7 @@
     <string name="error_in_deleting_product">Error in deleting product</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="search">Search</string>
-    <string name="product_name">Enter product Name or Code</string>
+    <string name="enter_product_name">Enter product Name or Code</string>
     <string name="product_name_not_empty">Product name should not be empty</string>
     <string name="title_activity_sell">SellActivity</string>
     <string name="sell">Sell</string>
@@ -77,5 +77,11 @@
     <string name="loss">Loss</string>
     <string name="faild_to_load_sales_list">Failed to load salesTracker list</string>
     <string name="total_sales">Total Sales</string>
+    <string name="product_code">Product Code</string>
+    <string name="selling_price">Selling price</string>
+    <string name="cost_price">Cost price</string>
+    <string name="total_cost_price">Total Cost Price</string>
+    <string name="product_name">Product Name</string>
+    <string name="break_even">Break even</string>
 
 </resources>

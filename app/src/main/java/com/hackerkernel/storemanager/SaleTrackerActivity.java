@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hackerkernel.storemanager.URL.DataUrl;
@@ -20,6 +21,9 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +36,20 @@ public class SaleTrackerActivity extends AppCompatActivity {
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.dateDropDown) Spinner mDateDropDown;
     @Bind(R.id.salesList) ListView mSalesListView;
+    @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
+    @Bind(R.id.profitOrLoss) TextView mProfitOrLossValue;
+    @Bind(R.id.costPrice) TextView mCostPriceValue;
+    @Bind(R.id.sellingPrice) TextView mSellingPriceValue;
+
 
     private List<STdatePojo> mDropdownList;
     private String mUserId,
             mDate,
-            mDateId;
+            mDateId,
+            mFailedMessage;
     private List<SalesTrackerPojo> mSalesList;
+    private int mTotalCP,
+                mTotalSales;
 
     private final String TAG = SaleTrackerActivity.class.getSimpleName();
     private final Context context = SaleTrackerActivity.this;
@@ -85,6 +97,32 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 Toast.makeText(getApplication(), "Please select a date", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    //method to update total sales cp & profit & loss
+    public void updateTotalStats(){
+        String label;
+        int value;
+        if(mTotalCP > mTotalSales){//loss
+            //cal loss
+            value = mTotalCP - mTotalSales;
+            label = "Loss";
+        }else {
+            if (mTotalSales > mTotalCP) { //profit
+                //call profit
+                value = mTotalSales - mTotalCP;
+                label = "Profit";
+            } else { // neutral CP = sales
+                value = 0;
+                label = "Break Even";
+            }
+        }
+
+        //set Label and value to TextView
+        mProfitOrLossLabel.setText(label);
+        mProfitOrLossValue.setText(String.valueOf(value));
+        mCostPriceValue.setText(String.valueOf(mTotalCP));
+        mSellingPriceValue.setText(String.valueOf(mTotalSales));
     }
 
     /*
@@ -163,17 +201,39 @@ public class SaleTrackerActivity extends AppCompatActivity {
 
             String jsonString = GetJson.request(DataUrl.GET_SALES_TRACKER, data, "POST");
             Log.d(TAG, "HUS: Raw json "+jsonString);
-            //parse json
-            return JsonParser.SalesTrackerParser(getApplication(),jsonString);
+
+            //parse json for TotalCP & TotalSp & build the salesTrackerList
+            try {
+                JSONObject jo = new JSONObject(jsonString);
+                if(jo.getBoolean("return")){
+                    mTotalSales = Integer.parseInt(jo.getString("total_sales"));
+                    mTotalCP = Integer.parseInt(jo.getString("total_cp"));
+                    //parse json for SalesTrackerList
+                    return JsonParser.SalesTrackerParser(SaleTrackerActivity.this,jsonString);
+                }else{
+                    /*
+                    * store the error message in a Global variable
+                    * So that we can show error message from MainThread
+                    * */
+                    mFailedMessage = jo.getString("message");
+                    return null;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.d(TAG,"HUS: Failed to parse json "+e);
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(List<SalesTrackerPojo> list) {
-            if(list.size() != 0){
+            if(list != null){
                 SalesTrackerAdapter adapter = new SalesTrackerAdapter(getApplication(),R.layout.sales_tracker_list_layout,list);
                 mSalesListView.setAdapter(adapter);
+                //call updateSalesState to calculate and set total Sales Total CP & p or l
+                updateTotalStats();
             }else{
-                Toast.makeText(getApplication(),getString(R.string.faild_to_load_sales_list),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(),mFailedMessage,Toast.LENGTH_LONG).show();
             }
             pd.dismiss();
         }

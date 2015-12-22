@@ -290,11 +290,6 @@ public class JsonParser {
             List<SalesTrackerPojo> list = new ArrayList<>();
             //returned true or success
             if(jsonObject.getBoolean("return")){
-                //add Total sales & cp
-                /*SalesTrackerPojo salesTacker = new SalesTrackerPojo();
-                salesTacker.setTotalSales(jsonObject.getString("total_sales"));
-                salesTacker.setTotalCp(jsonObject.getString("total_cp"));*/
-
                 //add products
                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -308,16 +303,15 @@ public class JsonParser {
                     current.setProductCode(jo.getString("code"));
                     current.setProductCp(jo.getString("cp"));
                     current.setProductSp(jo.getString("sp"));
-                    current.setCurrentCp(jo.getString("current_sales"));
-                    current.setCurrentSales(jo.getString("current_cp"));
+                    current.setCurrentCp(jo.getString("current_cp"));
+                    current.setCurrentSales(jo.getString("current_sales"));
 
                     //add to the list
                     list.add(current);
                 }
             }else{//returned false
                 //show a error Toast message
-                Toast.makeText(context,jsonObject.getString("message"),Toast.LENGTH_LONG).show();
-                Log.d(TAG,jsonObject.getString("message"));
+                Log.d(TAG,"HUS: "+jsonObject.getString("message"));
             }
 
             return list;

@@ -76,5 +76,6 @@
     <string name="profit">Profit</string>
     <string name="loss">Loss</string>
     <string name="faild_to_load_sales_list">Failed to load salesTracker list</string>
+    <string name="total_sales">Total Sales</string>
 
 </resources>

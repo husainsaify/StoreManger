@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Dummy text"
+        android:textColor="@color/abc_primary_text_material_light"
         android:id="@+id/productName"
-        android:textColor="@color/greyColor"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"/>
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Dummy text"
-        android:textColor="@color/greyColor"
+        android:textColor="@color/abc_primary_text_material_light"
         android:id="@+id/productPorL"
         android:layout_margin="10dp"
         android:layout_gravity="right" />

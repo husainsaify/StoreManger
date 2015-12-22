@@ -276,9 +276,32 @@ public class SellActivity extends AppCompatActivity {
         pDate.setText(product.getTime());
         pSize.setText(product.getSize());
         pQuantity.setText(product.getQuantity());
-        int profit = Integer.parseInt(product.getSp()) - Integer.parseInt(product.getCp());
-        String profitStack = product.getSp() +" - "+ product.getCp() +" = "+profit;
-        pProfit.setText(profitStack);
+
+        //cal Profit , loss or break Even to display
+        int sp = Integer.parseInt(product.getSp());
+        int cp = Integer.parseInt(product.getCp());
+        String value;
+        int label;
+
+        if(cp > sp){//loss
+            //cal loss
+            int loss = cp - sp;
+            value = cp + " - " + sp + " = "+loss;
+            label = R.string.sp_cp_loss;
+        }else {
+            if (sp > cp) { //profit
+                //call profit
+                int profit = sp - cp;
+                value = cp + " - " + sp + " = "+profit;
+                label = R.string.sp_cp_profit;
+            } else { // neutral CP = sales
+                value = cp + " - " + sp + " = "+0;
+                label = R.string.sp_cp_breakeven;
+            }
+        }
+
+        pProfit.setText(value);
+        profitHeader.setText(getString(label));
 
         /*
         * Code to set Product Image

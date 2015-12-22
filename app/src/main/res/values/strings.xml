@@ -64,7 +64,7 @@
     <string name="title_activity_sell">SellActivity</string>
     <string name="sell">Sell</string>
     <string name="sp_cp_profit">SP - CP = Profit</string>
-    <string name="sp_cp_loss">SP - CP = Loss</string>
+    <string name="sp_cp_loss">CP - SP = Loss</string>
     <string name="sp_cp_breakeven">SP - CP = Breakeven</string>
     <string name="external_storage_prblm">Their is a problem accessing your External Storage</string>
     <string name="price_per_unit">Price per unit</string>

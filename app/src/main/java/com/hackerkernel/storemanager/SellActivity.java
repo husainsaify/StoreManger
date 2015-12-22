@@ -292,7 +292,7 @@ public class SellActivity extends AppCompatActivity {
             if (sp > cp) { //profit
                 //call profit
                 int profit = sp - cp;
-                value = cp + " - " + sp + " = "+profit;
+                value = sp + " - " + cp + " = "+profit;
                 label = R.string.sp_cp_profit;
             } else { // neutral CP = sales
                 value = cp + " - " + sp + " = "+0;
@@ -366,7 +366,6 @@ public class SellActivity extends AppCompatActivity {
 
             //fetch data from the Backend
             String jsonString = GetJson.request(DataUrl.GET_SINGLE_PRODUCT, dataUrl, "POST");
-
             //parse JSON and store results in productPojo
             productPojo = JsonParser.SingleProductParser(jsonString);
             return productPojo;
@@ -436,7 +435,7 @@ public class SellActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(hashmap);
 
             String jsonString = GetJson.request(DataUrl.ADD_SELL, data, "POST");
-
+            Log.d(TAG,"HUS: JSON "+jsonString);
             //parse Json
             List<SimplePojo> list = JsonParser.SimpleParse(jsonString);
             assert list != null;

@@ -304,6 +304,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
                 Log.d(TAG,"HUS: Failed to parse json "+e);
+                mFailedMessage = "Failed to parse json";
                 return null;
             }
         }

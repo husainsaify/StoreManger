@@ -15,10 +15,11 @@ public class DataUrl {
             IMAGE_BASE_URL = SERVER + "co/storemanger/",
             GET_SINGLE_PRODUCT = SERVER + "co/storemanger/fetchProduct.php",
             DELETE_PRODUCT = SERVER + "co/storemanger/deleteProduct.php",
-            PRODUCT_SEARCH = SERVER + "co/storemanger/searchProduct.php",
+            AC_PRODUCT_SEARCH = SERVER + "co/storemanger/searchProduct.php",
             ADD_SELL = SERVER + "co/storemanger/addSell.php",
             SALES_TRACKER_DATE_LIST = SERVER + "co/storemanger/salesTrackerDatelist.php",
-            GET_SALES_TRACKER = SERVER + "co/storemanger/salesTracker.php";
+            GET_SALES_TRACKER = SERVER + "co/storemanger/salesTracker.php",
+            PRODUCT_SEARCH = SERVER + "co/storemanger/search.php";
                 
 
         /*private static final String SERVER = "http://demo.hackerkernel.com/";
@@ -32,5 +33,5 @@ public class DataUrl {
                 IMAGE_BASE_URL = SERVER + "storemanger/",
                 GET_SINGLE_PRODUCT = SERVER + "storemanger/fetchProduct.php",
                 DELETE_PRODUCT = SERVER + "storemanger/deleteProduct.php",
-                PRODUCT_SEARCH = SERVER + "storemanger/searchProduct.php";*/
+                AC_PRODUCT_SEARCH = SERVER + "storemanger/searchProduct.php";*/
 }

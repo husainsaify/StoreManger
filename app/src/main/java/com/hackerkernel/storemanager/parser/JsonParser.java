@@ -299,6 +299,7 @@ public class JsonParser {
                     current.setQuantity(jo.getString("quantity"));
                     current.setPrice_per(jo.getString("price_per"));
                     current.setProductId(jo.getString("product_id"));
+                    current.setProductImageAddress(jo.getString("product_image"));
                     current.setProductName(jo.getString("name"));
                     current.setProductCode(jo.getString("code"));
                     current.setProductCp(jo.getString("cp"));

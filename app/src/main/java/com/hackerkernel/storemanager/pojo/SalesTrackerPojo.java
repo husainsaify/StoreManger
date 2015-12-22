@@ -6,6 +6,7 @@ public class SalesTrackerPojo {
             quantity,
             price_per,
             productId,
+            productImageAddress,
             productName,
             productCode,
             productCp,
@@ -16,115 +17,123 @@ public class SalesTrackerPojo {
             totalCp;
     private boolean returned;
 
-        public String getMessage() {
-                return message;
-        }
+    public String getMessage() {
+        return message;
+    }
 
-        public void setMessage(String message) {
-                this.message = message;
-        }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-        public String getSellId() {
-                return sellId;
-        }
+    public String getSellId() {
+        return sellId;
+    }
 
-        public void setSellId(String sellId) {
-                this.sellId = sellId;
-        }
+    public void setSellId(String sellId) {
+        this.sellId = sellId;
+    }
 
-        public String getQuantity() {
-                return quantity;
-        }
+    public String getQuantity() {
+        return quantity;
+    }
 
-        public void setQuantity(String quantity) {
-                this.quantity = quantity;
-        }
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
+    }
 
-        public String getPrice_per() {
-                return price_per;
-        }
+    public String getPrice_per() {
+        return price_per;
+    }
 
-        public void setPrice_per(String price_per) {
-                this.price_per = price_per;
-        }
+    public void setPrice_per(String price_per) {
+        this.price_per = price_per;
+    }
 
-        public String getProductId() {
-                return productId;
-        }
+    public String getProductId() {
+        return productId;
+    }
 
-        public void setProductId(String productId) {
-                this.productId = productId;
-        }
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
 
-        public String getProductName() {
-                return productName;
-        }
+    public String getProductImageAddress() {
+        return productImageAddress;
+    }
 
-        public void setProductName(String productName) {
-                this.productName = productName;
-        }
+    public void setProductImageAddress(String productImageAddress) {
+        this.productImageAddress = productImageAddress;
+    }
 
-        public String getProductCode() {
-                return productCode;
-        }
+    public String getProductName() {
+        return productName;
+    }
 
-        public void setProductCode(String productCode) {
-                this.productCode = productCode;
-        }
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
-        public String getProductCp() {
-                return productCp;
-        }
+    public String getProductCode() {
+        return productCode;
+    }
 
-        public void setProductCp(String productCp) {
-                this.productCp = productCp;
-        }
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
-        public String getProductSp() {
-                return productSp;
-        }
+    public String getProductCp() {
+        return productCp;
+    }
 
-        public void setProductSp(String productSp) {
-                this.productSp = productSp;
-        }
+    public void setProductCp(String productCp) {
+        this.productCp = productCp;
+    }
 
-        public String getCurrentSales() {
-                return currentSales;
-        }
+    public String getProductSp() {
+        return productSp;
+    }
 
-        public void setCurrentSales(String currentSales) {
-                this.currentSales = currentSales;
-        }
+    public void setProductSp(String productSp) {
+        this.productSp = productSp;
+    }
 
-        public String getCurrentCp() {
-                return currentCp;
-        }
+    public String getCurrentSales() {
+        return currentSales;
+    }
 
-        public void setCurrentCp(String currentCp) {
-                this.currentCp = currentCp;
-        }
+    public void setCurrentSales(String currentSales) {
+        this.currentSales = currentSales;
+    }
 
-        public String getTotalSales() {
-                return totalSales;
-        }
+    public String getCurrentCp() {
+        return currentCp;
+    }
 
-        public void setTotalSales(String totalSales) {
-                this.totalSales = totalSales;
-        }
+    public void setCurrentCp(String currentCp) {
+        this.currentCp = currentCp;
+    }
 
-        public String getTotalCp() {
-                return totalCp;
-        }
+    public String getTotalSales() {
+        return totalSales;
+    }
 
-        public void setTotalCp(String totalCp) {
-                this.totalCp = totalCp;
-        }
+    public void setTotalSales(String totalSales) {
+        this.totalSales = totalSales;
+    }
 
-        public boolean isReturned() {
-                return returned;
-        }
+    public String getTotalCp() {
+        return totalCp;
+    }
 
-        public void setReturned(boolean returned) {
-                this.returned = returned;
-        }
+    public void setTotalCp(String totalCp) {
+        this.totalCp = totalCp;
+    }
+
+    public boolean isReturned() {
+        return returned;
+    }
+
+    public void setReturned(boolean returned) {
+        this.returned = returned;
+    }
 }

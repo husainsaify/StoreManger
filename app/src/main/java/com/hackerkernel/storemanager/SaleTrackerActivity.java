@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +61,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
     private final Context context = SaleTrackerActivity.this;
 
     ProgressDialog pd;
-    AlertDialog.Builder builder; //a alert dialog to display product details
+    AlertDialog.Builder dialog; //a alert dialog to display product details
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +116,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
         });
     }
 
-    public void setAlertDialog(SalesTrackerPojo c){
+    public void setAlertDialog(final SalesTrackerPojo c){
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.sales_tracker_alert_dialog,null);
         //find view and from the layout
@@ -155,12 +157,28 @@ public class SaleTrackerActivity extends AppCompatActivity {
             }
         }
 
-        profitOrLoss.setText(value+"");
+        profitOrLoss.setText(value + "");
 
-        builder = new AlertDialog.Builder(SaleTrackerActivity.this);
-        builder.setView(view);
-        builder.setPositiveButton(getString(R.string.ok),null);
-        builder.show();
+        dialog = new AlertDialog.Builder(SaleTrackerActivity.this)
+                .setView(view)
+                .setPositiveButton(getString(R.string.view_product), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //send to ViewProductActivity
+                        sendToViewProductActivity(c);
+                    }
+                })
+                .setNegativeButton(getString(R.string.ok),null);
+        AlertDialog builder = dialog.show();
+    }
+
+    public void sendToViewProductActivity(SalesTrackerPojo c){
+        //send user to ViewProductActivity
+        Intent intent = new Intent(SaleTrackerActivity.this,ViewProductActivity.class);
+        intent.putExtra("pName", c.getProductName());
+        intent.putExtra("pId", c.getProductId());
+        intent.putExtra("pImageAddress",c.getProductImageAddress());
+        startActivity(intent);
     }
 
     //method to update total sales cp & profit & loss

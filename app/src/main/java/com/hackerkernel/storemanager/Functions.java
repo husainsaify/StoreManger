@@ -63,7 +63,7 @@ public class Functions {
     public static void closeAppWhenNoConnection(final Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("No Internet Connection")
-                .setMessage("Sorry! no intenet connectivity detected")
+                .setMessage("Sorry! no internet connectivity detected")
                 .setCancelable(false)
                 .setPositiveButton("Settings", new DialogInterface.OnClickListener() {
                     @Override

@@ -83,5 +83,6 @@
     <string name="total_cost_price">Total Cost Price</string>
     <string name="product_name">Product Name</string>
     <string name="break_even">Break even</string>
+    <string name="view_product">View Product</string>
 
 </resources>

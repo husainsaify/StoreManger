@@ -24,8 +24,7 @@
         android:id="@+id/addCategory"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/primaryColor"
-        android:textColor="@color/lightColor"/>
+        android:background="@color/primaryColor" />
 
     <TextView
         android:layout_width="match_parent"

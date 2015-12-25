@@ -1,76 +1,46 @@
 <RelativeLayout
-    android:id="@+id/layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
     tools:context=".MainActivity"
-    android:background="@color/primaryColor">
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:id="@+id/loginBtn"
-        android:layout_above="@+id/goToRegister"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:background="@color/lightColor"
-        android:textColor="@color/primaryColor"/>
+    android:padding="20dp"
+    android:background="@color/primaryColor"
+    style="@style/Base.TextAppearance.AppCompat.Display1">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/register"
-        android:id="@+id/goToRegister"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/lightColor"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/loginPassword"
-        android:layout_above="@+id/loginBtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/password_hint"
-        android:padding="6dp"
-        android:background="@color/lightColor"
-        android:textColor="@color/primaryColor"
-        android:textColorHint="@color/primaryColor"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:id="@+id/loginEmail"
-        android:layout_above="@+id/loginPassword"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="@string/email_hint"
-        android:padding="6dp"
-        android:background="@color/lightColor"
-        android:textColor="@color/primaryColor"
-        android:textColorHint="@color/primaryColor"
-        android:focusable="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/app_name"
-        android:id="@+id/textView"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/lightColor"
-        android:textSize="40sp"/>
+        android:text="@string/app_name"
+        android:textColor="@color/iconColor"
+        style="@style/TextAppearance.AppCompat.Display1"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2">
+
+        <Button
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="LOGIN"
+            android:textColor="@color/primaryColor"
+            android:background="@drawable/white_button"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="SIGNUP"
+            android:textColor="@color/primaryColor"
+            android:background="@drawable/white_button"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </RelativeLayout>

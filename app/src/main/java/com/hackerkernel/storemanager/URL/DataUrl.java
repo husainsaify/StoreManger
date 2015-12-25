@@ -4,7 +4,7 @@ package com.hackerkernel.storemanager.URL;
  * CLass to feed URLS
  */
 public class DataUrl {
-    private static final String SERVER = "http://192.168.69.2/";
+   private static final String SERVER = "http://192.168.69.2/";
     public static final String
             REGISTER_URL = SERVER + "co/storemanger/register.php",
             LOGIN_URL = SERVER +  "co/storemanger/login.php",
@@ -20,18 +20,22 @@ public class DataUrl {
             SALES_TRACKER_DATE_LIST = SERVER + "co/storemanger/salesTrackerDatelist.php",
             GET_SALES_TRACKER = SERVER + "co/storemanger/salesTracker.php",
             PRODUCT_SEARCH = SERVER + "co/storemanger/search.php";
-                
 
-        /*private static final String SERVER = "http://demo.hackerkernel.com/";
+        /*private static final String SERVER = "http://store.goldennavratanonline.com//";
         public static final String
-                REGISTER_URL = SERVER + "storemanger/register.php",
-                LOGIN_URL = SERVER +  "storemanger/login.php",
-                ADD_CATEGORY = SERVER + "storemanger/addCategory.php",
-                GET_CATEGORY = SERVER + "storemanger/categoryList.php",
-                ADD_PRODUCT = SERVER + "storemanger/addProduct.php",
-                GET_PRODUCT = SERVER + "storemanger/productList.php",
-                IMAGE_BASE_URL = SERVER + "storemanger/",
-                GET_SINGLE_PRODUCT = SERVER + "storemanger/fetchProduct.php",
-                DELETE_PRODUCT = SERVER + "storemanger/deleteProduct.php",
-                AC_PRODUCT_SEARCH = SERVER + "storemanger/searchProduct.php";*/
+                REGISTER_URL = SERVER + "register.php",
+                LOGIN_URL = SERVER +  "login.php",
+                ADD_CATEGORY = SERVER + "addCategory.php",
+                GET_CATEGORY = SERVER + "categoryList.php",
+                ADD_PRODUCT = SERVER + "addProduct.php",
+                GET_PRODUCT = SERVER + "productList.php",
+                IMAGE_BASE_URL = SERVER + "",
+                GET_SINGLE_PRODUCT = SERVER + "fetchProduct.php",
+                DELETE_PRODUCT = SERVER + "deleteProduct.php",
+                AC_PRODUCT_SEARCH = SERVER + "searchProduct.php",
+                ADD_SELL = SERVER + "addSell.php",
+                SALES_TRACKER_DATE_LIST = SERVER + "salesTrackerDatelist.php",
+                GET_SALES_TRACKER = SERVER + "salesTracker.php",
+                PRODUCT_SEARCH = SERVER + "search.php";*/
+
 }

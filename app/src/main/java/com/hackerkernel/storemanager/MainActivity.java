@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
-    @Bind(R.id.loginEmail) TextView loginEmail;
+    /*@Bind(R.id.loginEmail) TextView loginEmail;
     @Bind(R.id.loginPassword) TextView loginPassword;
     @Bind(R.id.loginBtn) Button loginBtn;
     @Bind(R.id.goToRegister) TextView goToRegister;
@@ -33,22 +33,22 @@ public class MainActivity extends AppCompatActivity {
     DataBase database;
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private Context context = MainActivity.this;
+    private Context context = MainActivity.this;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this); //Bind Views
+        /*ButterKnife.bind(this); //Bind Views
         loginEmail.requestFocus();
 
         //instan the database
         database = new DataBase(this);
 
-        /*
+        *//*
         * if user record is in the SQLite database means he is login
         * Start HomeActivity
-        * */
+        * *//*
         if(database.loginStatus()) startHomeActivity();
 
         //make a progress dialog
@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
                     loginTask.execute(email,password);
                 }
             }
-        });
+        });*/
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
         //when connection is not available
@@ -93,10 +93,10 @@ public class MainActivity extends AppCompatActivity {
             //show close app dialog
             Functions.closeAppWhenNoConnection(this);
         }
-    }
+    }*/
 
     //async task class to fetch data from the web
-    private class LoginTask extends AsyncTask<String,String,String>{
+    /*private class LoginTask extends AsyncTask<String,String,String>{
 
         @Override
         protected void onPreExecute() {
@@ -140,9 +140,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    /*
+    *//*
     * Start Register ativity When Register TextView is clicked
-    * */
+    * *//*
     public void startRegisterActivity(){
         Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
         startActivity(intent);
@@ -156,5 +156,5 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         startActivity(intent);
-    }
+    }*/
 }

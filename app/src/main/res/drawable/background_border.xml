@@ -2,7 +2,7 @@
     android:shape="rectangle" >
     <!-- This is the stroke you want to define -->
     <stroke android:width="1dp"
-        android:color="@color/greyColor"/>
+        android:color="@color/dividerColor"/>
 
     <!-- Optional, round your corners -->
     <corners android:bottomLeftRadius="3dp"
@@ -11,7 +11,7 @@
         android:topRightRadius="3dp" />
 
     <!-- Optional, fill the rest of your background with a color or gradient, use transparent if you only want the border to be displayed-->
-    <gradient android:startColor="@color/lightColor"
-        android:endColor="@color/lightColor"
+    <gradient android:startColor="@color/iconColor"
+        android:endColor="@color/iconColor"
         android:angle="90"/>
 </shape>

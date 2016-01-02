@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".activity.MainActivity"
     android:padding="20dp"
     android:background="@color/primaryColor"
     style="@style/Base.TextAppearance.AppCompat.Display1">
@@ -28,19 +28,21 @@
             android:layout_marginEnd="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="LOGIN"
+            android:text="@string/login"
             android:textColor="@color/primaryColor"
             android:background="@drawable/white_button"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:id="@+id/goToLogin" />
 
         <Button
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="SIGNUP"
+            android:text="@string/signup"
             android:textColor="@color/primaryColor"
             android:background="@drawable/white_button"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:id="@+id/goToSignup" />
     </LinearLayout>
 </RelativeLayout>

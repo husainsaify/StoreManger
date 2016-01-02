@@ -88,5 +88,7 @@
     <string name="view_product">View Product</string>
     <string name="signup">SIGNUP</string>
     <string name="password">Password</string>
+    <string name="login_small">Login</string>
+    <string name="email">Email</string>
 
 </resources>

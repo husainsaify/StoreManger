@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.hackerkernel.storemanager.activity.LoginActivity">
+    tools:context="com.hackerkernel.storemanager.activity.LoginActivity"
+    android:id="@+id/login_linearlayout">
 
     <include layout="@layout/tool_bar" android:id="@+id/toolbar"/>
 
@@ -24,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="@string/fullname"/>
+                android:hint="@string/email"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -44,7 +45,8 @@
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login"
+            android:text="@string/login_small"
+            android:id="@+id/login_button"
             android:background="@drawable/primary_button"
             android:textColor="@color/iconColor" />
 

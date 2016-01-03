@@ -6,7 +6,7 @@ package com.hackerkernel.storemanager.extras;
 public class ApiUrl {
    private static final String SERVER = "http://192.168.69.2/";
     public static final String
-            REGISTER_URL = SERVER + "co/storemanger/register.php",
+            SIGNUP_URL = SERVER + "co/storemanger/register.php",
             LOGIN_URL = SERVER +  "co/storemanger/login.php",
             ADD_CATEGORY = SERVER + "co/storemanger/addCategory.php",
             GET_CATEGORY = SERVER + "co/storemanger/categoryList.php",
@@ -23,7 +23,7 @@ public class ApiUrl {
 
         /*private static final String SERVER = "http://store.goldennavratanonline.com//";
         public static final String
-                REGISTER_URL = SERVER + "register.php",
+                SIGNUP_URL = SERVER + "register.php",
                 LOGIN_URL = SERVER +  "login.php",
                 ADD_CATEGORY = SERVER + "addCategory.php",
                 GET_CATEGORY = SERVER + "categoryList.php",

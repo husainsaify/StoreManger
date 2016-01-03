@@ -91,15 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             * */
             if(!Util.isConnectedToInternet(getApplication())){ //no Internet
                 //show a no internet connection SnackBar message
-                final Snackbar snack = Snackbar.make(mLayout, getString(R.string.please_check_your_internt), Snackbar.LENGTH_INDEFINITE);
-                    snack.setAction(getString(R.string.retry_big), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //dismiss Snackbar
-                            snack.dismiss();
-                        }
-                    });
-                snack.show();
+                Util.noInternetSnackbar(getApplication(),mLayout);
 
             }else{ // internet is present
                 /*

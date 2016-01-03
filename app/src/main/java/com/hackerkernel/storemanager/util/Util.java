@@ -22,6 +22,14 @@ public class Util {
         return  Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    //check phone number
+    public static boolean isValidPhoneNumber(String phone) {
+        if (phone.length() < 6 || phone.length() > 13) {
+            return false;
+        } else {
+            return Patterns.PHONE.matcher(phone).matches();
+        }
+    }
     //method to check user is connected to internet
     public static boolean isConnectedToInternet(Context context){
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
@@ -39,4 +47,15 @@ public class Util {
         return false;
     }
 
+    public static void noInternetSnackbar(Context context,View layout){
+        final Snackbar snack = Snackbar.make(layout, context.getString(R.string.please_check_your_internt), Snackbar.LENGTH_INDEFINITE);
+        snack.setAction(context.getString(R.string.retry_big), new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //dismiss Snackbar
+                snack.dismiss();
+            }
+        });
+        snack.show();
+    }
 }

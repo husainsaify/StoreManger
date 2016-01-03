@@ -32,15 +32,6 @@ public class Functions {
 
     private static final String TAG = Functions.class.getSimpleName();
 
-    //check email address
-    public static boolean isValidEmail(CharSequence email){
-        return  Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    //check phone number
-    public static boolean isValidPhoneNumber(String phone){
-        return Patterns.PHONE.matcher(phone).matches();
-    }
 
     //show alert
     public static void errorAlert(Context context,String title,String message){

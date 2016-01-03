@@ -97,5 +97,6 @@
     <string name="storename">Storename</string>
     <string name="storename_more_then_3">Storename must be more then 3 characters</string>
     <string name="password_more_then_4">Password should be more then 4 characters</string>
+    <string name="unable_to_parse_response">Unable to parse response</string>
 
 </resources>

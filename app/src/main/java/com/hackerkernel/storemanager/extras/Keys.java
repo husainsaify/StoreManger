@@ -7,6 +7,7 @@ public interface Keys {
     //common Keys
     String KEY_COM_RETURN = "return";
     String KEY_COM_MESSAGE = "message";
+    String KEY_COM_USERID = "user_id";
     //Login Keys params
     String KEY_LOGIN_EMAIL_PRAM = "email";
     String KEY_LOGIN_PASSWORD_PRAM = "password";

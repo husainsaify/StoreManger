@@ -4,12 +4,14 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
+import com.hackerkernel.storemanager.pojo.SignupPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
@@ -32,20 +34,44 @@ public class JsonParser {
     public static List<SimplePojo> SimpleParse(String json){
         try {
             JSONObject jo = new JSONObject(json);
-            List<SimplePojo> registerList = new ArrayList<>();
+            List<SimplePojo> list = new ArrayList<>();
 
             SimplePojo simplePojo = new SimplePojo();
-            simplePojo.setMessage(jo.getString("message"));
-            simplePojo.setReturned(jo.getBoolean("return"));
+            simplePojo.setMessage(jo.getString(Keys.KEY_COM_MESSAGE));
+            simplePojo.setReturned(jo.getBoolean(Keys.KEY_COM_RETURN));
 
-            registerList.add(simplePojo);
+            list.add(simplePojo);
 
-            return registerList;
+            return list;
         } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    public static List<SignupPojo> SignupParse(String json){
+        try {
+            JSONObject jo = new JSONObject(json);
+            List<SignupPojo> list = new ArrayList<>();
+
+            SignupPojo current = new SignupPojo();
+            current.setMessage(jo.getString(Keys.KEY_COM_MESSAGE));
+            current.setReturned(jo.getBoolean(Keys.KEY_COM_RETURN));
+
+            //if response return true add ID also
+            if(current.getReturned()){
+                current.setUserId(jo.getString(Keys.KEY_COM_USERID));
+            }
+
+            list.add(current);
+
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     //login json parser
     public static List<LoginPojo> LoginParser(String json){

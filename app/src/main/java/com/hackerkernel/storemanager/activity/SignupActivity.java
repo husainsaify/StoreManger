@@ -1,5 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,23 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.SignupPojo;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -51,6 +50,8 @@ public class SignupActivity extends AppCompatActivity {
     LinearLayout mLayout;
 
     private RequestQueue mRequestQueue;
+    private List<SignupPojo> mSignupList;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,11 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.signup_small);
+
+        //make a progress dialog
+        pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
 
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
@@ -110,16 +116,23 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void registerInBackground(final String fullname, final String storename, final String email, final String phone, final String password) {
+        //show progressbar
+        pd.show();
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.SIGNUP_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplication(),response,Toast.LENGTH_LONG).show();
+                        //hide progressbar
+                        pd.dismiss();
+                        //parse the register Response which we have got from api
+                        parseRegisterResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        //hide progressbar
+                        pd.dismiss();
                         //handle Volley error
                         String errorMessage = VolleySingleton.handleVolleyError(error);
                         if(errorMessage != null){
@@ -141,5 +154,25 @@ public class SignupActivity extends AppCompatActivity {
         };
 
         mRequestQueue.add(request);
+    }
+
+    /*
+    * Parse the response which we have got from APi
+    * and if it return true login user in
+    * else display the error message
+    * */
+    public void parseRegisterResponse(String response){
+        mSignupList = JsonParser.SignupParse(response);
+        if(mSignupList != null){
+            SignupPojo current = mSignupList.get(0);
+            //request was success
+            if(current.getReturned()){
+                Toast.makeText(getApplication(),current.getUserId(),Toast.LENGTH_LONG).show();
+            }else{ //request failed
+                Util.redSnackbar(getApplication(),mLayout,current.getMessage());
+            }
+        }else{
+            Toast.makeText(getApplication(), R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 }

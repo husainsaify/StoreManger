@@ -3,7 +3,14 @@ package com.hackerkernel.storemanager.network;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 import com.hackerkernel.storemanager.application.MyApplication;
@@ -47,5 +54,21 @@ public class VolleySingleton {
 
     public ImageLoader getImageLoader(){
         return mImageLoader;
+    }
+
+    public static String handleVolleyError(VolleyError error){
+        String message = null;
+        if(error instanceof TimeoutError || error instanceof NoConnectionError){
+            message = "Connection timeout";
+        }else if(error instanceof AuthFailureError){
+            message = "Failed to perform a request";
+        }else if(error instanceof ServerError){
+            message = "Server error";
+        }else if(error instanceof NetworkError){
+            message = "Network error while performing a request";
+        }else if(error instanceof ParseError){
+            message = "Server response could not be parsed";
+        }
+        return message;
     }
 }

@@ -1,5 +1,6 @@
 package com.hackerkernel.storemanager.util;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

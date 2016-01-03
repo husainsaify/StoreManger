@@ -10,9 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
@@ -115,7 +120,11 @@ public class SignupActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getApplication(),error.getMessage(),Toast.LENGTH_LONG).show();
+                        //handle Volley error
+                        String errorMessage = VolleySingleton.handleVolleyError(error);
+                        if(errorMessage != null){
+                            Util.redSnackbar(getApplication(),mLayout,errorMessage);
+                        }
                     }
                 }) {
 

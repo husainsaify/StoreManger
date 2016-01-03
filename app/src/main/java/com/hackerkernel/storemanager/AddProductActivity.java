@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -282,7 +281,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected String doInBackground(String... params) {
-            return GetJson.request(DataUrl.ADD_PRODUCT,params[0],"POST");
+            return GetJson.request(ApiUrl.ADD_PRODUCT,params[0],"POST");
         }
 
         @Override

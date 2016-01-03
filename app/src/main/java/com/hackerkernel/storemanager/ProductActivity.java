@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +14,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
@@ -157,7 +156,7 @@ public class ProductActivity extends AppCompatActivity {
             String dataUrl = Functions.hashMapToEncodedUrl(productHash);
 
             //request the Backend
-            String jsonString = GetJson.request(DataUrl.GET_PRODUCT,dataUrl,"POST");
+            String jsonString = GetJson.request(ApiUrl.GET_PRODUCT,dataUrl,"POST");
 
             //parse Json and store it in "productList"
             productList = JsonParser.productParser(jsonString);

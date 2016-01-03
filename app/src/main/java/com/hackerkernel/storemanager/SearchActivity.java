@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,8 +16,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
@@ -146,7 +145,7 @@ public class SearchActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
             //make a request to the backend
-            String jsonResponse = GetJson.request(DataUrl.GET_CATEGORY,data,"POST");
+            String jsonResponse = GetJson.request(ApiUrl.GET_CATEGORY,data,"POST");
 
             categoryList = JsonParser.categoryParser(jsonResponse);
             return categoryList;
@@ -192,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
 
             //convert hashMap into a encoded string
             String data = Functions.hashMapToEncodedUrl(hashmap);
-            String  jsonString = GetJson.request(DataUrl.PRODUCT_SEARCH,data,"POST");
+            String  jsonString = GetJson.request(ApiUrl.PRODUCT_SEARCH,data,"POST");
             //parse Json and check we have some result or not
             try {
                 JSONObject jsonObject = new JSONObject(jsonString);

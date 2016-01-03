@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -107,8 +107,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(categoryData);
 
             //make a request to the web and
-            String response = GetJson.request(DataUrl.ADD_CATEGORY,data,"POST");
-            return response;
+            return GetJson.request(ApiUrl.ADD_CATEGORY,data,"POST");
         }
 
         @Override

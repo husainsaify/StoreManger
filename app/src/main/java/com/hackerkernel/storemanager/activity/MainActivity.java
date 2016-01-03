@@ -1,24 +1,12 @@
 package com.hackerkernel.storemanager.activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.URL.DataUrl;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.LoginPojo;
-
-import java.util.HashMap;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -141,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String data = Functions.hashMapToEncodedUrl(loginData);
 
             //make a request to the web
-            String response = GetJson.request(DataUrl.LOGIN_URL, data, "POST");
+            String response = GetJson.request(ApiUrl.LOGIN_URL, data, "POST");
             return response;
         }
 
@@ -170,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     * Start Register ativity When Register TextView is clicked
     * *//*
     public void startRegisterActivity(){
-        Intent intent = new Intent(MainActivity.this,RegisterActivity.class);
+        Intent intent = new Intent(MainActivity.this,SignupActivity.class);
         startActivity(intent);
     }
 

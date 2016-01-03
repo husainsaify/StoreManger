@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -198,7 +198,7 @@ public class ViewProductActivity extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... params) {
             //generate Image Full url
-            String imageUrl = DataUrl.IMAGE_BASE_URL + params[0];
+            String imageUrl = ApiUrl.IMAGE_BASE_URL + params[0];
             //fetch Image from the server
             try {
                 InputStream in = (InputStream) new URL(imageUrl).getContent();
@@ -268,7 +268,7 @@ public class ViewProductActivity extends AppCompatActivity {
             String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
 
             //fetch data from the Backend
-            String jsonString = GetJson.request(DataUrl.GET_SINGLE_PRODUCT,dataUrl,"POST");
+            String jsonString = GetJson.request(ApiUrl.GET_SINGLE_PRODUCT,dataUrl,"POST");
 
             //parse JSON and store results in productPojo
             productPojo = JsonParser.SingleProductParser(jsonString);
@@ -327,7 +327,7 @@ public class ViewProductActivity extends AppCompatActivity {
             //convert hashmap to encoded url
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
-            String jsonString = GetJson.request(DataUrl.DELETE_PRODUCT,data,"POST");
+            String jsonString = GetJson.request(ApiUrl.DELETE_PRODUCT,data,"POST");
 
             //parse json
             deleteProductList = JsonParser.SimpleParse(jsonString);

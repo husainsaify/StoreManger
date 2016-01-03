@@ -23,16 +23,6 @@
         </activity>
 
         <activity
-            android:name=".RegisterActivity"
-            android:label="@string/title_activity_register"
-            android:parentActivityName=".activity.MainActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
-        </activity>
-
-        <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait" />

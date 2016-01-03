@@ -12,9 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.adapter.CategoryAdapter;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
@@ -169,7 +168,7 @@ public class HomeActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(fetchCategoryData);
 
             //get the response from the web using GetJson class
-            return GetJson.request(DataUrl.GET_CATEGORY,data,"POST");
+            return GetJson.request(ApiUrl.GET_CATEGORY,data,"POST");
         }
 
         @Override

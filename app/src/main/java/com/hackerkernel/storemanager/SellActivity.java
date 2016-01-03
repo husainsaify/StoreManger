@@ -26,8 +26,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
 import com.hackerkernel.storemanager.adapter.ACProductAdapter;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -41,7 +41,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -365,7 +364,7 @@ public class SellActivity extends AppCompatActivity {
             String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
 
             //fetch data from the Backend
-            String jsonString = GetJson.request(DataUrl.GET_SINGLE_PRODUCT, dataUrl, "POST");
+            String jsonString = GetJson.request(ApiUrl.GET_SINGLE_PRODUCT, dataUrl, "POST");
             //parse JSON and store results in productPojo
             productPojo = JsonParser.SingleProductParser(jsonString);
             return productPojo;
@@ -389,7 +388,7 @@ public class SellActivity extends AppCompatActivity {
         @Override
         protected Bitmap doInBackground(String... params) {
             //generate Image Full url
-            String imageUrl = DataUrl.IMAGE_BASE_URL + params[0];
+            String imageUrl = ApiUrl.IMAGE_BASE_URL + params[0];
             //fetch Image from the server
             try {
                 InputStream in = (InputStream) new URL(imageUrl).getContent();
@@ -434,7 +433,7 @@ public class SellActivity extends AppCompatActivity {
             //convert it into a encoded url
             String data = Functions.hashMapToEncodedUrl(hashmap);
 
-            String jsonString = GetJson.request(DataUrl.ADD_SELL, data, "POST");
+            String jsonString = GetJson.request(ApiUrl.ADD_SELL, data, "POST");
             Log.d(TAG,"HUS: JSON "+jsonString);
             //parse Json
             List<SimplePojo> list = JsonParser.SimpleParse(jsonString);

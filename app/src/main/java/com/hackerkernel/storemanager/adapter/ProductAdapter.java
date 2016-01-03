@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
 import java.io.InputStream;
@@ -80,7 +80,7 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
             if(!productPojo.getProductImage().isEmpty()){
                 try{
                     //generate Image URL
-                    String imageURL = DataUrl.IMAGE_BASE_URL + productPojo.getProductImage();
+                    String imageURL = ApiUrl.IMAGE_BASE_URL + productPojo.getProductImage();
                     //get Image
                     InputStream in = (InputStream) new URL(imageURL).getContent();
                     //convert image into a bitmap

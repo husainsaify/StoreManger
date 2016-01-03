@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
@@ -123,7 +123,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
             //get data from the backend
-            String jsonString = GetJson.request(DataUrl.AC_PRODUCT_SEARCH, data, "POST");
+            String jsonString = GetJson.request(ApiUrl.AC_PRODUCT_SEARCH, data, "POST");
             //parse json
             return JsonParser.ACProductSearchParser(jsonString);
         }

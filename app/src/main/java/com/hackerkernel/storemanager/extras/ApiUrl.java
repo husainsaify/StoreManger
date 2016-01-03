@@ -1,9 +1,9 @@
-package com.hackerkernel.storemanager.URL;
+package com.hackerkernel.storemanager.extras;
 
 /**
  * CLass to feed URLS
  */
-public class DataUrl {
+public class ApiUrl {
    private static final String SERVER = "http://192.168.69.2/";
     public static final String
             REGISTER_URL = SERVER + "co/storemanger/register.php",

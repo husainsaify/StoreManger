@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.URL.DataUrl;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.adapter.SalesTrackerAdapter;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
@@ -29,7 +28,6 @@ import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -221,7 +219,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
             //request the web
-            String jsonString = GetJson.request(DataUrl.SALES_TRACKER_DATE_LIST, data, "POST");
+            String jsonString = GetJson.request(ApiUrl.SALES_TRACKER_DATE_LIST, data, "POST");
             //parse json
             mDropdownList = JsonParser.STdateParser(jsonString);
             List<String> stringList = new ArrayList<>();
@@ -281,7 +279,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
 
             String data = Functions.hashMapToEncodedUrl(hashMap);
 
-            String jsonString = GetJson.request(DataUrl.GET_SALES_TRACKER, data, "POST");
+            String jsonString = GetJson.request(ApiUrl.GET_SALES_TRACKER, data, "POST");
             Log.d(TAG, "HUS: Raw json "+jsonString);
 
             //parse json for TotalCP & TotalSp & build the salesTrackerList

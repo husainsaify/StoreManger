@@ -54,14 +54,6 @@ public class JsonParser {
             List<LoginPojo> loginList = new ArrayList<>();
 
             LoginPojo loginPojo = new LoginPojo();
-            loginPojo.setMessage(jo.getString("message"));
-            loginPojo.setReturned(jo.getBoolean("return"));
-
-            //check return
-            /*
-            * It was a success
-            * and we will fetch all the info
-            * */
             if(jo.getBoolean("return")){
                 JSONArray jsonArray = jo.getJSONArray("user");
                 JSONObject o = jsonArray.getJSONObject(0);

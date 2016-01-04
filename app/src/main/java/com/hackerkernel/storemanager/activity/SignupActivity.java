@@ -22,6 +22,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SignupPojo;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
@@ -52,6 +53,11 @@ public class SignupActivity extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private List<SignupPojo> mSignupList;
     private ProgressDialog pd;
+    String storename;
+    String fullname;
+    String email;
+    String phone;
+    String password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +87,11 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void checkSignup() {
-        String fullname = mFullname.getText().toString().trim(),
-                storename = mStoreName.getText().toString().trim(),
-                email = mEmail.getText().toString().trim(),
-                phone = mPhone.getText().toString().trim(),
-                password = mPassword.getText().toString().trim();
+        fullname = mFullname.getText().toString().trim();
+        storename = mStoreName.getText().toString().trim();
+        email = mEmail.getText().toString().trim();
+        phone = mPhone.getText().toString().trim();
+        password = mPassword.getText().toString().trim();
 
         //check all the inputs are filled
         if (fullname.isEmpty() || storename.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty()) {
@@ -167,6 +173,10 @@ public class SignupActivity extends AppCompatActivity {
             SignupPojo current = mSignupList.get(0);
             //request was success
             if(current.getReturned()){
+
+                //Store the user details in SharedPrefernce
+                MySharedPreferences mySharedPreferences = MySharedPreferences.getInstance(SignupActivity.this);
+                mySharedPreferences.setUser(current.getUserId(),fullname,storename,email,phone,password);
                 Toast.makeText(getApplication(),current.getUserId(),Toast.LENGTH_LONG).show();
             }else{ //request failed
                 Util.redSnackbar(getApplication(),mLayout,current.getMessage());

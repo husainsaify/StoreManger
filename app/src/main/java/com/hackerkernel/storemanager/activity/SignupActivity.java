@@ -33,26 +33,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-    @Bind(R.id.signup_fullname)
-    EditText mFullname;
-    @Bind(R.id.signup_storename)
-    EditText mStoreName;
-    @Bind(R.id.signup_email)
-    EditText mEmail;
-    @Bind(R.id.signup_number)
-    EditText mPhone;
-    @Bind(R.id.signup_password)
-    EditText mPassword;
-    @Bind(R.id.signup_button)
-    Button mButton;
-    @Bind(R.id.signup_layout)
-    LinearLayout mLayout;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.signup_fullname) EditText mFullname;
+    @Bind(R.id.signup_storename) EditText mStoreName;
+    @Bind(R.id.signup_email) EditText mEmail;
+    @Bind(R.id.signup_number) EditText mPhone;
+    @Bind(R.id.signup_password) EditText mPassword;
+    @Bind(R.id.signup_button) Button mButton;
+    @Bind(R.id.signup_layout) LinearLayout mLayout;
 
     private RequestQueue mRequestQueue;
     private List<SignupPojo> mSignupList;
     private ProgressDialog pd;
+
+    //Variable to store value enter by the user in the register form
     String storename;
     String fullname;
     String email;
@@ -66,8 +60,7 @@ public class SignupActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         //set Toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        assert getSupportActionBar() != null; //statement to avoid NullPointerException in Toolbar
         getSupportActionBar().setTitle(R.string.signup_small);
 
         //make a progress dialog
@@ -171,13 +164,14 @@ public class SignupActivity extends AppCompatActivity {
         mSignupList = JsonParser.SignupParse(response);
         if(mSignupList != null){
             SignupPojo current = mSignupList.get(0);
-            //request was success
+            //request was success (Login the user)
             if(current.getReturned()){
-
                 //Store the user details in SharedPrefernce
                 MySharedPreferences mySharedPreferences = MySharedPreferences.getInstance(SignupActivity.this);
                 mySharedPreferences.setUser(current.getUserId(),fullname,storename,email,phone,password);
-                Toast.makeText(getApplication(),current.getUserId(),Toast.LENGTH_LONG).show();
+
+                //send the user to CategoryActivity
+                Util.goToCategoryActivity(getApplication());
             }else{ //request failed
                 Util.redSnackbar(getApplication(),mLayout,current.getMessage());
             }
@@ -185,4 +179,6 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(getApplication(), R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
     }
+
+
 }

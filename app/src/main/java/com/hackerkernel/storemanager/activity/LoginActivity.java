@@ -2,7 +2,6 @@ package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -21,7 +20,9 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
     private ProgressDialog pd;
-    private List<LoginPojo> loginList;
+    private List<LoginPojo> mLoginList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //set Toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        assert getSupportActionBar() != null; //statement to avoid NullPointerException in Toolbar
         getSupportActionBar().setTitle(getString(R.string.login_small));
 
         //make a progress dialog
@@ -143,6 +143,25 @@ public class LoginActivity extends AppCompatActivity {
     * and If API return true we will log the user in
     * */
     private void parseLoginResponse(String response) {
-        Toast.makeText(getApplication(),response,Toast.LENGTH_LONG).show();
+        //parse result
+        mLoginList = JsonParser.LoginParser(response);
+
+        //check mLoginList doesn't return null
+        if(mLoginList != null){
+            //store the ArrayList in the LoginPojo
+            LoginPojo details = mLoginList.get(0);
+
+            if(details.getReturned()){
+                //store user details in a sharedPrefernce
+                MySharedPreferences.getInstance(getApplication()).setUser(details);
+                //GO to CategoryActivity
+                Util.goToCategoryActivity(getApplication());
+            }else{
+                //show the alert
+                Util.redSnackbar(getApplication(),mLayout,details.getMessage());
+            }
+        }else{ //when the list is null show this message
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 }

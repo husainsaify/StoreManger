@@ -80,20 +80,24 @@ public class JsonParser {
             List<LoginPojo> loginList = new ArrayList<>();
 
             LoginPojo loginPojo = new LoginPojo();
-            if(jo.getBoolean("return")){
-                JSONArray jsonArray = jo.getJSONArray("user");
+
+            //store message and return
+            loginPojo.setReturned(jo.getBoolean(Keys.KEY_COM_RETURN));
+            loginPojo.setMessage(jo.getString(Keys.KEY_COM_MESSAGE));
+
+            //if Response return success
+            if(jo.getBoolean(Keys.KEY_COM_RETURN)){
+                JSONArray jsonArray = jo.getJSONArray(Keys.KEY_L_USER);
                 JSONObject o = jsonArray.getJSONObject(0);
 
                 //store in the list
-                loginPojo.setId(o.getInt("id"));
-                loginPojo.setName(o.getString("name"));
-                loginPojo.setEmail(o.getString("email"));
-                loginPojo.setPhone(o.getString("phone"));
-                loginPojo.setPassword(o.getString("password"));
-                loginPojo.setRegisterAt(o.getString("register_at"));
-                loginPojo.setLastBillPaid(o.getString("last_bill_paid"));
-                loginPojo.setNextDueDate(o.getString("next_due_date"));
-                loginPojo.setActive(o.getString("active"));
+                loginPojo.setId(o.getInt(Keys.KEY_L_ID));
+                loginPojo.setName(o.getString(Keys.KEY_L_NAME));
+                loginPojo.setStorename(o.getString(Keys.KEY_L_STORENAME));
+                loginPojo.setEmail(o.getString(Keys.KEY_L_EMAIL));
+                loginPojo.setPhone(o.getString(Keys.KEY_L_PHONE));
+                loginPojo.setPassword(o.getString(Keys.KEY_L_PASSWORD));
+                loginPojo.setRegisterAt(o.getString(Keys.KEY_L_REGISTER_AT));
             }
 
             //add to the list

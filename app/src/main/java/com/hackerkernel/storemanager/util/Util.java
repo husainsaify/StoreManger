@@ -2,13 +2,18 @@ package com.hackerkernel.storemanager.util;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.util.Patterns;
 import android.view.View;
 
+import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.activity.CategoryActivity;
+import com.hackerkernel.storemanager.activity.MainActivity;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 public class Util {
     public static void redSnackbar(Context context,View layout,String text){
@@ -59,4 +64,28 @@ public class Util {
         });
         snack.show();
     }
+
+    /*
+     * Method to send the user to CategoryActivity
+     * */
+    public static void goToCategoryActivity(Context context){
+        Intent categoryIntent = new Intent(context, CategoryActivity.class);
+        categoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        categoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(categoryIntent);
+    }
+
+
+    //logout
+    public static void logout(Context context){
+        //delete the user data from Shared Prefernece
+        MySharedPreferences.getInstance(context).deleteUser();
+        //send user to mainActivity
+        Intent intent = new Intent(context, MainActivity.class);
+        //remove back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
 }

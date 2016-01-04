@@ -17,4 +17,14 @@ public interface Keys {
     String KEY_SIGNUP_EMAIL_PRAM = "email";
     String KEY_SIGNUP_PHONE_PRAM = "phone";
     String KEY_SIGNUP_PASS_PRAM = "password";
+
+    //login response
+    String KEY_L_USER = "user",
+            KEY_L_ID = "id",
+            KEY_L_NAME = "name",
+            KEY_L_STORENAME = "storename",
+            KEY_L_EMAIL = "email",
+            KEY_L_PHONE = "phone",
+            KEY_L_PASSWORD = "password",
+            KEY_L_REGISTER_AT = "register_at";
 }

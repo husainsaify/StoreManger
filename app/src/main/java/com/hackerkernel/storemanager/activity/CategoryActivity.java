@@ -1,4 +1,4 @@
-package com.hackerkernel.storemanager;
+package com.hackerkernel.storemanager.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,17 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.AddCategoryActivity;
+import com.hackerkernel.storemanager.DataBase;
+import com.hackerkernel.storemanager.Functions;
+import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.SaleTrackerActivity;
+import com.hackerkernel.storemanager.SearchActivity;
 import com.hackerkernel.storemanager.adapter.CategoryAdapter;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.hackerkernel.storemanager.util.Util;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.HashMap;
@@ -27,8 +32,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class HomeActivity extends AppCompatActivity {
-    private static final String TAG = HomeActivity.class.getSimpleName();
+public class CategoryActivity extends AppCompatActivity {
+    private static final String TAG = CategoryActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.listView) ListView categoryListView;
@@ -53,18 +58,18 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.app_name));
 
         //instant DB
-        db = new DataBase(this);
+        //db = new DataBase(this);
         //get userId
-        userId = db.getUserID();
+        //userId = db.getUserID();
 
         //when a item from the ListView is clicked
-        categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //store clicked item in CategoryPojo so that later we can get CategoryId and CategoryName
                 CategoryPojo categoryName = (CategoryPojo) categoryListView.getItemAtPosition(position);
                 //go to product activity
-                Intent productIntent = new Intent(HomeActivity.this, ProductActivity.class);
+                Intent productIntent = new Intent(CategoryActivity.this, ProductActivity.class);
                 //set categoryId and CategoryName in intenet
                 productIntent.putExtra("categoryId", categoryName.getId());
                 productIntent.putExtra("categoryName", categoryName.getName());
@@ -77,23 +82,17 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //open sell activity
-                Intent sellIntent = new Intent(HomeActivity.this,SellActivity.class);
+                Intent sellIntent = new Intent(CategoryActivity.this,SellActivity.class);
                 startActivity(sellIntent);
             }
-        });
+        });*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //when connection is not available
-        if(!Functions.isOnline(this)){
-            //show close app dialog
-            Functions.closeAppWhenNoConnection(this);
-        }
-
         //Fetch category from the backend
-        new FetchCategoryTask().execute(userId);
+        //new FetchCategoryTask().execute(userId);
 
     }
 
@@ -111,7 +110,7 @@ public class HomeActivity extends AppCompatActivity {
         switch (id){
             //sales Tracker
             case R.id.action_sale_tracker:
-                startActivity(new Intent(HomeActivity.this,SaleTrackerActivity.class));
+                startActivity(new Intent(CategoryActivity.this,SaleTrackerActivity.class));
                 break;
             //refresh
             case R.id.action_refresh:
@@ -120,16 +119,16 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             //logout
             case R.id.action_logout:
-                Functions.logout(this); //logout
+                Util.logout(this); //logout
                 break;
             //add new category
             case R.id.action_add_category:
                 //show the add category alertDialog
-                startActivity(new Intent(HomeActivity.this,AddCategoryActivity.class));
+                startActivity(new Intent(CategoryActivity.this,AddCategoryActivity.class));
                 break;
             //search
             case R.id.action_search:
-                Intent intent = new Intent(HomeActivity.this,SearchActivity.class);
+                Intent intent = new Intent(CategoryActivity.this,SearchActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -143,7 +142,7 @@ public class HomeActivity extends AppCompatActivity {
         //if their is no data in the list
         if (list.size() > 0){
             //call CategoryAdapter and adapter a Custom ListView
-            CategoryAdapter adapter = new CategoryAdapter(HomeActivity.this,R.layout.category_list_layout,list);
+            CategoryAdapter adapter = new CategoryAdapter(CategoryActivity.this,R.layout.category_list_layout,list);
             categoryListView.setAdapter(adapter);
         }else
             whenListIsEmpty.setText(getString(R.string.not_added_category));

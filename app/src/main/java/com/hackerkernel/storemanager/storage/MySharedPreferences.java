@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.hackerkernel.storemanager.pojo.LoginPojo;
+
 /**
  * Class to handle shared prefrences data
  */
@@ -17,6 +19,7 @@ public class MySharedPreferences {
     private String KEY_USER_EMAIL = "useremail";
     private String KEY_USER_PHONE = "userphonenumber";
     private String KEY_USER_PASWWORD = "userpassword";
+    private String KEY_DEFAULT = "";
     //member variables
     private static MySharedPreferences mInstance = null;
     private static SharedPreferences mSharedPreferences;
@@ -47,4 +50,28 @@ public class MySharedPreferences {
         Log.d(TAG,"HUS: Saved data in sharedPref");
     }
 
+    public void setUser(LoginPojo data){
+        mSharedPreferences.edit()
+                .putString(KEY_USER_ID,data.getId()+"")
+                .putString(KEY_USER_FULLNAME,data.getName())
+                .putString(KEY_USER_STORENAME,data.getStorename())
+                .putString(KEY_USER_EMAIL,data.getEmail())
+                .putString(KEY_USER_PHONE,data.getPhone())
+                .putString(KEY_USER_PASWWORD,data.getPassword()).apply();
+    }
+
+    /*
+    * Method to check some user is logged in or not
+    * */
+    public boolean checkUser(){
+        String userId = mSharedPreferences.getString(KEY_USER_ID, KEY_DEFAULT);
+        if(userId.equals(KEY_DEFAULT)){
+            return false;//no user
+        }
+        return true; //user found;
+    }
+
+    public void deleteUser(){
+        mSharedPreferences.edit().clear().apply();
+    }
 }

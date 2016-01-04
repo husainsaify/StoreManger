@@ -78,17 +78,6 @@ public class Functions {
         dialog.show();
     }
 
-    //logout
-    public static void logout(Context context){
-        DataBase db = new DataBase(context);
-        db.logout(); //logout
-        //send user to mainActivity
-        Intent intent = new Intent(context, MainActivity.class);
-        //remove back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-    }
 
     //function to show or hide the ProgressBar or loader
     public static void toggleProgressBar(ProgressBar pb){

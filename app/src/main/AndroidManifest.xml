@@ -23,26 +23,26 @@
         </activity>
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.CategoryActivity"
             android:label="@string/title_activity_home"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AddCategoryActivity"
             android:label="@string/title_activity_add_category"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.CategoryActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.HomeActivity" />
+                android:value=".activity.CategoryActivity" />
         </activity>
         <activity
             android:name=".ProductActivity"
             android:label="@string/title_activity_product"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.CategoryActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.HomeActivity" />
+                android:value=".activity.CategoryActivity" />
         </activity>
         <activity
             android:name=".AddProductActivity"
@@ -63,27 +63,27 @@
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.CategoryActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.HomeActivity" />
+                android:value=".activity.CategoryActivity" />
         </activity>
         <activity
             android:name=".SellActivity"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.CategoryActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.HomeActivity" />
+                android:value=".activity.CategoryActivity" />
         </activity>
         <activity
             android:name=".SaleTrackerActivity"
-            android:parentActivityName=".HomeActivity"
+            android:parentActivityName=".activity.CategoryActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.HomeActivity" />
+                android:value=".activity.CategoryActivity" />
         </activity>
 
         <activity android:name=".activity.LoginActivity"

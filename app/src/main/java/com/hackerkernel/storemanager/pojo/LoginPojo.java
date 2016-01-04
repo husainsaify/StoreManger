@@ -5,21 +5,12 @@ public class LoginPojo {
     private int id;
     private String  message,
                     name,
+                    storename,
                     email,
                     phone,
                     password,
                     registerAt,
-                    lastBillPaid,
-                    nextDueDate,
                     active;
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public Boolean getReturned() {
         return returned;
@@ -37,12 +28,28 @@ public class LoginPojo {
         this.id = id;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getStorename() {
+        return storename;
+    }
+
+    public void setStorename(String storename) {
+        this.storename = storename;
     }
 
     public String getEmail() {
@@ -75,22 +82,6 @@ public class LoginPojo {
 
     public void setRegisterAt(String registerAt) {
         this.registerAt = registerAt;
-    }
-
-    public String getLastBillPaid() {
-        return lastBillPaid;
-    }
-
-    public void setLastBillPaid(String lastBillPaid) {
-        this.lastBillPaid = lastBillPaid;
-    }
-
-    public String getNextDueDate() {
-        return nextDueDate;
-    }
-
-    public void setNextDueDate(String nextDueDate) {
-        this.nextDueDate = nextDueDate;
     }
 
     public String getActive() {

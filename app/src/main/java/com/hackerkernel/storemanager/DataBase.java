@@ -112,8 +112,6 @@ public class DataBase extends SQLiteOpenHelper {
         values.put(COL_PHONE, user.getPhone());
         values.put(COL_PASSWORD, user.getPassword());
         values.put(COL_REGISTER_AT, user.getRegisterAt());
-        values.put(COL_LAST_BILL_PAID, user.getLastBillPaid());
-        values.put(COL_NEXT_DUE_DATE, user.getNextDueDate());
         values.put(COL_ACTIVE, user.getActive());
 
         //insert into the database

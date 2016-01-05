@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home_id"
+            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+            android:title="Home"/>
+        <item
+            android:id="@+id/message_id"
+            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+            android:title="Message"/>
+        <item
+            android:id="@+id/setting_id"
+            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
+            android:title="Setting"/>
+    </group>
+
+    <item android:title="Social">
+        <menu>
+            <item android:title="Add to Group"
+                android:id="@+id/add_to_grp"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
+            <item android:title="Like us"
+                android:id="@+id/like_us"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
+            <item android:title="Fuck us"
+                android:id="@+id/fuck_us"
+                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
+        </menu>
+    </item>
+
+</menu>

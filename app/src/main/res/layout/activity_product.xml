@@ -33,19 +33,15 @@
         android:layout_centerHorizontal="true"
         android:visibility="invisible"/>
 
-    <com.melnykov.fab.FloatingActionButton
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="16dp"
-        fab:fab_colorNormal="@color/primaryColor"
-        fab:fab_colorPressed="@color/primaryColorDark"
         android:src="@drawable/ic_add_white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="openAddProduct"
-        />
+        android:layout_margin="@dimen/fab_margin"
+        android:onClick="openAddProduct"/>
 
 </RelativeLayout>

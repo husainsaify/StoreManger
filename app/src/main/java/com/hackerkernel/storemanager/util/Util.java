@@ -7,7 +7,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 
 import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.R;
@@ -88,4 +91,8 @@ public class Util {
         context.startActivity(intent);
     }
 
+    /*public static void closeSoftKeyBoard(Context context){
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(context.get)
+    }*/
 }

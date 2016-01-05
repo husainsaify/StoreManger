@@ -90,7 +90,7 @@
     <string name="password">Password</string>
     <string name="login_small">Login</string>
     <string name="email">Email</string>
-    <string name="please_check_your_internt">Please check your internet connection</string>
+    <string name="please_check_your_internt">Check your internet connection</string>
     <string name="retry_big">RETRY</string>
     <string name="signup_small">Signup</string>
     <string name="phone_number">Phone number</string>

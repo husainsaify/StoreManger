@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.AddCategoryActivity;
 import com.hackerkernel.storemanager.DataBase;
@@ -45,7 +47,8 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
     @Bind(R.id.whenListIsEmpty)TextView whenListIsEmpty;
     @Bind(R.id.fabAddCategory) FloatingActionButton mFab;
     @Bind(R.id.drawerLayout) DrawerLayout mDrawerLayout;
-    ActionBarDrawerToggle actionBarDrawerToggle;
+    @Bind(R.id.navigationView) NavigationView mNavigationView;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private DataBase db;
     private String userId;
@@ -66,6 +69,19 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
 
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                switch (id){
+                    case R.id.home_id:
+                        Toast.makeText(getApplication(),"Home",Toast.LENGTH_LONG).show();
+                        break;
+                }
+                return true;
+            }
+        });
         //instant DB
         //db = new DataBase(this);
         //get userId

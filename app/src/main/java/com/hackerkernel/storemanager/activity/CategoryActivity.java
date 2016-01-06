@@ -11,8 +11,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,6 +31,7 @@ import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
@@ -48,8 +51,9 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
     @Bind(R.id.fabAddCategory) FloatingActionButton mFab;
     @Bind(R.id.drawerLayout) DrawerLayout mDrawerLayout;
     @Bind(R.id.navigationView) NavigationView mNavigationView;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    private MySharedPreferences mySharedPreferences;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
     private DataBase db;
     private String userId;
     private List<CategoryPojo> categoryList;
@@ -66,6 +70,9 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(getString(R.string.app_name));
 
+        //instantiate MySharedPreferences to get user data
+        mySharedPreferences = MySharedPreferences.getInstance(this);
+
         actionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
 
         mDrawerLayout.setDrawerListener(actionBarDrawerToggle);
@@ -74,14 +81,21 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
-                switch (id){
+                switch (id) {
                     case R.id.home_id:
-                        Toast.makeText(getApplication(),"Home",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplication(), "Home", Toast.LENGTH_LONG).show();
                         break;
                 }
                 return true;
             }
         });
+
+        //set user information on the Navigation drawer Header
+        TextView headerStoreName = (TextView) mNavigationView.findViewById(R.id.navigationHeaderShopname);
+        TextView headerFullName = (TextView) mNavigationView.findViewById(R.id.navigationHeaderName);
+        headerStoreName.setText(mySharedPreferences.getUserStorename());
+        headerFullName.setText(mySharedPreferences.getUserFullname());
+
         //instant DB
         //db = new DataBase(this);
         //get userId

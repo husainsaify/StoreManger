@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:orientation="vertical"
+    android:background="@color/primaryColor"
+    android:paddingTop="20dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_navigation_drawer_icon"
+        android:id="@+id/navigationHeaderIcon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Saify kids shoes"
+        android:textColor="@color/iconColor"
+        android:layout_marginTop="10dp"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:id="@+id/navigationHeaderShopname"
+        android:layout_below="@+id/navigationHeaderIcon"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Husain saify"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/iconColor"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:id="@+id/navigationHeaderName"
+        android:layout_below="@+id/navigationHeaderShopname"
+         />
+
+</RelativeLayout>

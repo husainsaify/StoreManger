@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 
 /**
@@ -19,7 +20,7 @@ public class MySharedPreferences {
     private String KEY_USER_EMAIL = "useremail";
     private String KEY_USER_PHONE = "userphonenumber";
     private String KEY_USER_PASWWORD = "userpassword";
-    private String KEY_DEFAULT = "";
+    private String KEY_DEFAULT = Keys.KEY_DEFAULT;
     //member variables
     private static MySharedPreferences mInstance = null;
     private static SharedPreferences mSharedPreferences;
@@ -58,6 +59,29 @@ public class MySharedPreferences {
                 .putString(KEY_USER_EMAIL,data.getEmail())
                 .putString(KEY_USER_PHONE,data.getPhone())
                 .putString(KEY_USER_PASWWORD,data.getPassword()).apply();
+    }
+
+    /*
+    * Method to get user data from the shared Preferences
+    * */
+    public String getUserId(){
+        return mSharedPreferences.getString(KEY_USER_ID,KEY_DEFAULT);
+    }
+
+    public String getUserFullname(){
+        return mSharedPreferences.getString(KEY_USER_FULLNAME,KEY_DEFAULT);
+    }
+    public String getUserEmail(){
+        return mSharedPreferences.getString(KEY_USER_EMAIL,KEY_DEFAULT);
+    }
+    public String getUserPhone(){
+        return mSharedPreferences.getString(KEY_USER_PHONE,KEY_DEFAULT);
+    }
+    public String getUserStorename(){
+        return mSharedPreferences.getString(KEY_USER_STORENAME,KEY_DEFAULT);
+    }
+    public String getData(String key){
+        return mSharedPreferences.getString(key,KEY_DEFAULT);
     }
 
     /*

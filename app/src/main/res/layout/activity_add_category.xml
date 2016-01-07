@@ -15,7 +15,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="10dp"
-        android:hint="@string/add_category_hint"/>
+        android:hint="@string/add_category_hint"
+        android:background="@drawable/custom_edittext"/>
 
     <Button
         android:layout_width="match_parent"
@@ -24,11 +25,8 @@
         android:id="@+id/addCategory"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:background="@color/primaryColor" />
+        android:textColor="@color/iconColor"
+        android:background="@drawable/primary_button" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/result"/>
 
 </LinearLayout>

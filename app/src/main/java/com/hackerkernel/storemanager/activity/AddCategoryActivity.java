@@ -1,4 +1,4 @@
-package com.hackerkernel.storemanager;
+package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.hackerkernel.storemanager.DataBase;
+import com.hackerkernel.storemanager.Functions;
+import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
@@ -72,7 +75,7 @@ public class AddCategoryActivity extends AppCompatActivity {
     private void addCategory(String category){
         //check category is not empty
         if(category.isEmpty()){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.category_canot_empty));
+            Functions.errorAlert(context, getString(R.string.oops), getString(R.string.category_canot_empty));
         }else if(category.length() <= 3){
             Functions.errorAlert(context,getString(R.string.oops),getString(R.string.category_more_3_char));
         }else if(category.length() >= 20){

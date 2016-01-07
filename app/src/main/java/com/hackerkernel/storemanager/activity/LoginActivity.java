@@ -123,6 +123,11 @@ public class LoginActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         //Hide Progress Dialog
                         pd.hide();
+                        //handle Volley error
+                        String errorMessage = VolleySingleton.handleVolleyError(error);
+                        if(errorMessage != null){
+                            Util.redSnackbar(getApplication(),mLayout,errorMessage);
+                        }
                     }
                 }){
             @Override

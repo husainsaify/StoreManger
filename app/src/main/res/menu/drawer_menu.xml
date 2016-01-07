@@ -2,31 +2,31 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/home_id"
-            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
-            android:title="Home"/>
+            android:id="@+id/menu_add_category"
+            android:icon="@drawable/ic_add_category_black"
+            android:title="@string/add_category" />
         <item
-            android:id="@+id/message_id"
-            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
-            android:title="Message"/>
+            android:id="@+id/menu_sales_tracker"
+            android:icon="@drawable/ic_sales_tracker_black"
+            android:title="@string/sale_tracker" />
         <item
-            android:id="@+id/setting_id"
-            android:icon="@drawable/ic_format_list_bulleted_black_48dp"
-            android:title="Setting"/>
+            android:id="@+id/menu_setting"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/ic_logout_black"
+            android:title="@string/logout" />
     </group>
 
     <item android:title="Social">
         <menu>
-            <item android:title="Add to Group"
-                android:id="@+id/add_to_grp"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
-            <item android:title="Like us"
-                android:id="@+id/like_us"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
-            <item android:title="Fuck us"
-                android:id="@+id/fuck_us"
-                android:icon="@drawable/ic_format_list_bulleted_black_48dp"/>
+            <item
+                android:id="@+id/menu_share"
+                android:icon="@drawable/ic_share_black"
+                android:title="@string/share" />
         </menu>
     </item>
+
 
 </menu>

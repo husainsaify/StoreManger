@@ -11,16 +11,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.AddCategoryActivity;
 import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
@@ -82,8 +78,17 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 switch (id) {
-                    case R.id.home_id:
-                        Toast.makeText(getApplication(), "Home", Toast.LENGTH_LONG).show();
+                    case R.id.menu_add_category:
+                        startActivity(new Intent(CategoryActivity.this,AddCategoryActivity.class));
+                        break;
+                    case R.id.menu_sales_tracker:
+                        break;
+                    case R.id.menu_setting:
+                        break;
+                    case R.id.menu_logout:
+                        Util.logout(getApplication()); //logout
+                        break;
+                    case R.id.menu_share:
                         break;
                 }
                 return true;

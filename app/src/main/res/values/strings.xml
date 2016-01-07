@@ -32,7 +32,7 @@
     <string name="add_category_hint">Enter new category name</string>
     <string name="title_activity_add_category">AddCategoryActivity</string>
     <string name="category_canot_empty">Category name cannot be empty</string>
-    <string name="category_more_3_char">Category name should be more then 3 characters.</string>
+    <string name="category_more_3_char">Category name too short.</string>
     <string name="category_more_20_char">Category name should not be more then 20 characters.</string>
     <string name="oops">OOPS!</string>
     <string name="not_added_category">It\'s seem you haven\'t added any Category yet! Click on the top plus icon to add one.</string>

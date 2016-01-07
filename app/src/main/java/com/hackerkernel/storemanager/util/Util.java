@@ -26,6 +26,13 @@ public class Util {
         snackbar.show();
     }
 
+    public static void greenSnackbar(Context context,View layout,String text){
+        Snackbar snackbar = Snackbar.make(layout,text,Snackbar.LENGTH_LONG);
+        View snack = snackbar.getView();
+        snack.setBackgroundColor(context.getResources().getColor(R.color.successColor));
+        snackbar.show();
+    }
+
     //check email address
     public static boolean isValidEmail(CharSequence email){
         return  Patterns.EMAIL_ADDRESS.matcher(email).matches();
@@ -33,15 +40,11 @@ public class Util {
 
     //check phone number
     public static boolean isValidPhoneNumber(String phone) {
-        if (phone.length() < 6 || phone.length() > 13) {
-            return false;
-        } else {
-            return Patterns.PHONE.matcher(phone).matches();
-        }
+        return !(phone.length() < 6 || phone.length() > 13) && Patterns.PHONE.matcher(phone).matches();
     }
     //method to check user is connected to internet
     public static boolean isConnectedToInternet(Context context){
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         //if the phone can be connected to internet
         if(connectivity != null){
             NetworkInfo[] info = connectivity.getAllNetworkInfo();

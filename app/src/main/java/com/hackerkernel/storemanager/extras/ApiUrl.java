@@ -4,7 +4,7 @@ package com.hackerkernel.storemanager.extras;
  * CLass to feed URLS
  */
 public class ApiUrl {
-   /*private static final String SERVER = "http://192.168.69.2/";
+        private static final String SERVER = "http://192.168.69.2/";
     public static final String
             SIGNUP_URL = SERVER + "co/storemanger/register.php",
             LOGIN_URL = SERVER +  "co/storemanger/login.php",
@@ -20,8 +20,8 @@ public class ApiUrl {
             SALES_TRACKER_DATE_LIST = SERVER + "co/storemanger/salesTrackerDatelist.php",
             GET_SALES_TRACKER = SERVER + "co/storemanger/salesTracker.php",
             PRODUCT_SEARCH = SERVER + "co/storemanger/search.php";
-*/
-        private static final String SERVER = "http://storemanager.hackerkernel.com/";
+
+        /*private static final String SERVER = "http://storemanager.hackerkernel.com/";
         public static final String
                 SIGNUP_URL = SERVER + "register.php",
                 LOGIN_URL = SERVER +  "login.php",
@@ -36,6 +36,6 @@ public class ApiUrl {
                 ADD_SELL = SERVER + "addSell.php",
                 SALES_TRACKER_DATE_LIST = SERVER + "salesTrackerDatelist.php",
                 GET_SALES_TRACKER = SERVER + "salesTracker.php",
-                PRODUCT_SEARCH = SERVER + "search.php";
+                PRODUCT_SEARCH = SERVER + "search.php";*/
 
 }

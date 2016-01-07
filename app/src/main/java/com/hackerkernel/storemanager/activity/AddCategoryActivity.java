@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,18 +8,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
+import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,18 +40,14 @@ public class AddCategoryActivity extends AppCompatActivity {
     private static final String TAG = AddCategoryActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.categoryName) EditText categoryName;
-    @Bind(R.id.addCategory) Button addCategory;
-    /*
-    * Using register pojo because the returned json is same as register
-    * */
-    List<SimplePojo> categoryList;
+    @Bind(R.id.categoryName) EditText mCategoryName;
+    @Bind(R.id.addCategory) Button mAddCategory;
+    @Bind(R.id.addCategoryLinearLayout) LinearLayout mLayout;
 
 
-    public final Context context = AddCategoryActivity.this;
-
-    ProgressDialog pd;
-    DataBase db;
+    private List<SimplePojo> categoryList;
+    private ProgressDialog pd;
+    private RequestQueue mRequestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +57,23 @@ public class AddCategoryActivity extends AppCompatActivity {
 
         //set toolbar
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null; //avoid nullpointer warning
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.add_category);
 
-        //make progressDialog
-        pd = new ProgressDialog(context);
+        pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
 
-        //instan the database
-        db = new DataBase(this);
+
+        //instanciate the Volley RequestQueue object
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+
 
         //when add category button is added
-        addCategory.setOnClickListener(new View.OnClickListener() {
+        mAddCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category = categoryName.getText().toString().trim();
+                String category = mCategoryName.getText().toString().trim();
                 addCategory(category);
             }
         });
@@ -75,61 +83,81 @@ public class AddCategoryActivity extends AppCompatActivity {
     private void addCategory(String category){
         //check category is not empty
         if(category.isEmpty()){
-            Functions.errorAlert(context, getString(R.string.oops), getString(R.string.category_canot_empty));
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.category_canot_empty));
         }else if(category.length() <= 3){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.category_more_3_char));
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.category_more_3_char));
         }else if(category.length() >= 20){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.category_more_20_char));
+            Util.redSnackbar(getApplication(),mLayout,getString(R.string.category_more_20_char));
         }else{
-            //get the user id
-            String userId = db.getUserID();
+            //Check Internet connection is available or not
+            if(Util.isConnectedToInternet(getApplication())){
+                /*
+                * Get user Id From Shared Preferences*/
+                String userId = MySharedPreferences.getInstance(getApplication()).getUserId();
+                //Call addCategoryInBackground to add category to API
+                addCategoryInBackground(category,userId);
 
-            //execute the aysnc task
-            CategoryTask categoryTask = new CategoryTask();
-            categoryTask.execute(category,userId);
+            }else{ //if not connected to internet
+                Util.noInternetSnackbar(getApplication(),mLayout);
+            }
         }
     }
 
-    //async task to add category to database
-    private class CategoryTask extends AsyncTask<String,String,String>{
+    /*
+    * Method to add Category to API
+    * */
+    public void addCategoryInBackground(final String categoryName, final String userId){
+        //show ProgressBar
+        //pd.show();
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_CATEGORY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //hide progressbar
+                //pd.dismiss();
+                //Method to parse the response send By the API and Show Result
+                parseAddCategoryResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //hide progressbar
+                //pd.dismiss();
+                //handle Volley error
+                String errorMessage = VolleySingleton.handleVolleyError(error);
+                if(errorMessage != null){
+                    Util.redSnackbar(getApplication(),mLayout,errorMessage);
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put("categoryName",categoryName);
+                params.put("userId",userId);
+                return params;
+            }
+        };
 
-        @Override
-        protected void onPreExecute() {
-            pd.show();
-        }
+        mRequestQueue.add(request);
+    }
 
-        @Override
-        protected String doInBackground(String... params) {
+    private void parseAddCategoryResponse(String response) {
+        //parse response and store the result in a list
+        categoryList = JsonParser.SimpleParse(response);
 
-            //generate hashmap to values to be send to the Server
-            HashMap<String,String> categoryData = new HashMap<>();
-            categoryData.put("categoryName",params[0]);
-            categoryData.put("userId",params[1]);
-
-            //convert hashmap into EncodedUrl
-            String data = Functions.hashMapToEncodedUrl(categoryData);
-
-            //make a request to the web and
-            return GetJson.request(ApiUrl.ADD_CATEGORY,data,"POST");
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            //parse return json and store the result in a list
-            categoryList = JsonParser.SimpleParse(s);
+        //check the response list is not null
+        if(categoryList != null){
             SimplePojo category = categoryList.get(0);
 
-            pd.dismiss(); // dismiss the progress dialog
-
             if(category.getReturned()){//success
-                Toast.makeText(context,category.getMessage(),Toast.LENGTH_LONG).show();
-                //empty the exitText to enter categoryname
-                categoryName.setText("");
-            }else{//erro
-                Functions.errorAlert(context,getString(R.string.oops),category.getMessage());
-
+                Util.greenSnackbar(getApplication(),mLayout,category.getMessage());
+                //empty the exitText to enter category name
+                mCategoryName.setText("");
+            }else{//error
+                Util.redSnackbar(getApplication(),mLayout,category.getMessage());
             }
-
+        }else{ //when the list is null show this message
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
     }
 }

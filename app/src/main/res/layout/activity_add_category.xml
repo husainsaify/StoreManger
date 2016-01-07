@@ -1,32 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.hackerkernel.storemanager.AddCategoryActivity"
-              android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
-
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/categoryName"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/add_category_hint"
-        android:background="@drawable/custom_edittext"/>
+        tools:context="com.hackerkernel.storemanager.AddCategoryActivity"
+        android:orientation="vertical"
+        android:id="@+id/addCategoryLinearLayout">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add"
-        android:id="@+id/addCategory"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:textColor="@color/iconColor"
-        android:background="@drawable/primary_button" />
+        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/categoryName"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/add_category_hint"
+            android:background="@drawable/custom_edittext"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add"
+            android:id="@+id/addCategory"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/iconColor"
+            android:background="@drawable/primary_button" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

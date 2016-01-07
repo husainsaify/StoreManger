@@ -1,8 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -13,31 +11,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.DataBase;
-import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.SaleTrackerActivity;
 import com.hackerkernel.storemanager.SearchActivity;
-import com.hackerkernel.storemanager.adapter.CategoryAdapter;
-import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class CategoryActivity extends AppCompatActivity implements DialogInterface.OnClickListener {
+public class CategoryActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = CategoryActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -62,9 +55,13 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
 
         //set toolbar
         setSupportActionBar(toolbar);
-
-        //noinspection ConstantConditions
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.app_name));
+
+        /*
+        * Set OnClickListener to Views
+        * */
+        mFab.setOnClickListener(this);
 
         //instantiate MySharedPreferences to get user data
         mySharedPreferences = MySharedPreferences.getInstance(this);
@@ -79,7 +76,8 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
                 int id = menuItem.getItemId();
                 switch (id) {
                     case R.id.menu_add_category:
-                        startActivity(new Intent(CategoryActivity.this,AddCategoryActivity.class));
+                        mDrawerLayout.closeDrawers();
+                        goToAddCategoryActivity();
                         break;
                     case R.id.menu_sales_tracker:
                         break;
@@ -111,12 +109,12 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //store clicked item in CategoryPojo so that later we can get CategoryId and CategoryName
-                CategoryPojo categoryName = (CategoryPojo) categoryListView.getItemAtPosition(position);
+                CategoryPojo mCategoryName = (CategoryPojo) categoryListView.getItemAtPosition(position);
                 //go to product activity
                 Intent productIntent = new Intent(CategoryActivity.this, ProductActivity.class);
                 //set categoryId and CategoryName in intenet
-                productIntent.putExtra("categoryId", categoryName.getId());
-                productIntent.putExtra("categoryName", categoryName.getName());
+                productIntent.putExtra("categoryId", mCategoryName.getId());
+                productIntent.putExtra("mCategoryName", mCategoryName.getName());
                 startActivity(productIntent);
             }
         });
@@ -133,14 +131,6 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        //Fetch category from the backend
-        //new FetchCategoryTask().execute(userId);
-
-    }
-
-    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
@@ -149,33 +139,13 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
+        getMenuInflater().inflate(R.menu.menu_category, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id){
-            //sales Tracker
-            case R.id.action_sale_tracker:
-                startActivity(new Intent(CategoryActivity.this,SaleTrackerActivity.class));
-                break;
-            //refresh
-            case R.id.action_refresh:
-                //Fetch category from the backend
-                new FetchCategoryTask().execute(userId);
-                break;
-            //logout
-            case R.id.action_logout:
-                Util.logout(this); //logout
-                break;
-            //add new category
-            case R.id.action_add_category:
-                //show the add category alertDialog
-                startActivity(new Intent(CategoryActivity.this,AddCategoryActivity.class));
-                break;
+        switch (item.getItemId()){
             //search
             case R.id.action_search:
                 Intent intent = new Intent(CategoryActivity.this,SearchActivity.class);
@@ -186,8 +156,25 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //go to Add Category when fab was clicked
+            case R.id.fabAddCategory:
+                goToAddCategoryActivity();
+                break;
+        }
+    }
+
+    /*
+    * Method to go to AddCategoryActivity
+    * */
+    private void goToAddCategoryActivity() {
+        startActivity(new Intent(CategoryActivity.this, AddCategoryActivity.class));
+    }
+
     //function to updateListView
-    private void updateListView(List<CategoryPojo> list){
+    /*private void updateListView(List<CategoryPojo> list){
         //if their is data in the list
         //if their is no data in the list
         if (list.size() > 0){
@@ -196,15 +183,12 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
             categoryListView.setAdapter(adapter);
         }else
             whenListIsEmpty.setText(getString(R.string.not_added_category));
-    }
+    }*/
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
 
-    }
 
     //Private class to fetch category list from the database
-    private class FetchCategoryTask extends AsyncTask<String,String,String>{
+    /*private class FetchCategoryTask extends AsyncTask<String,String,String>{
 
         @Override
         protected void onPreExecute() {
@@ -234,5 +218,5 @@ public class CategoryActivity extends AppCompatActivity implements DialogInterfa
             //hide the progressbar
             Functions.toggleProgressBar(pb); //hide progressbar
         }
-    }
+    }*/
 }

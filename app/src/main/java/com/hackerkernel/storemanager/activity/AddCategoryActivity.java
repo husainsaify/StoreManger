@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +16,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.hackerkernel.storemanager.DataBase;
-import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -108,12 +104,12 @@ public class AddCategoryActivity extends AppCompatActivity {
     * */
     public void addCategoryInBackground(final String categoryName, final String userId){
         //show ProgressBar
-        //pd.show();
+        pd.show();
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_CATEGORY, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 //hide progressbar
-                //pd.dismiss();
+                pd.dismiss();
                 //Method to parse the response send By the API and Show Result
                 parseAddCategoryResponse(response);
             }
@@ -121,7 +117,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //hide progressbar
-                //pd.dismiss();
+                pd.dismiss();
                 //handle Volley error
                 String errorMessage = VolleySingleton.handleVolleyError(error);
                 if(errorMessage != null){

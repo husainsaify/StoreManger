@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -128,8 +129,8 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("categoryName",categoryName);
-                params.put("userId",userId);
+                params.put(Keys.KEY_AC_CATEGORY_NAME_PRAM,categoryName);
+                params.put(Keys.KEY_AC_USER_ID_PRAM,userId);
                 return params;
             }
         };

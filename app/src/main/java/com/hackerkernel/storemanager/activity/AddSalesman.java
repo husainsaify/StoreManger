@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -124,8 +125,8 @@ public class AddSalesman extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put("salesman",name);
-                params.put("userid",userId);
+                params.put(Keys.KEY_AS_SALESMAN_PRAM,name);
+                params.put(Keys.KEY_AC_USER_ID_PRAM,userId);
                 return params;
             }
         };

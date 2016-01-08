@@ -18,6 +18,11 @@ public interface Keys {
     String KEY_SIGNUP_EMAIL_PRAM = "email";
     String KEY_SIGNUP_PHONE_PRAM = "phone";
     String KEY_SIGNUP_PASS_PRAM = "password";
+    //add category params
+    String KEY_AC_CATEGORY_NAME_PRAM = "categoryName";
+    String KEY_AC_USER_ID_PRAM = "userId";
+    //add salesman params
+    String KEY_AS_SALESMAN_PRAM = "salesman";
 
     //login response
     String KEY_L_USER = "user",

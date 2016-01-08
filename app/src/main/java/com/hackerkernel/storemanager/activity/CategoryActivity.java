@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.SaleTrackerActivity;
 import com.hackerkernel.storemanager.SearchActivity;
 import com.hackerkernel.storemanager.pojo.CategoryPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
@@ -80,7 +79,8 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
                         goToAddCategoryActivity();
                         break;
                     case R.id.menu_manage_salesman:
-
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(CategoryActivity.this, ManageSalesman.class));
                         break;
                     case R.id.menu_sales_tracker:
                         break;

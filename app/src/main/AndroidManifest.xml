@@ -13,15 +13,13 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.CategoryActivity"
             android:label="@string/title_activity_home"
@@ -85,18 +83,37 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.CategoryActivity" />
         </activity>
-
-        <activity android:name=".activity.LoginActivity"
-            android:parentActivityName="com.hackerkernel.storemanager.activity.MainActivity">
+        <activity
+            android:name=".activity.LoginActivity"
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.activity.MainActivity"/>
+                android:value="com.hackerkernel.storemanager.activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.SignupActivity"
-            android:parentActivityName="com.hackerkernel.storemanager.activity.MainActivity">
+        <activity
+            android:name=".activity.SignupActivity"
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.activity.MainActivity"/>
+                android:value="com.hackerkernel.storemanager.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ManageSalesman"
+            android:label="@string/title_activity_manage_salesman"
+            android:parentActivityName=".activity.CategoryActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.activity.CategoryActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AddSalesman"
+            android:label="@string/title_activity_add_salesman"
+            android:parentActivityName=".activity.ManageSalesman"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.activity.ManageSalesman" />
         </activity>
     </application>
 

@@ -1,0 +1,39 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context="com.hackerkernel.storemanager.activity.AddSalesman"
+        android:orientation="vertical"
+        android:id="@+id/addSalesmanLinearLayout">
+
+        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/salesmanName"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/enter_salesman_name"
+            android:background="@drawable/custom_edittext"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_salesman"
+            android:id="@+id/addSalesman"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/iconColor"
+            android:background="@drawable/primary_button" />
+
+
+    </LinearLayout>
+</ScrollView>

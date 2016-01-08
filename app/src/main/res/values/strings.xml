@@ -102,5 +102,9 @@
     <string name="close">close</string>
     <string name="share">Share</string>
     <string name="manage_salesman">Manage Salesman</string>
+    <string name="title_activity_manage_salesman">ManageSalesman</string>
+    <string name="title_activity_add_salesman">AddSalesman</string>
+    <string name="add_salesman">Add Salesman</string>
+    <string name="enter_salesman_name">Enter Salesman name</string>
 
 </resources>

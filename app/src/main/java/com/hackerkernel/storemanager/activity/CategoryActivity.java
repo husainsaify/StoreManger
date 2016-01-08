@@ -79,6 +79,9 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
                         mDrawerLayout.closeDrawers();
                         goToAddCategoryActivity();
                         break;
+                    case R.id.menu_manage_salesman:
+
+                        break;
                     case R.id.menu_sales_tracker:
                         break;
                     case R.id.menu_setting:

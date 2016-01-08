@@ -6,6 +6,10 @@
             android:icon="@drawable/ic_add_category_black"
             android:title="@string/add_category" />
         <item
+            android:id="@+id/menu_manage_salesman"
+            android:icon="@drawable/ic_salesman_black"
+            android:title="@string/manage_salesman" />
+        <item
             android:id="@+id/menu_sales_tracker"
             android:icon="@drawable/ic_sales_tracker_black"
             android:title="@string/sale_tracker" />

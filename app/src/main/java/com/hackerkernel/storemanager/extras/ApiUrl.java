@@ -20,7 +20,8 @@ public class ApiUrl {
             SALES_TRACKER_DATE_LIST = SERVER + "co/storemanger/salesTrackerDatelist.php",
             GET_SALES_TRACKER = SERVER + "co/storemanger/salesTracker.php",
             PRODUCT_SEARCH = SERVER + "co/storemanger/search.php",
-        ADD_SALESMAN = SERVER + "co/storemanger/addSalesman.php";
+            ADD_SALESMAN = SERVER + "co/storemanger/addSalesman.php",
+            GET_SALESMAN = SERVER + "co/storemanger/salesmanList.php";
 
         /*private static final String SERVER = "http://storemanager.hackerkernel.com/";
         public static final String

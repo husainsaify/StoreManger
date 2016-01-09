@@ -19,7 +19,7 @@ import android.widget.TextView;
 import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.SearchActivity;
-import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
@@ -44,7 +44,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private DataBase db;
     private String userId;
-    private List<CategoryPojo> categoryList;
+    private List<SimpleListPojo> categoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,8 +111,8 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
         /*categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //store clicked item in CategoryPojo so that later we can get CategoryId and CategoryName
-                CategoryPojo mCategoryName = (CategoryPojo) categoryListView.getItemAtPosition(position);
+                //store clicked item in SimpleListPojo so that later we can get CategoryId and CategoryName
+                SimpleListPojo mCategoryName = (SimpleListPojo) categoryListView.getItemAtPosition(position);
                 //go to product activity
                 Intent productIntent = new Intent(CategoryActivity.this, ProductActivity.class);
                 //set categoryId and CategoryName in intenet
@@ -177,7 +177,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //function to updateListView
-    /*private void updateListView(List<CategoryPojo> list){
+    /*private void updateListView(List<SimpleListPojo> list){
         //if their is data in the list
         //if their is no data in the list
         if (list.size() > 0){
@@ -215,7 +215,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String s) {
             //parse returned json and store it in a "categoryList"
-            categoryList = JsonParser.categoryParser(s);
+            categoryList = JsonParser.simpleListParser(s);
             //call the updateListView method and update the "categoryListView"
             updateListView(categoryList);
             //hide the progressbar

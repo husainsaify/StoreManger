@@ -2,11 +2,10 @@ package com.hackerkernel.storemanager.parser;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
-import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
@@ -20,8 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -109,37 +106,63 @@ public class JsonParser {
         }
     }
 
-    //category list parser
-    public static List<CategoryPojo> categoryParser(String json){
+    //SimpleListParser to parse json response from category , salesman list etc
+    public static List<SimpleListPojo> simpleListParser(String json){
         try {
             JSONObject jsonObject = new JSONObject(json);
-            List<CategoryPojo> list = new ArrayList<>();
-            
+            List<SimpleListPojo> list = new ArrayList<>();
             /*
-            * If data category is found
+            * If response return true
             * */
-            if(jsonObject.getBoolean("return")){
-                JSONArray jsonArray = jsonObject.getJSONArray("category");
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN)){
+                Log.d(TAG,"HUS: True");
 
-                //loop throw the json array
-                for (int i = 0;i < jsonArray.length();i++){
-                    //get the current json object
-                    JSONObject jo = jsonArray.getJSONObject(i);
+                //check KEY_COM_DATA exits in json response
+                if(jsonObject.has(Keys.KEY_COM_DATA)){
+                    Log.d(TAG,"HUS: has data key");
+                    JSONArray jsonArray = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
 
-                    //create a instance of categoryPojo
-                    CategoryPojo cP = new CategoryPojo();
-                    //store results in categoryPojo
-                    cP.setId(jo.getString("id"));
-                    cP.setName(jo.getString("name"));
+                    //loop throw the json array
+                    for (int i = 0;i < jsonArray.length();i++){
+                        //get the current json object
+                        JSONObject jo = jsonArray.getJSONObject(i);
 
-                    //set categoryPojo to the list
-                    list.add(cP);
+                        //create a instance of SimpleListPojo
+                        SimpleListPojo current = new SimpleListPojo();
+
+                        //Store results in list
+                        current.setId(jo.getString(Keys.KEY_SL_ID));
+                        current.setName(jo.getString(Keys.KEY_SL_NAME));
+                        current.setUser_id(jo.getString(Keys.KEY_SL_USER_ID));
+                        current.setTime(jo.getString(Keys.KEY_SL_TIME));
+
+                        //add results to the list
+                        list.add(current);
+                    }
+
+                }else{ //If data not exits,Get count and store it
+                    Log.d(TAG, "HUS: data key not exits");
+                    //create a instance of SimpleListPojo
+                    SimpleListPojo current = new SimpleListPojo();
+                    current.setCount(jsonObject.getInt(Keys.KEY_SL_COUNT));
+
+                    //Add count to the list
+                    list.add(current);
                 }
+
+               //return the list
+               return list;
+            }else{ //If response is false return message
+                Log.d(TAG, "HUS: response false");
+                SimpleListPojo current = new SimpleListPojo();
+                current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
+                current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                list.add(current);
+                return list;
             }
 
-            //return the list
-            return list;
         } catch (JSONException e) {
+            Log.d(TAG,"HUS: Exception");
             e.printStackTrace();
             Log.e(TAG, "Exception " + e);
             return null;

@@ -126,7 +126,7 @@ public class AddSalesman extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
                 params.put(Keys.KEY_AS_SALESMAN_PRAM,name);
-                params.put(Keys.KEY_AC_USER_ID_PRAM,userId);
+                params.put(Keys.KEY_COM_USERID,userId);
                 return params;
             }
         };

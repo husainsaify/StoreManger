@@ -1,13 +1,16 @@
 package com.hackerkernel.storemanager.pojo;
 
 /**
- * Category Pojo
+ * SimpleList Pojo to store Category list , Salesman List etc
  */
-public class CategoryPojo {
-    private boolean returned;
+public class SimpleListPojo {
+    private boolean returned = true;
+    private int count = 1;
     private String message,
                     id,
-                    name;
+                    name,
+                    user_id,
+                    time;
 
     public boolean isReturned() {
         return returned;
@@ -39,5 +42,29 @@ public class CategoryPojo {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

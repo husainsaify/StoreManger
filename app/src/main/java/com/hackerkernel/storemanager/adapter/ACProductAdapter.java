@@ -95,7 +95,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View view = inflater.inflate(R.layout.ac_product_list_layout, parent, false);
 
-        //get data from my CategoryPojo
+        //get data from my SimpleListPojo
         ACProductSearchPojo product = suggestion.get(position);
         TextView name = (TextView) view.findViewById(R.id.ACproductName);
         TextView code = (TextView) view.findViewById(R.id.ACproductCode);

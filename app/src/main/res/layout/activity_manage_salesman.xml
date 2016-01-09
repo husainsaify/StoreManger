@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/manageSalesmanlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hackerkernel.storemanager.activity.ManageSalesman">
@@ -10,15 +10,21 @@
         android:id="@+id/toolbar"
         layout="@layout/tool_bar" />
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/salesmanRecyclerView"/>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabAddSalesman"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_white"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/fab_margin"/>
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_add_white" />
 
 </RelativeLayout>

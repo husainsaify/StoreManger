@@ -20,7 +20,7 @@ import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.CategoryPojo;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
 import org.json.JSONException;
@@ -50,7 +50,7 @@ public class SearchActivity extends AppCompatActivity {
     //global variables
     private String userId;
     private String mFailedMessage;
-    List<CategoryPojo> categoryList;
+    List<SimpleListPojo> categoryList;
     List<ProductPojo> searchList;
 
     ProgressDialog pd;
@@ -133,10 +133,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
     //Background Task to fetch category from the web
-    private class CategoryTask extends AsyncTask<Void,Void,List<CategoryPojo>>{
+    private class CategoryTask extends AsyncTask<Void,Void,List<SimpleListPojo>>{
 
         @Override
-        protected List<CategoryPojo> doInBackground(Void... params) {
+        protected List<SimpleListPojo> doInBackground(Void... params) {
             //create Hashmap for userId
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("userId",userId);
@@ -147,12 +147,12 @@ public class SearchActivity extends AppCompatActivity {
             //make a request to the backend
             String jsonResponse = GetJson.request(ApiUrl.GET_CATEGORY,data,"POST");
 
-            categoryList = JsonParser.categoryParser(jsonResponse);
+            categoryList = JsonParser.simpleListParser(jsonResponse);
             return categoryList;
         }
 
         @Override
-        protected void onPostExecute(List<CategoryPojo> category) {
+        protected void onPostExecute(List<SimpleListPojo> category) {
             //populate category spinner
             List<String> lable = new ArrayList<>();
             lable.add("Select Category");

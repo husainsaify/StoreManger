@@ -7,20 +7,24 @@ public interface Keys {
     //common Keys
     String KEY_COM_RETURN = "return";
     String KEY_COM_MESSAGE = "message";
-    String KEY_COM_USERID = "user_id";
+    String KEY_COM_USERID = "userId";
+    String KEY_COM_DATA = "data";
     String KEY_DEFAULT = "";
+
     //Login Keys params
     String KEY_LOGIN_EMAIL_PRAM = "email";
     String KEY_LOGIN_PASSWORD_PRAM = "password";
+
     //Signup keys params
     String KEY_SIGNUP_FN_PRAM = "fullname";
     String KEY_SIGNUP_STORENAME_PRAM = "storename";
     String KEY_SIGNUP_EMAIL_PRAM = "email";
     String KEY_SIGNUP_PHONE_PRAM = "phone";
     String KEY_SIGNUP_PASS_PRAM = "password";
+
     //add category params
     String KEY_AC_CATEGORY_NAME_PRAM = "categoryName";
-    String KEY_AC_USER_ID_PRAM = "userId";
+
     //add salesman params
     String KEY_AS_SALESMAN_PRAM = "salesman";
 
@@ -33,4 +37,10 @@ public interface Keys {
             KEY_L_PHONE = "phone",
             KEY_L_PASSWORD = "password",
             KEY_L_REGISTER_AT = "register_at";
+    //SimpleList response (category & salesman list)
+    String KEY_SL_ID = "id",
+            KEY_SL_NAME = "name",
+            KEY_SL_USER_ID = "user_id",
+            KEY_SL_TIME = "time",
+            KEY_SL_COUNT = "count";
 }

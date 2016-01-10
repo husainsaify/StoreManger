@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,12 +38,13 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ManageSalesman extends AppCompatActivity {
+public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.fabAddSalesman) FloatingActionButton fab;
     @Bind(R.id.clayout) CoordinatorLayout mLayout;
     @Bind(R.id.salesmanRecyclerView) RecyclerView mRecyclerView;
     @Bind(R.id.emptyRecyclerView) TextView mEmptyRecyclerViewText;
+    @Bind(R.id.swipeRefresh) SwipeRefreshLayout mSwipeRefreshLayout;
 
     private RequestQueue mRequestQueue;
     private List<SimpleListPojo> mSalesmanList;
@@ -74,6 +76,8 @@ public class ManageSalesman extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
         /*
         * When Floating action button is clicked Go to AddSalesman Activity
         * */
@@ -84,18 +88,31 @@ public class ManageSalesman extends AppCompatActivity {
             }
         });
 
+        userId = MySharedPreferences.getInstance(getApplication()).getUserId();
+
         /*
         * Check user has a Internet connected
         * if yes Fetch fresh salesman list from api and store it in sqlite database
         * if no Go to Sqlitedatabase and get the salesman list
         * if no data in SqliteDatabase show a message
         * */
-        userId = MySharedPreferences.getInstance(getApplication()).getUserId();
+        checkInternetAndDisplayList();
+    }
+
+    /*
+    * Check user has a Internet connected
+    * if yes Fetch fresh salesman list from api and store it in sqlite database
+    * if no Go to Sqlitedatabase and get the salesman list
+    * if no data in SqliteDatabase show a message
+    * */
+    private void checkInternetAndDisplayList() {
         if(Util.isConnectedToInternet(getApplication())){ //connected
             fetchSalesmanInBackground(); //fetch data
         }else{ //not connected
-            showListFromSqliteDatabase();
+            showListFromSqliteDatabase(); //method to display Data in list from Sqlite database
             Util.noInternetSnackbar(getApplication(),mLayout);
+            //method to stop swipeRefreshlayout refresh icon
+            stopRefreshing();
         }
     }
 
@@ -111,14 +128,14 @@ public class ManageSalesman extends AppCompatActivity {
 
 
     public void fetchSalesmanInBackground(){
-        pd.show();
+        startRefreshing();
         //get user id
         final String userId = MySharedPreferences.getInstance(getApplication()).getUserId();
         //Request API for salesman list
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALESMAN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pd.dismiss();
+                stopRefreshing();
                 //Call the method to parse json response
                 mSalesmanList = parseSalesmanResponse(response);
                 if(mSalesmanList != null){
@@ -133,7 +150,7 @@ public class ManageSalesman extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.dismiss();
+                stopRefreshing();
                 //handle Volley error
                 String errorMessage = VolleySingleton.handleVolleyError(error);
                 if(errorMessage != null){
@@ -197,4 +214,28 @@ public class ManageSalesman extends AppCompatActivity {
         }
     }
 
+    /* When Swipe to refresh layout is called */
+    @Override
+    public void onRefresh() {
+        checkInternetAndDisplayList();
+    }
+
+    //method to stop swipeRefreshlayout refresh icon
+    private void stopRefreshing() {
+        if(mSwipeRefreshLayout.isRefreshing()){
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private void startRefreshing(){
+        if(!mSwipeRefreshLayout.isRefreshing()){
+            mSwipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            });
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+    }
 }

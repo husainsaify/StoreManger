@@ -32,6 +32,7 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
+import com.hackerkernel.storemanager.storage.Database;
 
 import java.io.File;
 import java.io.IOException;
@@ -82,7 +83,7 @@ public class SellActivity extends AppCompatActivity {
     private String productImageAddress;
     private Uri productImageUri;
 
-    DataBase db;
+    Database db;
     SingleProductPojo productPojo;
 
     ProgressDialog pd;
@@ -94,11 +95,12 @@ public class SellActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.sell));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //get the userId
-        db = new DataBase(this);
+        /*//get the userId
+        db = new Database(this);
         userId = db.getUserID();
 
         String productSearchText = productSearch.getText().toString().trim();
@@ -135,17 +137,17 @@ public class SellActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
 
         //When Load more Button is clicked
-        /*
+        *//*
         * generate a new Size/Quantity/price EditText
         * Add them to Their layout
         * Add them to their list
-        * */
+        * *//*
         loadMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadMore(); //call loadMore method
             }
-        });
+        });*/
     }
 
     @Override
@@ -161,11 +163,11 @@ public class SellActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_ok:
-                    sellProduct();
+                    //sellProduct();
                 break;
             case R.id.action_cancel: //when cancel button is pressed
                 //close AddProductActivty
-                finish();
+                //finish();
                 break;
         }
 
@@ -175,7 +177,7 @@ public class SellActivity extends AppCompatActivity {
     /*
     * This method will get all details from "sellActivity" and send it to the backend
     * */
-    private void sellProduct() {
+    /*private void sellProduct() {
         //check productId is not null
         if(productId == null){
             Functions.errorAlert(context, getString(R.string.oops), getString(R.string.please_select_product));
@@ -212,10 +214,10 @@ public class SellActivity extends AppCompatActivity {
     }
 
 
-    /*
+    *//*
     * This method will create 3 new EditText for size/quantity/product
     * and append them to layout
-    *  */
+    *  *//*
     public void loadMore(){
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //create a new Size / Quantity / price EditText
@@ -302,17 +304,17 @@ public class SellActivity extends AppCompatActivity {
         pProfit.setText(value);
         profitHeader.setText(getString(label));
 
-        /*
+        *//*
         * Code to set Product Image
-        * */
+        * *//*
         productImageAddress = product.getImageAddress();
 
         //product image is not empty
         //get Image from the web
         if (!productImageAddress.isEmpty()){
-            /*
+            *//*
             * Get the image from Sdcard is available
-            * */
+            * *//*
 
             //1. get image uri from database
             Uri uri = db.getProductImageUri(productId);
@@ -460,5 +462,5 @@ public class SellActivity extends AppCompatActivity {
             //hide progressDialog
             pd.hide();
         }
-    }
+    }*/
 }

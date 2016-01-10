@@ -1,18 +1,13 @@
 package com.hackerkernel.storemanager.util;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.Snackbar;
 import android.util.Patterns;
-import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 
-import com.hackerkernel.storemanager.DataBase;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.CategoryActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;

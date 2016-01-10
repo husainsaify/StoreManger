@@ -25,6 +25,7 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
+import com.hackerkernel.storemanager.storage.Database;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,12 +69,13 @@ public class SaleTrackerActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.sale_tracker));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        //get user_id
-        DataBase db = new DataBase(this);
+        /*//get user_id
+        Database db = new Database(this);
         mUserId = db.getUserID();
 
         //create a progressDialog when we fetch sales
@@ -91,9 +93,9 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 //store new date & dateId
                 mDate = mDropdownList.get(position).getDate();
                 mDateId = mDropdownList.get(position).getDateId();
-                /*
+                *//*
                 * Call AsyncTask and set mSalesListView
-                * */
+                * *//*
                 new GetSalesTask().execute(mDateId);
             }
 
@@ -111,10 +113,10 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 SalesTrackerPojo current = mSalesList.get(position);
                 setAlertDialog(current);
             }
-        });
+        });*/
     }
 
-    public void setAlertDialog(final SalesTrackerPojo c){
+    /*public void setAlertDialog(final SalesTrackerPojo c){
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.sales_tracker_alert_dialog,null);
         //find view and from the layout
@@ -205,9 +207,9 @@ public class SaleTrackerActivity extends AppCompatActivity {
         mSellingPriceValue.setText(String.valueOf(mTotalSales));
     }
 
-    /*
+    *//*
     * Class to fetch date for mDateDropDown Menu
-    * */
+    * *//*
     private class DateDropDownTask extends AsyncTask<Void, Void, List<String>> {
 
         @Override
@@ -252,17 +254,17 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 //show a error message of no sales
                 Functions.errorAlert(context,getString(R.string.oops),getString(R.string.no_sales));
             }
-            /*
+            *//*
             * Call AsyncTask and set mSalesListView
-            * */
+            * *//*
             new GetSalesTask().execute(mDateId);
         }
     }
 
 
-    /*
+    *//*
     * Class to fetch all the sales of the current date
-    * */
+    * *//*
     private class GetSalesTask extends AsyncTask<String,Void,List<SalesTrackerPojo>>{
         @Override
         protected void onPreExecute() {
@@ -292,10 +294,10 @@ public class SaleTrackerActivity extends AppCompatActivity {
                     mSalesList = JsonParser.SalesTrackerParser(SaleTrackerActivity.this,jsonString);
                     return mSalesList;
                 }else{
-                    /*
+                    *//*
                     * store the error message in a Global variable
                     * So that we can show error message from MainThread
-                    * */
+                    * *//*
                     mFailedMessage = jo.getString("message");
                     return null;
                 }
@@ -319,6 +321,6 @@ public class SaleTrackerActivity extends AppCompatActivity {
             }
             pd.dismiss();
         }
-    }
+    }*/
 
 }

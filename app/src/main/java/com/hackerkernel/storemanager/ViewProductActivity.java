@@ -21,6 +21,7 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
+import com.hackerkernel.storemanager.storage.Database;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +58,7 @@ public class ViewProductActivity extends AppCompatActivity {
     //Pojo for product
     SingleProductPojo productPojo;
     ProgressDialog pd;
-    DataBase db;
+    Database db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,16 +70,17 @@ public class ViewProductActivity extends AppCompatActivity {
         String pImageAddress = getIntent().getExtras().getString("pImageAddress");
 
         //get userId
-        db = new DataBase(this);
-        userId = db.getUserID();
+        db = new Database(this);
+        //userId = db.getUserID();
 
         //Toolbar
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(pName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        //check Product Has a image or we have to Display a PlaceHolder Image
+        /*//check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
 
             //get the image Uri from the SQlite database
@@ -109,7 +111,7 @@ public class ViewProductActivity extends AppCompatActivity {
             //Show the placeHolder image
             imageView.setImageResource(R.drawable.placeholder_product);
             Log.d(TAG, "HUS: showing placeholder image");
-        }
+        }*/
 
         //create ProgressDialog
         pd = new ProgressDialog(this);
@@ -121,7 +123,7 @@ public class ViewProductActivity extends AppCompatActivity {
         * if not exits fetch it from Backend and then store it in local database
         * */
 
-        if(db.checkProduct(pId)){ //product exits in local database
+        /*if(db.checkProduct(pId)){ //product exits in local database
             //fetch product
             SingleProductPojo fetchedProduct = db.getProduct(pId);
 
@@ -130,7 +132,7 @@ public class ViewProductActivity extends AppCompatActivity {
         }else{
             //fetch product from backend
             new getProductTask().execute();
-        }
+        }*/
     }
 
     @Override
@@ -145,19 +147,19 @@ public class ViewProductActivity extends AppCompatActivity {
 
         switch (id){
             case R.id.action_delete:
-                    deleteProduct();
+                    //deleteProduct();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteProduct() {
-        /*
+    /*private void deleteProduct() {
+        *//*
         * Delete the product
         * - Local SQLite database
         * - Backend
-        * */
+        * *//*
 
         //check product is store in database and then delete it
         if(db.checkProduct(pId)){
@@ -224,22 +226,22 @@ public class ViewProductActivity extends AppCompatActivity {
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setImageBitmap(imageBitmap);
 
-                /*
+                *//*
                 * Store image to sdCard
                 * save image Uri to global varaible "productImageUri"
                 * so that we can store the image Uri in db
-                * */
+                * *//*
 
                 productImageUri = Functions.saveImageToSD(context,imageBitmap);
 
                 //add ProductImageUri to database
                 db.addProductImageUri(pId,productImageUri);
             }else{
-                /*
+                *//*
                 * Seams their is some issue is retrieving image
                 * - store placeholder image (Drawable) into "imageBitmap" (Bitmap) global variable
                 * - Throw and error Log & toast
-                * */
+                * *//*
 
                 imageBitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder_product);
 
@@ -292,7 +294,7 @@ public class ViewProductActivity extends AppCompatActivity {
             //add this product to the Local SQLite database
             db.addProduct(productPojo);
 
-            /*
+            *//*
             * Get Size & Quantity from "productPojo"
             * and store them in `SQ` Local database
             * Convert This 2,3,4
@@ -300,7 +302,7 @@ public class ViewProductActivity extends AppCompatActivity {
             * Array 2
             *       3
             *       4
-            * */
+            * *//*
             String sizeArray[] = productPojo.getSize().split("\n");
             String quantityArray[] = productPojo.getQuantity().split("\n");
 
@@ -349,6 +351,6 @@ public class ViewProductActivity extends AppCompatActivity {
                 Functions.errorAlert(context,getString(R.string.oops),deletePojo.getMessage());
             }
         }
-    }
+    }*/
 
 }

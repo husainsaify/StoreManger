@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /*
     * This method parse json response from the api
-    * & and API return false we will show error Message
+    * & and API return false we will show error message
     * and If API return true we will log the user in
     * */
     private void parseLoginResponse(String response) {

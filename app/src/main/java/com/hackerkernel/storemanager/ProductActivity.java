@@ -19,6 +19,7 @@ import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.storage.Database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class ProductActivity extends AppCompatActivity {
     private String  categoryId,
             categoryName,
             userId;
-    private DataBase db;
+    private Database db;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.productList) ListView listView;
@@ -54,14 +55,15 @@ public class ProductActivity extends AppCompatActivity {
         //get the categoryId , categoryName & userId
         categoryId = getIntent().getExtras().getString("categoryId");
         categoryName = getIntent().getExtras().getString("categoryName");
-        db = new DataBase(this);
-        userId = db.getUserID();
+        db = new Database(this);
+        //userId = db.getUserID();
 
         //initalize list
         productList = new ArrayList<>();
 
         //set the Toolbar
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(categoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

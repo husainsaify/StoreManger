@@ -22,6 +22,7 @@ import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.storage.Database;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
     @Bind(R.id.searchListView) ListView searchListView;
 
     //dataBase
-    DataBase db;
+    Database db;
 
     //global variables
     private String userId;
@@ -63,13 +64,14 @@ public class SearchActivity extends AppCompatActivity {
 
         //toolbar
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.search));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //instanciate database
-        db = new DataBase(this);
+        db = new Database(this);
         //get userId from the database
-        userId = db.getUserID();
+        //userId = db.getUserID();
 
         //create progressDialog
         pd = new ProgressDialog(this);

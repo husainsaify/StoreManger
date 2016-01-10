@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.hackerkernel.storemanager.DataBase;
+import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.SearchActivity;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -42,7 +42,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
 
     private MySharedPreferences mySharedPreferences;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private DataBase db;
+    private Database db;
     private String userId;
     private List<SimpleListPojo> categoryList;
 
@@ -103,7 +103,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
         headerFullName.setText(mySharedPreferences.getUserFullname());
 
         //instant DB
-        //db = new DataBase(this);
+        //db = new Database(this);
         //get userId
         //userId = db.getUserID();
 

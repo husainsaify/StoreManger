@@ -182,7 +182,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
         //if their is no data in the list
         if (list.size() > 0){
             //call CategoryAdapter and adapter a Custom ListView
-            CategoryAdapter adapter = new CategoryAdapter(CategoryActivity.this,R.layout.category_list_layout,list);
+            CategoryAdapter adapter = new CategoryAdapter(CategoryActivity.this,R.layout.simple_list_layout,list);
             categoryListView.setAdapter(adapter);
         }else
             whenListIsEmpty.setText(getString(R.string.not_added_category));

@@ -15,7 +15,8 @@
         android:layout_height="match_parent"
         android:layout_toRightOf="@+id/categoryIcon"
         android:text="Kids Shoes"
-        android:id="@+id/categoryText"
+        android:id="@+id/SimpleListText"
+        android:textColor="@color/primaryTextColor"
         android:gravity="center_vertical"
-        android:textAppearance="?android:textAppearanceLarge"/>
+        style="@style/Base.TextAppearance.AppCompat.Medium"/>
 </RelativeLayout>

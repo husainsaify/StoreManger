@@ -2,13 +2,14 @@ package com.hackerkernel.storemanager.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -18,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.adapter.SimpleListAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
@@ -26,10 +28,6 @@ import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +38,7 @@ import butterknife.ButterKnife;
 public class ManageSalesman extends AppCompatActivity {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.fabAddSalesman) FloatingActionButton fab;
-    @Bind(R.id.manageSalesmanlayout) RelativeLayout mLayout;
+    @Bind(R.id.clayout) CoordinatorLayout mLayout;
     @Bind(R.id.salesmanRecyclerView) RecyclerView mRecyclerView;
 
     private RequestQueue mRequestQueue;
@@ -59,6 +57,8 @@ public class ManageSalesman extends AppCompatActivity {
 
         //volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
 
         /*
         * When Floating action button is clicked Go to AddSalesman Activity
@@ -89,8 +89,11 @@ public class ManageSalesman extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Call the method to parse json response
-                Log.d("HUS","HUS: "+response);
-                parseSalesmanResponse(response);
+                mSalesmanList = parseSalesmanResponse(response);
+                if(mSalesmanList != null){
+                    //Call SetRecyclerView to setup Recyclerview
+                    setupRecyclerView();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -113,20 +116,31 @@ public class ManageSalesman extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
-    private void parseSalesmanResponse(String response) {
-        mSalesmanList = JsonParser.simpleListParser(response);
+    private void setupRecyclerView() {
+        SimpleListAdapter adapter = new SimpleListAdapter(getApplication());
+        adapter.setList(mSalesmanList);
+        Log.d("HUS","HUS: "+adapter.getItemCount());
+        mRecyclerView.setAdapter(adapter);
+    }
 
-        if(mSalesmanList != null){
+    private List<SimpleListPojo> parseSalesmanResponse(String response) {
+        List<SimpleListPojo> list = JsonParser.simpleListParser(response);
+
+        if(list != null){
             //If json Response Return false Display message in SnackBar
-            if(!mSalesmanList.get(0).isReturned()){
-                Util.redSnackbar(getApplication(),mLayout,mSalesmanList.get(0).getMessage());
-            }else if(mSalesmanList.get(0).getCount() == 0){ //Count (Number of saleman returned)
+            if(!list.get(0).isReturned()){
+                Util.redSnackbar(getApplication(),mLayout,list.get(0).getMessage());
+                return null;
+            }else if(list.get(0).getCount() == 0){ //Count (Number of saleman returned)
+                //TODO add a no result found label in activity
                 Toast.makeText(getApplication(),"No Results found",Toast.LENGTH_LONG).show();
+                return null;
             }else{ //if we get true results
-                Toast.makeText(getApplication(),"Results",Toast.LENGTH_LONG).show();
+                return list;
             }
         }else{ // when return null
             Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+            return null;
         }
     }
 

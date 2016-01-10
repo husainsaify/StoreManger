@@ -28,11 +28,11 @@ public class CategoryAdapter extends ArrayAdapter<SimpleListPojo> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.category_list_layout,parent, false);
+        View view = inflater.inflate(R.layout.simple_list_layout,parent, false);
 
         //get data from my SimpleListPojo
         SimpleListPojo categoryPojo = list.get(position);
-        TextView tv = (TextView) view.findViewById(R.id.categoryText);
+        TextView tv = (TextView) view.findViewById(R.id.SimpleListText);
         tv.setText(categoryPojo.getName());
         return view;
     }

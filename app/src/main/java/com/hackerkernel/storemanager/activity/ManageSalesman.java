@@ -1,7 +1,7 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +46,9 @@ public class ManageSalesman extends AppCompatActivity {
 
     private RequestQueue mRequestQueue;
     private List<SimpleListPojo> mSalesmanList;
+    private Database db;
+    private ProgressDialog pd;
+    private String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,13 +62,17 @@ public class ManageSalesman extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.manage_salesman);
 
         //Database
-        Database database = new Database(this);
-        database.test();
+        db = new Database(this);
 
         //volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+
+        //make a progress dialog
+        pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
 
         /*
         * When Floating action button is clicked Go to AddSalesman Activity
@@ -79,38 +85,65 @@ public class ManageSalesman extends AppCompatActivity {
         });
 
         /*
-        * Check user has a Internet connection or not
+        * Check user has a Internet connected
+        * if yes Fetch fresh salesman list from api and store it in sqlite database
+        * if no Go to Sqlitedatabase and get the salesman list
+        * if no data in SqliteDatabase show a message
         * */
+        userId = MySharedPreferences.getInstance(getApplication()).getUserId();
         if(Util.isConnectedToInternet(getApplication())){ //connected
             fetchSalesmanInBackground(); //fetch data
         }else{ //not connected
+            showListFromSqliteDatabase();
             Util.noInternetSnackbar(getApplication(),mLayout);
+        }
+    }
+
+    /*
+    * Method to fetch salesman from sqlite database and display it in RecyclerView
+    * */
+    private void showListFromSqliteDatabase() {
+        List<SimpleListPojo> list = db.getAllSalesman(userId);
+        if(list != null){
+            setupRecyclerView(list);
         }
     }
 
 
     public void fetchSalesmanInBackground(){
+        pd.show();
         //get user id
         final String userId = MySharedPreferences.getInstance(getApplication()).getUserId();
         //Request API for salesman list
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALESMAN, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                pd.dismiss();
                 //Call the method to parse json response
                 mSalesmanList = parseSalesmanResponse(response);
                 if(mSalesmanList != null){
                     //Call SetRecyclerView to setup Recyclerview
-                    setupRecyclerView();
+                    setupRecyclerView(mSalesmanList);
                 }
+
+                //Store new Salesman list in Sqlite Database
+                db.deleteAllSalesman();
+                db.insertAllSalesman(mSalesmanList);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
                 //handle Volley error
                 String errorMessage = VolleySingleton.handleVolleyError(error);
                 if(errorMessage != null){
                     Util.redSnackbar(getApplication(), mLayout, errorMessage);
                 }
+
+                /*
+                * Show Salesman data from the Sqlitedatabase
+                * */
+                showListFromSqliteDatabase();
             }
         }){
             @Override
@@ -124,10 +157,12 @@ public class ManageSalesman extends AppCompatActivity {
         mRequestQueue.add(request);
     }
 
-    private void setupRecyclerView() {
+    /*
+    * Method to set the RecyclerView
+    * */
+    private void setupRecyclerView(List<SimpleListPojo> list) {
         SimpleListAdapter adapter = new SimpleListAdapter(getApplication());
-        adapter.setList(mSalesmanList);
-        Log.d("HUS", "HUS: " + adapter.getItemCount());
+        adapter.setList(list);
         mRecyclerView.setAdapter(adapter);
     }
 

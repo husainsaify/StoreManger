@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -40,6 +41,7 @@ public class ManageSalesman extends AppCompatActivity {
     @Bind(R.id.fabAddSalesman) FloatingActionButton fab;
     @Bind(R.id.clayout) CoordinatorLayout mLayout;
     @Bind(R.id.salesmanRecyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.emptyRecyclerView) TextView mEmptyRecyclerViewText;
 
     private RequestQueue mRequestQueue;
     private List<SimpleListPojo> mSalesmanList;
@@ -119,7 +121,7 @@ public class ManageSalesman extends AppCompatActivity {
     private void setupRecyclerView() {
         SimpleListAdapter adapter = new SimpleListAdapter(getApplication());
         adapter.setList(mSalesmanList);
-        Log.d("HUS","HUS: "+adapter.getItemCount());
+        Log.d("HUS", "HUS: " + adapter.getItemCount());
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -132,10 +134,20 @@ public class ManageSalesman extends AppCompatActivity {
                 Util.redSnackbar(getApplication(),mLayout,list.get(0).getMessage());
                 return null;
             }else if(list.get(0).getCount() == 0){ //Count (Number of saleman returned)
-                //TODO add a no result found label in activity
-                Toast.makeText(getApplication(),"No Results found",Toast.LENGTH_LONG).show();
+                /*
+                * If count return 0 means no salesman added
+                * Hide recyclerView and show TextView
+                * */
+                mRecyclerView.setVisibility(View.GONE);
+                mEmptyRecyclerViewText.setVisibility(View.VISIBLE);
                 return null;
             }else{ //if we get true results
+                /*
+                * If result found
+                * Make recyclerview visible and TextView invisible
+                * */
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mEmptyRecyclerViewText.setVisibility(View.GONE);
                 return list;
             }
         }else{ // when return null

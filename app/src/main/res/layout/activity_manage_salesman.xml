@@ -16,6 +16,16 @@
         android:layout_height="match_parent"
         android:id="@+id/salesmanRecyclerView" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="@string/no_salesman_added"
+        android:id="@+id/emptyRecyclerView"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone"
+        android:layout_margin="10dp"/>
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"

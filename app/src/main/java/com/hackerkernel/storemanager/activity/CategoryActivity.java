@@ -130,6 +130,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
 
         //Get userId
         userId = mySharedPreferences.getUserId();
+        Log.d(TAG,"HUS: userId "+userId);
 
         //Setup Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
@@ -226,6 +227,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
             public void onErrorResponse(VolleyError error) {
                 stopRefreshing();
                 //handle Volley error
+                Log.d(TAG,"HUS: error "+error.getMessage());
                 String errorMessage = VolleySingleton.handleVolleyError(error);
                 if(errorMessage != null){
                     Util.redSnackbar(getApplication(), mLayout, errorMessage);

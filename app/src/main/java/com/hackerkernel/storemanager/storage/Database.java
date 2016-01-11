@@ -33,15 +33,18 @@ public class Database {
     public void insertAllSimpleList(String tablename,List<SimpleListPojo> list) {
         SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
         Log.d(TAG, "HUS: insertAllSimpleList");
-        for (int i = 0; i < list.size(); i++)
-        {
-            SimpleListPojo simplelistpojo = list.get(i);
-            ContentValues contentvalues = new ContentValues();
-            contentvalues.put(DatabaseHelper.COL_S_ID, simplelistpojo.getId());
-            contentvalues.put(DatabaseHelper.COL_S_NAME, simplelistpojo.getName());
-            contentvalues.put(DatabaseHelper.COL_S_USER_ID, simplelistpojo.getUser_id());
-            contentvalues.put(DatabaseHelper.COL_S_TIME, simplelistpojo.getTime());
-            sqlitedatabase.insert(tablename, null, contentvalues);
+        //Insert data to table only when SimpleList is not null
+        if(list != null){
+            for (int i = 0; i < list.size(); i++)
+            {
+                SimpleListPojo simplelistpojo = list.get(i);
+                ContentValues contentvalues = new ContentValues();
+                contentvalues.put(DatabaseHelper.COL_S_ID, simplelistpojo.getId());
+                contentvalues.put(DatabaseHelper.COL_S_NAME, simplelistpojo.getName());
+                contentvalues.put(DatabaseHelper.COL_S_USER_ID, simplelistpojo.getUser_id());
+                contentvalues.put(DatabaseHelper.COL_S_TIME, simplelistpojo.getTime());
+                sqlitedatabase.insert(tablename, null, contentvalues);
+            }
         }
 
     }

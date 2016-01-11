@@ -16,6 +16,12 @@ import java.util.List;
  * Database class to insert user in the database
  */
 public class Database {
+    /*
+    * public variables to store SimpleList TABLE NAME
+    * */
+    public static final String SALESMAN = DatabaseHelper.TABLE_SALESMAN;
+    public static final String CATEGORY = DatabaseHelper.TABLE_CATEGORY;
+
     //Make a global variable of DatabaseHelper class
     DatabaseHelper helper;
     private final String TAG = Database.class.getSimpleName();
@@ -24,9 +30,9 @@ public class Database {
         helper = new DatabaseHelper(context);
     }
 
-    public void insertAllSalesman(List<SimpleListPojo> list) {
+    public void insertAllSimpleList(String tablename,List<SimpleListPojo> list) {
         SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
-        Log.d(TAG, "HUS: insertAllSalesman");
+        Log.d(TAG, "HUS: insertAllSimpleList");
         for (int i = 0; i < list.size(); i++)
         {
             SimpleListPojo simplelistpojo = list.get(i);
@@ -35,23 +41,24 @@ public class Database {
             contentvalues.put(DatabaseHelper.COL_S_NAME, simplelistpojo.getName());
             contentvalues.put(DatabaseHelper.COL_S_USER_ID, simplelistpojo.getUser_id());
             contentvalues.put(DatabaseHelper.COL_S_TIME, simplelistpojo.getTime());
-            sqlitedatabase.insert(DatabaseHelper.TABLE_SALESMAN, null, contentvalues);
+            sqlitedatabase.insert(tablename, null, contentvalues);
         }
 
     }
 
-    public int deleteAllSalesman() {
+    public int deleteAllSimpleList(String tablename) {
+        Log.d(TAG,"HUS: tablename "+tablename);
         SQLiteDatabase db = helper.getWritableDatabase();
-        Log.d(TAG, "HUS: deleteAllSalesman");
-        return db.delete(DatabaseHelper.TABLE_SALESMAN, null, null);
+        Log.d(TAG, "HUS: deleteAllSimpleList");
+        return db.delete(tablename, null, null);
     }
 
-    public List<SimpleListPojo> getAllSalesman(String userId) {
+    public List<SimpleListPojo> getAllSimpleList(String table,String userId) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        Log.d(TAG, "HUS: getAllSalesman");
+        Log.d(TAG, "HUS: getAllSimpleList");
         String[] col = {DatabaseHelper.COL_S_ID,DatabaseHelper.COL_S_NAME,DatabaseHelper.COL_S_TIME};
         String[] selectionArgs = {userId};
-        Cursor c = db.query(DatabaseHelper.TABLE_SALESMAN,col,DatabaseHelper.COL_S_USER_ID + " = ?",selectionArgs,null,null,null);
+        Cursor c = db.query(table,col,DatabaseHelper.COL_S_USER_ID + " = ?",selectionArgs,null,null,null);
         List<SimpleListPojo> list = new ArrayList<>();
         while (c.moveToNext()) {
             //retive data
@@ -74,7 +81,7 @@ public class Database {
 
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
-        private static final int DATABASE_VERSION = 1;
+        private static final int DATABASE_VERSION = 2;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -88,6 +95,13 @@ public class Database {
                 COL_S_USER_ID = "user_id",
                 COL_S_TIME = "time";
 
+        //Category table
+        private static final String TABLE_CATEGORY = "category",
+                COL_C_ID = "_id",
+                COL_C_NAME = "name",
+                COL_C_USER_ID = "user_id",
+                COL_C_TIME = "time";
+
         /*
         * CREATE TABLE QUERY
         * */
@@ -97,11 +111,17 @@ public class Database {
                 COL_S_USER_ID + " INTEGER," +
                 COL_S_TIME + " VARCHAR(20));";
 
+        private String CREATE_CATEGORY = "CREATE TABLE " + TABLE_CATEGORY + "(" +
+                COL_C_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_C_NAME + " VARCHAR(50)," +
+                COL_C_USER_ID + " INTEGER," +
+                COL_C_TIME + " VARCHAR(20));";
+
         /*
         * DROP TABLE QUERY
         * */
         private String DROP_SALESMAN = "DROP TABLE IF EXISTS "+TABLE_SALESMAN;
-
+        private String DROP_CATEGORY = "DROP TABLE IF EXISTS "+TABLE_CATEGORY;
 
 
         /*private static final String TABLE_USER = "user",
@@ -172,6 +192,7 @@ public class Database {
         public void onCreate(SQLiteDatabase db) {
             //create table
             db.execSQL(CREATE_SALESMAN);
+            db.execSQL(CREATE_CATEGORY);
             Log.d(TAG, "HUS: onCreate");
         }
 
@@ -179,6 +200,7 @@ public class Database {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             //drop table if factory version upgrade
             db.execSQL(DROP_SALESMAN);
+            db.execSQL(DROP_CATEGORY);
             Log.d(TAG, "HUS: onUpgrade");
             //Call onCreate to recreate tables
             onCreate(db);

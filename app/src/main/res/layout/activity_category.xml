@@ -11,47 +11,54 @@
         android:layout_height="match_parent"
         tools:context="com.hackerkernel.storemanager.HomeActivity">
 
-        <!-- toolbar -->
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
-        <!-- /toolbar -->
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/tool_bar" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_below="@+id/toolbar"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/categoryRecyclerView" />
 
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <!-- Textview to show text when RecyclerView is empty -->
         <TextView
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:id="@+id/whenListIsEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/no_category_added"
+            android:id="@+id/emptyRecyclerView"
             android:layout_below="@+id/toolbar"
-            android:layout_centerHorizontal="true"/>
+            android:visibility="gone"
+            android:layout_margin="10dp"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAddCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_white"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="@dimen/fab_margin" />
+        <!-- Coordinator layout to store Snackbar and Fab -->
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/clayout"
+            android:layout_alignParentBottom="true">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabAddCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_white"
+                android:layout_margin="@dimen/fab_margin"
+                android:layout_gravity="end|bottom"/>
+
+        </android.support.design.widget.CoordinatorLayout>
 
     </RelativeLayout>
 
+    <!-- Navigation view -->
     <android.support.design.widget.NavigationView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,4 +68,5 @@
         android:layout_gravity="start">
 
     </android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>

@@ -35,7 +35,7 @@
     <string name="category_more_3_char">Category name too short.</string>
     <string name="category_more_20_char">Category name should not be more then 20 characters.</string>
     <string name="oops">OOPS!</string>
-    <string name="not_added_category">It\'s seem you haven\'t added any Category yet! Click on the top plus icon to add one.</string>
+    <string name="no_category_added">It\'s seem you haven\'t added any Category yet! Click on the plus icon to add one.</string>
     <string name="title_activity_product">product</string>
     <string name="title_activity_add_product">AddProductActivity</string>
     <!-- add product activity -->

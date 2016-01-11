@@ -4,8 +4,8 @@ package com.hackerkernel.storemanager.extras;
  * CLass to feed URLS
  */
 public class ApiUrl {
-        //private static final String SERVER = "http://192.168.69.2/co/storemanger/";
-        private static final String SERVER = "http://storemanager.hackerkernel.com/";
+        private static final String SERVER = "http://192.168.69.2/co/storemanger/";
+        //private static final String SERVER = "http://hackerkernel.com/storetest/";
         public static final String
                 SIGNUP_URL = SERVER + "register.php",
                 LOGIN_URL = SERVER +  "login.php",

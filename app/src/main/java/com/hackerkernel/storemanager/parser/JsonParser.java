@@ -118,8 +118,8 @@ public class JsonParser {
                 Log.d(TAG,"HUS: True");
 
                 //check KEY_COM_DATA exits in json response
-                if(jsonObject.has(Keys.KEY_COM_DATA)){
-                    Log.d(TAG,"HUS: has data key");
+                if(jsonObject.has(Keys.KEY_COM_DATA) && !jsonObject.isNull(Keys.KEY_COM_DATA)){
+                    Log.d(TAG,"HUS: data key exits");
                     JSONArray jsonArray = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
 
                     //loop throw the json array
@@ -153,7 +153,7 @@ public class JsonParser {
                //return the list
                return list;
             }else{ //If response is false return message
-                Log.d(TAG, "HUS: response false");
+                Log.d(TAG, "HUS: response false "+jsonObject.getString(Keys.KEY_COM_MESSAGE));
                 SimpleListPojo current = new SimpleListPojo();
                 current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
                 current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));

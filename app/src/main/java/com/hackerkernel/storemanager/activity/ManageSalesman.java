@@ -68,6 +68,8 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
 
         //volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+
+        //Add layout manager to RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -120,7 +122,7 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
     * Method to fetch salesman from sqlite database and display it in RecyclerView
     * */
     private void showListFromSqliteDatabase() {
-        List<SimpleListPojo> list = db.getAllSalesman(userId);
+        List<SimpleListPojo> list = db.getAllSimpleList(Database.SALESMAN,userId);
         if(list != null){
             setupRecyclerView(list);
         }
@@ -144,8 +146,8 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
                 }
 
                 //Store new Salesman list in Sqlite Database
-                db.deleteAllSalesman();
-                db.insertAllSalesman(mSalesmanList);
+                db.deleteAllSimpleList(Database.SALESMAN);
+                db.insertAllSimpleList(Database.SALESMAN,mSalesmanList);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -235,7 +237,6 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
                     mSwipeRefreshLayout.setRefreshing(true);
                 }
             });
-            mSwipeRefreshLayout.setRefreshing(true);
         }
     }
 }

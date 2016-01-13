@@ -130,7 +130,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
 
         //Get userId
         userId = mySharedPreferences.getUserId();
-        Log.d(TAG,"HUS: userId "+userId);
+        Log.d(TAG, "HUS: userId " + userId);
 
         //Setup Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
@@ -311,8 +311,7 @@ public class CategoryActivity extends AppCompatActivity implements View.OnClickL
         switch (item.getItemId()){
             //search
             case R.id.action_search:
-                Intent intent = new Intent(CategoryActivity.this,SearchActivity.class);
-                startActivity(intent);
+
                 break;
         }
 

@@ -115,6 +115,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.activity.ManageSalesman" />
         </activity>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

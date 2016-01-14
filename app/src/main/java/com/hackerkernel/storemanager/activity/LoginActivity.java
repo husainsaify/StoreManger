@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
                 //store user details in a sharedPrefernce
                 MySharedPreferences.getInstance(getApplication()).setUser(details);
                 //GO to CategoryActivity
-                Util.goToCategoryActivity(getApplication());
+                Util.goToHomeActivity(getApplication());
             }else{
                 //show the alert
                 Util.redSnackbar(getApplication(),mLayout,details.getMessage());

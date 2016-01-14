@@ -171,7 +171,7 @@ public class SignupActivity extends AppCompatActivity {
                 mySharedPreferences.setUser(current.getUserId(),fullname,storename,email,phone,password);
 
                 //send the user to CategoryActivity
-                Util.goToCategoryActivity(getApplication());
+                Util.goToHomeActivity(getApplication());
             }else{ //request failed
                 Util.redSnackbar(getApplication(),mLayout,current.getMessage());
             }

@@ -70,7 +70,7 @@ public class Util {
     /*
      * Method to send the user to CategoryActivity
      * */
-    public static void goToCategoryActivity(Context context){
+    public static void goToHomeActivity(Context context){
         Intent categoryIntent = new Intent(context, HomeActivity.class);
         categoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         categoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

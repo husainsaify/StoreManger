@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
         if(sharedPreferences.checkUser()){
             //Go to CategoryActivity
-            Util.goToCategoryActivity(getApplication());
+            Util.goToHomeActivity(getApplication());
         }
 
 

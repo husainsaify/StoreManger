@@ -1,13 +1,49 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hackerkernel.storemanager.fragment.CategoryFragment">
+    tools:context="com.hackerkernel.storemanager.HomeActivity">
 
-    <!-- TODO: Update blank fragment layout -->
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/categoryRecyclerView" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!-- Textview to show text when RecyclerView is empty -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Category fragment" />
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="@string/no_category_added"
+        android:id="@+id/emptyRecyclerView"
+        android:layout_below="@+id/toolbar"
+        android:visibility="gone"
+        android:layout_margin="10dp"/>
 
-</FrameLayout>
+    <!-- Coordinator layout to store Snackbar and Fab -->
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/clayout"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="end|bottom"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+    <!-- / Coordinator layout to store Snackbar and Fab -->
+
+</RelativeLayout>

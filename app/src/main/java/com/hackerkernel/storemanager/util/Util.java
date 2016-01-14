@@ -9,7 +9,6 @@ import android.util.Patterns;
 import android.view.View;
 
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.activity.CategoryActivity;
 import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
@@ -68,7 +67,7 @@ public class Util {
     }
 
     /*
-     * Method to send the user to CategoryActivity
+     * Method to send the user to HomeActivity
      * */
     public static void goToHomeActivity(Context context){
         Intent categoryIntent = new Intent(context, HomeActivity.class);

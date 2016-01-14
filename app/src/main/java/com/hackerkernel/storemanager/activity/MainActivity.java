@@ -27,12 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         /*
         * Check User is logged in from SharedPreferences
-        * if user Is login send him to CategoryActivity
+        * if user Is login send him to HomeActivity
         * Else be in this screen
         * */
         MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
         if(sharedPreferences.checkUser()){
-            //Go to CategoryActivity
+            //Go to HomeActivity
             Util.goToHomeActivity(getApplication());
         }
 

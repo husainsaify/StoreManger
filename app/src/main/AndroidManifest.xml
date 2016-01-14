@@ -21,26 +21,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.CategoryActivity"
-            android:label="@string/title_activity_home"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.AddCategoryActivity"
             android:label="@string/title_activity_add_category"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CategoryActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".ProductActivity"
             android:label="@string/title_activity_product"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CategoryActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".AddProductActivity"
@@ -61,27 +57,27 @@
         </activity>
         <activity
             android:name=".SearchActivity"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CategoryActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".SellActivity"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CategoryActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".SaleTrackerActivity"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.CategoryActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".activity.LoginActivity"
@@ -100,11 +96,11 @@
         <activity
             android:name=".activity.ManageSalesman"
             android:label="@string/title_activity_manage_salesman"
-            android:parentActivityName=".activity.CategoryActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.activity.CategoryActivity" />
+                android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
         </activity>
         <activity
             android:name=".activity.AddSalesman"
@@ -118,7 +114,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

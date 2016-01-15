@@ -1,12 +1,16 @@
 package com.hackerkernel.storemanager.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.hackerkernel.storemanager.ProductActivity;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
@@ -20,10 +24,17 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
 
     private LayoutInflater mInflater;
     private List<SimpleListPojo> mList = new ArrayList<>();
+    private Context mContext;
+    private String mActivityName;
 
+    //name of Activity using SimpleListAdapter
+    public static String CATEGORY = "category";
+    public static String SALESMAN = "salesman";
 
-    public SimpleListAdapter(Context context){
+    public SimpleListAdapter(Context context,String activityName){
         mInflater = LayoutInflater.from(context);
+        mContext = context;
+        mActivityName = activityName;
     }
 
     public void setList(List<SimpleListPojo> list){
@@ -50,11 +61,31 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
         return mList.size();
     }
 
-    static class ViewHolderSimpleList extends RecyclerView.ViewHolder {
+    class ViewHolderSimpleList extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         public ViewHolderSimpleList(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.SimpleListText);
+
+            /*Item click listener*/
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            /*
+            * Check if SimpleListAdapter is used for CATEGORY
+            * */
+            if(mActivityName.equals(CATEGORY)){
+                int position = getAdapterPosition();
+                SimpleListPojo current = mList.get(position);
+                //go to product activity
+                Intent productIntent = new Intent(mContext, ProductActivity.class);
+                //set categoryId and CategoryName in intenet
+                productIntent.putExtra("categoryId", current.getId());
+                productIntent.putExtra("categoryName", current.getName());
+                mContext.startActivity(productIntent);
+            }
         }
     }
 }

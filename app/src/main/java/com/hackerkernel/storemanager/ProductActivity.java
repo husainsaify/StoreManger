@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
@@ -55,11 +56,10 @@ public class ProductActivity extends AppCompatActivity {
         //get the categoryId , categoryName & userId
         categoryId = getIntent().getExtras().getString("categoryId");
         categoryName = getIntent().getExtras().getString("categoryName");
-        db = new Database(this);
-        //userId = db.getUserID();
 
-        //initalize list
-        productList = new ArrayList<>();
+        Toast.makeText(getApplication(),"ID "+categoryId,Toast.LENGTH_LONG).show();
+        //db = new Database(this);
+        //userId = db.getUserID();
 
         //set the Toolbar
         setSupportActionBar(toolbar);
@@ -68,7 +68,7 @@ public class ProductActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        //When user click on of the item from the list
+        /*//When user click on of the item from the list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,11 +81,11 @@ public class ProductActivity extends AppCompatActivity {
                 intent.putExtra("pImageAddress",product.getProductImage());
                 startActivity(intent);
             }
-        });
+        });*/
 
     }
 
-    @Override
+    /*@Override
     protected void onResume() {
         super.onResume();
         //Do all the stuff and Set Result to ListView
@@ -95,7 +95,7 @@ public class ProductActivity extends AppCompatActivity {
     public void refreshList(){
         //fetch Json data from the Backend and Parse it into a ListView
         new productTask().execute();
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,14 +110,14 @@ public class ProductActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_refresh) {
-            refreshList(); //refresh view
+            //refreshList(); //refresh view
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    //Open addProduct Activity when FAB is clicked
+    /*//Open addProduct Activity when FAB is clicked
     public void openAddProduct(View view){
         Intent addProductIntent = new Intent(ProductActivity.this,AddProductActivity.class);
         addProductIntent.putExtra("categoryId",categoryId);
@@ -134,9 +134,9 @@ public class ProductActivity extends AppCompatActivity {
         }else{
             whenListIsEmpty.setText("No Product Listed");
         }
-    }
+    }*/
 
-    //Class to fetch json data from the Backend
+    /*//Class to fetch json data from the Backend
     private class productTask extends AsyncTask<String,String,List<ProductPojo>>{
         @Override
         protected void onPreExecute() {
@@ -146,9 +146,9 @@ public class ProductActivity extends AppCompatActivity {
 
         @Override
         protected List<ProductPojo> doInBackground(String... params) {
-            /*
+            *//*
             * Fetch the Product list from the web
-            * */
+            * *//*
             //generate a HashMap as fro sending POST params to Backend
             HashMap<String,String> productHash = new HashMap<>();
             productHash.put("userId",userId);
@@ -174,5 +174,5 @@ public class ProductActivity extends AppCompatActivity {
             //Hide PB
             Functions.toggleProgressBar(pb);
         }
-    }
+    }*/
 }

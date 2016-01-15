@@ -180,7 +180,7 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
     * Method to set the RecyclerView
     * */
     private void setupRecyclerView(List<SimpleListPojo> list) {
-        SimpleListAdapter adapter = new SimpleListAdapter(getApplication());
+        SimpleListAdapter adapter = new SimpleListAdapter(getApplication(),SimpleListAdapter.SALESMAN);
         adapter.setList(list);
         mRecyclerView.setAdapter(adapter);
     }

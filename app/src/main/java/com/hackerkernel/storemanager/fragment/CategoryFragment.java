@@ -233,7 +233,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
     * Method to set the RecyclerView
     * */
     private void setupRecyclerView(List<SimpleListPojo> list) {
-        SimpleListAdapter adapter = new SimpleListAdapter(getActivity());
+        SimpleListAdapter adapter = new SimpleListAdapter(getActivity(),SimpleListAdapter.CATEGORY);
         adapter.setList(list);
         mCategoryRecyclerView.setAdapter(adapter);
     }

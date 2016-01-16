@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -83,6 +84,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private List<SimpleListPojo> mCategorySimpleList;
     private List<String> mCategoryStringList;
     private Database db;
+    private String mCategoryId;
+    private String mCategoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,11 +105,30 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //Initialize Database
         db = new Database(getApplication());
 
+        //setup category Spinner
+        setUpCategorySpinner();
 
-        //get categoryId , categoryName & userId from intent
-        /*categoryId = getIntent().getExtras().getString("categoryId");
-        categoryName = getIntent().getExtras().getString("categoryName");
-        userId = getIntent().getExtras().getString("userId");*/
+        /*
+        * Check intent has send categoryId & categoryName
+        * if yes store them in Member variables
+        * */
+        if(getIntent().hasExtra("categoryId") && getIntent().hasExtra("categoryName")){
+            mCategoryId = getIntent().getExtras().getString("categoryId");
+            mCategoryName = getIntent().getExtras().getString("categoryName");
+        }
+
+        mCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                Log.d(TAG,"HUS: categoryId "+mCategorySimpleList.get(position).getId()+" Postion "+position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         //set the size & quantity list
         sizeList = new ArrayList<>();
@@ -115,10 +137,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //add first size and Quantity EditText to ArrayList
         sizeList.add(productSize);
         quantityList.add(productQuantity);
-
-        //setup category Spinner
-        setUpCategorySpinner();
-
 
         //set OnClicklistener
         //productSelectImage.setOnClickListener(this);
@@ -150,7 +168,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             //setup List to resources
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,mCategoryStringList);
-
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mCategorySpinner.setAdapter(adapter);
         }else{

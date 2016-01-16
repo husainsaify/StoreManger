@@ -25,12 +25,17 @@ import butterknife.ButterKnife;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.tabs) TabLayout tabs;
-    @Bind(R.id.viewpager) ViewPager viewPager;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.tabs)
+    TabLayout tabs;
+    @Bind(R.id.viewpager)
+    ViewPager viewPager;
     //Navigation drawer
-    @Bind(R.id.drawerLayout) DrawerLayout mDrawerLayout;
-    @Bind(R.id.navigationView) NavigationView mNavigationView;
+    @Bind(R.id.drawerLayout)
+    DrawerLayout mDrawerLayout;
+    @Bind(R.id.navigationView)
+    NavigationView mNavigationView;
 
 
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -55,7 +60,7 @@ public class HomeActivity extends AppCompatActivity {
         //instantiate MySharedPreferences to get user data
         mSharedPreferences = MySharedPreferences.getInstance(this);
 
-        mActionBarDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.open,R.string.close);
+        mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
@@ -67,6 +72,10 @@ public class HomeActivity extends AppCompatActivity {
                     case R.id.menu_add_category:
                         mDrawerLayout.closeDrawers();
                         goToAddCategoryActivity();
+                        break;
+                    case R.id.menu_add_product:
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(getApplication(),AddProductActivity.class));
                         break;
                     case R.id.menu_manage_salesman:
                         mDrawerLayout.closeDrawers();

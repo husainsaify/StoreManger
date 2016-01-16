@@ -1,4 +1,4 @@
-package com.hackerkernel.storemanager;
+package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,20 +13,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hackerkernel.storemanager.Functions;
+import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
+import com.hackerkernel.storemanager.storage.Database;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.Util;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -43,19 +52,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private final Context context = AddProductActivity.this;
 
     private String  categoryId,
-            categoryName,
-            userId;
+            categoryName;
     private int RESULT_LOAD_IMAGE = 1;
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.productImage) ImageView productImage;
-    @Bind(R.id.productSelectImage) Button productSelectImage;
+    //@Bind(R.id.productSelectImage) Button productSelectImage;
     @Bind(R.id.productName) EditText productName;
     @Bind(R.id.productCode) EditText productCode;
     @Bind(R.id.productCostPrice) EditText productCP;
     @Bind(R.id.productSellingPrice) EditText productSP;
     @Bind(R.id.productSize) EditText productSize;
     @Bind(R.id.productQuantity) EditText productQuantity;
-    @Bind(R.id.loadMore) Button loadMore;
+    //@Bind(R.id.loadMore) Button loadMore;
 
     //layout
     @Bind(R.id.productSizeLayout) LinearLayout sizeLayout;
@@ -68,6 +76,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     //ProgressDialog
     ProgressDialog pd;
 
+    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
+    @Bind(R.id.linearLayout) LinearLayout mLayout;
+
+    private String mUserId;
+    private List<SimpleListPojo> mCategorySimpleList;
+    private List<String> mCategoryStringList;
+    private Database db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,12 +92,21 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         //set toolbar
         setSupportActionBar(toolbar);
+        assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.add_product));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //Get Username From SharedPreferences
+        mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
+
+        //Initialize Database
+        db = new Database(getApplication());
+
 
         //get categoryId , categoryName & userId from intent
-        categoryId = getIntent().getExtras().getString("categoryId");
+        /*categoryId = getIntent().getExtras().getString("categoryId");
         categoryName = getIntent().getExtras().getString("categoryName");
-        userId = getIntent().getExtras().getString("userId");
+        userId = getIntent().getExtras().getString("userId");*/
 
         //set the size & quantity list
         sizeList = new ArrayList<>();
@@ -91,14 +116,46 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         sizeList.add(productSize);
         quantityList.add(productQuantity);
 
+        //setup category Spinner
+        setUpCategorySpinner();
+
+
         //set OnClicklistener
-        productSelectImage.setOnClickListener(this);
-        loadMore.setOnClickListener(this);
+        //productSelectImage.setOnClickListener(this);
+        //loadMore.setOnClickListener(this);
 
         //Create a progressDialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
+    }
+
+    /*
+    * Method to setup category Spinner
+    * */
+    public void setUpCategorySpinner(){
+        //setup StringList to avoid NullPointerException
+        mCategoryStringList = new ArrayList<>();
+        //Get category data from Sqlite Database
+        mCategorySimpleList = db.getAllSimpleList(Database.CATEGORY,mUserId);
+
+        //mCategorySimpleList is not null
+        if(mCategorySimpleList.size() > 0){
+            //Create a simple
+            for (int i = 0; i < mCategorySimpleList.size(); i++) {
+                SimpleListPojo c = mCategorySimpleList.get(i);
+                //Make a Simple String list which can be used with Default spinner adapter
+                mCategoryStringList.add(c.getName());
+            }
+
+            //setup List to resources
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,mCategoryStringList);
+
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mCategorySpinner.setAdapter(adapter);
+        }else{
+            Toast.makeText(getApplication(),R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -108,9 +165,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         switch (id){
             case R.id.loadMore: //when load more button is clicked
                     loadMore();
-                break;
-            case R.id.productSelectImage: //when select image button is clicked
-                    selectImageFromGallery();
                 break;
         }
     }
@@ -175,28 +229,27 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_ok:
+            /*case R.id.action_ok:
                     addProduct();
-                break;
-            case R.id.action_cancel: //when cancel button is pressed
-                //close AddProductActivty
-                finish();
+                break;*/
+            case R.id.loadMore:
+                loadMore();
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void addProduct() {
+    /*private void addProduct() {
         //get all the texts from the fields
         String  name = productName.getText().toString().trim(),
                 code = productCode.getText().toString().trim(),
                 cp = productCP.getText().toString().trim(),
                 sp = productSP.getText().toString().trim();
 
-        /*
+        *//*
         * Get Product Image if user has selected a image
-        * */
+        * *//*
         String encodedImage = "";
         if(productImage.getDrawable() != null){
             //get the image from ImageView and store it in a Bitmap
@@ -212,7 +265,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         // if any field is empty
         if(name.isEmpty() || code.isEmpty() || cp.isEmpty() || sp.isEmpty()){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.fillin_all_fields));
+            Functions.errorAlert(context, getString(R.string.oops), getString(R.string.fillin_all_fields));
             return;
         }
 
@@ -248,10 +301,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         }
 
-        /*
+        *//*
         * IF all goes well we will reach here
         * Create a Hashmap to store Data which we will send to the server
-        * */
+        * *//*
         HashMap<String,String> addProductHashMap = new HashMap<>();
         addProductHashMap.put("categoryName",categoryName);
         addProductHashMap.put("categoryId",categoryId);
@@ -308,5 +361,5 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 Functions.errorAlert(context,getString(R.string.oops),productPojo.getMessage());
             }
         }
-    }
+    }*/
 }

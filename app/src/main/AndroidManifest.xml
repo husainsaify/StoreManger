@@ -39,7 +39,7 @@
                 android:value=".activity.HomeActivity" />
         </activity>
         <activity
-            android:name=".AddProductActivity"
+            android:name=".activity.AddProductActivity"
             android:label="@string/title_activity_add_product"
             android:parentActivityName=".ProductActivity"
             android:screenOrientation="portrait">

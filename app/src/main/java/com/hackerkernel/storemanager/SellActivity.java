@@ -162,9 +162,9 @@ public class SellActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.action_ok:
+            /*case R.id.action_ok:
                     //sellProduct();
-                break;
+                break;*/
             case R.id.action_cancel: //when cancel button is pressed
                 //close AddProductActivty
                 //finish();

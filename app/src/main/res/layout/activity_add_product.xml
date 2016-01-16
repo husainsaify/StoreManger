@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.hackerkernel.storemanager.AddProductActivity">
+    tools:context=".activity.AddProductActivity"
+    android:id="@+id/linearLayout">
 
     <!-- toolbar -->
     <include
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         layout="@layout/tool_bar"/>
     <!-- / toolbar -->
 
@@ -25,37 +24,47 @@
         <!--  Main container -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/Addp_linerlayout_margin"
             android:layout_marginRight="@dimen/Addp_linerlayout_margin"
-            android:orientation="vertical"
-            android:weightSum="4">
+            android:orientation="vertical">
 
             <!-- Image container -->
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginBottom="@dimen/Addp_bottom_margin"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_marginTop="@dimen/Addp_bottom_margin"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin">
 
                 <ImageView
-                    android:layout_width="0dp"
+                    android:layout_width="150dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:id="@+id/productImage"/>
+                    android:id="@+id/productImage"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_camera_black_big" />
 
-                <Button
-                    android:layout_width="0dp"
+            </RelativeLayout>
+            <!-- / image Container -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_border"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Select Category"
+                    android:gravity="center_vertical"/>
+
+                <Spinner
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="@string/select_image"
-                    android:id="@+id/productSelectImage"/>
+                    android:id="@+id/categorySpinner"/>
 
             </LinearLayout>
-            <!-- / image Container -->
 
             <!-- Product Info (Container) -->
             <LinearLayout
@@ -148,11 +157,4 @@
     </ScrollView>
     <!-- / container for views -->
 
-    <!-- button to add more -->
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/load_more"
-        android:id="@+id/loadMore"/>
-    <!-- /button to add more -->
 </LinearLayout>

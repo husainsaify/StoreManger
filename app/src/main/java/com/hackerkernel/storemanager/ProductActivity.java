@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hackerkernel.storemanager.activity.AddProductActivity;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
@@ -33,11 +34,10 @@ import butterknife.ButterKnife;
 public class ProductActivity extends AppCompatActivity {
     //Global variable
     private static final String TAG = ProductActivity.class.getSimpleName();
-    private final Context context = this;
 
-    private String  categoryId,
-            categoryName,
-            userId;
+    private String mCategoryId;
+    private String mCategoryName;
+    private String mUserId;
     private Database db;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -54,17 +54,17 @@ public class ProductActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //get the categoryId , categoryName & userId
-        categoryId = getIntent().getExtras().getString("categoryId");
-        categoryName = getIntent().getExtras().getString("categoryName");
+        mCategoryId = getIntent().getExtras().getString("categoryId");
+        mCategoryName = getIntent().getExtras().getString("categoryName");
 
-        Toast.makeText(getApplication(),"ID "+categoryId,Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplication(),"ID "+mCategoryId,Toast.LENGTH_LONG).show();
         //db = new Database(this);
         //userId = db.getUserID();
 
         //set the Toolbar
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(categoryName);
+        getSupportActionBar().setTitle(mCategoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -117,14 +117,16 @@ public class ProductActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*//Open addProduct Activity when FAB is clicked
+    //Open addProduct Activity when FAB is clicked
     public void openAddProduct(View view){
-        Intent addProductIntent = new Intent(ProductActivity.this,AddProductActivity.class);
-        addProductIntent.putExtra("categoryId",categoryId);
-        addProductIntent.putExtra("categoryName",categoryName);
-        addProductIntent.putExtra("userId",userId);
+        Intent addProductIntent = new Intent(getApplication(),AddProductActivity.class);
+        addProductIntent.putExtra("categoryId",mCategoryId);
+        addProductIntent.putExtra("categoryName",mCategoryName);
+        addProductIntent.putExtra("userId",mUserId);
         startActivity(addProductIntent);
     }
+
+    /*
 
     //This method will Adapte a List into a ListView
     private void updateListView(List<ProductPojo> list){

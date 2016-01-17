@@ -223,7 +223,6 @@
                         android:drawableStart="@drawable/ic_delete_black"
                         android:id="@+id/productDelete"
                         android:gravity="center"
-                        android:background="@null"
                         />
 
                 </LinearLayout>

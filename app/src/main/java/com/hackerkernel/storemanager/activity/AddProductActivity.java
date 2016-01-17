@@ -2,12 +2,18 @@ package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,6 +94,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //Initialize Database
         db = new Database(getApplication());
 
+        //Set Delete button background transparent
+        mProductDelete.setBackgroundColor(Color.TRANSPARENT);
         //setup category Spinner
         setUpCategorySpinner();
 
@@ -102,6 +110,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             setSpinnerPostionToCategoryID();
         }
 
+        //When An item is selected in spinner
         mCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -116,22 +125,30 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         });
 
-        //set the size & quantity list
+        /*
+        * Store Size, Quantity and delete in their List
+        * */
         mSizeList = new ArrayList<>();
         mQuantityList = new ArrayList<>();
-
-        //add first size and Quantity EditText to ArrayList
+        mDeleteList = new ArrayList<>();
         mSizeList.add(mProductSize);
         mQuantityList.add(mProductQuantity);
-
-        //set OnClicklistener
-        //productSelectImage.setOnClickListener(this);
-        //loadMore.setOnClickListener(this);
+        mDeleteList.add(mProductDelete);
 
         //Create a progressDialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.loadMore: //when load more button is clicked
+                loadMore();
+                break;
+        }
     }
 
     /*
@@ -179,16 +196,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.loadMore: //when load more button is clicked
-                    loadMore();
-                break;
-        }
-    }
-
     //when select image button is clicked open gallery
     private void selectImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -209,33 +216,50 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    /*
+    * Method to dynamically add Size, Quantity and Delete
+    * */
     private void loadMore() {
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ViewGroup.LayoutParams ButtonlayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         //create a new Size & Quantity EditText
-        EditText size = new EditText(AddProductActivity.this);
-        EditText quantity = new EditText(AddProductActivity.this);
+        EditText size = new EditText(getApplication());
+        EditText quantity = new EditText(getApplication());
+        Button delete = new Button(getApplication());
 
         //set their width and height
         size.setLayoutParams(layoutParams);
         quantity.setLayoutParams(layoutParams);
+        delete.setLayoutParams(ButtonlayoutParams);
 
         //set inputType
         size.setInputType(InputType.TYPE_CLASS_NUMBER);
         quantity.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        //set their hint
-        size.setHint(getString(R.string.size));
-        quantity.setHint(getString(R.string.quantity));
+        //Set input Bottom line color
+        size.getBackground().setColorFilter(getResources().getColor(R.color.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
+        quantity.getBackground().setColorFilter(getResources().getColor(R.color.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
+        size.setTextColor(getResources().getColor(R.color.primaryTextColor));
+        quantity.setTextColor(getResources().getColor(R.color.primaryTextColor));
+
+        //set icon and background to button
+        delete.setBackgroundColor(Color.TRANSPARENT);
+        delete.setGravity(Gravity.CENTER);
+        //set icon
+        Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
+        delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+
 
         //add to list
         mSizeList.add(size);
         mQuantityList.add(quantity);
+        mDeleteList.add(delete);
 
         //append to layout
         mSizeLayout.addView(size);
         mQuantityLayout.addView(quantity);
+        mDeleteLayout.addView(delete);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

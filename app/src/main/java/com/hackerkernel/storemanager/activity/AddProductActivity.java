@@ -1,19 +1,13 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,20 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
-import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
-import com.hackerkernel.storemanager.util.Util;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -50,35 +37,25 @@ import butterknife.ButterKnife;
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
-    private final Context context = AddProductActivity.this;
 
-    private String  categoryId,
-            categoryName;
     private int RESULT_LOAD_IMAGE = 1;
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.productImage) ImageView productImage;
-    //@Bind(R.id.productSelectImage) Button productSelectImage;
-    @Bind(R.id.productName) EditText productName;
-    @Bind(R.id.productCode) EditText productCode;
-    @Bind(R.id.productCostPrice) EditText productCP;
-    @Bind(R.id.productSellingPrice) EditText productSP;
-    @Bind(R.id.productSize) EditText productSize;
-    @Bind(R.id.productQuantity) EditText productQuantity;
-    //@Bind(R.id.loadMore) Button loadMore;
 
-    //layout
-    @Bind(R.id.productSizeLayout) LinearLayout sizeLayout;
-    @Bind(R.id.productQuantityLayout) LinearLayout quantityLayout;
-
-    //list
-    List<EditText> sizeList;
-    List<EditText> quantityList;
-    List<SimplePojo> productList; //list to store Return json abjects
-    //ProgressDialog
-    ProgressDialog pd;
-
-    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
     @Bind(R.id.linearLayout) LinearLayout mLayout;
+    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.productImage) ImageView mProductImage;
+    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
+    @Bind(R.id.productName) EditText mProductName;
+    @Bind(R.id.productCode) EditText mProductCode;
+    @Bind(R.id.productCostPrice) EditText mProductCP;
+    @Bind(R.id.productSellingPrice) EditText mProductSP;
+    @Bind(R.id.productSizeLayout) LinearLayout mSizeLayout;
+    @Bind(R.id.productQuantityLayout) LinearLayout mQuantityLayout;
+    @Bind(R.id.productDeleteLayout) LinearLayout mDeleteLayout;
+    @Bind(R.id.productSize) EditText mProductSize;
+    @Bind(R.id.productQuantity) EditText mProductQuantity;
+    @Bind(R.id.productDelete) Button mProductDelete;
+    @Bind(R.id.addProduct) Button mAddProduct;
+
 
     private String mUserId;
     private List<SimpleListPojo> mCategorySimpleList;
@@ -86,6 +63,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private Database db;
     private String mCategoryId;
     private String mCategoryName;
+    private  ProgressDialog pd;
+    //list to store (size,Qunatity and delete refernce)
+    private List<EditText> mSizeList;
+    private List<EditText> mQuantityList;
+    private List<Button> mDeleteList;
+    private List<SimplePojo> productList; //list to store Return json abjects
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,11 +90,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         //setup category Spinner
         setUpCategorySpinner();
-
-        /*
-        *
-        * */
-
 
         /*
         * Check intent has send categoryId & categoryName
@@ -139,12 +117,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         });
 
         //set the size & quantity list
-        sizeList = new ArrayList<>();
-        quantityList = new ArrayList<>();
+        mSizeList = new ArrayList<>();
+        mQuantityList = new ArrayList<>();
 
         //add first size and Quantity EditText to ArrayList
-        sizeList.add(productSize);
-        quantityList.add(productQuantity);
+        mSizeList.add(mProductSize);
+        mQuantityList.add(mProductQuantity);
 
         //set OnClicklistener
         //productSelectImage.setOnClickListener(this);
@@ -227,7 +205,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
             Uri selectedImage = data.getData();
-            productImage.setImageURI(selectedImage);
+            mProductImage.setImageURI(selectedImage);
         }
     }
 
@@ -250,12 +228,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         quantity.setHint(getString(R.string.quantity));
 
         //add to list
-        sizeList.add(size);
-        quantityList.add(quantity);
+        mSizeList.add(size);
+        mQuantityList.add(quantity);
 
         //append to layout
-        sizeLayout.addView(size);
-        quantityLayout.addView(quantity);
+        mSizeLayout.addView(size);
+        mQuantityLayout.addView(quantity);
     }
 
 
@@ -284,18 +262,18 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     /*private void addProduct() {
         //get all the texts from the fields
-        String  name = productName.getText().toString().trim(),
-                code = productCode.getText().toString().trim(),
-                cp = productCP.getText().toString().trim(),
-                sp = productSP.getText().toString().trim();
+        String  name = mProductName.getText().toString().trim(),
+                code = mProductCode.getText().toString().trim(),
+                cp = mProductCP.getText().toString().trim(),
+                sp = mProductSP.getText().toString().trim();
 
         *//*
         * Get Product Image if user has selected a image
         * *//*
         String encodedImage = "";
-        if(productImage.getDrawable() != null){
+        if(mProductImage.getDrawable() != null){
             //get the image from ImageView and store it in a Bitmap
-            Bitmap bitmapImage = ((BitmapDrawable) productImage.getDrawable()).getBitmap();
+            Bitmap bitmapImage = ((BitmapDrawable) mProductImage.getDrawable()).getBitmap();
 
             //compress the image into 70% quality
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -328,9 +306,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         StringBuilder quantityBuilder = new StringBuilder();
 
         //check size & quantity
-        for (int i = 0; i < sizeList.size(); i++) {
-            String size = sizeList.get(i).getText().toString().trim();
-            String quantity = quantityList.get(i).getText().toString().trim();
+        for (int i = 0; i < mSizeList.size(); i++) {
+            String size = mSizeList.get(i).getText().toString().trim();
+            String quantity = mQuantityList.get(i).getText().toString().trim();
 
             if (size.isEmpty() || quantity.isEmpty()){
                 //display error

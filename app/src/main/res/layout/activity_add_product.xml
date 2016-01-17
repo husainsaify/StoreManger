@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Select Category"
+                    android:text="@string/select_category"
                     android:gravity="center_vertical"/>
 
                 <Spinner
@@ -82,7 +82,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Product Name"
+                        android:text="@string/product_name"
                         android:layout_marginRight="5dp"
                         android:layout_marginEnd="5dp"
                         />
@@ -98,7 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Product Code"
+                        android:text="@string/product_code"
                         android:layout_marginRight="5dp"
                         android:layout_marginEnd="5dp"
                         />
@@ -114,7 +114,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cost Price"
+                        android:text="@string/cost_price"
                         android:layout_marginRight="5dp"
                         android:layout_marginEnd="5dp"
                         />
@@ -130,7 +130,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Selling Price"
+                        android:text="@string/selling_price"
                         android:id="@+id/textView"
                         android:layout_marginRight="5dp"
                         android:layout_marginEnd="5dp"
@@ -221,6 +221,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/ic_delete_black"
                         android:drawableStart="@drawable/ic_delete_black"
+                        android:id="@+id/productDelete"
                         android:gravity="center"
                         android:background="@null"
                         />
@@ -235,6 +236,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/add_product"
+                android:id="@+id/addProduct"
                 android:background="@drawable/primary_button"
                 android:textColor="@color/iconColor"
                 android:layout_marginBottom="5dp"/>

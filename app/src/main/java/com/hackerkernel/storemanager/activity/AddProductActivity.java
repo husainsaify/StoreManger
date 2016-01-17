@@ -220,28 +220,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * Method to dynamically add Size, Quantity and Delete
     * */
     private void loadMore() {
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        //Set delete button
         ViewGroup.LayoutParams ButtonlayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        //create a new Size & Quantity EditText
-        EditText size = new EditText(getApplication());
-        EditText quantity = new EditText(getApplication());
         Button delete = new Button(getApplication());
-
-        //set their width and height
-        size.setLayoutParams(layoutParams);
-        quantity.setLayoutParams(layoutParams);
         delete.setLayoutParams(ButtonlayoutParams);
-
-        //set inputType
-        size.setInputType(InputType.TYPE_CLASS_NUMBER);
-        quantity.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        //Set input Bottom line color
-        size.getBackground().setColorFilter(getResources().getColor(R.color.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
-        quantity.getBackground().setColorFilter(getResources().getColor(R.color.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
-        size.setTextColor(getResources().getColor(R.color.primaryTextColor));
-        quantity.setTextColor(getResources().getColor(R.color.primaryTextColor));
-
         //set icon and background to button
         delete.setBackgroundColor(Color.TRANSPARENT);
         delete.setGravity(Gravity.CENTER);
@@ -249,6 +231,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
         delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
+        //set size & quantity
+        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null); // Magic!
+        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
 
         //add to list
         mSizeList.add(size);

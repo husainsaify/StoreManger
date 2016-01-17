@@ -122,7 +122,6 @@ public class ProductActivity extends AppCompatActivity {
         Intent addProductIntent = new Intent(getApplication(),AddProductActivity.class);
         addProductIntent.putExtra("categoryId",mCategoryId);
         addProductIntent.putExtra("categoryName",mCategoryName);
-        addProductIntent.putExtra("userId",mUserId);
         startActivity(addProductIntent);
     }
 

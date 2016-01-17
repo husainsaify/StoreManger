@@ -109,19 +109,27 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         setUpCategorySpinner();
 
         /*
+        *
+        * */
+
+
+        /*
         * Check intent has send categoryId & categoryName
         * if yes store them in Member variables
         * */
         if(getIntent().hasExtra("categoryId") && getIntent().hasExtra("categoryName")){
             mCategoryId = getIntent().getExtras().getString("categoryId");
             mCategoryName = getIntent().getExtras().getString("categoryName");
+            //Set spinner to category Id
+            setSpinnerPostionToCategoryID();
         }
 
         mCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                Log.d(TAG,"HUS: categoryId "+mCategorySimpleList.get(position).getId()+" Postion "+position);
+                //Store CategoryId & categoryName
+                mCategoryId = mCategorySimpleList.get(position).getId();
+                mCategoryName = mCategorySimpleList.get(position).getName();
             }
 
             @Override
@@ -146,6 +154,23 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
+    }
+
+    /*
+    * Method to set Spinner value to the category id send by the Intent
+    * */
+    private void setSpinnerPostionToCategoryID() {
+        int i = 0;
+        int postion = -1;
+        for (SimpleListPojo list : mCategorySimpleList){
+            if(list.getId().equals(mCategoryId)){
+                postion = i;
+                break;
+            }
+            i++;
+        }
+
+        mCategorySpinner.setSelection(postion);
     }
 
     /*

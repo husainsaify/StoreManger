@@ -65,7 +65,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private int TAKE_PICTURE = 1; //camera
     private int CHOSE_PICTURE = 2; //gallery
 
-    @Bind(R.id.linearLayout) LinearLayout mLayout;
+    @Bind(R.id.addProductLayout) LinearLayout mLayout;
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.productImage) ImageView mProductImage;
     @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
@@ -455,8 +455,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         }
 
-        //Call addProductInBackground to add product to API
-        addProductInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
+        //Check user has internet connection of not
+        if(Util.isConnectedToInternet(getApplication())){
+            //Call addProductInBackground to add product to API
+            addProductInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
+        }else{
+            Util.noInternetSnackbar(getApplicationContext(),mLayout);
+        }
     }
 
      /*

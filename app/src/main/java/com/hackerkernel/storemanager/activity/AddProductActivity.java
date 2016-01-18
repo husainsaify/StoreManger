@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +41,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddProductActivity extends AppCompatActivity{
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
 
@@ -69,7 +70,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private Database db;
     private String mCategoryId;
     private String mCategoryName;
-    private  ProgressDialog pd;
+    private ProgressDialog pd;
     //list to store (size,Qunatity and delete refernce)
     private List<EditText> mSizeList;
     private List<EditText> mQuantityList;
@@ -94,8 +95,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //Initialize Database
         db = new Database(getApplication());
 
-        //Set Delete button background transparent
+        //Set Delete button background transparent & OnClickMethod & its tag
         mProductDelete.setBackgroundColor(Color.TRANSPARENT);
+        mProductDelete.setOnClickListener(deleteBtnClick);
+        mProductDelete.setTag(0);
+
         //setup category Spinner
         setUpCategorySpinner();
 
@@ -141,15 +145,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         pd.setCancelable(true);
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.loadMore: //when load more button is clicked
-                loadMore();
-                break;
+    View.OnClickListener deleteBtnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int tag = (int) v.getTag();
+            Toast.makeText(getApplication(),tag+"",Toast.LENGTH_SHORT).show();
         }
-    }
+    };
 
     /*
     * Method to set Spinner value to the category id send by the Intent
@@ -221,12 +223,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * */
     private void loadMore() {
         //Set delete button
-        ViewGroup.LayoutParams ButtonlayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         Button delete = new Button(getApplication());
-        delete.setLayoutParams(ButtonlayoutParams);
+        delete.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         //set icon and background to button
         delete.setBackgroundColor(Color.TRANSPARENT);
         delete.setGravity(Gravity.CENTER);
+
+        //setTag to the button
+        delete.setTag(mDeleteList.size());
+        delete.setOnClickListener(deleteBtnClick);
+
         //set icon
         Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
         delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
@@ -258,9 +264,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         int id = item.getItemId();
 
         switch (id){
-            /*case R.id.action_ok:
-                    addProduct();
-                break;*/
             case R.id.loadMore:
                 loadMore();
                 break;

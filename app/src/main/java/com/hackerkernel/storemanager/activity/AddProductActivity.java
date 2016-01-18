@@ -3,17 +3,13 @@ package com.hackerkernel.storemanager.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -145,11 +141,34 @@ public class AddProductActivity extends AppCompatActivity{
         pd.setCancelable(true);
     }
 
+
+    /*
+    * Click handler for Delete Button
+    * THis method delete Size & quantity from layout & list
+    * */
     View.OnClickListener deleteBtnClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            int tag = (int) v.getTag();
-            Toast.makeText(getApplication(),tag+"",Toast.LENGTH_SHORT).show();
+            //only allow to remove views when its more then one
+            if(mSizeList.size() > 1  && mQuantityList.size() > 1){
+                int tag = (int) v.getTag();
+                //Get the reference of size,Quantity and delete button
+                EditText size = mSizeList.get(tag);
+                EditText quantity = mQuantityList.get(tag);
+                Button delete = mDeleteList.get(tag);
+
+                //Remove views from layout
+                mSizeLayout.removeView(size);
+                mQuantityLayout.removeView(quantity);
+                mDeleteLayout.removeView(delete);
+
+                //Remove views from list
+                mSizeList.remove(tag);
+                mQuantityList.remove(tag);
+                mDeleteList.remove(tag);
+            }else{
+                Toast.makeText(getApplication(), R.string.atleast_one_size_quantity_field,Toast.LENGTH_LONG).show();
+            }
         }
     };
 

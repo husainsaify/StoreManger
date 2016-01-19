@@ -123,9 +123,10 @@ public class ProductActivity extends AppCompatActivity {
                 List<ProductPojo> list  = parseProductListResponse(response);
                 if(list != null){
                     setupRecyclerView(list);
+
                     //Store in PRODUCT LIST Table
-                    db.insertProductList(list);
                     db.deleteProductList(mUserId,mCategoryId);
+                    db.insertProductList(list);
                 }
             }
         }, new Response.ErrorListener() {

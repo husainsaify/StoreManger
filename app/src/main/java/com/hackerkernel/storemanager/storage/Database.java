@@ -115,6 +115,47 @@ public class Database {
         return db.delete(DatabaseHelper.TABLE_PRODUCT_LIST,where,whereArgs);
     }
 
+    public List<ProductPojo> getProductList(String userId,String categoryId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String[] col = {DatabaseHelper.COL_PL_PRODUCT_ID,DatabaseHelper.COL_PL_NAME,DatabaseHelper.COL_PL_CODE,DatabaseHelper.COL_PL_TIME};
+        String where = DatabaseHelper.COL_PL_USER_ID+"=? AND "+DatabaseHelper.COL_PL_CATEGORY_ID+"=?";
+        String[] whereArgs = {userId,categoryId};
+
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_LIST,col,where,whereArgs,null,null,null);
+        //check cursor is valid
+        if((cursor != null) && (cursor.getCount() > 0)){
+            List<ProductPojo> list = new ArrayList<>();
+            while (cursor.moveToNext()){
+                //get Data
+                String id = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_PRODUCT_ID));
+                String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_NAME));
+                String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_CODE));
+                String time = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_TIME));
+
+                //set data
+                ProductPojo p = new ProductPojo();
+                p.setProductId(id);
+                p.setProductName(name);
+                p.setProductImage(""); //Leave image blank so that we display default image
+                p.setProductTime(time);
+                p.setProductCode(code);
+
+                //add Model to the list
+                list.add(p);
+            }
+
+            //close Cursor
+            cursor.close();
+            return list;
+        }else{ //if cursor is empty return null
+            //close cursor
+            assert cursor != null;
+            cursor.close();
+            return null;
+        }
+    }
+
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
         private static final int DATABASE_VERSION = 4;

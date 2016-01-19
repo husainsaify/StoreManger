@@ -125,6 +125,7 @@ public class ProductActivity extends AppCompatActivity {
                     setupRecyclerView(list);
                     //Store in PRODUCT LIST Table
                     db.insertProductList(list);
+                    db.deleteProductList(mUserId,mCategoryId);
                 }
             }
         }, new Response.ErrorListener() {

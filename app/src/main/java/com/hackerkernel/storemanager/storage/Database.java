@@ -108,6 +108,13 @@ public class Database {
 
     }
 
+    public int deleteProductList(String userId, String categoryId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String where = DatabaseHelper.COL_PL_USER_ID+"=? AND "+DatabaseHelper.COL_PL_CATEGORY_ID+"=?";
+        String[] whereArgs = {userId,categoryId};
+        return db.delete(DatabaseHelper.TABLE_PRODUCT_LIST,where,whereArgs);
+    }
+
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
         private static final int DATABASE_VERSION = 4;

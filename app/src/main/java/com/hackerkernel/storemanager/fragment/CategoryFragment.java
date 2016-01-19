@@ -134,6 +134,9 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         List<SimpleListPojo> list = db.getAllSimpleList(Database.CATEGORY,userId);
         if(list != null){
             setupRecyclerView(list);
+        }else{
+            //TODO: replace toast with alertDialog
+            Toast.makeText(getActivity(),R.string.no_data_found_on_local,Toast.LENGTH_LONG).show();
         }
     }
 
@@ -155,16 +158,18 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
             public void onResponse(String response) {
                 stopRefreshing();
                 //Call the method to parse json response
-                Log.d(TAG,"HUS: "+response);
                 mCategoryList = parseCategoryResponse(response);
                 if(mCategoryList != null){
                     //Call SetRecyclerView to setup Recyclerview
                     setupRecyclerView(mCategoryList);
-                }
 
-                //Store new Salesman list in Sqlite Database
-                db.deleteAllSimpleList(Database.CATEGORY);
-                db.insertAllSimpleList(Database.CATEGORY,mCategoryList);
+                    //Store new Salesman list in Sqlite Database
+                    db.deleteAllSimpleList(Database.CATEGORY);
+                    db.insertAllSimpleList(Database.CATEGORY, mCategoryList);
+                }else{
+                    //Display list from Local Sqlite database
+                    showListFromSqliteDatabase();
+                }
             }
         }, new Response.ErrorListener() {
             @Override

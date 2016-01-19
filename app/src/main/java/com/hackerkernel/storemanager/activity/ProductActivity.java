@@ -9,8 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +38,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class ProductActivity extends AppCompatActivity {
+public class ProductActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     //Global variable
     private static final String TAG = ProductActivity.class.getSimpleName();
 
@@ -55,8 +53,6 @@ public class ProductActivity extends AppCompatActivity {
     private String mUserId;
     private Database db;
     private RequestQueue mRequestQueue;
-    //list
-    List<ProductPojo> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +90,9 @@ public class ProductActivity extends AppCompatActivity {
         //Instantiate Database
         db = new Database(this);
 
+        //Instantiate SwipeToRefreshLayout
+        mSwipeRefresh.setOnRefreshListener(this);
+
         /*//When user click on of the item from the list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,16 +108,35 @@ public class ProductActivity extends AppCompatActivity {
             }
         });*/
 
-        getProductListInBackground();
+        fetchProductListInBackground();
+    }
+
+    /*
+    * Check user has a Internet connected
+    * if yes Fetch fresh product list from api and store it in sqlite database
+    * if no Go to Sqlitedatabase and get the product list
+    * if no data in SqliteDatabase show a message
+    * */
+    private void checkInternetAndDisplayList() {
+        if(Util.isConnectedToInternet(getApplication())){ //connected
+            fetchProductListInBackground(); //fetch data
+        }else{ //not connected
+            showListFromSqliteDatabase(); //method to display Data in list from Sqlite database
+            Util.noInternetSnackbar(getApplication(), mLayout);
+            //method to stop swipeRefreshlayout refresh icon
+            stopRefreshing();
+        }
     }
 
     /*
     * Method To Get Product list from API
     * */
-    public void getProductListInBackground(){
+    public void fetchProductListInBackground(){
+        startRefreshing(); //show refresh
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.PRODUCT_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                stopRefreshing(); //Stop refresh
                 //Parse response send by the server
                 List<ProductPojo> list  = parseProductListResponse(response);
                 if(list != null){
@@ -127,17 +145,24 @@ public class ProductActivity extends AppCompatActivity {
                     //Store in PRODUCT LIST Table
                     db.deleteProductList(mUserId,mCategoryId);
                     db.insertProductList(list);
+                }else{
+                    //Show list from Local sqlite database
+                    showListFromSqliteDatabase();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                stopRefreshing(); //Stop refresh
                 //handle Volley error
                 Log.d(TAG,"HUS: error "+error.getMessage());
                 String errorMessage = VolleySingleton.handleVolleyError(error);
                 if(errorMessage != null){
                     Util.redSnackbar(getApplication(), mLayout, errorMessage);
                 }
+
+                //Show list from Sqlite Database
+                showListFromSqliteDatabase();
             }
         }){
             @Override
@@ -150,6 +175,17 @@ public class ProductActivity extends AppCompatActivity {
         };
 
         mRequestQueue.add(request);
+    }
+
+    private void showListFromSqliteDatabase() {
+        //Display List From SQlite database
+        List<ProductPojo> list = db.getProductList(mUserId,mCategoryId);
+        if(list != null){
+            setupRecyclerView(list);
+        }else{
+            //TODO: replace toast with alertDialog
+            Toast.makeText(getApplication(),R.string.no_data_found_on_local,Toast.LENGTH_LONG).show();
+        }
     }
 
     public List<ProductPojo> parseProductListResponse(String response){
@@ -189,9 +225,9 @@ public class ProductActivity extends AppCompatActivity {
     * Method to take a ProductPojo list and set RecyclerView
     * */
     private void setupRecyclerView(List<ProductPojo> list){
-        ProductListAdapter adapter = new ProductListAdapter(getApplication());
-        adapter.setList(list);
-        mRecyclerView.setAdapter(adapter);
+            ProductListAdapter adapter = new ProductListAdapter(getApplication());
+            adapter.setList(list);
+            mRecyclerView.setAdapter(adapter);
     }
 
     //Open addProduct Activity when FAB is clicked
@@ -203,74 +239,29 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     /*
-
-    //This method will Adapte a List into a ListView
-    private void updateListView(List<ProductPojo> list){
-        if(list != null){
-            ProductAdapter productAdapter = new ProductAdapter(ProductActivity.this,R.layout.product_list_layout,list);
-            listView.setAdapter(productAdapter);
-        }else{
-            whenListIsEmpty.setText("No Product Listed");
-        }
-    }*/
-
-    /*//Class to fetch json data from the Backend
-    private class productTask extends AsyncTask<String,String,List<ProductPojo>>{
-        @Override
-        protected void onPreExecute() {
-            //show PB
-            Functions.toggleProgressBar(pb);
-        }
-
-        @Override
-        protected List<ProductPojo> doInBackground(String... params) {
-            *//*
-            * Fetch the Product list from the web
-            * *//*
-            //generate a HashMap as fro sending POST params to Backend
-            HashMap<String,String> productHash = new HashMap<>();
-            productHash.put("userId",userId);
-            productHash.put("categoryId",categoryId);
-
-            //convert a hashmap into Encoded Url so that we can send it to Backend
-            String dataUrl = Functions.hashMapToEncodedUrl(productHash);
-
-            //request the Backend
-            String jsonString = GetJson.request(ApiUrl.PRODUCT_LIST,dataUrl,"POST");
-
-            //parse Json and store it in "productList"
-            productList = JsonParser.productListParser(jsonString);
-
-
-            return productList;
-        }
-
-        @Override
-        protected void onPostExecute(List<ProductPojo> list) {
-            //set "ProductList" to "ListView"
-            updateListView(list);
-            //Hide PB
-            Functions.toggleProgressBar(pb);
-        }
-    }*/
+    * Swipe to refresh
+    * */
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_product, menu);
-        return true;
+    public void onRefresh() {
+        checkInternetAndDisplayList();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            //refreshList(); //refresh view
-            return true;
+    //method to stop swipeRefreshlayout refresh icon
+    private void stopRefreshing() {
+        if(mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.setRefreshing(false);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    private void startRefreshing(){
+        if(!mSwipeRefresh.isRefreshing()){
+            mSwipeRefresh.post(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefresh.setRefreshing(true);
+                }
+            });
+        }
     }
 }

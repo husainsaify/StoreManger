@@ -10,11 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 import java.util.List;
 
@@ -24,12 +27,15 @@ import butterknife.ButterKnife;
 public class ProductActivity extends AppCompatActivity {
     private static final String TAG = ProductActivity.class.getSimpleName();
 
-    private String mProductId;
-    private String userId;
-    private Bitmap imageBitmap;
-    private Uri productImageUri;
-
     @Bind(R.id.toolbar) Toolbar toolbar;
+
+    private String mProductId;
+    private String mProductName;
+    private String mUserId;
+    private ProgressDialog pd;
+    private Database db;
+
+    private Uri productImageUri;
     @Bind(R.id.imageView) ImageView imageView;
     @Bind(R.id.pName) TextView productName;
     @Bind(R.id.pCode) TextView productCode;
@@ -37,30 +43,46 @@ public class ProductActivity extends AppCompatActivity {
     @Bind(R.id.pSize) TextView productSize;
     @Bind(R.id.pQuantity) TextView productQuantity;
     @Bind(R.id.pProfit) TextView productProfit;
-
     //list
     List<SimplePojo> deleteProductList;
-
     //Pojo for product
     SingleProductPojo productPojo;
-    ProgressDialog pd;
-    Database db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_product);
         ButterKnife.bind(this);
 
-        //get userId
-        db = new Database(this);
-        //userId = db.getUserID();
+        //get the ProductId & productName
+        if (getIntent().hasExtra(Keys.KEY_PL_ID) && getIntent().hasExtra(Keys.KEY_PL_NAME)) {
+            mProductId = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYID);
+            mProductName = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYNAME);
+        } else {
+            Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
+            return;
+        }
 
         //Toolbar
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle("Hello");
+        getSupportActionBar().setTitle(mProductName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Get userId and check it
+        mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
+        if(mUserId.equals(Keys.KEY_DEFAULT)){
+            Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Instantiate Database
+        db = new Database(this);
+
+        //create ProgressDialog
+        pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
 
         /*//check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
@@ -95,10 +117,6 @@ public class ProductActivity extends AppCompatActivity {
             Log.d(TAG, "HUS: showing placeholder image");
         }*/
 
-        //create ProgressDialog
-        pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.pleasewait));
-
         /*
         * Check Product exits in local database
         * if exits Fetch data and display in views
@@ -119,7 +137,7 @@ public class ProductActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_product,menu);
+        getMenuInflater().inflate(R.menu.menu_view_product, menu);
         return true;
     }
 
@@ -127,9 +145,9 @@ public class ProductActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.action_delete:
-                    //deleteProduct();
+                //deleteProduct();
                 break;
         }
 

@@ -122,6 +122,7 @@
     <string name="select_category_to_continue">Select a category to continue</string>
     <string name="no_product_found">No Product found for this category. Click on plus icon to add one</string>
     <string name="no_data_found_on_local">No data found on local storage. Please check your internet connection and try again</string>
+    <string name="internal_error_restart_app">Internal error. Restart application and Try login again.</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

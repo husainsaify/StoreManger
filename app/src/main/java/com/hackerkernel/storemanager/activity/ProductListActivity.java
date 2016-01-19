@@ -60,12 +60,12 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         setContentView(R.layout.activity_product);
         ButterKnife.bind(this);
 
-        //get the categoryId , categoryName & userId
-        if(getIntent().hasExtra("categoryId") && getIntent().hasExtra("categoryName")){
-            mCategoryId = getIntent().getExtras().getString("categoryId");
-            mCategoryName = getIntent().getExtras().getString("categoryName");
+        //get the categoryId & categoryName
+        if(getIntent().hasExtra(Keys.PRAM_PL_CATEGORYID) && getIntent().hasExtra(Keys.PRAM_PL_CATEGORYNAME)){
+            mCategoryId = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYID);
+            mCategoryName = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYNAME);
         }else{
-            Toast.makeText(getApplication(),"Internal error. Restart app",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplication(), R.string.internal_error_restart_app,Toast.LENGTH_LONG).show();
             return;
         }
 

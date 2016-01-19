@@ -90,22 +90,6 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
         //Instantiate SwipeToRefreshLayout
         mSwipeRefresh.setOnRefreshListener(this);
-
-        /*//When user click on of the item from the list
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Get item where user has clicked
-                ProductPojo product = (ProductPojo) listView.getItemAtPosition(position);
-                //Send to ViewProductActivity
-                Intent intent = new Intent(ProductListActivity.this,ViewProductActivity.class);
-                intent.putExtra("pName",product.getProductName());
-                intent.putExtra("pId", product.getProductId());
-                intent.putExtra("pImageAddress",product.getProductImage());
-                startActivity(intent);
-            }
-        });*/
-
         checkInternetAndDisplayList();
     }
 

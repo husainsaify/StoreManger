@@ -1,44 +1,30 @@
-package com.hackerkernel.storemanager;
+package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ViewProductActivity extends AppCompatActivity {
-    private static final String TAG = ViewProductActivity.class.getSimpleName();
-    private final Context context = this;
+public class ProductActivity extends AppCompatActivity {
+    private static final String TAG = ProductActivity.class.getSimpleName();
 
-    private String pId;
+    private String mProductId;
     private String userId;
     private Bitmap imageBitmap;
     private Uri productImageUri;
@@ -65,10 +51,6 @@ public class ViewProductActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_product);
         ButterKnife.bind(this);
 
-        String pName = getIntent().getExtras().getString("pName");
-        pId = getIntent().getExtras().getString("pId");
-        String pImageAddress = getIntent().getExtras().getString("pImageAddress");
-
         //get userId
         db = new Database(this);
         //userId = db.getUserID();
@@ -76,7 +58,7 @@ public class ViewProductActivity extends AppCompatActivity {
         //Toolbar
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
-        getSupportActionBar().setTitle(pName);
+        getSupportActionBar().setTitle("Hello");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -84,7 +66,7 @@ public class ViewProductActivity extends AppCompatActivity {
         if(!pImageAddress.isEmpty()){
 
             //get the image Uri from the SQlite database
-            Uri imageUri = db.getProductImageUri(pId);
+            Uri imageUri = db.getProductImageUri(mProductId);
 
             //display image which is stored in sdcard using uri
             if(imageUri != null){
@@ -123,9 +105,9 @@ public class ViewProductActivity extends AppCompatActivity {
         * if not exits fetch it from Backend and then store it in local database
         * */
 
-        /*if(db.checkProduct(pId)){ //product exits in local database
+        /*if(db.checkProduct(mProductId)){ //product exits in local database
             //fetch product
-            SingleProductPojo fetchedProduct = db.getProduct(pId);
+            SingleProductPojo fetchedProduct = db.getProduct(mProductId);
 
             //set "SingleProductPojo" to views
             setProductViews(fetchedProduct);
@@ -162,9 +144,9 @@ public class ViewProductActivity extends AppCompatActivity {
         * *//*
 
         //check product is store in database and then delete it
-        if(db.checkProduct(pId)){
+        if(db.checkProduct(mProductId)){
             //delete it from SQLite database
-            int result = db.deleteProduct(pId);
+            int result = db.deleteProduct(mProductId);
             if(result == 1){
                 //delete product from the Backend
                 new deleteProductTask().execute();
@@ -235,7 +217,7 @@ public class ViewProductActivity extends AppCompatActivity {
                 productImageUri = Functions.saveImageToSD(context,imageBitmap);
 
                 //add ProductImageUri to database
-                db.addProductImageUri(pId,productImageUri);
+                db.addProductImageUri(mProductId,productImageUri);
             }else{
                 *//*
                 * Seams their is some issue is retrieving image
@@ -264,7 +246,7 @@ public class ViewProductActivity extends AppCompatActivity {
             //make request to the web to fetch data
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("userId",userId);
-            hashMap.put("productId",pId);
+            hashMap.put("productId",mProductId);
 
             //convert hashmap into url encoded String
             String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
@@ -311,7 +293,7 @@ public class ViewProductActivity extends AppCompatActivity {
                 String quantity = quantityArray[i];
 
                 //insert into db
-                db.addSQ(size,quantity,userId,pId);
+                db.addSQ(size,quantity,userId,mProductId);
             }
         }
     }
@@ -324,7 +306,7 @@ public class ViewProductActivity extends AppCompatActivity {
             //create a hashmap of Productid & userid
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("userId",userId);
-            hashMap.put("productId",pId);
+            hashMap.put("productId",mProductId);
 
             //convert hashmap to encoded url
             String data = Functions.hashMapToEncodedUrl(hashMap);

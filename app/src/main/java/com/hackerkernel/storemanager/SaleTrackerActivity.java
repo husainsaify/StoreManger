@@ -164,7 +164,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.view_product), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //send to ViewProductActivity
+                        //send to ProductActivity
                         sendToViewProductActivity(c);
                     }
                 })
@@ -173,8 +173,8 @@ public class SaleTrackerActivity extends AppCompatActivity {
     }
 
     public void sendToViewProductActivity(SalesTrackerPojo c){
-        //send user to ViewProductActivity
-        Intent intent = new Intent(SaleTrackerActivity.this,ViewProductActivity.class);
+        //send user to ProductActivity
+        Intent intent = new Intent(SaleTrackerActivity.this,ProductActivity.class);
         intent.putExtra("pName", c.getProductName());
         intent.putExtra("pId", c.getProductId());
         intent.putExtra("pImageAddress",c.getProductImageAddress());

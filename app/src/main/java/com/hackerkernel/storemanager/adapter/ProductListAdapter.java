@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,17 +14,13 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.activity.ProductActivity;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,7 +33,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private LayoutInflater mInflater;
     private List<ProductPojo> mList;
     private ImageLoader mImageLoader;
-    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     public ProductListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
@@ -98,7 +94,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     }
 
     //ViewHolder Class
-    class ProductListViewHolder extends RecyclerView.ViewHolder{
+    class ProductListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.productImage) ImageView image;
         @Bind(R.id.productName) TextView name;
         @Bind(R.id.productCode) TextView code;
@@ -106,6 +102,20 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         public ProductListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
+            //Set OnClick
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            ProductPojo p = mList.get(position);
+            Intent intent = new Intent(mContext, ProductActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra(Keys.KEY_PL_ID,p.getProductId());
+            intent.putExtra(Keys.KEY_PL_NAME,p.getProductName());
+            mContext.startActivity(intent);
         }
     }
 }

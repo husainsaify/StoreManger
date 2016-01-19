@@ -49,7 +49,7 @@
                 android:value=".activity.HomeActivity" />
         </activity>
         <activity
-            android:name=".ViewProductActivity"
+            android:name=".activity.ProductActivity"
             android:parentActivityName=".activity.ProductListActivity"
             android:screenOrientation="portrait">
             <meta-data

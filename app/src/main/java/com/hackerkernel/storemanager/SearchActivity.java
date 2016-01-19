@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hackerkernel.storemanager.activity.ProductActivity;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
@@ -123,8 +124,8 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductPojo current = searchList.get(position);
-                //Send to ViewProductActivity
-                Intent intent = new Intent(SearchActivity.this,ViewProductActivity.class);
+                //Send to ProductActivity
+                Intent intent = new Intent(SearchActivity.this,ProductActivity.class);
                 intent.putExtra("pName",current.getProductName());
                 intent.putExtra("pId", current.getProductId());
                 intent.putExtra("pImageAddress",current.getProductImage());

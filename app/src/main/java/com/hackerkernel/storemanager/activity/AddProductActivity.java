@@ -1,5 +1,7 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,13 +12,11 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,7 +39,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class AddProductActivity extends AppCompatActivity{
+public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
 
@@ -93,6 +93,9 @@ public class AddProductActivity extends AppCompatActivity{
         //Initialize Database
         db = new Database(getApplication());
 
+        //Set OnClickMethod on productImage(Camera icon)
+        mProductImage.setOnClickListener(this);
+
         //Set Delete button background transparent & OnClickMethod & its tag
         mProductDelete.setBackgroundColor(Color.TRANSPARENT);
         mProductDelete.setOnClickListener(deleteBtnClick);
@@ -141,6 +144,16 @@ public class AddProductActivity extends AppCompatActivity{
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //when Camera image is clicked open ChosePicture alertDialog
+            case R.id.productImage:
+                selectPictureOptions();
+                break;
+        }
     }
 
     /*
@@ -257,6 +270,29 @@ public class AddProductActivity extends AppCompatActivity{
         }else{
             Toast.makeText(getApplication(),R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    /*
+    * Method to
+    * Show a Dialog to Take a picture or chose a picture
+    * */
+    private void selectPictureOptions(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(R.array.select_picture_option,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: //Take picture
+                        Toast.makeText(getApplication(),"Take picture",Toast.LENGTH_LONG).show();
+                        break;
+                    case 1: //choose picture
+                        Toast.makeText(getApplication(),"Take picture",Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        }).setNegativeButton(R.string.cancel, null)
+                .show();
     }
 
 

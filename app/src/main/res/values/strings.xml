@@ -118,4 +118,8 @@
     <string name="unable_to_load_category">Unable to load category. Add a category if you haven\'t</string>
     <string name="select_category">Select Category</string>
     <string name="atleast_one_size_quantity_field"><![CDATA[You should atleast have one size & quantity field]]></string>
+    <string-array name="select_picture_option">
+        <item>Take Picture</item>
+        <item>Choose Picture</item>
+    </string-array>
 </resources>

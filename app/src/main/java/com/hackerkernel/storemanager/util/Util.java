@@ -13,6 +13,11 @@ import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class Util {
     public static void redSnackbar(Context context,View layout,String text){
         Snackbar snackbar = Snackbar.make(layout,text,Snackbar.LENGTH_LONG);
@@ -89,8 +94,4 @@ public class Util {
         context.startActivity(intent);
     }
 
-    /*public static void closeSoftKeyBoard(Context context){
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(context.get)
-    }*/
 }

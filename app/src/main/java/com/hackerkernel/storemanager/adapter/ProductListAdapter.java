@@ -17,7 +17,13 @@ import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +36,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     private LayoutInflater mInflater;
     private List<ProductPojo> mList;
     private ImageLoader mImageLoader;
+    private DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
     public ProductListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
@@ -45,7 +52,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public ProductListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.product_list_layout,parent,false);
+        View view = mInflater.inflate(R.layout.product_list_layout, parent, false);
         return new ProductListViewHolder(view);
     }
 

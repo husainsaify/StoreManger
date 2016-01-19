@@ -134,9 +134,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         List<SimpleListPojo> list = db.getAllSimpleList(Database.CATEGORY,userId);
         if(list != null){
             setupRecyclerView(list);
-        }else{
-            //TODO: replace toast with alertDialog
-            Toast.makeText(getActivity(),R.string.no_data_found_on_local,Toast.LENGTH_LONG).show();
         }
     }
 

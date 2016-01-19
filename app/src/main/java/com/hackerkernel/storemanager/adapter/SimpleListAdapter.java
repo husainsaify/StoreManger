@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.hackerkernel.storemanager.activity.ProductActivity;
+import com.hackerkernel.storemanager.activity.ProductListActivity;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -82,7 +82,7 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
                 int position = getAdapterPosition();
                 SimpleListPojo current = mList.get(position);
                 //go to product activity
-                Intent productIntent = new Intent(mContext, ProductActivity.class);
+                Intent productIntent = new Intent(mContext, ProductListActivity.class);
                 //set categoryId and CategoryName in intenet
                 productIntent.putExtra(Keys.PRAM_PL_CATEGORYID, current.getId());
                 productIntent.putExtra(Keys.PRAM_PL_CATEGORYNAME, current.getName());

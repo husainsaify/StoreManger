@@ -31,7 +31,7 @@
                 android:value=".activity.HomeActivity" />
         </activity>
         <activity
-            android:name=".activity.ProductActivity"
+            android:name=".activity.ProductListActivity"
             android:label="@string/title_activity_product"
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait">
@@ -50,11 +50,11 @@
         </activity>
         <activity
             android:name=".ViewProductActivity"
-            android:parentActivityName=".activity.ProductActivity"
+            android:parentActivityName=".activity.ProductListActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.ProductActivity" />
+                android:value=".activity.ProductListActivity" />
         </activity>
         <activity
             android:name=".SearchActivity"

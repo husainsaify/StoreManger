@@ -38,9 +38,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class ProductActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ProductListActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     //Global variable
-    private static final String TAG = ProductActivity.class.getSimpleName();
+    private static final String TAG = ProductListActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.layout) CoordinatorLayout mLayout;
@@ -75,8 +75,6 @@ public class ProductActivity extends AppCompatActivity implements SwipeRefreshLa
         getSupportActionBar().setTitle(mCategoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Toast.makeText(getApplication(),"ID "+mCategoryId,Toast.LENGTH_LONG).show();
-
         //Get Loggedin userId
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
 
@@ -100,7 +98,7 @@ public class ProductActivity extends AppCompatActivity implements SwipeRefreshLa
                 //Get item where user has clicked
                 ProductPojo product = (ProductPojo) listView.getItemAtPosition(position);
                 //Send to ViewProductActivity
-                Intent intent = new Intent(ProductActivity.this,ViewProductActivity.class);
+                Intent intent = new Intent(ProductListActivity.this,ViewProductActivity.class);
                 intent.putExtra("pName",product.getProductName());
                 intent.putExtra("pId", product.getProductId());
                 intent.putExtra("pImageAddress",product.getProductImage());
@@ -108,7 +106,7 @@ public class ProductActivity extends AppCompatActivity implements SwipeRefreshLa
             }
         });*/
 
-        fetchProductListInBackground();
+        checkInternetAndDisplayList();
     }
 
     /*
@@ -182,9 +180,6 @@ public class ProductActivity extends AppCompatActivity implements SwipeRefreshLa
         List<ProductPojo> list = db.getProductList(mUserId,mCategoryId);
         if(list != null){
             setupRecyclerView(list);
-        }else{
-            //TODO: replace toast with alertDialog
-            Toast.makeText(getApplication(),R.string.no_data_found_on_local,Toast.LENGTH_LONG).show();
         }
     }
 

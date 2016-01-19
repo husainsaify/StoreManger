@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -95,7 +96,7 @@ public class AddProductActivity extends AppCompatActivity{
         //Set Delete button background transparent & OnClickMethod & its tag
         mProductDelete.setBackgroundColor(Color.TRANSPARENT);
         mProductDelete.setOnClickListener(deleteBtnClick);
-        mProductDelete.setTag(0);
+        mProductDelete.setTag(1);
 
         //setup category Spinner
         setUpCategorySpinner();
@@ -142,6 +143,40 @@ public class AddProductActivity extends AppCompatActivity{
         pd.setCancelable(true);
     }
 
+    /*
+    * Method to dynamically add Size, Quantity and Delete
+    * */
+    private void loadMore() {
+        //Set delete button
+        Button delete = new Button(getApplication());
+        delete.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //set icon and background to button
+        delete.setBackgroundColor(Color.TRANSPARENT);
+        delete.setGravity(Gravity.CENTER);
+
+        //setTag to the button
+        delete.setTag(mDeleteList.size() + 1);
+        delete.setOnClickListener(deleteBtnClick);
+
+        //set icon
+        Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
+        delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
+
+        //set size & quantity
+        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null); // Magic!
+        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+
+        //add to list
+        mSizeList.add(size);
+        mQuantityList.add(quantity);
+        mDeleteList.add(delete);
+
+        //append to layout
+        mSizeLayout.addView(size);
+        mQuantityLayout.addView(quantity);
+        mDeleteLayout.addView(delete);
+    }
+
 
     /*
     * Click handler for Delete Button
@@ -153,10 +188,12 @@ public class AddProductActivity extends AppCompatActivity{
             //only allow to remove views when its more then one
             if(mSizeList.size() > 1  && mQuantityList.size() > 1){
                 int tag = (int) v.getTag();
+                int index = tag - 1; //because array starts with zero and tag starts with 1
                 //Get the reference of size,Quantity and delete button
-                EditText size = mSizeList.get(tag);
-                EditText quantity = mQuantityList.get(tag);
-                Button delete = mDeleteList.get(tag);
+
+                EditText size = mSizeList.get(index);
+                EditText quantity = mQuantityList.get(index);
+                Button delete = mDeleteList.get(index);
 
                 //Remove views from layout
                 mSizeLayout.removeView(size);
@@ -164,9 +201,14 @@ public class AddProductActivity extends AppCompatActivity{
                 mDeleteLayout.removeView(delete);
 
                 //Remove views from list
-                mSizeList.remove(tag);
-                mQuantityList.remove(tag);
-                mDeleteList.remove(tag);
+                mSizeList.remove(index);
+                mQuantityList.remove(index);
+                mDeleteList.remove(index);
+
+                //reset all the delete button tags
+                for (int i = 0; i < mDeleteList.size(); i++) {
+                    mDeleteList.get(i).setTag(i+1);
+                }
             }else{
                 Toast.makeText(getApplication(), R.string.atleast_one_size_quantity_field,Toast.LENGTH_LONG).show();
             }
@@ -238,39 +280,6 @@ public class AddProductActivity extends AppCompatActivity{
         }
     }
 
-    /*
-    * Method to dynamically add Size, Quantity and Delete
-    * */
-    private void loadMore() {
-        //Set delete button
-        Button delete = new Button(getApplication());
-        delete.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        //set icon and background to button
-        delete.setBackgroundColor(Color.TRANSPARENT);
-        delete.setGravity(Gravity.CENTER);
-
-        //setTag to the button
-        delete.setTag(mDeleteList.size());
-        delete.setOnClickListener(deleteBtnClick);
-
-        //set icon
-        Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
-        delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
-
-        //set size & quantity
-        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null); // Magic!
-        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
-
-        //add to list
-        mSizeList.add(size);
-        mQuantityList.add(quantity);
-        mDeleteList.add(delete);
-
-        //append to layout
-        mSizeLayout.addView(size);
-        mQuantityLayout.addView(quantity);
-        mDeleteLayout.addView(delete);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

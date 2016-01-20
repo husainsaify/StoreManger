@@ -1,17 +1,19 @@
 package com.hackerkernel.storemanager.activity;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +45,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
 
-    private int RESULT_LOAD_IMAGE = 1;
+
+    private int TAKE_PICTURE = 1; //camera
+    private int CHOSE_PICTURE = 2; //gallery
 
     @Bind(R.id.linearLayout) LinearLayout mLayout;
     @Bind(R.id.toolbar) Toolbar toolbar;
@@ -151,7 +155,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()){
             //when Camera image is clicked open ChosePicture alertDialog
             case R.id.productImage:
-                selectPictureOptions();
+                openSelectPictureDialog();
                 break;
         }
     }
@@ -277,17 +281,17 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * Method to
     * Show a Dialog to Take a picture or chose a picture
     * */
-    private void selectPictureOptions(){
+    private void openSelectPictureDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setItems(R.array.select_picture_option,new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0: //Take picture
-                        Toast.makeText(getApplication(),"Take picture",Toast.LENGTH_LONG).show();
+                        captureImageFromCamera(); //open camera
                         break;
                     case 1: //choose picture
-                        Toast.makeText(getApplication(),"Take picture",Toast.LENGTH_LONG).show();
+                        selectImageFromGallery(); //open gallary
                         break;
                 }
             }
@@ -295,26 +299,41 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 .show();
     }
 
-
-    //when select image button is clicked open gallery
+    /*
+    * Code to open gallery and select Image from their
+    * */
     private void selectImageFromGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent,RESULT_LOAD_IMAGE);
+        startActivityForResult(galleryIntent, CHOSE_PICTURE);
+    }
+
+    /*
+    * This method will open camera and allow user to take a picture
+    * */
+    private void captureImageFromCamera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent,TAKE_PICTURE);
     }
 
     /*
     * When image is selected from the gallery
-    * set image to productImageView
+    * set image to mProductImage
     * */
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
+        //camera
+        if(requestCode == TAKE_PICTURE && resultCode == RESULT_OK && data != null){
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            mProductImage.setImageBitmap(photo);
+            Log.d(TAG,"HUS: camera intent result");
+        }else if(requestCode == CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
             Uri selectedImage = data.getData();
             mProductImage.setImageURI(selectedImage);
+            Log.d(TAG, "HUS: gallery intent result");
         }
     }
+
 
 
     @Override

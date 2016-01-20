@@ -125,7 +125,7 @@ public class AddSalesman extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_AS_SALESMAN_PRAM,name);
+                params.put(Keys.PRAM_AS_SALESMAN,name);
                 params.put(Keys.KEY_COM_USERID,userId);
                 return params;
             }

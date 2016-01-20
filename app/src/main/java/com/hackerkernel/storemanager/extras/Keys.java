@@ -12,21 +12,21 @@ public interface Keys {
     String KEY_DEFAULT = "";
 
     //Login Keys params
-    String KEY_LOGIN_EMAIL_PRAM = "email";
-    String KEY_LOGIN_PASSWORD_PRAM = "password";
+    String PRAM_LOGIN_EMAIL = "email";
+    String PRAM_LOGIN_PASSWORD = "password";
 
     //Signup keys params
-    String KEY_SIGNUP_FN_PRAM = "fullname";
-    String KEY_SIGNUP_STORENAME_PRAM = "storename";
-    String KEY_SIGNUP_EMAIL_PRAM = "email";
-    String KEY_SIGNUP_PHONE_PRAM = "phone";
-    String KEY_SIGNUP_PASS_PRAM = "password";
+    String PRAM_SIGNUP_FN = "fullname";
+    String PRAM_SIGNUP_STORENAME = "storename";
+    String PRAM_SIGNUP_EMAIL = "email";
+    String PRAM_SIGNUP_PHONE = "phone";
+    String PRAM_SIGNUP_PASS = "password";
 
     //add category params
-    String KEY_AC_CATEGORY_NAME_PRAM = "categoryName";
+    String PRAM_AC_CATEGORY_NAME = "categoryName";
 
     //add salesman params
-    String KEY_AS_SALESMAN_PRAM = "salesman";
+    String PRAM_AS_SALESMAN = "salesman";
 
     //login response
     String KEY_L_USER = "user",
@@ -37,6 +37,7 @@ public interface Keys {
             KEY_L_PHONE = "phone",
             KEY_L_PASSWORD = "password",
             KEY_L_REGISTER_AT = "register_at";
+
     //SimpleList response (category & salesman list)
     String KEY_SL_ID = "id",
             KEY_SL_NAME = "name",
@@ -45,14 +46,25 @@ public interface Keys {
             KEY_SL_COUNT = "count";
 
     //Add products
-    String KEY_AP_CATEGORYNAME = "categoryName",
-            KEY_AP_CATEGORYID = "categoryId",
-            KEY_AP_USERID = "userId",
-            KEY_AP_IMAGE = "pImage",
-            KEY_AP_NAME = "pName",
-            KEY_AP_CODE = "pCode",
-            KEY_AP_CP = "pCP",
-            KEY_AP_SP = "pSP",
-            KEY_AP_SIZE = "pSize",
-            KEY_AP_QUANTITY = "pQuantity";
+    String PRAM_AP_CATEGORYNAME = "categoryName",
+            PRAM_AP_CATEGORYID = "categoryId",
+            PRAM_AP_USERID = "userId",
+            PRAM_AP_IMAGE = "pImage",
+            PRAM_AP_NAME = "pName",
+            PRAM_AP_CODE = "pCode",
+            PRAM_AP_CP = "pCP",
+            PRAM_AP_SP = "pSP",
+            PRAM_AP_SIZE = "pSize",
+            PRAM_AP_QUANTITY = "pQuantity";
+
+    //product list
+    String KEY_PL_ID = "productId",
+            KEY_PL_NAME = "name",
+            KEY_PL_IMAGE = "image",
+            KEY_PL_CODE = "code",
+            KEY_PL_TIME = "time";
+
+    //PRAM PRODUCT LIST
+    String PRAM_PL_CATEGORYID = "categoryId",
+            PRAM_PL_CATEGORYNAME = "categoryName";
 }

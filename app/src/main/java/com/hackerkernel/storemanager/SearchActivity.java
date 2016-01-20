@@ -201,7 +201,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(jsonObject.getBoolean("return")){ //return is true
 
                     //parse json data and store it in searchList
-                    searchList = JsonParser.productParser(jsonString);
+                    searchList = JsonParser.productListParser(jsonString);
                     return searchList;
 
                 }else{ //return is false

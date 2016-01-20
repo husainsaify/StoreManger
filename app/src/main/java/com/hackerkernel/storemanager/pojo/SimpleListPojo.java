@@ -5,7 +5,7 @@ package com.hackerkernel.storemanager.pojo;
  */
 public class SimpleListPojo {
     private boolean returned = true;
-    private int count = 1;
+    private int count = -1;
     private String message,
                     id,
                     name,

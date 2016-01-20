@@ -129,7 +129,7 @@ public class AddCategoryActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_AC_CATEGORY_NAME_PRAM,categoryName);
+                params.put(Keys.PRAM_AC_CATEGORY_NAME,categoryName);
                 params.put(Keys.KEY_COM_USERID,userId);
                 return params;
             }

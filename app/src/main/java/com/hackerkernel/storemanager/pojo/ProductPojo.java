@@ -4,12 +4,31 @@ package com.hackerkernel.storemanager.pojo;
 import android.graphics.Bitmap;
 
 public class ProductPojo {
-    private boolean returned;
+    private boolean returned = true;
     private String  message,
                     productId,
                     productName,
                     productImage,
-                    productCode;
+                    productCode,
+                    productTime;
+    private int count = -1;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getProductTime() {
+        return productTime;
+    }
+
+    public void setProductTime(String productTime) {
+        this.productTime = productTime;
+    }
+
     //a bitmap to store Images
     private Bitmap bitmap;
 

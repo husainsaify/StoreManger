@@ -31,7 +31,7 @@
                 android:value=".activity.HomeActivity" />
         </activity>
         <activity
-            android:name=".ProductActivity"
+            android:name=".activity.ProductActivity"
             android:label="@string/title_activity_product"
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait">
@@ -42,19 +42,19 @@
         <activity
             android:name=".activity.AddProductActivity"
             android:label="@string/title_activity_add_product"
-            android:parentActivityName=".ProductActivity"
+            android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.ProductActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".ViewProductActivity"
-            android:parentActivityName=".ProductActivity"
+            android:parentActivityName=".activity.ProductActivity"
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.ProductActivity" />
+                android:value=".activity.ProductActivity" />
         </activity>
         <activity
             android:name=".SearchActivity"

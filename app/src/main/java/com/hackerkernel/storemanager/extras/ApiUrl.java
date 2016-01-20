@@ -12,7 +12,7 @@ public class ApiUrl {
                 ADD_CATEGORY = SERVER + "addCategory.php",
                 GET_CATEGORY = SERVER + "categoryList.php",
                 ADD_PRODUCT = SERVER + "addProduct.php",
-                GET_PRODUCT = SERVER + "productList.php",
+                PRODUCT_LIST = SERVER + "productList.php",
                 IMAGE_BASE_URL = SERVER + "",
                 GET_SINGLE_PRODUCT = SERVER + "fetchProduct.php",
                 DELETE_PRODUCT = SERVER + "deleteProduct.php",

@@ -73,7 +73,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         * */
         mySharedPreferences = MySharedPreferences.getInstance(getActivity());
         userId = mySharedPreferences.getUserId();
-        Log.d(TAG, "HUS: userId " + userId);
         //Setup Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 

@@ -143,11 +143,11 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_SIGNUP_FN_PRAM,fullname);
-                params.put(Keys.KEY_SIGNUP_STORENAME_PRAM,storename);
-                params.put(Keys.KEY_SIGNUP_EMAIL_PRAM,email);
-                params.put(Keys.KEY_SIGNUP_PHONE_PRAM,phone);
-                params.put(Keys.KEY_SIGNUP_PASS_PRAM,password);
+                params.put(Keys.PRAM_SIGNUP_FN,fullname);
+                params.put(Keys.PRAM_SIGNUP_STORENAME,storename);
+                params.put(Keys.PRAM_SIGNUP_EMAIL,email);
+                params.put(Keys.PRAM_SIGNUP_PHONE,phone);
+                params.put(Keys.PRAM_SIGNUP_PASS,password);
                 return params;
             }
         };

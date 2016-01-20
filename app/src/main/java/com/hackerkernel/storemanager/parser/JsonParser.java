@@ -170,34 +170,56 @@ public class JsonParser {
     }
 
     //method to parse product List
-    public static List<ProductPojo> productParser(String jsonString){
+    public static List<ProductPojo> productListParser(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
             List<ProductPojo> list = new ArrayList<>();
 
             //if we have product List
-            if(jsonObject.getBoolean("return")){
-                //fetch product
-                JSONArray jsonArray = jsonObject.getJSONArray("product");
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN)){
 
-                //Fetch all the Product from the jsonArray
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jo = jsonArray.getJSONObject(i);
+                //check Product Key is avaialble
+                if(jsonObject.has(Keys.KEY_COM_DATA) && !jsonObject.isNull(Keys.KEY_COM_DATA)){
 
-                    //Set all the fetched json values to the ProductPojo
-                    ProductPojo productPojo = new ProductPojo();
+                    //fetch product
+                    JSONArray jsonArray = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
 
-                    productPojo.setProductId(jo.getString("productId"));
-                    productPojo.setProductName(jo.getString("name"));
-                    productPojo.setProductImage(jo.getString("image"));
-                    productPojo.setProductCode(jo.getString("code"));
+                    //Fetch all the Product from the jsonArray
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jo = jsonArray.getJSONObject(i);
 
-                    //Add productPojo to the list
-                    list.add(productPojo);
+                        //Set all the fetched json values to the ProductPojo
+                        ProductPojo productPojo = new ProductPojo();
+
+                        productPojo.setProductId(jo.getString(Keys.KEY_PL_ID));
+                        productPojo.setProductName(jo.getString(Keys.KEY_PL_NAME));
+                        productPojo.setProductImage(jo.getString(Keys.KEY_PL_IMAGE));
+                        productPojo.setProductCode(jo.getString(Keys.KEY_PL_CODE));
+                        productPojo.setProductTime(jo.getString(Keys.KEY_PL_TIME));
+
+                        //Add productPojo to the list
+                        list.add(productPojo);
+                    }
+                }else{
+                    //create a instance of ProductPojo
+                    ProductPojo current = new ProductPojo();
+                    current.setCount(jsonObject.getInt(Keys.KEY_SL_COUNT));
+
+                    //Add count to the list
+                    list.add(current);
                 }
+
+                return list;
+            }else{//If response is false return message
+                Log.d(TAG, "HUS: productListParser: response false "+jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                ProductPojo current = new ProductPojo();
+                current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
+                current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                list.add(current);
+                return list;
             }
-            return list;
+
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(TAG, "Exception " + e);

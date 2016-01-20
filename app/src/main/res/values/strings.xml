@@ -120,6 +120,7 @@
     <string name="atleast_one_size_quantity_field"><![CDATA[You should atleast have one size & quantity field]]></string>
     <string name="file_not_found">File not found</string>
     <string name="select_category_to_continue">Select a category to continue</string>
+    <string name="no_product_found">No Product found for this category. Click on plus icon to add one</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

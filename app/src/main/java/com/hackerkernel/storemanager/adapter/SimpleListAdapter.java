@@ -3,15 +3,14 @@ package com.hackerkernel.storemanager.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.ProductActivity;
+import com.hackerkernel.storemanager.activity.ProductActivity;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
 import java.util.ArrayList;
@@ -82,8 +81,8 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
                 //go to product activity
                 Intent productIntent = new Intent(mContext, ProductActivity.class);
                 //set categoryId and CategoryName in intenet
-                productIntent.putExtra("categoryId", current.getId());
-                productIntent.putExtra("categoryName", current.getName());
+                productIntent.putExtra(Keys.PRAM_PL_CATEGORYID, current.getId());
+                productIntent.putExtra(Keys.PRAM_PL_CATEGORYNAME, current.getName());
                 mContext.startActivity(productIntent);
             }
         }

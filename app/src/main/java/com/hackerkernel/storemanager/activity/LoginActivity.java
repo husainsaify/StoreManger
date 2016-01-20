@@ -133,8 +133,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_LOGIN_EMAIL_PRAM,email);
-                params.put(Keys.KEY_LOGIN_PASSWORD_PRAM,password);
+                params.put(Keys.PRAM_LOGIN_EMAIL,email);
+                params.put(Keys.PRAM_LOGIN_PASSWORD,password);
                 return params;
             }
         };

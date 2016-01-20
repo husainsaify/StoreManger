@@ -491,16 +491,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
-                param.put(Keys.KEY_AP_CATEGORYNAME,mCategoryName);
-                param.put(Keys.KEY_AP_CATEGORYID,mCategoryId);
-                param.put(Keys.KEY_AP_USERID,mUserId);
-                param.put(Keys.KEY_AP_IMAGE,encodedImage);
-                param.put(Keys.KEY_AP_NAME,name);
-                param.put(Keys.KEY_AP_CODE,code);
-                param.put(Keys.KEY_AP_CP,cp);
-                param.put(Keys.KEY_AP_SP,sp);
-                param.put(Keys.KEY_AP_SIZE,size);
-                param.put(Keys.KEY_AP_QUANTITY,quantity);
+                param.put(Keys.PRAM_AP_CATEGORYNAME,mCategoryName);
+                param.put(Keys.PRAM_AP_CATEGORYID,mCategoryId);
+                param.put(Keys.PRAM_AP_USERID,mUserId);
+                param.put(Keys.PRAM_AP_IMAGE,encodedImage);
+                param.put(Keys.PRAM_AP_NAME,name);
+                param.put(Keys.PRAM_AP_CODE,code);
+                param.put(Keys.PRAM_AP_CP,cp);
+                param.put(Keys.PRAM_AP_SP,sp);
+                param.put(Keys.PRAM_AP_SIZE,size);
+                param.put(Keys.PRAM_AP_QUANTITY,quantity);
                 return param;
             }
         };

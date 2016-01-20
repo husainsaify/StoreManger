@@ -57,7 +57,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product);
+        setContentView(R.layout.activity_product_list);
         ButterKnife.bind(this);
 
         //get the categoryId & categoryName
@@ -66,6 +66,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
             mCategoryName = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYNAME);
         }else{
             Toast.makeText(getApplication(), R.string.internal_error_restart_app,Toast.LENGTH_LONG).show();
+            finish();
             return;
         }
 

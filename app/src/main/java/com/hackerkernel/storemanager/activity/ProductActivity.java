@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,15 +50,16 @@ public class ProductActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_product);
+        setContentView(R.layout.activity_product);
         ButterKnife.bind(this);
 
         //get the ProductId & productName
         if (getIntent().hasExtra(Keys.KEY_PL_ID) && getIntent().hasExtra(Keys.KEY_PL_NAME)) {
-            mProductId = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYID);
-            mProductName = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYNAME);
+            mProductId = getIntent().getExtras().getString(Keys.KEY_PL_ID);
+            mProductName = getIntent().getExtras().getString(Keys.KEY_PL_NAME);
         } else {
             Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
+            finish();
             return;
         }
 

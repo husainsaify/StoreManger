@@ -25,7 +25,7 @@ import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
@@ -121,7 +121,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
             public void onResponse(String response) {
                 stopRefreshing(); //Stop refresh
                 //Parse response send by the server
-                List<ProductPojo> list  = parseProductListResponse(response);
+                List<ProductListPojo> list  = parseProductListResponse(response);
                 if(list != null){
                     setupRecyclerView(list);
 
@@ -162,14 +162,14 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
     private void showListFromSqliteDatabase() {
         //Display List From SQlite database
-        List<ProductPojo> list = db.getProductList(mUserId,mCategoryId);
+        List<ProductListPojo> list = db.getProductList(mUserId,mCategoryId);
         if(list != null){
             setupRecyclerView(list);
         }
     }
 
-    public List<ProductPojo> parseProductListResponse(String response){
-        List<ProductPojo> list = JsonParser.productListParser(response);
+    public List<ProductListPojo> parseProductListResponse(String response){
+        List<ProductListPojo> list = JsonParser.productListParser(response);
         if(list != null){
             //if response return false
             if(!list.get(0).isReturned()){
@@ -202,9 +202,9 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     }
 
     /*
-    * Method to take a ProductPojo list and set RecyclerView
+    * Method to take a ProductListPojo list and set RecyclerView
     * */
-    private void setupRecyclerView(List<ProductPojo> list){
+    private void setupRecyclerView(List<ProductListPojo> list){
             ProductListAdapter adapter = new ProductListAdapter(getApplication());
             adapter.setList(list);
             mRecyclerView.setAdapter(adapter);

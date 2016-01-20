@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
 import java.util.ArrayList;
@@ -86,14 +86,14 @@ public class Database {
     /*
     * Product List
     * */
-    public void insertProductList(List<ProductPojo> list) {
+    public void insertProductList(List<ProductListPojo> list) {
         SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
         Log.d(TAG, "HUS: insertProductList");
         //Insert data to table only when SimpleList is not null
         if(list != null){
             for (int i = 0; i < list.size(); i++)
             {
-                ProductPojo p = list.get(i);
+                ProductListPojo p = list.get(i);
                 ContentValues contentvalues = new ContentValues();
                 contentvalues.put(DatabaseHelper.COL_PL_PRODUCT_ID, p.getProductId());
                 contentvalues.put(DatabaseHelper.COL_PL_USER_ID, p.getUserId());
@@ -115,7 +115,7 @@ public class Database {
         return db.delete(DatabaseHelper.TABLE_PRODUCT_LIST,where,whereArgs);
     }
 
-    public List<ProductPojo> getProductList(String userId,String categoryId){
+    public List<ProductListPojo> getProductList(String userId,String categoryId){
         SQLiteDatabase db = helper.getWritableDatabase();
 
         String[] col = {DatabaseHelper.COL_PL_PRODUCT_ID,DatabaseHelper.COL_PL_NAME,DatabaseHelper.COL_PL_CODE,DatabaseHelper.COL_PL_TIME};
@@ -125,7 +125,7 @@ public class Database {
         Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_LIST,col,where,whereArgs,null,null,null);
         //check cursor is valid
         if((cursor != null) && (cursor.getCount() > 0)){
-            List<ProductPojo> list = new ArrayList<>();
+            List<ProductListPojo> list = new ArrayList<>();
             while (cursor.moveToNext()){
                 //get Data
                 String id = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_PRODUCT_ID));
@@ -134,7 +134,7 @@ public class Database {
                 String time = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_TIME));
 
                 //set data
-                ProductPojo p = new ProductPojo();
+                ProductListPojo p = new ProductListPojo();
                 p.setProductId(id);
                 p.setProductName(name);
                 p.setProductImage(""); //Leave image blank so that we display default image

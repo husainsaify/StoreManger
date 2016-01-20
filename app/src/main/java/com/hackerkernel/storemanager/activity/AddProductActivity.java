@@ -532,45 +532,4 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
     }
-
-
-
-    //Class to add product to server
-    /*private class addProductTask extends AsyncTask<String,String,String>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pd.show(); //show ProgressDialog
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            return GetJson.request(ApiUrl.ADD_PRODUCT,params[0],"POST");
-        }
-
-        @Override
-        protected void onPostExecute(String jsonString) {
-            //parse json and store it in a list
-            productList = JsonParser.SimpleParse(jsonString);
-
-            SimplePojo productPojo = productList.get(0);
-
-            pd.dismiss();
-
-            //success
-            if (productPojo.getReturned()){
-
-                //show a success toast message
-                Toast.makeText(context,productPojo.getMessage(),Toast.LENGTH_LONG).show();
-
-                //restart activity
-                Intent restartIntent = getIntent();
-                finish();
-                startActivity(restartIntent);
-
-            }else{ //failed
-                Functions.errorAlert(context,getString(R.string.oops),productPojo.getMessage());
-            }
-        }
-    }*/
 }

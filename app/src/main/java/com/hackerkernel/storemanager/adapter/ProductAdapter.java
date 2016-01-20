@@ -14,18 +14,18 @@ import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-public class ProductAdapter extends ArrayAdapter<ProductPojo> {
+public class ProductAdapter extends ArrayAdapter<ProductListPojo> {
     public static final String TAG = ProductAdapter.class.getSimpleName();
     private Context context;
-    private List<ProductPojo> list;
+    private List<ProductListPojo> list;
 
-    public ProductAdapter(Context context, int resource, List<ProductPojo> objects) {
+    public ProductAdapter(Context context, int resource, List<ProductListPojo> objects) {
         super(context, resource, objects);
         this.context = context;
         this.list = objects;
@@ -36,24 +36,24 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         View view = layoutInflater.inflate(R.layout.product_list_layout, parent, false);
 
-        //get Data from ProductPojo
-        ProductPojo productPojo = list.get(position);
+        //get Data from ProductListPojo
+        ProductListPojo productListPojo = list.get(position);
         TextView productName = (TextView) view.findViewById(R.id.productName);
         TextView productCode = (TextView) view.findViewById(R.id.productCode);
 
-        productName.setText(productPojo.getProductName());
-        productCode.setText(productPojo.getProductCode());
+        productName.setText(productListPojo.getProductName());
+        productCode.setText(productListPojo.getProductCode());
 
         //Set Image
 
         //if image is already available
-        if(productPojo.getBitmap() != null){
+        if(productListPojo.getBitmap() != null){
             ImageView productImage = (ImageView) view.findViewById(R.id.productImage);
-            productImage.setImageBitmap(productPojo.getBitmap());
+            productImage.setImageBitmap(productListPojo.getBitmap());
         }else{
             //Fetch Image with our LazyLoader
             Container container = new Container();
-            container.productPojo = productPojo;
+            container.productListPojo = productListPojo;
             container.view = view;
 
             new lazyLoadImage().execute(container);
@@ -62,7 +62,7 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
     }
 
     class Container{
-        public ProductPojo productPojo;
+        public ProductListPojo productListPojo;
         public View view;
         public Bitmap bitmap;
     }
@@ -73,20 +73,20 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
         @Override
         protected Container doInBackground(Container... params) {
             Container container = params[0];
-            ProductPojo productPojo = container.productPojo;
+            ProductListPojo productListPojo = container.productListPojo;
 
             //Check image is not empty
             Bitmap bitmap = null;
-            if(!productPojo.getProductImage().isEmpty()){
+            if(!productListPojo.getProductImage().isEmpty()){
                 try{
                     //generate Image URL
-                    String imageURL = ApiUrl.IMAGE_BASE_URL + productPojo.getProductImage();
+                    String imageURL = ApiUrl.IMAGE_BASE_URL + productListPojo.getProductImage();
                     //get Image
                     InputStream in = (InputStream) new URL(imageURL).getContent();
                     //convert image into a bitmap
                     bitmap = BitmapFactory.decodeStream(in);
                     //store image
-                    productPojo.setBitmap(bitmap);
+                    productListPojo.setBitmap(bitmap);
                     in.close();
                 }catch (Exception e){
                     e.printStackTrace();
@@ -94,7 +94,7 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
             }else{ //generate a placeholder image
                 //convert a Drawable into a Bitmap
                 bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder_product);
-                productPojo.setBitmap(bitmap);
+                productListPojo.setBitmap(bitmap);
             }
             //Add image to Container
             container.bitmap = bitmap;
@@ -106,7 +106,7 @@ public class ProductAdapter extends ArrayAdapter<ProductPojo> {
             ImageView productImage = (ImageView) container.view.findViewById(R.id.productImage);
             productImage.setImageBitmap(container.bitmap);
             //save the bitmap for future use
-            container.productPojo.setBitmap(container.bitmap);
+            container.productListPojo.setBitmap(container.bitmap);
         }
     }
 

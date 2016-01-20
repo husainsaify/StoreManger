@@ -21,8 +21,8 @@ import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
-import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 
 import org.json.JSONException;
@@ -53,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
     private String userId;
     private String mFailedMessage;
     List<SimpleListPojo> categoryList;
-    List<ProductPojo> searchList;
+    List<ProductListPojo> searchList;
 
     ProgressDialog pd;
 
@@ -123,7 +123,7 @@ public class SearchActivity extends AppCompatActivity {
         searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ProductPojo current = searchList.get(position);
+                ProductListPojo current = searchList.get(position);
                 //Send to ProductActivity
                 Intent intent = new Intent(SearchActivity.this,ProductActivity.class);
                 intent.putExtra("pName",current.getProductName());
@@ -174,14 +174,14 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     //background task for search
-    private class SearchTask extends AsyncTask<String,Void,List<ProductPojo>>{
+    private class SearchTask extends AsyncTask<String,Void,List<ProductListPojo>>{
         @Override
         protected void onPreExecute() {
             pd.show();
         }
 
         @Override
-        protected List<ProductPojo> doInBackground(String... params) {
+        protected List<ProductListPojo> doInBackground(String... params) {
             HashMap<String,String> hashmap = new HashMap<>();
             hashmap.put("userId",params[0]);
             hashmap.put("name",params[1]);
@@ -218,7 +218,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<ProductPojo> list) {
+        protected void onPostExecute(List<ProductListPojo> list) {
             if(list != null){ //adapt the arrayList and show in a listView
                 ProductAdapter productAdapter = new ProductAdapter(SearchActivity.this,R.layout.product_list_layout,list);
                 searchListView.setAdapter(productAdapter);

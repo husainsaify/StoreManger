@@ -5,9 +5,9 @@ import android.util.Log;
 
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
-import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.pojo.SignupPojo;
@@ -170,11 +170,11 @@ public class JsonParser {
     }
 
     //method to parse product List
-    public static List<ProductPojo> productListParser(String jsonString){
+    public static List<ProductListPojo> productListParser(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
-            List<ProductPojo> list = new ArrayList<>();
+            List<ProductListPojo> list = new ArrayList<>();
 
             //if we have product List
             if(jsonObject.getBoolean(Keys.KEY_COM_RETURN)){
@@ -189,23 +189,23 @@ public class JsonParser {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jo = jsonArray.getJSONObject(i);
 
-                        //Set all the fetched json values to the ProductPojo
-                        ProductPojo productPojo = new ProductPojo();
+                        //Set all the fetched json values to the ProductListPojo
+                        ProductListPojo productListPojo = new ProductListPojo();
 
-                        productPojo.setProductId(jo.getString(Keys.KEY_PL_ID));
-                        productPojo.setUserId(jo.getString(Keys.KEY_COM_USERID));
-                        productPojo.setCategoryId(jo.getString(Keys.KEY_PL_CATEGORY_ID));
-                        productPojo.setProductName(jo.getString(Keys.KEY_PL_NAME));
-                        productPojo.setProductImage(jo.getString(Keys.KEY_PL_IMAGE));
-                        productPojo.setProductCode(jo.getString(Keys.KEY_PL_CODE));
-                        productPojo.setProductTime(jo.getString(Keys.KEY_PL_TIME));
+                        productListPojo.setProductId(jo.getString(Keys.KEY_PL_ID));
+                        productListPojo.setUserId(jo.getString(Keys.KEY_COM_USERID));
+                        productListPojo.setCategoryId(jo.getString(Keys.KEY_PL_CATEGORY_ID));
+                        productListPojo.setProductName(jo.getString(Keys.KEY_PL_NAME));
+                        productListPojo.setProductImage(jo.getString(Keys.KEY_PL_IMAGE));
+                        productListPojo.setProductCode(jo.getString(Keys.KEY_PL_CODE));
+                        productListPojo.setProductTime(jo.getString(Keys.KEY_PL_TIME));
 
-                        //Add productPojo to the list
-                        list.add(productPojo);
+                        //Add productListPojo to the list
+                        list.add(productListPojo);
                     }
                 }else{
-                    //create a instance of ProductPojo
-                    ProductPojo current = new ProductPojo();
+                    //create a instance of ProductListPojo
+                    ProductListPojo current = new ProductListPojo();
                     current.setCount(jsonObject.getInt(Keys.KEY_SL_COUNT));
 
                     //Add count to the list
@@ -215,7 +215,7 @@ public class JsonParser {
                 return list;
             }else{//If response is false return message
                 Log.d(TAG, "HUS: productListParser: response false "+jsonObject.getString(Keys.KEY_COM_MESSAGE));
-                ProductPojo current = new ProductPojo();
+                ProductListPojo current = new ProductListPojo();
                 current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
                 current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
                 list.add(current);
@@ -234,12 +234,12 @@ public class JsonParser {
         SingleProductPojo product = new SingleProductPojo();
         try {
             JSONObject jo = new JSONObject(jsonString);
-            //put return & message into productPojo
+            //put return & message into productListPojo
 
             product.setReturned(jo.getBoolean("return"));
             product.setMessage(jo.getString("message"));
 
-            //return is success add more item to productPojo
+            //return is success add more item to productListPojo
             if(product.getReturned()){
                 //add more item
                 product.setId(jo.getString("id"));
@@ -266,12 +266,12 @@ public class JsonParser {
                     }
                 }
 
-                //add size & quantity to productPojo
+                //add size & quantity to productListPojo
                 product.setSize(size);
                 product.setQuantity(quantity);
             }
 
-            //return the productPojo
+            //return the productListPojo
             return product;
         } catch (JSONException e) {
             e.printStackTrace();

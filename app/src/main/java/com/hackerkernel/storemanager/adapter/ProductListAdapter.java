@@ -18,7 +18,7 @@ import com.hackerkernel.storemanager.activity.ProductActivity;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
-import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.ProductListPojo;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder> {
     private Context mContext;
     private LayoutInflater mInflater;
-    private List<ProductPojo> mList;
+    private List<ProductListPojo> mList;
     private ImageLoader mImageLoader;
 
     public ProductListAdapter(Context context) {
@@ -41,7 +41,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
     }
 
-    public void setList(List<ProductPojo> list){
+    public void setList(List<ProductListPojo> list){
         this.mList = list;
         notifyDataSetChanged();
     }
@@ -54,7 +54,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public void onBindViewHolder(final ProductListViewHolder holder, int position) {
-        ProductPojo c = mList.get(position);
+        ProductListPojo c = mList.get(position);
         holder.name.setText(c.getProductName());
         holder.code.setText(c.getProductCode());
         holder.time.setText(c.getProductTime());
@@ -110,7 +110,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            ProductPojo p = mList.get(position);
+            ProductListPojo p = mList.get(position);
             Intent intent = new Intent(mContext, ProductActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(Keys.KEY_PL_ID,p.getProductId());

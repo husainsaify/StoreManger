@@ -3,7 +3,7 @@ package com.hackerkernel.storemanager.pojo;
 
 import android.graphics.Bitmap;
 
-public class ProductPojo {
+public class ProductListPojo {
     private boolean returned = true;
     private String  message;
     private String userId;

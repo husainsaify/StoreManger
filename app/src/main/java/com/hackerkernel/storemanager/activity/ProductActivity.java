@@ -22,8 +22,8 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
-import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
@@ -62,7 +62,7 @@ public class ProductActivity extends AppCompatActivity {
     //list
     List<SimplePojo> deleteProductList;
     //Pojo for product
-    SingleProductPojo productPojo;
+    ProductPojo productPojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,9 +147,9 @@ public class ProductActivity extends AppCompatActivity {
 
         /*if(db.checkProduct(mProductId)){ //product exits in local database
             //fetch product
-            SingleProductPojo fetchedProduct = db.getProduct(mProductId);
+            ProductPojo fetchedProduct = db.getProduct(mProductId);
 
-            //set "SingleProductPojo" to views
+            //set "ProductPojo" to views
             setProductViews(fetchedProduct);
         }else{
             //fetch product from backend
@@ -240,8 +240,8 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
-    //method to view "SingleProductPojo to views"
-    private void setProductViews(SingleProductPojo product){
+    //method to view "ProductPojo to views"
+    private void setProductViews(ProductPojo product){
         //set Views
         productName.setText(product.getName());
         mCode.setText(product.getCode());
@@ -318,14 +318,14 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     //fetch product details
-    class getProductTask extends AsyncTask<String,String,SingleProductPojo>{
+    class getProductTask extends AsyncTask<String,String,ProductPojo>{
         @Override
         protected void onPreExecute() {
             pd.show();
         }
 
         @Override
-        protected SingleProductPojo doInBackground(String... params) {
+        protected ProductPojo doInBackground(String... params) {
             //make request to the web to fetch data
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("userId",userId);
@@ -344,11 +344,11 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(SingleProductPojo product) {
+        protected void onPostExecute(ProductPojo product) {
             //success
             if (product.getReturned()){
 
-                //set "SingleProductPojo" to view
+                //set "ProductPojo" to view
                 setProductViews(product);
             }else{
                 //Display the Error to user

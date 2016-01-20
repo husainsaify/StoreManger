@@ -6,13 +6,13 @@ import android.util.Log;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
+import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.STdatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.pojo.SignupPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
-import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -230,8 +230,8 @@ public class JsonParser {
     }
 
     //fetch product data
-    public static SingleProductPojo SingleProductParser(String jsonString){
-        SingleProductPojo product = new SingleProductPojo();
+    public static ProductPojo SingleProductParser(String jsonString){
+        ProductPojo product = new ProductPojo();
         try {
             JSONObject jo = new JSONObject(jsonString);
             //put return & message into productListPojo

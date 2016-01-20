@@ -2,21 +2,12 @@ package com.hackerkernel.storemanager;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,23 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.adapter.ACProductAdapter;
-import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.SimplePojo;
-import com.hackerkernel.storemanager.pojo.SingleProductPojo;
+import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -84,7 +62,7 @@ public class SellActivity extends AppCompatActivity {
     private Uri productImageUri;
 
     Database db;
-    SingleProductPojo productPojo;
+    ProductPojo productPojo;
 
     ProgressDialog pd;
 
@@ -256,7 +234,7 @@ public class SellActivity extends AppCompatActivity {
         //product available in sqlite database
         if(db.checkProduct(productId)){
             //get data from SQlite database
-            SingleProductPojo product = db.getProduct(productId);
+            ProductPojo product = db.getProduct(productId);
 
             setProductData(product);
         }else{
@@ -266,7 +244,7 @@ public class SellActivity extends AppCompatActivity {
     }
 
     //hookup product data to the views
-    public void setProductData(SingleProductPojo product){
+    public void setProductData(ProductPojo product){
         //headers
         sizeHeader.setText(getString(R.string.size));
         quantityHeader.setText(getString(R.string.quantity));
@@ -348,7 +326,7 @@ public class SellActivity extends AppCompatActivity {
     }
 
     //Fetch data from the backend
-    private class DownloadProductTask extends AsyncTask<Void,Void,SingleProductPojo>{
+    private class DownloadProductTask extends AsyncTask<Void,Void,ProductPojo>{
         @Override
         protected void onPreExecute() {
             //show progressBar
@@ -356,7 +334,7 @@ public class SellActivity extends AppCompatActivity {
         }
 
         @Override
-        protected SingleProductPojo doInBackground(Void... params) {
+        protected ProductPojo doInBackground(Void... params) {
             //make request to the web to fetch data
             HashMap<String,String> hashMap = new HashMap<>();
             hashMap.put("userId",userId);
@@ -373,7 +351,7 @@ public class SellActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(SingleProductPojo product) {
+        protected void onPostExecute(ProductPojo product) {
             //hookup views
             setProductData(product);
 

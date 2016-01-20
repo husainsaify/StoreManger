@@ -1,6 +1,6 @@
 package com.hackerkernel.storemanager.pojo;
 
-public class SingleProductPojo {
+public class ProductPojo {
     private boolean returned;
     private String  id,
                     name,

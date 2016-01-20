@@ -393,7 +393,7 @@ public class Database {
          return true;
          }
          //Method to insert new Product in product table
-         public void addProduct(SingleProductPojo product) {
+         public void addProduct(ProductPojo product) {
          db = this.getWritableDatabase();
          //store values
          ContentValues cv = new ContentValues();
@@ -410,15 +410,15 @@ public class Database {
          db.close();
          }
          //function to fetch all the product Information
-         public SingleProductPojo getProduct(String productId) {
+         public ProductPojo getProduct(String productId) {
          db = this.getReadableDatabase();
          String q = "select * from " + TABLE_PRODUCT + " where " + COL_P_ID + " = ?";
          Cursor cursor = db.rawQuery(q, new String[]{productId});
          //their is result in table
          if (cursor.moveToFirst()) {
-         //crete a instance "SingleProductPojo"
-         SingleProductPojo product = new SingleProductPojo();
-         //store Value from database into my SingleProductPojo
+         //crete a instance "ProductPojo"
+         ProductPojo product = new ProductPojo();
+         //store Value from database into my ProductPojo
          product.setId(cursor.getString(0));
          product.setName(cursor.getString(1));
          product.setImageAddress(cursor.getString(2));

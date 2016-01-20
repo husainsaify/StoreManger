@@ -230,7 +230,7 @@ public class JsonParser {
     }
 
     //fetch product data
-    public static ProductPojo SingleProductParser(String jsonString){
+    public static ProductPojo ProductParser(String jsonString){
         ProductPojo product = new ProductPojo();
         try {
             JSONObject jo = new JSONObject(jsonString);

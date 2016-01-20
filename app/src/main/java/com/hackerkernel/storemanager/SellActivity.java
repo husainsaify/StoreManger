@@ -366,7 +366,7 @@ public class SellActivity extends AppCompatActivity {
             String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
 
             //fetch data from the Backend
-            String jsonString = GetJson.request(ApiUrl.GET_SINGLE_PRODUCT, dataUrl, "POST");
+            String jsonString = GetJson.request(ApiUrl.GET_PRODUCT, dataUrl, "POST");
             //parse JSON and store results in productPojo
             productPojo = JsonParser.SingleProductParser(jsonString);
             return productPojo;

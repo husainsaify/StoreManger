@@ -14,7 +14,7 @@ public class ApiUrl {
                 ADD_PRODUCT = SERVER + "addProduct.php",
                 PRODUCT_LIST = SERVER + "productList.php",
                 IMAGE_BASE_URL = SERVER + "",
-                GET_SINGLE_PRODUCT = SERVER + "fetchProduct.php",
+                GET_PRODUCT = SERVER + "fetchProduct.php",
                 DELETE_PRODUCT = SERVER + "deleteProduct.php",
                 AC_PRODUCT_SEARCH = SERVER + "searchProduct.php",
                 ADD_SELL = SERVER + "addSell.php",

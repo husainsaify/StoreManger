@@ -11,14 +11,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
+import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,21 +37,22 @@ public class ProductActivity extends AppCompatActivity {
     private static final String TAG = ProductActivity.class.getSimpleName();
 
     @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.imageView) ImageView mImage;
+    @Bind(R.id.pName) TextView mName;
+    @Bind(R.id.pCode) TextView mCode;
+    @Bind(R.id.pTimeAgo) TextView mTime;
+    @Bind(R.id.pSize) TextView mSize;
+    @Bind(R.id.pQuantity) TextView mQuantity;
+    @Bind(R.id.pProfit) TextView mProfit;
 
     private String mProductId;
     private String mProductName;
     private String mUserId;
     private ProgressDialog pd;
     private Database db;
+    private RequestQueue mRequestQueue;
 
     private Uri productImageUri;
-    @Bind(R.id.imageView) ImageView imageView;
-    @Bind(R.id.pName) TextView productName;
-    @Bind(R.id.pCode) TextView productCode;
-    @Bind(R.id.pTimeAgo) TextView productTimeAgo;
-    @Bind(R.id.pSize) TextView productSize;
-    @Bind(R.id.pQuantity) TextView productQuantity;
-    @Bind(R.id.pProfit) TextView productProfit;
     //list
     List<SimplePojo> deleteProductList;
     //Pojo for product
@@ -84,6 +95,12 @@ public class ProductActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        //Instanciate Volley
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+
+
+        fetchProductInBackground();
+
         /*//check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
 
@@ -99,7 +116,7 @@ public class ProductActivity extends AppCompatActivity {
 
                 if(file.exists()){
                     //if file is in sdcard
-                    imageView.setImageURI(imageUri);
+                    mImage.setImageURI(imageUri);
                     Log.d(TAG,"HUS: image available in sdcard");
                 }else{
                     //deleted from sdcard
@@ -113,7 +130,7 @@ public class ProductActivity extends AppCompatActivity {
             }
         }else{
             //Show the placeHolder image
-            imageView.setImageResource(R.drawable.placeholder_product);
+            mImage.setImageResource(R.drawable.placeholder_product);
             Log.d(TAG, "HUS: showing placeholder image");
         }*/
 
@@ -133,6 +150,29 @@ public class ProductActivity extends AppCompatActivity {
             //fetch product from backend
             new getProductTask().execute();
         }*/
+    }
+
+    private void fetchProductInBackground(){
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplication(),response,Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplication(),error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_USERID,mUserId);
+                params.put(Keys.KEY_PL_ID,mProductId);
+                return params;
+            }
+        };
+        mRequestQueue.add(request);
     }
 
     @Override
@@ -179,8 +219,8 @@ public class ProductActivity extends AppCompatActivity {
     private void setProductViews(SingleProductPojo product){
         //set Views
         productName.setText(product.getName());
-        productCode.setText(product.getCode());
-        productTimeAgo.setText(product.getTime());
+        mCode.setText(product.getCode());
+        mTime.setText(product.getTime());
         //find out profit
         int cp = Integer.parseInt(product.getCp());
         int sp = Integer.parseInt(product.getSp());
@@ -188,9 +228,9 @@ public class ProductActivity extends AppCompatActivity {
 
         String profitStack = sp + " - "+ cp + " = "+profit;
 
-        productProfit.setText(profitStack);
-        productSize.setText(product.getSize());
-        productQuantity.setText(product.getQuantity());
+        mProfit.setText(profitStack);
+        mSize.setText(product.getSize());
+        mQuantity.setText(product.getQuantity());
     }
 
 
@@ -223,8 +263,8 @@ public class ProductActivity extends AppCompatActivity {
                 //store bitmap in "imageBitmap" global variable for later reference
                 imageBitmap = bitmap;
                 //display the image
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setImageBitmap(imageBitmap);
+                mImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                mImage.setImageBitmap(imageBitmap);
 
                 *//*
                 * Store image to sdCard
@@ -270,7 +310,7 @@ public class ProductActivity extends AppCompatActivity {
             String dataUrl = Functions.hashMapToEncodedUrl(hashMap);
 
             //fetch data from the Backend
-            String jsonString = GetJson.request(ApiUrl.GET_SINGLE_PRODUCT,dataUrl,"POST");
+            String jsonString = GetJson.request(ApiUrl.GET_PRODUCT,dataUrl,"POST");
 
             //parse JSON and store results in productPojo
             productPojo = JsonParser.SingleProductParser(jsonString);

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
+import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
 import java.util.ArrayList;
@@ -26,18 +27,21 @@ public class Database {
     //Make a global variable of DatabaseHelper class
     DatabaseHelper helper;
     private final String TAG = Database.class.getSimpleName();
-    public Database(Context context){
+
+    public Database(Context context) {
         //Instantiate DatabaseHelper
         helper = new DatabaseHelper(context);
     }
 
-    public void insertAllSimpleList(String tablename,List<SimpleListPojo> list) {
+    //***************************** SimpleList
+
+    //Insert all the simple list in db
+    public void insertAllSimpleList(String tablename, List<SimpleListPojo> list) {
         SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
         Log.d(TAG, "HUS: insertAllSimpleList");
         //Insert data to table only when SimpleList is not null
-        if(list != null){
-            for (int i = 0; i < list.size(); i++)
-            {
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
                 SimpleListPojo simplelistpojo = list.get(i);
                 ContentValues contentvalues = new ContentValues();
                 contentvalues.put(DatabaseHelper.COL_S_ID, simplelistpojo.getId());
@@ -50,19 +54,21 @@ public class Database {
 
     }
 
+    //delete all SimpleList from db
     public int deleteAllSimpleList(String tablename) {
-        Log.d(TAG,"HUS: tablename "+tablename);
+        Log.d(TAG, "HUS: tablename " + tablename);
         SQLiteDatabase db = helper.getWritableDatabase();
         Log.d(TAG, "HUS: deleteAllSimpleList");
         return db.delete(tablename, null, null);
     }
 
-    public List<SimpleListPojo> getAllSimpleList(String table,String userId) {
+    //get all simple list from db
+    public List<SimpleListPojo> getAllSimpleList(String table, String userId) {
         SQLiteDatabase db = helper.getWritableDatabase();
         Log.d(TAG, "HUS: getAllSimpleList");
-        String[] col = {DatabaseHelper.COL_S_ID,DatabaseHelper.COL_S_NAME,DatabaseHelper.COL_S_TIME};
+        String[] col = {DatabaseHelper.COL_S_ID, DatabaseHelper.COL_S_NAME, DatabaseHelper.COL_S_TIME};
         String[] selectionArgs = {userId};
-        Cursor c = db.query(table,col,DatabaseHelper.COL_S_USER_ID + " = ?",selectionArgs,null,null,null);
+        Cursor c = db.query(table, col, DatabaseHelper.COL_S_USER_ID + " = ?", selectionArgs, null, null, null);
         List<SimpleListPojo> list = new ArrayList<>();
         while (c.moveToNext()) {
             //retive data
@@ -83,16 +89,15 @@ public class Database {
         return list;
     }
 
-    /*
-    * Product List
-    * */
+    //******************************** Product List
+
+    //insert all product list in db
     public void insertProductList(List<ProductListPojo> list) {
         SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
         Log.d(TAG, "HUS: insertProductList");
         //Insert data to table only when SimpleList is not null
-        if(list != null){
-            for (int i = 0; i < list.size(); i++)
-            {
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
                 ProductListPojo p = list.get(i);
                 ContentValues contentvalues = new ContentValues();
                 contentvalues.put(DatabaseHelper.COL_PL_PRODUCT_ID, p.getProductId());
@@ -108,25 +113,27 @@ public class Database {
 
     }
 
-    public int deleteProductList(String userId, String categoryId){
+    //delete all Product list from db
+    public int deleteProductList(String userId, String categoryId) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String where = DatabaseHelper.COL_PL_USER_ID+"=? AND "+DatabaseHelper.COL_PL_CATEGORY_ID+"=?";
-        String[] whereArgs = {userId,categoryId};
-        return db.delete(DatabaseHelper.TABLE_PRODUCT_LIST,where,whereArgs);
+        String where = DatabaseHelper.COL_PL_USER_ID + "=? AND " + DatabaseHelper.COL_PL_CATEGORY_ID + "=?";
+        String[] whereArgs = {userId, categoryId};
+        return db.delete(DatabaseHelper.TABLE_PRODUCT_LIST, where, whereArgs);
     }
 
-    public List<ProductListPojo> getProductList(String userId,String categoryId){
+    //get all product list from db
+    public List<ProductListPojo> getProductList(String userId, String categoryId) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
-        String[] col = {DatabaseHelper.COL_PL_PRODUCT_ID,DatabaseHelper.COL_PL_NAME,DatabaseHelper.COL_PL_CODE,DatabaseHelper.COL_PL_TIME};
-        String where = DatabaseHelper.COL_PL_USER_ID+"=? AND "+DatabaseHelper.COL_PL_CATEGORY_ID+"=?";
-        String[] whereArgs = {userId,categoryId};
+        String[] col = {DatabaseHelper.COL_PL_PRODUCT_ID, DatabaseHelper.COL_PL_NAME, DatabaseHelper.COL_PL_CODE, DatabaseHelper.COL_PL_TIME};
+        String where = DatabaseHelper.COL_PL_USER_ID + "=? AND " + DatabaseHelper.COL_PL_CATEGORY_ID + "=?";
+        String[] whereArgs = {userId, categoryId};
 
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_LIST,col,where,whereArgs,null,null,null);
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_LIST, col, where, whereArgs, null, null, null);
         //check cursor is valid
-        if((cursor != null) && (cursor.getCount() > 0)){
+        if ((cursor != null) && (cursor.getCount() > 0)) {
             List<ProductListPojo> list = new ArrayList<>();
-            while (cursor.moveToNext()){
+            while (cursor.moveToNext()) {
                 //get Data
                 String id = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_PRODUCT_ID));
                 String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_PL_NAME));
@@ -148,7 +155,7 @@ public class Database {
             //close Cursor
             cursor.close();
             return list;
-        }else{ //if cursor is empty return null
+        } else { //if cursor is empty return null
             //close cursor
             assert cursor != null;
             cursor.close();
@@ -156,7 +163,143 @@ public class Database {
         }
     }
 
-    private class DatabaseHelper extends SQLiteOpenHelper{
+    //************************** Product
+
+    //Method to insert new Product in product table
+    public void insertProduct(ProductPojo product) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //store values
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COL_P_USER_ID, product.getUserId());
+        cv.put(DatabaseHelper.COL_P_PRODUCT_ID, product.getId());
+        cv.put(DatabaseHelper.COL_P_NAME, product.getName());
+        cv.put(DatabaseHelper.COL_P_IMAGE_ADDRESS, product.getImageAddress());
+        cv.put(DatabaseHelper.COL_P_IMAGE_URI, "");
+        cv.put(DatabaseHelper.COL_P_CODE, product.getCode());
+        cv.put(DatabaseHelper.COL_P_CP, product.getSp());
+        cv.put(DatabaseHelper.COL_P_SP, product.getCp());
+        cv.put(DatabaseHelper.COL_P_TIME, product.getTime());
+        //insert into productTable
+        db.insert(DatabaseHelper.TABLE_PRODUCT, null, cv);
+        db.close();
+    }
+
+    //method to get product information
+    public ProductPojo getProduct(String userId, String productId) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] columns = {DatabaseHelper.COL_P_NAME,
+                DatabaseHelper.COL_P_IMAGE_ADDRESS,
+                DatabaseHelper.COL_P_IMAGE_URI,
+                DatabaseHelper.COL_P_CODE,
+                DatabaseHelper.COL_P_TIME,
+                DatabaseHelper.COL_P_CP,
+                DatabaseHelper.COL_P_SP};
+        String selection = DatabaseHelper.COL_P_USER_ID +"=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
+        String[] selectionArgs = {userId,productId};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT,columns,selection,selectionArgs,null,null,null);
+
+        //their is result in table
+        if (cursor.moveToFirst()) {
+            //crete a instance "ProductPojo"
+            ProductPojo product = new ProductPojo();
+            //get value from the database
+            String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_NAME));
+            String imageAddress = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_IMAGE_ADDRESS));
+            String imageUri = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_IMAGE_URI));
+            String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_CODE));
+            String cp = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_CP));
+            String sp = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_SP));
+            String time = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_TIME));
+            //get size and Quantity stack from Member methods
+            String size  = this.getSize(userId, productId);
+            String quantity = this.getQuantity(userId,productId);
+
+            product.setName(name);
+            product.setImageAddress(imageAddress);
+            product.setImageUri(imageUri);
+            product.setCode(code);
+            product.setCp(cp);
+            product.setSp(sp);
+            product.setTime(time);
+            product.setSize(size);
+            product.setQuantity(quantity);
+
+            //close cursor & db
+            cursor.close();
+            db.close();
+            //return the Product
+            return product;
+        }
+        return null;
+    }
+
+    //************* SQ (Size and Quantity)
+
+    //method to insert SQ - size and quantity
+    public void addSQ(String size,String quantity,String userId, String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COL_SQ_SIZE,size);
+        cv.put(DatabaseHelper.COL_SQ_QUANTITY,quantity);
+        cv.put(DatabaseHelper.COL_SQ_USER_ID,userId);
+        cv.put(DatabaseHelper.COL_SQ_PRODUCT_ID,productId);
+        db.insert(DatabaseHelper.TABLE_SQ, null, cv);
+        //close db
+        db.close();
+    }
+
+    //method to get size as (4\n5\n6\n)
+    private String getSize(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String[] col = {DatabaseHelper.COL_SQ_SIZE};
+        String selection = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String[] where = {userId, productId};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_SQ, col, selection, where, null, null, null);
+        int i = 0;
+        if (cursor.moveToFirst()){
+            String size = "";
+            do{
+                i++;
+                size += cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_SQ_SIZE));
+                if(i < cursor.getCount()){
+                    size += "\n";
+                }
+            }while (cursor.moveToNext());
+            db.close();
+            return size;
+        }
+        db.close();
+        return null;
+    }
+
+    //Method to get Quantity like (4\n5\n6\n)
+    private String getQuantity(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        String[] col = {DatabaseHelper.COL_SQ_QUANTITY};
+        String selection = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String[] where = {userId, productId};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_SQ, col, selection, where, null, null, null);
+
+        int i = 0;
+        if (cursor.moveToFirst()){
+            String quantity = "";
+            do{
+                i++;
+                quantity += cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_SQ_QUANTITY));
+                if(i < cursor.getCount()){
+                    quantity += "\n";
+                }
+            }while (cursor.moveToNext());
+            db.close();
+            return quantity;
+        }
+        db.close();
+        return null;
+    }
+
+    private class DatabaseHelper extends SQLiteOpenHelper {
         //Database Schema class
         private static final int DATABASE_VERSION = 5;
         private static final String DATABASE_NAME = "storemanager";
@@ -223,19 +366,19 @@ public class Database {
                 COL_C_USER_ID + " INTEGER," +
                 COL_C_TIME + " VARCHAR(20));";
 
-        private String CREATE_PRODUCT_LIST = "CREATE TABLE "+ TABLE_PRODUCT_LIST + "(" +
+        private String CREATE_PRODUCT_LIST = "CREATE TABLE " + TABLE_PRODUCT_LIST + "(" +
                 COL_PL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_PL_PRODUCT_ID + " INTEGER ," +
                 COL_PL_USER_ID + " INTEGER," +
                 COL_PL_CATEGORY_ID + " INTEGER," +
-                COL_PL_NAME + " VARCHAR(20),"+
-                COL_PL_CODE +" TEXT," +
-                COL_PL_TIME +" TEXT);";
+                COL_PL_NAME + " VARCHAR(20)," +
+                COL_PL_CODE + " TEXT," +
+                COL_PL_TIME + " TEXT);";
 
         private String CREATE_PRODUCT = "CREATE TABLE " + TABLE_PRODUCT + "(" +
                 COL_P_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_P_USER_ID +" INTEGER," +
-                COL_P_PRODUCT_ID +" INTEGER," +
+                COL_P_USER_ID + " INTEGER," +
+                COL_P_PRODUCT_ID + " INTEGER," +
                 COL_P_NAME + " TEXT," +
                 COL_P_IMAGE_ADDRESS + " TEXT," +
                 COL_P_IMAGE_URI + " TEXT," +
@@ -244,7 +387,7 @@ public class Database {
                 COL_P_SP + " TEXT," +
                 COL_P_TIME + " TEXT);";
 
-        private String CREATE_SQ = "CREATE TABLE "+ TABLE_SQ +"(" +
+        private String CREATE_SQ = "CREATE TABLE " + TABLE_SQ + "(" +
                 COL_SQ_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_SQ_SIZE + " INTEGER," +
                 COL_SQ_QUANTITY + " INTEGER," +
@@ -254,15 +397,15 @@ public class Database {
         /*
         * DROP TABLE QUERY
         * */
-        private String DROP_SALESMAN = "DROP TABLE IF EXISTS "+TABLE_SALESMAN;
-        private String DROP_CATEGORY = "DROP TABLE IF EXISTS "+TABLE_CATEGORY;
-        private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS "+TABLE_PRODUCT_LIST;
-        private String DROP_PRODUCT = "DROP TABLE IF EXISTS "+TABLE_PRODUCT;
-        private String DROP_SQ = "DROP TABLE IF EXISTS "+TABLE_SQ;
+        private String DROP_SALESMAN = "DROP TABLE IF EXISTS " + TABLE_SALESMAN;
+        private String DROP_CATEGORY = "DROP TABLE IF EXISTS " + TABLE_CATEGORY;
+        private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS " + TABLE_PRODUCT_LIST;
+        private String DROP_PRODUCT = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
+        private String DROP_SQ = "DROP TABLE IF EXISTS " + TABLE_SQ;
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            Log.d(TAG,"HUS: Constructor");
+            Log.d(TAG, "HUS: Constructor");
         }
 
         @Override
@@ -306,53 +449,7 @@ public class Database {
          db.close();
          return true;
          }
-         //Method to insert new Product in product table
-         public void addProduct(ProductPojo product) {
-         db = this.getWritableDatabase();
-         //store values
-         ContentValues cv = new ContentValues();
-         cv.put(COL_P_ID, product.getId());
-         cv.put(COL_P_NAME, product.getName());
-         cv.put(COL_P_IMAGE_ADDRESS, product.getImageAddress());
-         cv.put(COL_P_IMAGE_URI, "");
-         cv.put(COL_P_CODE, product.getCode());
-         cv.put(COL_P_SP, product.getSp());
-         cv.put(COL_P_CP, product.getCp());
-         cv.put(COL_P_TIME, product.getTime());
-         //insert into productTable
-         db.insert(TABLE_PRODUCT, null, cv);
-         db.close();
-         }
-         //function to fetch all the product Information
-         public ProductPojo getProduct(String productId) {
-         db = this.getReadableDatabase();
-         String q = "select * from " + TABLE_PRODUCT + " where " + COL_P_ID + " = ?";
-         Cursor cursor = db.rawQuery(q, new String[]{productId});
-         //their is result in table
-         if (cursor.moveToFirst()) {
-         //crete a instance "ProductPojo"
-         ProductPojo product = new ProductPojo();
-         //store Value from database into my ProductPojo
-         product.setId(cursor.getString(0));
-         product.setName(cursor.getString(1));
-         product.setImageAddress(cursor.getString(2));
-         product.setImageUri(cursor.getString(3));
-         product.setCode(cursor.getString(4));
-         product.setCp(cursor.getString(5));
-         product.setSp(cursor.getString(6));
-         product.setTime(cursor.getString(7));
-         //get size and Quantity stack from Member methods "getSize" & "getQuanity"
-         String userId = this.getUserID(); //get userId from member method
-         product.setSize(this.getSize(userId, productId));
-         product.setQuantity(this.getQuantity(userId,productId));
-         //close cursor & db
-         cursor.close();
-         db.close();
-         //return the Product
-         return product;
-         }
-         return null;
-         }
+
          //method to delete product from the database
          public int deleteProduct(String productId){
          db = this.getWritableDatabase();
@@ -394,67 +491,7 @@ public class Database {
             return null;
         }
         /*//********************************** TABLE SQ
-         //this method is used to insert SQ
-         public boolean addSQ(String size,String quantity,String userId, String productId){
-         db = this.getWritableDatabase();
-         ContentValues cv = new ContentValues();
-         cv.put(COL_SQ_SIZE,size);
-         cv.put(COL_SQ_QUANTITY,quantity);
-         cv.put(COL_SQ_USER_ID,userId);
-         cv.put(COL_SQ_PRODUCT_ID,productId);
-         long r = db.insert(TABLE_SQ,null,cv);
-         if(r == -1){
-         db.close();
-         return false;
-         }
-         //close db
-         db.close();
-         return true;
-         }
-         *//*
-        * getSize & getQuantity will return size | Quantity in StringStack
-        * This method will ge used by "db.getProduct" method
-        * *//*
-        private String getSize(String userId,String productId){
-            db = this.getReadableDatabase();
-            String q = "SELECT "+COL_SQ_SIZE+" FROM "+TABLE_SQ+" WHERE "+COL_SQ_USER_ID+"=? AND "+COL_SQ_PRODUCT_ID+"=?";
-            Cursor cursor = db.rawQuery(q, new String[]{userId, productId});
-            int i = 0;
-            if (cursor.moveToFirst()){
-                String size = "";
-                do{
-                    i++;
-                    size += cursor.getString(cursor.getColumnIndex(COL_SQ_SIZE));
-                    if(i < cursor.getCount()){
-                        size += "\n";
-                    }
-                }while (cursor.moveToNext());
-                db.close();
-                return size;
-            }
-            db.close();
-            return null;
-        }
-        private String getQuantity(String userId,String productId){
-            db = this.getReadableDatabase();
-            String q = "SELECT "+COL_SQ_QUANTITY+" FROM "+TABLE_SQ+" WHERE "+COL_SQ_USER_ID+"=? AND "+COL_SQ_PRODUCT_ID+"=?";
-            Cursor cursor = db.rawQuery(q, new String[]{userId, productId});
-            int i = 0;
-            if (cursor.moveToFirst()){
-                String quantity = "";
-                do{
-                    i++;
-                    quantity += cursor.getString(cursor.getColumnIndex(COL_SQ_QUANTITY));
-                    if(i < cursor.getCount()){
-                        quantity += "\n";
-                    }
-                }while (cursor.moveToNext());
-                db.close();
-                return quantity;
-            }
-            db.close();
-            return null;
-        }
+
         public void deleteAllSQ(){
             db = this.getWritableDatabase();
             db.delete(TABLE_SQ,null,null);

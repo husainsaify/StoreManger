@@ -171,7 +171,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //Set OnClickMethod on productImage(Camera icon)
         mProductImage.setOnClickListener(this);
 
-        //set OnclickMethod on addProduct
+        //set OnclickMethod on insertProduct
         mAddProduct.setOnClickListener(this);
     }
 

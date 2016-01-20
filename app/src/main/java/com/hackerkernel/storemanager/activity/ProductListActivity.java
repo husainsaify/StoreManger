@@ -210,7 +210,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
             mRecyclerView.setAdapter(adapter);
     }
 
-    //Open addProduct Activity when FAB is clicked
+    //Open insertProduct Activity when FAB is clicked
     public void openAddProduct(View view){
         Intent addProductIntent = new Intent(getApplication(),AddProductActivity.class);
         addProductIntent.putExtra("categoryId",mCategoryId);

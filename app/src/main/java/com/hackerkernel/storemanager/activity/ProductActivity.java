@@ -201,7 +201,9 @@ public class ProductActivity extends AppCompatActivity {
                     //setView with Response
                     setViews(productPojo);
                     downloadImage(productPojo.getImageAddress());
-                    Log.d(TAG,"HUS: productPojo not null");
+                    db.insertProduct(productPojo);
+                    //
+                    Log.d(TAG, "HUS: productPojo not null");
                 }else{
                     //TODO: to something to notifiy user that we where unable to fetch response
                     Log.d(TAG,"HUS: productPojo not");
@@ -413,7 +415,7 @@ public class ProductActivity extends AppCompatActivity {
             pd.dismiss();
 
             //add this product to the Local SQLite database
-            db.addProduct(productPojo);
+            db.insertProduct(productPojo);
 
             *//*
             * Get Size & Quantity from "productPojo"

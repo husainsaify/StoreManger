@@ -356,7 +356,7 @@ public class SellActivity extends AppCompatActivity {
             setProductData(product);
 
             //store data in the database for later reference
-            db.addProduct(product);
+            db.insertProduct(product);
 
             //hide progressBar
             Functions.toggleProgressBar(progressBar);

@@ -13,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -28,14 +29,28 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.Util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -69,16 +84,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private String mUserId;
     private List<SimpleListPojo> mCategorySimpleList;
     private List<String> mCategoryStringList;
-    private Database db;
     private String mCategoryId;
     private String mCategoryName;
+    private Database db;
     private ProgressDialog pd;
     //list to store (size,Qunatity and delete refernce)
     private List<EditText> mSizeList;
     private List<EditText> mQuantityList;
     private List<Button> mDeleteList;
-    private List<SimplePojo> productList; //list to store Return json abjects
+    //Volley
+    private RequestQueue mRequestQueue;
 
+    //variable to hold camera or gallery
+    private Bitmap mSelectedImage = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,16 +112,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //Get Username From SharedPreferences
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
 
-        //Initialize Database
-        db = new Database(getApplication());
-
-        //Set OnClickMethod on productImage(Camera icon)
-        mProductImage.setOnClickListener(this);
+        //initalize database
+        db = new Database(this);
 
         //Set Delete button background transparent & OnClickMethod & its tag
         mProductDelete.setBackgroundColor(Color.TRANSPARENT);
         mProductDelete.setOnClickListener(deleteBtnClick);
         mProductDelete.setTag(1);
+
+        //Set UP Volley RequestQueue
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
         //setup category Spinner
         setUpCategorySpinner();
@@ -130,7 +148,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                Toast.makeText(getApplicationContext(), R.string.select_category_to_continue,Toast.LENGTH_LONG).show();
             }
         });
 
@@ -148,6 +166,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
+
+        //Set OnClickMethod on productImage(Camera icon)
+        mProductImage.setOnClickListener(this);
+
+        //set OnclickMethod on addProduct
+        mAddProduct.setOnClickListener(this);
     }
 
     @Override
@@ -156,6 +180,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             //when Camera image is clicked open ChosePicture alertDialog
             case R.id.productImage:
                 openSelectPictureDialog();
+                break;
+            //When add product button is clicked
+            case R.id.addProduct:
+                addProduct();
                 break;
         }
     }
@@ -318,7 +346,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     /*
     * When image is selected from the gallery
-    * set image to mProductImage
+    * set image to mProductImage (imageView)
+    * and store in a bitmap member variable
     * */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -326,11 +355,21 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if(requestCode == TAKE_PICTURE && resultCode == RESULT_OK && data != null){
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mProductImage.setImageBitmap(photo);
-            Log.d(TAG,"HUS: camera intent result");
+
+            //set Camera image into Member varialble
+            mSelectedImage = photo;
         }else if(requestCode == CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
             Uri selectedImage = data.getData();
             mProductImage.setImageURI(selectedImage);
-            Log.d(TAG, "HUS: gallery intent result");
+
+            //set gallery image into Member varialble
+            try {
+                mSelectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG,"HUS: exception "+e.getMessage());
+                Toast.makeText(getApplication(),getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -356,24 +395,22 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         return super.onOptionsItemSelected(item);
     }
 
-    /*private void addProduct() {
+    private void addProduct() {
         //get all the texts from the fields
         String  name = mProductName.getText().toString().trim(),
                 code = mProductCode.getText().toString().trim(),
                 cp = mProductCP.getText().toString().trim(),
                 sp = mProductSP.getText().toString().trim();
 
-        *//*
-        * Get Product Image if user has selected a image
-        * *//*
+        /*
+        * Get image if user has added one
+        * */
         String encodedImage = "";
-        if(mProductImage.getDrawable() != null){
-            //get the image from ImageView and store it in a Bitmap
-            Bitmap bitmapImage = ((BitmapDrawable) mProductImage.getDrawable()).getBitmap();
+        if(mSelectedImage != null){
 
             //compress the image into 70% quality
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            bitmapImage.compress(Bitmap.CompressFormat.JPEG,70,byteArrayOutputStream);
+            mSelectedImage.compress(Bitmap.CompressFormat.JPEG,80,byteArrayOutputStream);
 
             //convert image to  Base64 encoded string
             encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
@@ -381,19 +418,19 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         // if any field is empty
         if(name.isEmpty() || code.isEmpty() || cp.isEmpty() || sp.isEmpty()){
-            Functions.errorAlert(context, getString(R.string.oops), getString(R.string.fillin_all_fields));
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.fillin_all_fields));
             return;
         }
 
         //check name is more then 3 char long
         if(name.length() < 3){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.name_more_then_2));
+            Util.redSnackbar(getApplication(),mLayout,getString(R.string.name_more_then_2));
             return;
         }
 
         //check code
         if(code.length() < 3){
-            Functions.errorAlert(context,getString(R.string.oops),getString(R.string.pcode_more_then_2));
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.pcode_more_then_2));
             return;
         }
 
@@ -408,7 +445,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             if (size.isEmpty() || quantity.isEmpty()){
                 //display error
-                Functions.errorAlert(context,getString(R.string.oops),getString(R.string.size_quantity_canot_empty));
+                Util.redSnackbar(getApplication(),mLayout,getString(R.string.size_quantity_canot_empty));
                 return;
             }else{
                 //add to StringBuilder
@@ -417,11 +454,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         }
 
-        *//*
-        * IF all goes well we will reach here
-        * Create a Hashmap to store Data which we will send to the server
-        * *//*
-        HashMap<String,String> addProductHashMap = new HashMap<>();
+        //Call addProductInBackground to add product to API
+        addProductInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
+
+        /*HashMap<String,String> addProductHashMap = new HashMap<>();
         addProductHashMap.put("categoryName",categoryName);
         addProductHashMap.put("categoryId",categoryId);
         addProductHashMap.put("userId",userId);
@@ -437,11 +473,82 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         String dataUrl = Functions.hashMapToEncodedUrl(addProductHashMap);
 
         //Call the addProductTask and send data to PHP backend
-        new addProductTask().execute(dataUrl);
+        new addProductTask().execute(dataUrl);*/
     }
 
+     /*
+      * Method to make a call to API and save product data
+      * */
+    private void addProductInBackground(final String encodedImage, final String name, final String code, final String cp, final String sp, final String size, final String quantity){
+        pd.show(); //show progressbar
+        StringRequest request = new StringRequest(Request.Method.POST,ApiUrl.ADD_PRODUCT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                pd.dismiss(); //hide progressbar
+                Log.d(TAG,"HUS: response "+response);
+                //parse response
+                parseAddProductResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                pd.dismiss(); //hide progressbar
+                //handle Volley error
+                String errorMessage = VolleySingleton.handleVolleyError(error);
+                if(errorMessage != null){
+                    Util.redSnackbar(getApplication(),mLayout,errorMessage);
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+                param.put("categoryName",mCategoryName);
+                param.put("categoryId",mCategoryId);
+                param.put("userId",mUserId);
+                param.put("pImage",encodedImage);
+                param.put("pName",name);
+                param.put("pCode",code);
+                param.put("pCP",cp);
+                param.put("pSP",sp);
+                param.put("pSize",size);
+                param.put("pQuantity",quantity);
+                return param;
+            }
+        };
+
+        mRequestQueue.add(request);
+    }
+
+    /*
+    * Method to parse addProductInBackground response and display result
+    * */
+    private void parseAddProductResponse(String response){
+        //parse response and store the result in a list
+        List<SimplePojo> list = JsonParser.SimpleParse(response);
+
+        //check the response list is not null
+        if(list != null){
+            SimplePojo current = list.get(0);
+
+            if(current.getReturned()){//success
+                Toast.makeText(getApplication(),current.getMessage(),Toast.LENGTH_LONG).show();
+                //restart activity
+                Intent restartIntent = getIntent();
+                finish();
+                startActivity(restartIntent);
+            }else{//error
+                Util.redSnackbar(getApplication(),mLayout,current.getMessage());
+            }
+        }else{ //when the list is null show this message
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
     //Class to add product to server
-    private class addProductTask extends AsyncTask<String,String,String>{
+    /*private class addProductTask extends AsyncTask<String,String,String>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

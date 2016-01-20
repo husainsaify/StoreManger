@@ -229,33 +229,32 @@ public class JsonParser {
         }
     }
 
-    //fetch product data
-    public static ProductPojo ProductParser(String jsonString){
+    /*
+    * Method to parse product response
+    * */
+    public static ProductPojo productParser(String jsonString){
         ProductPojo product = new ProductPojo();
         try {
             JSONObject jo = new JSONObject(jsonString);
-            //put return & message into productListPojo
-
-            product.setReturned(jo.getBoolean("return"));
-            product.setMessage(jo.getString("message"));
 
             //return is success add more item to productListPojo
-            if(product.getReturned()){
+            if(jo.getBoolean(Keys.KEY_COM_RETURN)){
                 //add more item
-                product.setId(jo.getString("id"));
-                product.setName(jo.getString("name"));
-                product.setImageAddress(jo.getString("image"));
-                product.setCode(jo.getString("code"));
-                product.setCp(jo.getString("cp"));
-                product.setSp(jo.getString("sp"));
-                product.setTime(jo.getString("time"));
+                product.setUserId(jo.getString(Keys.KEY_COM_USERID));
+                product.setId(jo.getString(Keys.KEY_P_ID));
+                product.setName(jo.getString(Keys.KEY_P_NAME));
+                product.setImageAddress(jo.getString(Keys.KEY_P_IMAGE));
+                product.setCode(jo.getString(Keys.KEY_P_CODE));
+                product.setCp(jo.getString(Keys.KEY_P_CP));
+                product.setSp(jo.getString(Keys.KEY_P_SP));
+                product.setTime(jo.getString(Keys.KEY_P_TIME));
 
                 //fetch Size & quantity
-                JSONArray sizeJsonArray = jo.getJSONArray("size");
-                JSONArray quantityJsonArray = jo.getJSONArray("quantity");
+                JSONArray sizeJsonArray = jo.getJSONArray(Keys.KEY_P_SIZE);
+                JSONArray quantityJsonArray = jo.getJSONArray(Keys.KEY_P_QUANTITY);
                 String size = "",quantity = "";
 
-                //generate a size & quantity string Ex "7,8,9,"
+                //generate a size & quantity string Ex "7\n8\n9\n"
                 for (int i = 0; i < sizeJsonArray.length(); i++) {
                     size += sizeJsonArray.get(i);
                     quantity += quantityJsonArray.get(i);
@@ -269,10 +268,13 @@ public class JsonParser {
                 //add size & quantity to productListPojo
                 product.setSize(size);
                 product.setQuantity(quantity);
-            }
 
-            //return the productListPojo
-            return product;
+                //return the productListPojo
+                return product;
+            }else{
+                Log.d(TAG,"HUS: productParser: return false, message "+jo.getString(Keys.KEY_COM_MESSAGE));
+                return null;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

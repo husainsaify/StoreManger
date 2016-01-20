@@ -2,18 +2,26 @@ package com.hackerkernel.storemanager.pojo;
 
 public class ProductPojo {
     private boolean returned;
-    private String  id,
-                    name,
-                    imageAddress,
-                    code,
-                    size,
-                    quantity,
-                    cp,
-                    sp,
-                    time,
-                    message;
+    private String userId;
+    private String id;
+    private String name;
+    private String imageAddress;
+    private String code;
+    private String size;
+    private String quantity;
+    private String cp;
+    private String sp;
+    private String time;
+    private String message;
     private String imageUri;
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
     public boolean getReturned() {
         return returned;
     }
@@ -61,7 +69,6 @@ public class ProductPojo {
     public void setQuantity(String quantity) {
         this.quantity = quantity;
     }
-
 
 
     public String getCp() {

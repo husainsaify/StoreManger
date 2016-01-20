@@ -68,4 +68,15 @@ public interface Keys {
     //PRAM PRODUCT LIST
     String PRAM_PL_CATEGORYID = "categoryId",
             PRAM_PL_CATEGORYNAME = "categoryName";
+
+    //Keys Product
+    String KEY_P_ID = "id",
+            KEY_P_NAME = "name",
+            KEY_P_IMAGE = "image",
+            KEY_P_CODE = "code",
+            KEY_P_SIZE = "size",
+            KEY_P_QUANTITY = "quantity",
+            KEY_P_TIME = "time",
+            KEY_P_CP = "cp",
+            KEY_P_SP = "sp";
 }

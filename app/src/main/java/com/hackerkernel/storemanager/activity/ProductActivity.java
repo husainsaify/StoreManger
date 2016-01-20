@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
@@ -189,7 +191,19 @@ public class ProductActivity extends AppCompatActivity {
             JSONObject jo = new JSONObject(response);
             //Check Response return in true or false
             if(jo.getBoolean(Keys.KEY_COM_RETURN)){
-                Toast.makeText(getApplication(),"success",Toast.LENGTH_LONG).show();
+
+                //Parse the response
+                ProductPojo productPojo = JsonParser.productParser(response);
+
+                //Check Response is valid
+                if(productPojo != null){
+                    //setView with Response
+                    setViews(productPojo);
+                    Log.d(TAG,"HUS: productPojo not null");
+                }else{
+                    //TODO: to something to notifiy user that we where unable to fetch response
+                    Log.d(TAG,"HUS: productPojo not");
+                }
             }else{
                 //return is false show error
                 Util.redSnackbar(getApplication(),mLayout,jo.getString(Keys.KEY_COM_MESSAGE));
@@ -198,6 +212,26 @@ public class ProductActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+    * Method to set all the view in the ProductActivity
+    * */
+    private void setViews(ProductPojo product) {
+        mName.setText(product.getName());
+        mCode.setText(product.getCode());
+        mTime.setText(product.getTime());
+        mSize.setText(product.getSize());
+        mQuantity.setText(product.getQuantity());
+
+        //Set Profit View
+        int cp = Integer.parseInt(product.getCp());
+        int sp = Integer.parseInt(product.getSp());
+        int profit = sp - cp;
+
+        String profitStack = sp + " - "+ cp + " = "+profit;
+
+        mProfit.setText(profitStack);
     }
 
     @Override
@@ -338,7 +372,7 @@ public class ProductActivity extends AppCompatActivity {
             String jsonString = GetJson.request(ApiUrl.GET_PRODUCT,dataUrl,"POST");
 
             //parse JSON and store results in productPojo
-            productPojo = JsonParser.SingleProductParser(jsonString);
+            productPojo = JsonParser.productParser(jsonString);
 
             return productPojo;
         }

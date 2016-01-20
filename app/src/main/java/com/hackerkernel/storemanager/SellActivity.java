@@ -346,7 +346,7 @@ public class SellActivity extends AppCompatActivity {
             //fetch data from the Backend
             String jsonString = GetJson.request(ApiUrl.GET_PRODUCT, dataUrl, "POST");
             //parse JSON and store results in productPojo
-            productPojo = JsonParser.SingleProductParser(jsonString);
+            productPojo = JsonParser.productParser(jsonString);
             return productPojo;
         }
 

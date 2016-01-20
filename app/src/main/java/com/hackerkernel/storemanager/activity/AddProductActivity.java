@@ -37,6 +37,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -456,24 +457,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
         //Call addProductInBackground to add product to API
         addProductInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
-
-        /*HashMap<String,String> addProductHashMap = new HashMap<>();
-        addProductHashMap.put("categoryName",categoryName);
-        addProductHashMap.put("categoryId",categoryId);
-        addProductHashMap.put("userId",userId);
-        addProductHashMap.put("pImage",encodedImage);
-        addProductHashMap.put("pName",name);
-        addProductHashMap.put("pCode",code);
-        addProductHashMap.put("pCP",cp);
-        addProductHashMap.put("pSP",sp);
-        addProductHashMap.put("pSize",sizeBuilder.toString());
-        addProductHashMap.put("pQuantity",quantityBuilder.toString());
-
-        //convert addProductHashMap into encode url
-        String dataUrl = Functions.hashMapToEncodedUrl(addProductHashMap);
-
-        //Call the addProductTask and send data to PHP backend
-        new addProductTask().execute(dataUrl);*/
     }
 
      /*
@@ -503,16 +486,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
-                param.put("categoryName",mCategoryName);
-                param.put("categoryId",mCategoryId);
-                param.put("userId",mUserId);
-                param.put("pImage",encodedImage);
-                param.put("pName",name);
-                param.put("pCode",code);
-                param.put("pCP",cp);
-                param.put("pSP",sp);
-                param.put("pSize",size);
-                param.put("pQuantity",quantity);
+                param.put(Keys.KEY_AP_CATEGORYNAME,mCategoryName);
+                param.put(Keys.KEY_AP_CATEGORYID,mCategoryId);
+                param.put(Keys.KEY_AP_USERID,mUserId);
+                param.put(Keys.KEY_AP_IMAGE,encodedImage);
+                param.put(Keys.KEY_AP_NAME,name);
+                param.put(Keys.KEY_AP_CODE,code);
+                param.put(Keys.KEY_AP_CP,cp);
+                param.put(Keys.KEY_AP_SP,sp);
+                param.put(Keys.KEY_AP_SIZE,size);
+                param.put(Keys.KEY_AP_QUANTITY,quantity);
                 return param;
             }
         };

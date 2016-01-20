@@ -43,4 +43,16 @@ public interface Keys {
             KEY_SL_USER_ID = "user_id",
             KEY_SL_TIME = "time",
             KEY_SL_COUNT = "count";
+
+    //Add products
+    String KEY_AP_CATEGORYNAME = "categoryName",
+            KEY_AP_CATEGORYID = "categoryId",
+            KEY_AP_USERID = "userId",
+            KEY_AP_IMAGE = "pImage",
+            KEY_AP_NAME = "pName",
+            KEY_AP_CODE = "pCode",
+            KEY_AP_CP = "pCP",
+            KEY_AP_SP = "pSP",
+            KEY_AP_SIZE = "pSize",
+            KEY_AP_QUANTITY = "pQuantity";
 }

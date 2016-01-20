@@ -1,7 +1,5 @@
 package com.hackerkernel.storemanager.pojo;
 
-import android.net.Uri;
-
 public class SingleProductPojo {
     private boolean returned;
     private String  id,

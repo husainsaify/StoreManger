@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,10 @@ import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.pojo.SingleProductPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.Util;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +49,7 @@ public class ProductActivity extends AppCompatActivity {
     @Bind(R.id.pSize) TextView mSize;
     @Bind(R.id.pQuantity) TextView mQuantity;
     @Bind(R.id.pProfit) TextView mProfit;
+    @Bind(R.id.layout) LinearLayout mLayout;
 
     private String mProductId;
     private String mProductName;
@@ -97,7 +103,6 @@ public class ProductActivity extends AppCompatActivity {
 
         //Instanciate Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-
 
         fetchProductInBackground();
 
@@ -156,7 +161,8 @@ public class ProductActivity extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplication(),response,Toast.LENGTH_LONG).show();
+                //Parse the response
+                parseProductResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -173,6 +179,25 @@ public class ProductActivity extends AppCompatActivity {
             }
         };
         mRequestQueue.add(request);
+    }
+
+    /*
+    * Method to parse product response
+    * */
+    private void parseProductResponse(String response) {
+        try {
+            JSONObject jo = new JSONObject(response);
+            //Check Response return in true or false
+            if(jo.getBoolean(Keys.KEY_COM_RETURN)){
+                Toast.makeText(getApplication(),"success",Toast.LENGTH_LONG).show();
+            }else{
+                //return is false show error
+                Util.redSnackbar(getApplication(),mLayout,jo.getString(Keys.KEY_COM_MESSAGE));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

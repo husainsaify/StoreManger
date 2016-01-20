@@ -6,7 +6,8 @@
     android:background="#eeeeee"
     android:orientation="vertical"
     android:weightSum="2"
-    tools:context=".activity.ProductActivity">
+    tools:context=".activity.ProductActivity"
+    android:id="@+id/layout">
 
     <!-- Toolbar -->
     <include

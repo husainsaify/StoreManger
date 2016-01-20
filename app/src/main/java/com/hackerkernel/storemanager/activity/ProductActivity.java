@@ -86,7 +86,6 @@ public class ProductActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(mProductName);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Get userId and check it
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
@@ -107,7 +106,7 @@ public class ProductActivity extends AppCompatActivity {
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
-        fetchProductInBackground();
+        checkInternetAndDisplay();
 
         /*//check Product Has a image or we have to Display a PlaceHolder Image
         if(!pImageAddress.isEmpty()){
@@ -160,6 +159,29 @@ public class ProductActivity extends AppCompatActivity {
         }*/
     }
 
+    /*
+    * Method will check internet
+    * if avaiable - download a fresh product
+    * if not - get from Sqlite database and show snackbar
+    * */
+    private void checkInternetAndDisplay(){
+        if(Util.isConnectedToInternet(getApplication())){
+            fetchProductInBackground(); //get product from API
+        }else{
+            Util.noInternetSnackbar(getApplication(),mLayout);
+
+            //Check Product is Available in Local database or not
+            if(db.checkProduct(mUserId,mProductId)){
+                //Get product from database
+                ProductPojo productPojo = db.getProduct(mUserId, mProductId);
+                //set the views
+                setProductViews(productPojo);
+            }else{
+                Toast.makeText(getApplication(), R.string.unable_display_product_info_check_inetnet,Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     private void fetchProductInBackground(){
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
             @Override
@@ -199,14 +221,22 @@ public class ProductActivity extends AppCompatActivity {
                 //Check Response is valid
                 if(productPojo != null){
                     //setView with Response
-                    setViews(productPojo);
+                    setProductViews(productPojo);
+                    //Download image
                     downloadImage(productPojo.getImageAddress());
+
+                    //Delete Product
+                    db.deleteProduct(mUserId, mProductId);
+                    //Delete size & Quantity
+                    db.deleteSQ(mUserId,mProductId);
+
+                    //Insert Product in SQlite database
                     db.insertProduct(productPojo);
-                    //
-                    Log.d(TAG, "HUS: productPojo not null");
+                    //Insert size and Quantity
+                    insertSizeQuantityInLocalDatabase(productPojo.getSize(),productPojo.getQuantity());
+
                 }else{
-                    //TODO: to something to notifiy user that we where unable to fetch response
-                    Log.d(TAG,"HUS: productPojo not");
+                    Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
                 }
             }else{
                 //return is false show error
@@ -232,7 +262,8 @@ public class ProductActivity extends AppCompatActivity {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    Log.e(TAG,"HUS: ImageLoading: "+error.getMessage());
+                    Toast.makeText(getApplication(),R.string.unable_load_image,Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -241,7 +272,7 @@ public class ProductActivity extends AppCompatActivity {
     /*
     * Method to set all the view in the ProductActivity
     * */
-    private void setViews(ProductPojo product) {
+    private void setProductViews(ProductPojo product) {
         mName.setText(product.getName());
         mCode.setText(product.getCode());
         mTime.setText(product.getTime());
@@ -256,6 +287,24 @@ public class ProductActivity extends AppCompatActivity {
         String profitStack = sp + " - "+ cp + " = "+profit;
 
         mProfit.setText(profitStack);
+    }
+
+    /*
+    * Method to store Size & Quantity in local SQlite database
+    * Convert Size/Quantity stack (3\n3\n4\n)
+    * into array and store it in database
+    * */
+    public void insertSizeQuantityInLocalDatabase(String sizeStack,String quantityStack){
+        String[] sizeArray = sizeStack.split("\n");
+        String[] quantityArray = quantityStack.split("\n");
+
+        for (int i = 0; i < sizeArray.length; i++) {
+            String size = sizeArray[i];
+            String quantity = quantityArray[i];
+
+            //insert into db
+            db.insertSQ(size, quantity, mUserId, mProductId);
+        }
     }
 
     @Override
@@ -434,7 +483,7 @@ public class ProductActivity extends AppCompatActivity {
                 String quantity = quantityArray[i];
 
                 //insert into db
-                db.addSQ(size,quantity,userId,mProductId);
+                db.insertSQ(size,quantity,userId,mProductId);
             }
         }
     }

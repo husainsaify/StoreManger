@@ -176,8 +176,8 @@ public class Database {
         cv.put(DatabaseHelper.COL_P_IMAGE_ADDRESS, product.getImageAddress());
         cv.put(DatabaseHelper.COL_P_IMAGE_URI, "");
         cv.put(DatabaseHelper.COL_P_CODE, product.getCode());
-        cv.put(DatabaseHelper.COL_P_CP, product.getSp());
-        cv.put(DatabaseHelper.COL_P_SP, product.getCp());
+        cv.put(DatabaseHelper.COL_P_CP, product.getCp());
+        cv.put(DatabaseHelper.COL_P_SP, product.getSp());
         cv.put(DatabaseHelper.COL_P_TIME, product.getTime());
         //insert into productTable
         db.insert(DatabaseHelper.TABLE_PRODUCT, null, cv);
@@ -233,10 +233,39 @@ public class Database {
         return null;
     }
 
+    //check  product exits in the database
+    public boolean checkProduct(String userId,String productId) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String[] col = {DatabaseHelper.COL_P_NAME};
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
+        String[] args = {userId,productId};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT, col, where, args, null, null, null);
+
+        //if product not found
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            db.close();
+            return false;
+        }
+        //if product found
+        cursor.close();
+        db.close();
+        return true;
+    }
+
+    //Method to delete product
+    public void deleteProduct(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
+        String[] args = {userId,productId};
+        db.delete(DatabaseHelper.TABLE_PRODUCT,where,args);
+    }
+
     //************* SQ (Size and Quantity)
 
     //method to insert SQ - size and quantity
-    public void addSQ(String size,String quantity,String userId, String productId){
+    public void insertSQ(String size, String quantity, String userId, String productId){
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.COL_SQ_SIZE,size);
@@ -246,6 +275,14 @@ public class Database {
         db.insert(DatabaseHelper.TABLE_SQ, null, cv);
         //close db
         db.close();
+    }
+
+    //Method to delete SQ
+    public void deleteSQ(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String where = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String[] whereArg = {userId, productId};
+        db.delete(DatabaseHelper.TABLE_SQ,where,whereArg);
     }
 
     //method to get size as (4\n5\n6\n)
@@ -266,9 +303,11 @@ public class Database {
                     size += "\n";
                 }
             }while (cursor.moveToNext());
+            cursor.close();
             db.close();
             return size;
         }
+        cursor.close();
         db.close();
         return null;
     }
@@ -292,9 +331,11 @@ public class Database {
                     quantity += "\n";
                 }
             }while (cursor.moveToNext());
+            cursor.close();
             db.close();
             return quantity;
         }
+        cursor.close();
         db.close();
         return null;
     }
@@ -433,33 +474,6 @@ public class Database {
         }
 
         /************************************ TABLE_PRODUCT
-         //check  product exits in the database
-         public boolean checkProduct(String productId) {
-         db = this.getReadableDatabase();
-         String q = "select * from " + TABLE_PRODUCT + " where " + COL_P_ID + " = ?";
-         Cursor cursor = db.rawQuery(q, new String[]{productId});
-         //if product not found
-         if (cursor.getCount() <= 0) {
-         cursor.close();
-         db.close();
-         return false;
-         }
-         //if product found
-         cursor.close();
-         db.close();
-         return true;
-         }
-
-         //method to delete product from the database
-         public int deleteProduct(String productId){
-         db = this.getWritableDatabase();
-         //delete from TABLE_PRODUCT
-         int result = db.delete(TABLE_PRODUCT,COL_P_ID+"=?",new String[] {productId});
-         //delete from TABLE_SQ
-         db.delete(TABLE_SQ,COL_SQ_PRODUCT_ID+"=?",new String[]{productId});
-         db.close();
-         return result;
-         }
          //method to delete all product from the database
          public int deleteAllProduct(){
          db = this.getWritableDatabase();

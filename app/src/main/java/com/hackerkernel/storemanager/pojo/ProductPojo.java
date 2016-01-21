@@ -5,13 +5,31 @@ import android.graphics.Bitmap;
 
 public class ProductPojo {
     private boolean returned = true;
-    private String  message,
-                    productId,
-                    productName,
-                    productImage,
-                    productCode,
-                    productTime;
+    private String  message;
+    private String userId;
+    private String categoryId;
+    private String productId;
+    private String productName;
+    private String productImage;
+    private String productCode;
+    private String productTime;
     private int count = -1;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public int getCount() {
         return count;

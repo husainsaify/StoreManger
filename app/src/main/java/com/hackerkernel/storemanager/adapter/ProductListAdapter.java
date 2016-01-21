@@ -90,7 +90,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         return mList.size();
     }
 
-    //ViewHolder Classs
+    //ViewHolder Class
     class ProductListViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.productImage) ImageView image;
         @Bind(R.id.productName) TextView name;

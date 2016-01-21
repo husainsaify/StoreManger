@@ -59,6 +59,7 @@ public interface Keys {
 
     //product list
     String KEY_PL_ID = "productId",
+            KEY_PL_CATEGORY_ID = "categoryId",
             KEY_PL_NAME = "name",
             KEY_PL_IMAGE = "image",
             KEY_PL_CODE = "code",

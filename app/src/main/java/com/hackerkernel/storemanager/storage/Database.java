@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
 import java.util.ArrayList;
@@ -82,9 +83,13 @@ public class Database {
         return list;
     }
 
+    /*
+    * Product List
+    * */
+
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
-        private static final int DATABASE_VERSION = 2;
+        private static final int DATABASE_VERSION = 3;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -105,6 +110,16 @@ public class Database {
                 COL_C_USER_ID = "user_id",
                 COL_C_TIME = "time";
 
+        //ProductList table
+        private static final String TABLE_PRODUCT_LIST = "product_list",
+                COL_PL_ID = "_id",
+                COL_PL_PRODUCT_ID = "product_id",
+                COL_PL_USER_ID = "user_id",
+                COL_PL_CATEGORY_ID = "category_id",
+                COL_PL_NAME = "name",
+                COL_PL_CODE = "code",
+                COL_PL_TIME = "time";
+
         /*
         * CREATE TABLE QUERY
         * */
@@ -120,12 +135,21 @@ public class Database {
                 COL_C_USER_ID + " INTEGER," +
                 COL_C_TIME + " VARCHAR(20));";
 
+        private String CREATE_PRODUCT_LIST = "CREATE TABLE "+ TABLE_PRODUCT_LIST + "(" +
+                COL_PL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_PL_PRODUCT_ID + "INTEGER ," +
+                COL_PL_USER_ID + " INTEGER," +
+                COL_PL_CATEGORY_ID + " INTEGER," +
+                COL_PL_NAME + " VARCHAR(20),"+
+                COL_PL_CODE +" TEXT," +
+                COL_PL_TIME +" TEXT);";
+
         /*
         * DROP TABLE QUERY
         * */
         private String DROP_SALESMAN = "DROP TABLE IF EXISTS "+TABLE_SALESMAN;
         private String DROP_CATEGORY = "DROP TABLE IF EXISTS "+TABLE_CATEGORY;
-
+        private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS "+TABLE_PRODUCT_LIST;
 
         /*private static final String TABLE_USER = "user",
                 COL_ID = "id",
@@ -196,6 +220,7 @@ public class Database {
             //create table
             db.execSQL(CREATE_SALESMAN);
             db.execSQL(CREATE_CATEGORY);
+            db.execSQL(CREATE_PRODUCT_LIST);
             Log.d(TAG, "HUS: onCreate");
         }
 
@@ -204,6 +229,7 @@ public class Database {
             //drop table if factory version upgrade
             db.execSQL(DROP_SALESMAN);
             db.execSQL(DROP_CATEGORY);
+            db.execSQL(DROP_PRODUCT_LIST);
             Log.d(TAG, "HUS: onUpgrade");
             //Call onCreate to recreate tables
             onCreate(db);

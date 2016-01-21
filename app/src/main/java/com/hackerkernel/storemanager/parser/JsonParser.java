@@ -193,6 +193,8 @@ public class JsonParser {
                         ProductPojo productPojo = new ProductPojo();
 
                         productPojo.setProductId(jo.getString(Keys.KEY_PL_ID));
+                        productPojo.setUserId(jo.getString(Keys.KEY_COM_USERID));
+                        productPojo.setCategoryId(jo.getString(Keys.KEY_PL_CATEGORY_ID));
                         productPojo.setProductName(jo.getString(Keys.KEY_PL_NAME));
                         productPojo.setProductImage(jo.getString(Keys.KEY_PL_IMAGE));
                         productPojo.setProductCode(jo.getString(Keys.KEY_PL_CODE));

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
@@ -194,9 +195,9 @@ public class Database {
                 DatabaseHelper.COL_P_TIME,
                 DatabaseHelper.COL_P_CP,
                 DatabaseHelper.COL_P_SP};
-        String selection = DatabaseHelper.COL_P_USER_ID +"=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
-        String[] selectionArgs = {userId,productId};
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT,columns,selection,selectionArgs,null,null,null);
+        String selection = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
+        String[] selectionArgs = {userId, productId};
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT, columns, selection, selectionArgs, null, null, null);
 
         //their is result in table
         if (cursor.moveToFirst()) {
@@ -211,8 +212,8 @@ public class Database {
             String sp = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_SP));
             String time = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_TIME));
             //get size and Quantity stack from Member methods
-            String size  = this.getSize(userId, productId);
-            String quantity = this.getQuantity(userId,productId);
+            String size = this.getSize(userId, productId);
+            String quantity = this.getQuantity(userId, productId);
 
             product.setName(name);
             product.setImageAddress(imageAddress);
@@ -234,12 +235,12 @@ public class Database {
     }
 
     //check  product exits in the database
-    public boolean checkProduct(String userId,String productId) {
+    public boolean checkProduct(String userId, String productId) {
         SQLiteDatabase db = helper.getReadableDatabase();
 
         String[] col = {DatabaseHelper.COL_P_NAME};
-        String where = DatabaseHelper.COL_P_USER_ID + "=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
-        String[] args = {userId,productId};
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
         Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT, col, where, args, null, null, null);
 
         //if product not found
@@ -255,54 +256,88 @@ public class Database {
     }
 
     //Method to delete product
-    public void deleteProduct(String userId,String productId){
+    public void deleteProduct(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String where = DatabaseHelper.COL_P_USER_ID + "=? AND "+DatabaseHelper.COL_P_PRODUCT_ID+"=?";
-        String[] args = {userId,productId};
-        db.delete(DatabaseHelper.TABLE_PRODUCT,where,args);
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+        db.delete(DatabaseHelper.TABLE_PRODUCT, where, args);
+    }
+
+    //store image uri to Database
+    public void insertProductImageUri(String userId,String productId, Uri productUri) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Conditions
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COL_P_IMAGE_URI, String.valueOf(productUri));
+        db.update(DatabaseHelper.TABLE_PRODUCT, cv, where, args);
+        db.close();
+    }
+
+    //get product image uri from database
+    public Uri getProductImageUri(String userId,String productId) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Conditions
+        String[] col = {DatabaseHelper.COL_P_IMAGE_URI};
+        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT,col,where,args,null,null,null);
+
+        if (cursor.moveToFirst()) {
+            String imageUri = cursor.getString(0);
+            cursor.close();
+            return Uri.parse(imageUri);
+        }
+        cursor.close();
+        return null;
     }
 
     //************* SQ (Size and Quantity)
 
     //method to insert SQ - size and quantity
-    public void insertSQ(String size, String quantity, String userId, String productId){
+    public void insertSQ(String size, String quantity, String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.COL_SQ_SIZE,size);
-        cv.put(DatabaseHelper.COL_SQ_QUANTITY,quantity);
-        cv.put(DatabaseHelper.COL_SQ_USER_ID,userId);
-        cv.put(DatabaseHelper.COL_SQ_PRODUCT_ID,productId);
+        cv.put(DatabaseHelper.COL_SQ_SIZE, size);
+        cv.put(DatabaseHelper.COL_SQ_QUANTITY, quantity);
+        cv.put(DatabaseHelper.COL_SQ_USER_ID, userId);
+        cv.put(DatabaseHelper.COL_SQ_PRODUCT_ID, productId);
         db.insert(DatabaseHelper.TABLE_SQ, null, cv);
         //close db
         db.close();
     }
 
     //Method to delete SQ
-    public void deleteSQ(String userId,String productId){
+    public void deleteSQ(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String where = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String where = DatabaseHelper.COL_SQ_USER_ID + "=? AND " + DatabaseHelper.COL_SQ_PRODUCT_ID + "=?";
         String[] whereArg = {userId, productId};
-        db.delete(DatabaseHelper.TABLE_SQ,where,whereArg);
+        db.delete(DatabaseHelper.TABLE_SQ, where, whereArg);
     }
 
     //method to get size as (4\n5\n6\n)
-    private String getSize(String userId,String productId){
+    private String getSize(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         String[] col = {DatabaseHelper.COL_SQ_SIZE};
-        String selection = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String selection = DatabaseHelper.COL_SQ_USER_ID + "=? AND " + DatabaseHelper.COL_SQ_PRODUCT_ID + "=?";
         String[] where = {userId, productId};
         Cursor cursor = db.query(DatabaseHelper.TABLE_SQ, col, selection, where, null, null, null);
         int i = 0;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             String size = "";
-            do{
+            do {
                 i++;
                 size += cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_SQ_SIZE));
-                if(i < cursor.getCount()){
+                if (i < cursor.getCount()) {
                     size += "\n";
                 }
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
             cursor.close();
             db.close();
             return size;
@@ -313,24 +348,24 @@ public class Database {
     }
 
     //Method to get Quantity like (4\n5\n6\n)
-    private String getQuantity(String userId,String productId){
+    private String getQuantity(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         String[] col = {DatabaseHelper.COL_SQ_QUANTITY};
-        String selection = DatabaseHelper.COL_SQ_USER_ID +"=? AND "+DatabaseHelper.COL_SQ_PRODUCT_ID+"=?";
+        String selection = DatabaseHelper.COL_SQ_USER_ID + "=? AND " + DatabaseHelper.COL_SQ_PRODUCT_ID + "=?";
         String[] where = {userId, productId};
         Cursor cursor = db.query(DatabaseHelper.TABLE_SQ, col, selection, where, null, null, null);
 
         int i = 0;
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             String quantity = "";
-            do{
+            do {
                 i++;
                 quantity += cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_SQ_QUANTITY));
-                if(i < cursor.getCount()){
+                if (i < cursor.getCount()) {
                     quantity += "\n";
                 }
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
             cursor.close();
             db.close();
             return quantity;
@@ -482,28 +517,7 @@ public class Database {
          return result;
          }
          //store product image Uri into database
-         *//*
-    * This method will take productId and image Uri
-    * and store it in the prooduct table for later use
-    * *//*
-        public void addProductImageUri(String productId, Uri productUri){
-            db = this.getWritableDatabase();
-            ContentValues cv = new ContentValues();
-            cv.put(COL_P_IMAGE_URI, String.valueOf(productUri));
-            db.update(TABLE_PRODUCT, cv, COL_P_ID + "=?", new String[]{productId});
-            db.close();
-        }
-        //get product image uri from database
-        public Uri getProductImageUri(String productId){
-            db = this.getWritableDatabase();
-            String q = "SELECT "+COL_P_IMAGE_URI+" FROM "+TABLE_PRODUCT+" WHERE "+COL_P_ID+"=?";
-            Cursor cursor = db.rawQuery(q, new String[]{productId});
-            if(cursor.moveToFirst()){
-                String imageUri = cursor.getString(0);
-                return Uri.parse(imageUri);
-            }
-            return null;
-        }
+         */
         /*//********************************** TABLE SQ
 
         public void deleteAllSQ(){

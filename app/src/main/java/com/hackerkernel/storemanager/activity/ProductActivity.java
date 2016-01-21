@@ -89,7 +89,7 @@ public class ProductActivity extends AppCompatActivity {
 
         //Get userId and check it
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
-        if(mUserId.equals(Keys.KEY_DEFAULT)){
+        if (mUserId.equals(Keys.KEY_DEFAULT)) {
             Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
             return;
         }
@@ -164,25 +164,32 @@ public class ProductActivity extends AppCompatActivity {
     * if avaiable - download a fresh product
     * if not - get from Sqlite database and show snackbar
     * */
-    private void checkInternetAndDisplay(){
-        if(Util.isConnectedToInternet(getApplication())){
+    private void checkInternetAndDisplay() {
+        if (Util.isConnectedToInternet(getApplication())) {
             fetchProductInBackground(); //get product from API
-        }else{
-            Util.noInternetSnackbar(getApplication(),mLayout);
+        } else {
+            Util.noInternetSnackbar(getApplication(), mLayout);
 
             //Check Product is Available in Local database or not
-            if(db.checkProduct(mUserId,mProductId)){
+            if (db.checkProduct(mUserId, mProductId)) {
                 //Get product from database
                 ProductPojo productPojo = db.getProduct(mUserId, mProductId);
                 //set the views
                 setProductViews(productPojo);
-            }else{
-                Toast.makeText(getApplication(), R.string.unable_display_product_info_check_inetnet,Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplication(), R.string.unable_display_product_info_check_inetnet, Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private void fetchProductInBackground(){
+
+    /*
+    * Method to download and store image in sdcard
+    * */
+
+
+
+    private void fetchProductInBackground() {
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -192,14 +199,14 @@ public class ProductActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplication(),error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_COM_USERID,mUserId);
-                params.put(Keys.KEY_PL_ID,mProductId);
+                Map<String, String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_USERID, mUserId);
+                params.put(Keys.KEY_PL_ID, mProductId);
                 return params;
             }
         };
@@ -213,13 +220,13 @@ public class ProductActivity extends AppCompatActivity {
         try {
             JSONObject jo = new JSONObject(response);
             //Check Response return in true or false
-            if(jo.getBoolean(Keys.KEY_COM_RETURN)){
+            if (jo.getBoolean(Keys.KEY_COM_RETURN)) {
 
                 //Parse the response
                 ProductPojo productPojo = JsonParser.productParser(response);
 
                 //Check Response is valid
-                if(productPojo != null){
+                if (productPojo != null) {
                     //setView with Response
                     setProductViews(productPojo);
                     //Download image
@@ -228,42 +235,49 @@ public class ProductActivity extends AppCompatActivity {
                     //Delete Product
                     db.deleteProduct(mUserId, mProductId);
                     //Delete size & Quantity
-                    db.deleteSQ(mUserId,mProductId);
+                    db.deleteSQ(mUserId, mProductId);
 
                     //Insert Product in SQlite database
                     db.insertProduct(productPojo);
                     //Insert size and Quantity
-                    insertSizeQuantityInLocalDatabase(productPojo.getSize(),productPojo.getQuantity());
+                    insertSizeQuantityInLocalDatabase(productPojo.getSize(), productPojo.getQuantity());
 
-                }else{
-                    Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
                 }
-            }else{
+            } else {
                 //return is false show error
-                Util.redSnackbar(getApplication(),mLayout,jo.getString(Keys.KEY_COM_MESSAGE));
+                Util.redSnackbar(getApplication(), mLayout, jo.getString(Keys.KEY_COM_MESSAGE));
             }
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
         }
     }
 
     /*
     * Method to Download image
     * */
-    public void downloadImage(String imageAddress){
-        if(!imageAddress.isEmpty()){
+    public void downloadImage(String imageAddress) {
+        if (!imageAddress.isEmpty()) {
             String imageUrl = ApiUrl.IMAGE_BASE_URL + imageAddress;
             mImageLoader.get(imageUrl, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     mImage.setImageBitmap(response.getBitmap());
+
+                    //Store image in Sdcard
+                    Uri imageUri = Util.saveImageToExternalStorage(getApplication(), response.getBitmap());
+
+                    if(imageUri != null){
+                        //Store image Uri in Local Sqlite database
+                    }
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.e(TAG,"HUS: ImageLoading: "+error.getMessage());
-                    Toast.makeText(getApplication(),R.string.unable_load_image,Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "HUS: ImageLoading: " + error.getMessage());
+                    Toast.makeText(getApplication(), R.string.unable_load_image, Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -284,7 +298,7 @@ public class ProductActivity extends AppCompatActivity {
         int sp = Integer.parseInt(product.getSp());
         int profit = sp - cp;
 
-        String profitStack = sp + " - "+ cp + " = "+profit;
+        String profitStack = sp + " - " + cp + " = " + profit;
 
         mProfit.setText(profitStack);
     }
@@ -294,7 +308,7 @@ public class ProductActivity extends AppCompatActivity {
     * Convert Size/Quantity stack (3\n3\n4\n)
     * into array and store it in database
     * */
-    public void insertSizeQuantityInLocalDatabase(String sizeStack,String quantityStack){
+    public void insertSizeQuantityInLocalDatabase(String sizeStack, String quantityStack) {
         String[] sizeArray = sizeStack.split("\n");
         String[] quantityArray = quantityStack.split("\n");
 

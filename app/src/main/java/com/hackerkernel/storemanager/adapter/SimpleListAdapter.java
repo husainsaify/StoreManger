@@ -16,10 +16,13 @@ import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * Adapter to adapt simpleList item like category & salesman list
  */
-public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.ViewHolderSimpleList>{
+public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.SimpleListViewHolder>{
 
     private LayoutInflater mInflater;
     private List<SimpleListPojo> mList = new ArrayList<>();
@@ -43,13 +46,13 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
     }
 
     @Override
-    public ViewHolderSimpleList onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SimpleListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.simple_list_layout,parent,false);
-        return new ViewHolderSimpleList(view);
+        return new SimpleListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderSimpleList holder, int position) {
+    public void onBindViewHolder(SimpleListViewHolder holder, int position) {
         SimpleListPojo current = mList.get(position);
         //set item to  views
         holder.name.setText(current.getName());
@@ -60,11 +63,11 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Vi
         return mList.size();
     }
 
-    class ViewHolderSimpleList extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView name;
-        public ViewHolderSimpleList(View itemView) {
+    class SimpleListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @Bind(R.id.SimpleListText) TextView name;
+        public SimpleListViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.SimpleListText);
+            ButterKnife.bind(this,itemView);
 
             /*Item click listener*/
             itemView.setOnClickListener(this);

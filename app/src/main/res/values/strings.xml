@@ -127,6 +127,7 @@
     <string name="failed_create_directory">Failed to create directory</string>
     <string name="unable_to_save_image">Unable to save image</string>
     <string name="image_saved_successfully">Image saved successfully!</string>
+    <string name="check_your_internet_and_try_again">Check your internet and Try again.</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

@@ -22,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.adapter.ProductListAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
@@ -116,7 +117,10 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 //Parse response send by the server
-                parseProductListResponse(response);
+                List<ProductPojo> list  = parseProductListResponse(response);
+                if(list != null){
+                    setupRecyclerView(list);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -172,6 +176,15 @@ public class ProductActivity extends AppCompatActivity {
             Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
             return null;
         }
+    }
+
+    /*
+    * Method to take a ProductPojo list and set RecyclerView
+    * */
+    private void setupRecyclerView(List<ProductPojo> list){
+        ProductListAdapter adapter = new ProductListAdapter(getApplication());
+        adapter.setList(list);
+        mRecyclerView.setAdapter(adapter);
     }
 
     //Open addProduct Activity when FAB is clicked

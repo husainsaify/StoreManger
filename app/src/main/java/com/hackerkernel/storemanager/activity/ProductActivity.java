@@ -91,6 +91,9 @@ public class ProductActivity extends AppCompatActivity {
         LinearLayoutManager manger = new LinearLayoutManager(getApplication());
         mRecyclerView.setLayoutManager(manger);
 
+        //Instantiate Database
+        db = new Database(this);
+
         /*//When user click on of the item from the list
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -120,6 +123,8 @@ public class ProductActivity extends AppCompatActivity {
                 List<ProductPojo> list  = parseProductListResponse(response);
                 if(list != null){
                     setupRecyclerView(list);
+                    //Store in PRODUCT LIST Table
+                    db.insertProductList(list);
                 }
             }
         }, new Response.ErrorListener() {

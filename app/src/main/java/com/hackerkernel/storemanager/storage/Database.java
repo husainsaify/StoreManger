@@ -86,10 +86,31 @@ public class Database {
     /*
     * Product List
     * */
+    public void insertProductList(List<ProductPojo> list) {
+        SQLiteDatabase sqlitedatabase = helper.getWritableDatabase();
+        Log.d(TAG, "HUS: insertProductList");
+        //Insert data to table only when SimpleList is not null
+        if(list != null){
+            for (int i = 0; i < list.size(); i++)
+            {
+                ProductPojo p = list.get(i);
+                ContentValues contentvalues = new ContentValues();
+                contentvalues.put(DatabaseHelper.COL_PL_PRODUCT_ID, p.getProductId());
+                contentvalues.put(DatabaseHelper.COL_PL_USER_ID, p.getUserId());
+                contentvalues.put(DatabaseHelper.COL_PL_CATEGORY_ID, p.getCategoryId());
+                contentvalues.put(DatabaseHelper.COL_PL_NAME, p.getProductName());
+                contentvalues.put(DatabaseHelper.COL_PL_CODE, p.getProductCode());
+                contentvalues.put(DatabaseHelper.COL_PL_TIME, p.getProductTime());
+
+                sqlitedatabase.insert(DatabaseHelper.TABLE_PRODUCT_LIST, null, contentvalues);
+            }
+        }
+
+    }
 
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
-        private static final int DATABASE_VERSION = 3;
+        private static final int DATABASE_VERSION = 4;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -137,7 +158,7 @@ public class Database {
 
         private String CREATE_PRODUCT_LIST = "CREATE TABLE "+ TABLE_PRODUCT_LIST + "(" +
                 COL_PL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COL_PL_PRODUCT_ID + "INTEGER ," +
+                COL_PL_PRODUCT_ID + " INTEGER ," +
                 COL_PL_USER_ID + " INTEGER," +
                 COL_PL_CATEGORY_ID + " INTEGER," +
                 COL_PL_NAME + " VARCHAR(20),"+

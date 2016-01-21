@@ -124,7 +124,7 @@ public class Util {
             //2. Create our subdirectory
             File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
             if(!dir.exists()){
-              boolean result = dir.mkdirs();
+                boolean result = dir.mkdirs();
                 if(!result){
                     Log.d(TAG, "HUS: failed to create directory");
                     Toast.makeText(context, R.string.failed_create_directory,Toast.LENGTH_LONG).show();
@@ -134,11 +134,10 @@ public class Util {
 
             //3. Create file name
             Date date = new Date();
-            String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(date);
-            String filename = "IMG_"+dateString+".jpg";
+            String filename = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(date);
 
             //4. Create a file
-            File file = new File(dir,filename);
+            File file = new File(dir,"IMG_"+filename+".jpg");
 
             try {
                 output = new FileOutputStream(file);
@@ -146,17 +145,16 @@ public class Util {
                 bitmap.compress(Bitmap.CompressFormat.JPEG,100,output);
                 output.flush();
                 output.close();
-
+                Toast.makeText(context, R.string.image_saved_successfully, Toast.LENGTH_SHORT).show();
                 //5. return the Uri
                 return Uri.fromFile(file);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.d(TAG, "HUS: ioException " + e.getMessage());
+                Log.d(TAG, "HUS: Exception " + e.getMessage());
                 Toast.makeText(context, R.string.unable_to_save_image, Toast.LENGTH_SHORT).show();
                 return null;
             }
         }else{
-            Log.d(TAG, "HUS: external storage not avaible");
             Toast.makeText(context, R.string.external_storage_not_available, Toast.LENGTH_SHORT).show();
             return null;
         }

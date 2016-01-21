@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
+import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
@@ -266,11 +268,20 @@ public class ProductActivity extends AppCompatActivity {
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     mImage.setImageBitmap(response.getBitmap());
 
-                    //Store image in Sdcard
-                    Uri imageUri = Util.saveImageToExternalStorage(getApplication(), response.getBitmap());
+                    Bitmap bitmap = response.getBitmap();
 
-                    if(imageUri != null){
-                        //Store image Uri in Local Sqlite database
+                    //check if bitmap is not null
+                    if(bitmap != null){
+                        Log.d(TAG,"HUS: Bitmap not null");
+                        //Store image in Sdcard
+                        Uri imageUri = Util.saveImageToExternalStorage(getApplication(), bitmap);
+
+                        if(imageUri != null){
+                            //Store image Uri in Local Sqlite database
+                            db.insertProductImageUri(mUserId,mProductId,imageUri);
+                        }
+                    }else{
+                        Log.d(TAG,"HUS: Bitmap is null");
                     }
                 }
 

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
@@ -32,6 +33,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     public ProductListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
+        mContext = context;
         //Instanciate the ImageLoader
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
     }
@@ -56,24 +58,30 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
         //Set image
         String urlThumbnail = c.getProductImage();
-        if(urlThumbnail != null){
-            Log.d("HUS", "HUS: productListAdapter: not null");
+        if(!urlThumbnail.isEmpty()){
             //Create Image Url
             String imageUrl = ApiUrl.IMAGE_BASE_URL + urlThumbnail;
             mImageLoader.get(imageUrl, new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     holder.image.setImageBitmap(response.getBitmap());
-                    Log.d("HUS", "HUS: productListAdapter: noResponse");
                 }
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("HUS","HUS: productListAdapter: onError "+error.getMessage());
+                    //Handle volley error
+                    String errorString = VolleySingleton.handleVolleyError(error);
+                    if(errorString != null){
+                        Toast.makeText(mContext,errorString,Toast.LENGTH_SHORT).show();
+                        Log.d("HUS","HUS: productList: "+errorString+" volleyError "+error.getMessage());
+                    }
+                    //Set default image
+                    holder.image.setImageResource(R.drawable.ic_image_not_available);
                 }
             });
         }else{
-            Log.d("HUS","HUS: productListAdapter: null");
+            //Set default image
+            holder.image.setImageResource(R.drawable.ic_image_not_available);
         }
     }
 

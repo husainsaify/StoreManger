@@ -2,23 +2,33 @@ package com.hackerkernel.storemanager.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
-import java.text.DateFormat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Util {
+    public static final String TAG = Util.class.getSimpleName();
+
     public static void redSnackbar(Context context,View layout,String text){
         Snackbar snackbar = Snackbar.make(layout,text,Snackbar.LENGTH_LONG);
         View snack = snackbar.getView();
@@ -94,4 +104,61 @@ public class Util {
         context.startActivity(intent);
     }
 
+    //method to check External is available to write
+    private static boolean isExternalStorageAvailable(){
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+    /*
+    * Method to save image to Sdcard
+    * */
+    public static Uri saveImageToExternalStorage(Context context,Bitmap bitmap){
+        //Check external storage is avaialble
+        if(isExternalStorageAvailable()){
+            OutputStream output;
+            String appName = context.getString(R.string.app_name);
+
+            //1. Get external storage directory
+            File filePath = Environment.getExternalStorageDirectory();
+
+            //2. Create our subdirectory
+            File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
+            if(!dir.exists()){
+              boolean result = dir.mkdirs();
+                if(!result){
+                    Log.d(TAG, "HUS: failed to create directory");
+                    Toast.makeText(context, R.string.failed_create_directory,Toast.LENGTH_LONG).show();
+                    return null;
+                }
+            }
+
+            //3. Create file name
+            Date date = new Date();
+            String dateString = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(date);
+            String filename = "IMG_"+dateString+".jpg";
+
+            //4. Create a file
+            File file = new File(dir,filename);
+
+            try {
+                output = new FileOutputStream(file);
+
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100,output);
+                output.flush();
+                output.close();
+
+                //5. return the Uri
+                return Uri.fromFile(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "HUS: ioException " + e.getMessage());
+                Toast.makeText(context, R.string.unable_to_save_image, Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        }else{
+            Log.d(TAG, "HUS: external storage not avaible");
+            Toast.makeText(context, R.string.external_storage_not_available, Toast.LENGTH_SHORT).show();
+            return null;
+        }
+    }
 }

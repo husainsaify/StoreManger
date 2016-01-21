@@ -11,12 +11,9 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.hackerkernel.storemanager.activity.MainActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -138,7 +135,7 @@ public class Functions {
             //2. Create our subdirectory
             File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
             if(!dir.exists()){
-                dir.mkdirs();
+                boolean file = dir.mkdirs();
             }
 
             //3. Create file name
@@ -167,7 +164,7 @@ public class Functions {
             }
         }else{
             //not Available
-            Toast.makeText(context.getApplicationContext(), R.string.external_storage_prblm, Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(), R.string.external_storage_not_available, Toast.LENGTH_LONG).show();
             return null;
         }
 

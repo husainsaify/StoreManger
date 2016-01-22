@@ -28,7 +28,7 @@ public class JsonParser {
 
     private static final String TAG = JsonParser.class.getSimpleName();
 
-    public static List<SimplePojo> SimpleParse(String json){
+    public static List<SimplePojo> simpleParse(String json){
         try {
             JSONObject jo = new JSONObject(json);
             List<SimplePojo> list = new ArrayList<>();
@@ -46,7 +46,7 @@ public class JsonParser {
         }
     }
 
-    public static List<SignupPojo> SignupParse(String json){
+    public static List<SignupPojo> signupParse(String json){
         try {
             JSONObject jo = new JSONObject(json);
             List<SignupPojo> list = new ArrayList<>();
@@ -71,7 +71,7 @@ public class JsonParser {
 
 
     //login json parser
-    public static List<LoginPojo> LoginParser(String json){
+    public static List<LoginPojo> loginParser(String json){
         try {
             JSONObject jo = new JSONObject(json);
             List<LoginPojo> loginList = new ArrayList<>();
@@ -282,7 +282,7 @@ public class JsonParser {
     }
 
     //ACProductSearch json parser
-    public static List<ACProductSearchPojo> ACProductSearchParser(String jsonString){
+    public static List<ACProductSearchPojo> acProductSearchParser(String jsonString){
         ACProductSearchPojo product = new ACProductSearchPojo();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -324,7 +324,7 @@ public class JsonParser {
         }
     }
 
-    public static List<STdatePojo> STdateParser(String jsonParser){
+    public static List<STdatePojo> stDateParser(String jsonParser){
         try {
             JSONObject jsonObject = new JSONObject(jsonParser);
             STdatePojo STdate = new STdatePojo();

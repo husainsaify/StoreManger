@@ -135,7 +135,7 @@ public class AddSalesman extends AppCompatActivity {
 
     private void parseAddSalesResponse(String response) {
         //parse response and store the result in a list
-        mSalesmanList = JsonParser.SimpleParse(response);
+        mSalesmanList = JsonParser.simpleParse(response);
 
         //check the response list is not null
         if(mSalesmanList != null){

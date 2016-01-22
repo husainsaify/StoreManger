@@ -252,11 +252,11 @@ public class Database {
     }
 
     //Method to delete product
-    public void deleteProduct(String userId, String productId) {
+    public int deleteProduct(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
         String[] args = {userId, productId};
-        db.delete(DatabaseHelper.TABLE_PRODUCT, where, args);
+        return db.delete(DatabaseHelper.TABLE_PRODUCT, where, args);
     }
 
     //************* SQ (Size and Quantity)

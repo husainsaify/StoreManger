@@ -223,7 +223,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
             //request the web
             String jsonString = GetJson.request(ApiUrl.SALES_TRACKER_DATE_LIST, data, "POST");
             //parse json
-            mDropdownList = JsonParser.STdateParser(jsonString);
+            mDropdownList = JsonParser.stDateParser(jsonString);
             List<String> stringList = new ArrayList<>();
 
             if(mDropdownList.size() != 0){

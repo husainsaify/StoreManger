@@ -149,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
     * */
     private void parseLoginResponse(String response) {
         //parse result
-        mLoginList = JsonParser.LoginParser(response);
+        mLoginList = JsonParser.loginParser(response);
 
         //check mLoginList doesn't return null
         if(mLoginList != null){

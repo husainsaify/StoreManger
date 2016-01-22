@@ -513,7 +513,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * */
     private void parseAddProductResponse(String response){
         //parse response and store the result in a list
-        List<SimplePojo> list = JsonParser.SimpleParse(response);
+        List<SimplePojo> list = JsonParser.simpleParse(response);
 
         //check the response list is not null
         if(list != null){

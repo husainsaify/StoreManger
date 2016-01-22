@@ -128,6 +128,9 @@
     <string name="unable_to_save_image">Unable to save image</string>
     <string name="image_saved_successfully">Image saved successfully!</string>
     <string name="check_your_internet_and_try_again">Check your internet and Try again.</string>
+    <string name="are_your_sure_you_want_to_delete_this">Are your sure. You want to delete this Product?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

@@ -161,7 +161,7 @@ public class SignupActivity extends AppCompatActivity {
     * else display the error message
     * */
     public void parseRegisterResponse(String response){
-        mSignupList = JsonParser.SignupParse(response);
+        mSignupList = JsonParser.signupParse(response);
         if(mSignupList != null){
             SignupPojo current = mSignupList.get(0);
             //request was success (Login the user)

@@ -125,7 +125,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
             //get data from the backend
             String jsonString = GetJson.request(ApiUrl.AC_PRODUCT_SEARCH, data, "POST");
             //parse json
-            return JsonParser.ACProductSearchParser(jsonString);
+            return JsonParser.acProductSearchParser(jsonString);
         }
     }
 }

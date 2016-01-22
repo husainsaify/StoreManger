@@ -4,7 +4,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="1"
         tools:context=".activity.AddProductActivity"
         android:id="@+id/addProductLayout">
 
@@ -17,9 +16,7 @@
         <!-- container for views -->
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:fillViewport="false">
+            android:layout_height="match_parent">
 
             <!--  Main container -->
             <LinearLayout

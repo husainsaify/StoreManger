@@ -119,7 +119,10 @@
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
-        <activity android:name=".activity.EditProductActivity"></activity>
+
+        <activity android:name=".activity.EditProductActivity"/>
+
+
     </application>
 
 </manifest>

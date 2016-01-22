@@ -9,7 +9,9 @@ public interface Keys {
     String KEY_COM_MESSAGE = "message";
     String KEY_COM_USERID = "userId";
     String KEY_COM_DATA = "data";
+    String KEY_COM_PRODUCTID = "productId";
     String KEY_DEFAULT = "";
+
 
     //Login Keys params
     String PRAM_LOGIN_EMAIL = "email";
@@ -79,7 +81,4 @@ public interface Keys {
             KEY_P_TIME = "time",
             KEY_P_CP = "cp",
             KEY_P_SP = "sp";
-
-    //Param Delete product
-    String PRAM_P_DEL_PRODUCTID = "productId";
 }

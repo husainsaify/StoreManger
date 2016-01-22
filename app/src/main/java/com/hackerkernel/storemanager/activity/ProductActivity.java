@@ -68,10 +68,6 @@ public class ProductActivity extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    private Uri productImageUri;
-    //list
-    List<SimplePojo> deleteProductList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -424,7 +420,7 @@ public class ProductActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
                 params.put(Keys.KEY_COM_USERID,mUserId);
-                params.put(Keys.PRAM_P_DEL_PRODUCTID,mProductId);
+                params.put(Keys.KEY_COM_PRODUCTID,mProductId);
                 return params;
             }
         };
@@ -469,6 +465,12 @@ public class ProductActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete:
                 deleteProduct();
+                break;
+            case R.id.action_edit:
+                //start edit activity
+                Intent edit = new Intent(getApplication(),EditProductActivity.class);
+                edit.putExtra(Keys.KEY_COM_PRODUCTID,mProductId);
+                startActivity(edit);
                 break;
         }
 

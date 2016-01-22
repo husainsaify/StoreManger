@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -318,7 +317,7 @@ public class ProductActivity extends AppCompatActivity {
     * */
     public void downloadImage(String imageAddress) {
         if (!imageAddress.isEmpty()) {
-            Log.d(TAG,"HUS: downloadImage - image download");
+            Log.d(TAG, "HUS: downloadImage - image download");
             String imageUrl = ApiUrl.IMAGE_BASE_URL + imageAddress;
             mImageLoader.get(imageUrl, new ImageLoader.ImageListener() {
                 @Override
@@ -387,9 +386,23 @@ public class ProductActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * method to refresh product info
+    * if internet is avaialble
+    * else show a Toast no internet
+    * */
+    public void refreshProduct(){
+        //internet is available
+        if(Util.isConnectedToInternet(getApplication())){
+            fetchProductInBackground();
+        }else{ //internet not avaialble
+            Toast.makeText(getApplication(),R.string.check_your_internet_and_try_again,Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_view_product, menu);
+        getMenuInflater().inflate(R.menu.menu_product, menu);
         return true;
     }
 
@@ -398,6 +411,9 @@ public class ProductActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            case R.id.action_refresh:
+                 refreshProduct();
+                break;
             case R.id.action_delete:
                 //deleteProduct();
                 break;

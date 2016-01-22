@@ -8,6 +8,12 @@
         android:orderInCategory="100"
         android:title="@string/delete"
         android:icon="@drawable/ic_delete"
-        app:showAsAction="always"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="200"
+        android:title="@string/refresh"
+        app:showAsAction="never"
         />
 </menu>

@@ -93,7 +93,7 @@ public class ProductAdapter extends ArrayAdapter<ProductListPojo> {
                 }
             }else{ //generate a placeholder image
                 //convert a Drawable into a Bitmap
-                bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder_product);
+                bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.placeholder);
                 productListPojo.setBitmap(bitmap);
             }
             //Add image to Container

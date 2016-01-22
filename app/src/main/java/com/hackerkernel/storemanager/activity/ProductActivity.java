@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -55,7 +56,7 @@ public class ProductActivity extends AppCompatActivity {
     @Bind(R.id.pSize) TextView mSize;
     @Bind(R.id.pQuantity) TextView mQuantity;
     @Bind(R.id.pProfit) TextView mProfit;
-    @Bind(R.id.layout) LinearLayout mLayout;
+    @Bind(R.id.layout) CoordinatorLayout mLayout;
 
     private String mProductId;
     private String mProductName;

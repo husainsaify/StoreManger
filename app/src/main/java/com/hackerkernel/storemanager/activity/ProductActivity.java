@@ -113,56 +113,6 @@ public class ProductActivity extends AppCompatActivity {
         mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
         checkInternetAndDisplay();
-
-        /*//check Product Has a image or we have to Display a PlaceHolder Image
-        if(!pImageAddress.isEmpty()){
-
-            //get the image Uri from the SQlite database
-            Uri imageUri = db.getProductUri(mProductId);
-
-            //display image which is stored in sdcard using uri
-            if(imageUri != null){
-
-                //check is image is available & not deleted from sdcard
-                String imageUriString = String.valueOf(imageUri);
-                File file = new File(URI.create(imageUriString).getPath());
-
-                if(file.exists()){
-                    //if file is in sdcard
-                    mImage.setImageURI(imageUri);
-                    Log.d(TAG,"HUS: image available in sdcard");
-                }else{
-                    //deleted from sdcard
-                    new getImageTask().execute(pImageAddress); //fetch a new image from the web
-                    Log.d(TAG, "HUS: image not available in sdcard deleted");
-                }
-            }else{
-                //fetch the Image and display it
-                new getImageTask().execute(pImageAddress);
-                Log.d(TAG, "HUS: no image uri stored");
-            }
-        }else{
-            //Show the placeHolder image
-            mImage.setImageResource(R.drawable.placeholder_product);
-            Log.d(TAG, "HUS: showing placeholder image");
-        }*/
-
-        /*
-        * Check Product exits in local database
-        * if exits Fetch data and display in views
-        * if not exits fetch it from Backend and then store it in local database
-        * */
-
-        /*if(db.checkProduct(mProductId)){ //product exits in local database
-            //fetch product
-            ProductPojo fetchedProduct = db.getProduct(mProductId);
-
-            //set "ProductPojo" to views
-            setProductViews(fetchedProduct);
-        }else{
-            //fetch product from backend
-            new getProductTask().execute();
-        }*/
     }
 
     /*

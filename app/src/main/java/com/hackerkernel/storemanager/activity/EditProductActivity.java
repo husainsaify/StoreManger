@@ -3,9 +3,11 @@ package com.hackerkernel.storemanager.activity;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -60,9 +63,6 @@ public class EditProductActivity extends AppCompatActivity {
     @Bind(R.id.productSizeLayout) LinearLayout mSizeLayout;
     @Bind(R.id.productQuantityLayout) LinearLayout mQuantityLayout;
     @Bind(R.id.productDeleteLayout) LinearLayout mDeleteLayout;
-    @Bind(R.id.productSize) EditText mProductSize;
-    @Bind(R.id.productQuantity) EditText mProductQuantity;
-    @Bind(R.id.productDelete) Button mProductDelete;
     @Bind(R.id.done) Button mDone;
 
     private RequestQueue mRequestQueue;
@@ -92,9 +92,9 @@ public class EditProductActivity extends AppCompatActivity {
         pd.setCancelable(true);
 
         //Set Delete button background transparent & OnClickMethod & its tag
-        mProductDelete.setBackgroundColor(Color.TRANSPARENT);
+        //mProductDelete.setBackgroundColor(Color.TRANSPARENT);
         //mProductDelete.setOnClickListener(deleteBtnClick);
-        mProductDelete.setTag(1);
+       //mProductDelete.setTag(1);
 
         //get ProductId From Intent
         if (getIntent().hasExtra(Keys.KEY_COM_PRODUCTID)){
@@ -244,6 +244,31 @@ public class EditProductActivity extends AppCompatActivity {
         mProductSP.setText(product.getSp());
         mProductCP.setText(product.getCp());
 
+        String[] sizeArray = product.getSize().split("\n");
+        String[] quantityArray = product.getQuantity().split("\n");
+
+        //Add EditText bassed on sizeArray length
+        for (int i = 0; i < sizeArray.length; i++) {
+            //Add editText to size & quantity layout and Button to delete layout
+            EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style,null);
+            EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style,null);
+
+            //get Size & Quantity
+            String s = sizeArray[i];
+            String q = quantityArray[i];
+
+            size.setText(s);
+            quantity.setText(q);
+
+            ImageButton deleteButton = new ImageButton(getApplication());
+            deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black));
+            deleteButton.setTag(i+1);
+            deleteButton.setBackgroundColor(Color.TRANSPARENT);
+
+            mSizeLayout.addView(size);
+            mQuantityLayout.addView(quantity);
+            mDeleteLayout.addView(deleteButton);
+        }
     }
 
     @Override

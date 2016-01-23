@@ -72,6 +72,9 @@ public class EditProductActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private Database db;
     private List<SimpleListPojo> mCategorySimpleList;
+    private List<EditText> mSizeList;
+    private List<EditText> mQuantityList;
+    private List<ImageButton> mDeleteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,15 +94,14 @@ public class EditProductActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
-        //Set Delete button background transparent & OnClickMethod & its tag
-        //mProductDelete.setBackgroundColor(Color.TRANSPARENT);
-        //mProductDelete.setOnClickListener(deleteBtnClick);
-       //mProductDelete.setTag(1);
+        mSizeList = new ArrayList<>();
+        mQuantityList = new ArrayList<>();
+        mDeleteList = new ArrayList<>();
 
         //get ProductId From Intent
-        if (getIntent().hasExtra(Keys.KEY_COM_PRODUCTID)){
+        if (getIntent().hasExtra(Keys.KEY_COM_PRODUCTID)) {
             mProductId = getIntent().getExtras().getString(Keys.KEY_COM_PRODUCTID);
-        }else {
+        } else {
             Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -122,7 +124,7 @@ public class EditProductActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mCategoryId = mCategorySimpleList.get(position).getId();
-                Toast.makeText(getApplicationContext(),mCategoryId,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), mCategoryId, Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -135,14 +137,14 @@ public class EditProductActivity extends AppCompatActivity {
     /*
     * Method to set Category Spinner From SQlite database
     * */
-    public void setUpCategorySpinner(String categoryId){
+    public void setUpCategorySpinner(String categoryId) {
         //setup StringList to avoid NullPointerException
         List<String> stringList = new ArrayList<>();
         //Get category data from Sqlite Database
-        mCategorySimpleList = db.getAllSimpleList(Database.CATEGORY,mUserId);
+        mCategorySimpleList = db.getAllSimpleList(Database.CATEGORY, mUserId);
 
         //mCategorySimpleList is not null
-        if(mCategorySimpleList.size() > 0){
+        if (mCategorySimpleList.size() > 0) {
             //Create a simple
             for (int i = 0; i < mCategorySimpleList.size(); i++) {
                 SimpleListPojo c = mCategorySimpleList.get(i);
@@ -151,34 +153,33 @@ public class EditProductActivity extends AppCompatActivity {
             }
 
             //setup List to resources
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,stringList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, stringList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mCategorySpinner.setAdapter(adapter);
 
             //Make categoryID selected in the spinner
-            Util.setSpinnerPostionToCategoryID(mCategorySimpleList,categoryId,mCategorySpinner);
-        }else{
-            Toast.makeText(getApplication(),R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
+            Util.setSpinnerPostionToCategoryID(mCategorySimpleList, categoryId, mCategorySpinner);
+        } else {
+            Toast.makeText(getApplication(), R.string.unable_to_load_category, Toast.LENGTH_LONG).show();
         }
     }
-
 
 
     /*
     * Method to check internet and fetch fetchProduct
     * */
-    public void checkInternetAndFetchProduct(){
-        if (Util.isConnectedToInternet(getApplication())){
+    public void checkInternetAndFetchProduct() {
+        if (Util.isConnectedToInternet(getApplication())) {
             fetchProductInBackground();
-        }else{
-            Toast.makeText(getApplication(),R.string.check_your_internet_and_try_again,Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getApplication(), R.string.check_your_internet_and_try_again, Toast.LENGTH_LONG).show();
         }
     }
 
     /*
     * Method to fetch product in background
     * */
-    public void fetchProductInBackground(){
+    public void fetchProductInBackground() {
         pd.show(); //show progressDialog
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
             @Override
@@ -190,9 +191,9 @@ public class EditProductActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss(); //Hide progressDialog
-                Toast.makeText(getApplication(),error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplication(), error.getMessage(), Toast.LENGTH_LONG).show();
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
@@ -250,8 +251,8 @@ public class EditProductActivity extends AppCompatActivity {
         //Add EditText bassed on sizeArray length
         for (int i = 0; i < sizeArray.length; i++) {
             //Add editText to size & quantity layout and Button to delete layout
-            EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style,null);
-            EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style,null);
+            EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+            EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
 
             //get Size & Quantity
             String s = sizeArray[i];
@@ -261,14 +262,42 @@ public class EditProductActivity extends AppCompatActivity {
             quantity.setText(q);
 
             ImageButton deleteButton = new ImageButton(getApplication());
-            deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black));
-            deleteButton.setTag(i+1);
+            deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
+            deleteButton.setTag(i + 1);
             deleteButton.setBackgroundColor(Color.TRANSPARENT);
 
+            //add views to layout
             mSizeLayout.addView(size);
             mQuantityLayout.addView(quantity);
             mDeleteLayout.addView(deleteButton);
+
+            //Add views to list
+            mSizeList.add(size);
+            mQuantityList.add(quantity);
+            mDeleteList.add(deleteButton);
         }
+    }
+
+    /*
+    * Method to add more Size, Quantity and Delete button to Their respective layout
+    * */
+    private void loadMore() {
+        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+        ImageButton deleteButton = new ImageButton(getApplication());
+        deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
+        deleteButton.setTag(mSizeList.size() + 1);
+        deleteButton.setBackgroundColor(Color.TRANSPARENT);
+
+        //add to layout
+        mSizeLayout.addView(size);
+        mQuantityLayout.addView(quantity);
+        mDeleteLayout.addView(deleteButton);
+
+        //add to list
+        mSizeList.add(size);
+        mQuantityList.add(quantity);
+        mDeleteList.add(deleteButton);
     }
 
     @Override
@@ -281,9 +310,21 @@ public class EditProductActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        //when home or up button is pressed
-        if (id == android.R.id.home){
-            finish();
+        switch (id) {
+            //when load more button is pressed
+            case R.id.loadMore:
+                loadMore();
+                break;
+            //when home button is pressed
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.test:
+                for (int i = 0; i < mDeleteList.size(); i++) {
+                    int tag = (int) mDeleteList.get(i).getTag();
+                    Log.d(TAG,"HUS: tags "+tag);
+                }
+                break;
         }
 
         return super.onOptionsItemSelected(item);

@@ -265,6 +265,7 @@ public class EditProductActivity extends AppCompatActivity {
             deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
             deleteButton.setTag(i + 1);
             deleteButton.setBackgroundColor(Color.TRANSPARENT);
+            deleteButton.setOnClickListener(deleteListner);
 
             //add views to layout
             mSizeLayout.addView(size);
@@ -287,6 +288,7 @@ public class EditProductActivity extends AppCompatActivity {
         ImageButton deleteButton = new ImageButton(getApplication());
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
         deleteButton.setTag(mSizeList.size() + 1);
+        deleteButton.setOnClickListener(deleteListner);
         deleteButton.setBackgroundColor(Color.TRANSPARENT);
 
         //add to layout
@@ -299,6 +301,42 @@ public class EditProductActivity extends AppCompatActivity {
         mQuantityList.add(quantity);
         mDeleteList.add(deleteButton);
     }
+
+    /*
+    * Listner when the delete button is pressed
+    * */
+    View.OnClickListener deleteListner = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(mSizeList.size() > 1 && mQuantityList.size() > 1){
+                int tag = (int) v.getTag();
+                int index = tag - 1; //because array start with zero
+
+                //get the views
+                EditText size = mSizeList.get(index);
+                EditText quantity = mQuantityList.get(index);
+                ImageButton delete = mDeleteList.get(index);
+
+                //remove from layout
+                mSizeLayout.removeView(size);
+                mQuantityLayout.removeView(quantity);
+                mDeleteLayout.removeView(delete);
+
+                //remove from list
+                mSizeList.remove(index);
+                mQuantityList.remove(index);
+                mDeleteList.remove(index);
+
+                //reset all the tags
+                for (int i = 0; i < mDeleteList.size(); i++) {
+                    mDeleteList.get(i).setTag(i+1);
+                }
+            }else{
+                Toast.makeText(getApplication(), R.string.atleast_one_size_quantity_field,Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -318,12 +356,6 @@ public class EditProductActivity extends AppCompatActivity {
             //when home button is pressed
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.test:
-                for (int i = 0; i < mDeleteList.size(); i++) {
-                    int tag = (int) mDeleteList.get(i).getTag();
-                    Log.d(TAG,"HUS: tags "+tag);
-                }
                 break;
         }
 

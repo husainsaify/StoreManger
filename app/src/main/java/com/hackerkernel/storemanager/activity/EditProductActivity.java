@@ -2,6 +2,7 @@ package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,8 @@ import com.hackerkernel.storemanager.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -219,10 +222,13 @@ public class EditProductActivity extends AppCompatActivity {
                 if (current != null) {
                     //Set Category Id to member variable
                     mCategoryId = current.getCategoryId();
+                    String imageAddress = current.getImageAddress();
                     //setup category spinner
                     setUpCategorySpinner(mCategoryId);
 
                     setUpViews(current);
+
+                    setupProductImage(imageAddress);
                 } else {
                     Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
                 }
@@ -337,6 +343,31 @@ public class EditProductActivity extends AppCompatActivity {
         }
     };
 
+    /*
+    * Method to load image From sdcard if avaiable else From THe API
+    * */
+    public void setupProductImage(String imageAddress){
+        //check image is set by the user or not for the product
+        if(imageAddress != null && !imageAddress.isEmpty()){
+            //check image Uri is avaialble or not
+            if(db.checkProductUri(mUserId,mProductId)){
+                //get the Uri of product image
+                Uri imageUri = db.getProductUri(mUserId,mProductId);
+                String imageUriString = String.valueOf(imageUri);
+
+                //check file exits or not
+                File file = new File(URI.create(imageUriString).getPath());
+
+                if(file.exists()){
+                    mProductImage.setImageURI(imageUri);
+                }else{
+                    //TODO:: fetch image from internet
+                }
+            }else{
+                //TODO: fetch image from internet
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -31,11 +31,12 @@
                 android:layout_marginBottom="@dimen/Addp_bottom_margin">
 
                 <ImageView
-                    android:layout_width="150dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/productImage"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_camera_black_big" />
+                    android:src="@drawable/placeholder"
+                    android:scaleType="centerCrop"/>
 
             </RelativeLayout>
             <!-- / image Container -->

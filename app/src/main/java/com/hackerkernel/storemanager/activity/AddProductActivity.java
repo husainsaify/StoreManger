@@ -66,7 +66,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private int CHOSE_PICTURE = 2; //gallery
 
     @Bind(R.id.addProductLayout) LinearLayout mLayout;
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.productImage) ImageView mProductImage;
     @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
     @Bind(R.id.productName) EditText mProductName;
@@ -84,7 +84,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     private String mUserId;
     private List<SimpleListPojo> mCategorySimpleList;
-    private List<String> mCategoryStringList;
     private String mCategoryId;
     private String mCategoryName;
     private Database db;
@@ -105,7 +104,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         ButterKnife.bind(this);
 
         //set toolbar
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.add_product));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -131,11 +130,12 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         * Check intent has send categoryId & categoryName
         * if yes store them in Member variables
         * */
-        if(getIntent().hasExtra("categoryId") && getIntent().hasExtra("categoryName")){
-            mCategoryId = getIntent().getExtras().getString("categoryId");
-            mCategoryName = getIntent().getExtras().getString("categoryName");
+        if(getIntent().hasExtra(Keys.PRAM_AP_CATEGORYID) && getIntent().hasExtra(Keys.PRAM_AP_CATEGORYNAME)){
+            mCategoryId = getIntent().getExtras().getString(Keys.PRAM_AP_CATEGORYID);
+            mCategoryName = getIntent().getExtras().getString(Keys.PRAM_AP_CATEGORYNAME);
+
             //Set spinner to category Id
-            setSpinnerPostionToCategoryID();
+            Util.setSpinnerPostionToCategoryID(mCategorySimpleList,mCategoryId,mCategorySpinner);
         }
 
         //When An item is selected in spinner
@@ -262,28 +262,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     };
 
     /*
-    * Method to set Spinner value to the category id send by the Intent
-    * */
-    private void setSpinnerPostionToCategoryID() {
-        int i = 0;
-        int postion = -1;
-        for (SimpleListPojo list : mCategorySimpleList){
-            if(list.getId().equals(mCategoryId)){
-                postion = i;
-                break;
-            }
-            i++;
-        }
-
-        mCategorySpinner.setSelection(postion);
-    }
-
-    /*
     * Method to setup category Spinner
     * */
     public void setUpCategorySpinner(){
         //setup StringList to avoid NullPointerException
-        mCategoryStringList = new ArrayList<>();
+        List<String> mCategoryStringList = new ArrayList<>();
         //Get category data from Sqlite Database
         mCategorySimpleList = db.getAllSimpleList(Database.CATEGORY,mUserId);
 
@@ -297,7 +280,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
 
             //setup List to resources
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,mCategoryStringList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, mCategoryStringList);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mCategorySpinner.setAdapter(adapter);
         }else{

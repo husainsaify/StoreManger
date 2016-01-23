@@ -133,6 +133,8 @@
     <string name="no">No</string>
     <string name="sp_cannot_be_then_cp">Selling price cannot be smaller then cost price</string>
     <string name="edit">Edit</string>
+    <string name="done">DONE</string>
+    <string name="edit_product">Edit product</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

@@ -73,6 +73,7 @@ public interface Keys {
 
     //Keys Product
     String KEY_P_ID = "id",
+            KEY_P_CATEGORYID = "categoryId",
             KEY_P_NAME = "name",
             KEY_P_IMAGE = "image",
             KEY_P_CODE = "code",

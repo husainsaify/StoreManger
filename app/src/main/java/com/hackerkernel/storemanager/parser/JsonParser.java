@@ -242,6 +242,7 @@ public class JsonParser {
                 //add more item
                 product.setUserId(jo.getString(Keys.KEY_COM_USERID));
                 product.setId(jo.getString(Keys.KEY_P_ID));
+                product.setCategoryId(jo.getString(Keys.KEY_P_CATEGORYID));
                 product.setName(jo.getString(Keys.KEY_P_NAME));
                 product.setImageAddress(jo.getString(Keys.KEY_P_IMAGE));
                 product.setCode(jo.getString(Keys.KEY_P_CODE));

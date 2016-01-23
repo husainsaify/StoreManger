@@ -11,11 +11,15 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
+import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 import java.io.File;
@@ -23,7 +27,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Util {
@@ -158,5 +164,22 @@ public class Util {
             Toast.makeText(context, R.string.external_storage_not_available, Toast.LENGTH_SHORT).show();
             return null;
         }
+    }
+
+    /*
+    * Method to select a Category Spinner to categoryId
+    * */
+    public static void setSpinnerPostionToCategoryID(List<SimpleListPojo> mCategorySimpleList,String mCategoryId,Spinner spinner) {
+        int i = 0;
+        int postion = -1;
+        for (SimpleListPojo list : mCategorySimpleList){
+            if(list.getId().equals(mCategoryId)){
+                postion = i;
+                break;
+            }
+            i++;
+        }
+
+        spinner.setSelection(postion);
     }
 }

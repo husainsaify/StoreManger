@@ -3,6 +3,7 @@ package com.hackerkernel.storemanager.pojo;
 public class ProductPojo {
     private boolean returned;
     private String userId;
+    private String categoryId;
     private String id;
     private String name;
     private String imageAddress;
@@ -14,6 +15,14 @@ public class ProductPojo {
     private String time;
     private String message;
     private String imageUri;
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getUserId() {
         return userId;

@@ -476,15 +476,108 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     /*
     *
     * THis method is called when user press the done button
-    * This method will update the product info
+    * This method will check info is valid or not
     * */
     private void doneProductEditing() {
         //check internet
         if(Util.isConnectedToInternet(getApplication())){
-            //TODO:: do check and upload product
+            //get text from the views
+            String name = mProductName.getText().toString().trim(),
+                    code = mProductCode.getText().toString().trim(),
+                    sp = mProductSP.getText().toString().trim(),
+                    cp = mProductCP.getText().toString().trim();
+
+            //code to convert image to Base64
+            String encodedImage = "";
+            if(mImageBitmap != null){
+                encodedImage = mImageSelection.compressImageToBase64(mImageBitmap);
+            }
+
+            // if any field is empty
+            if(name.isEmpty() || code.isEmpty() || cp.isEmpty() || sp.isEmpty()){
+                Util.redSnackbar(getApplication(), mLayout, getString(R.string.fillin_all_fields));
+                return;
+            }
+
+            //check name is more then 3 char long
+            if(name.length() < 3){
+                Util.redSnackbar(getApplication(),mLayout,getString(R.string.name_more_then_2));
+                return;
+            }
+
+            //check code
+            if(code.length() < 3){
+                Util.redSnackbar(getApplication(), mLayout, getString(R.string.pcode_more_then_2));
+                return;
+            }
+
+            //check sp is not smaller then cp
+            int difference = Integer.parseInt(sp) - Integer.parseInt(cp);
+            if(difference < 0){
+                Util.redSnackbar(getApplication(), mLayout, getString(R.string.sp_cannot_be_then_cp));
+                return;
+            }
+
+            //generate a StringBuilder for size & quantity
+            StringBuilder sizeBuilder = new StringBuilder();
+            StringBuilder quantityBuilder = new StringBuilder();
+
+            //check size & quantity
+            for (int i = 0; i < mSizeList.size(); i++) {
+                String size = mSizeList.get(i).getText().toString().trim();
+                String quantity = mQuantityList.get(i).getText().toString().trim();
+
+                if (size.isEmpty() || quantity.isEmpty()){
+                    //display error
+                    Util.redSnackbar(getApplication(),mLayout,getString(R.string.size_quantity_canot_empty));
+                    return;
+                }else{
+                    //add to StringBuilder
+                    sizeBuilder.append(size).append(",");
+                    quantityBuilder.append(quantity).append(",");
+                }
+            }
+
+
+            //Call method to store product info in api
+            doneEditingInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
+
         }else{
             Toast.makeText(getApplication(),R.string.check_your_internet_and_try_again,Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+    * This method will edit the product details in API
+    * */
+    private void doneEditingInBackground(final String encodedImage, final String name, final String code, final String cp, final String sp, final String size, final String quantity){
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.EDIT_PRODUCT, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+                param.put(Keys.PRAM_AP_CATEGORYID,mCategoryId);
+                param.put(Keys.PRAM_AP_USERID,mUserId);
+                param.put(Keys.PRAM_AP_IMAGE,encodedImage);
+                param.put(Keys.PRAM_AP_NAME,name);
+                param.put(Keys.PRAM_AP_CODE,code);
+                param.put(Keys.PRAM_AP_CP,cp);
+                param.put(Keys.PRAM_AP_SP,sp);
+                param.put(Keys.PRAM_AP_SIZE,size);
+                param.put(Keys.PRAM_AP_QUANTITY,quantity);
+                return param;
+            }
+        };
+        mRequestQueue.add(request);
     }
 
     @Override

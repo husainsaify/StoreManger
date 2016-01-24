@@ -353,13 +353,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         * */
         String encodedImage = "";
         if(mSelectedImage != null){
-
-            //compress the image into 70% quality
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mSelectedImage.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
-
-            //convert image to  Base64 encoded string
-            encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+            //Compress image to Base64
+            encodedImage = mImageSelection.compressImageToBase64(mSelectedImage);
         }
 
         // if any field is empty

@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 
 import com.hackerkernel.storemanager.R;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Class to handle all the stuff realeated to ImageSelection
@@ -54,5 +58,14 @@ public class ImageSeletion{
     private void captureImageFromCamera(){
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         ((Activity) mContext).startActivityForResult(cameraIntent, TAKE_PICTURE);
+    }
+
+    public String compressImageToBase64(Bitmap bitmap){
+        //compress the image into 100% quality
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+
+        //convert image to  Base64 encoded string
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 }

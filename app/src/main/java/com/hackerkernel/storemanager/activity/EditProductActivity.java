@@ -27,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
@@ -69,6 +70,7 @@ public class EditProductActivity extends AppCompatActivity {
     @Bind(R.id.done) Button mDone;
 
     private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
     private String mProductId;
     private String mUserId;
     private String mCategoryId = null;
@@ -115,6 +117,7 @@ public class EditProductActivity extends AppCompatActivity {
 
         //Instanciate Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
         //Get Loggedin userId
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
@@ -223,11 +226,14 @@ public class EditProductActivity extends AppCompatActivity {
                     //Set Category Id to member variable
                     mCategoryId = current.getCategoryId();
                     String imageAddress = current.getImageAddress();
+
                     //setup category spinner
                     setUpCategorySpinner(mCategoryId);
 
+                    //set data to the views
                     setUpViews(current);
 
+                    //set product image
                     setupProductImage(imageAddress);
                 } else {
                     Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
@@ -361,11 +367,38 @@ public class EditProductActivity extends AppCompatActivity {
                 if(file.exists()){
                     mProductImage.setImageURI(imageUri);
                 }else{
-                    //TODO:: fetch image from internet
+                    //fetch image from API
+                    fetchImageInBackground(imageAddress);
                 }
             }else{
-                //TODO: fetch image from internet
+                //fetch image from API
+                fetchImageInBackground(imageAddress);
             }
+        }
+    }
+
+
+    public void fetchImageInBackground(String imageAddress){
+        //check Internet Connection
+        if(Util.isConnectedToInternet(getApplication())){
+            String imageUrl = ApiUrl.IMAGE_BASE_URL + imageAddress;
+            mImageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    //set image to view
+                    mProductImage.setImageBitmap(response.getBitmap());
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d(TAG,"HUS: fetchImageInBackground: "+error.getMessage());
+                    //Handle volley error
+                    String errorString = VolleySingleton.handleVolleyError(error);
+                    if(errorString != null){
+                        Util.redSnackbar(getApplication(),mLayout,errorString);
+                    }
+                }
+            });
         }
     }
 

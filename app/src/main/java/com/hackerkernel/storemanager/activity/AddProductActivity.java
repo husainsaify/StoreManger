@@ -44,6 +44,7 @@ import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.ImageSeletion;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.io.ByteArrayOutputStream;
@@ -60,10 +61,6 @@ import butterknife.ButterKnife;
 public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
-
-
-    private int TAKE_PICTURE = 1; //camera
-    private int CHOSE_PICTURE = 2; //gallery
 
     @Bind(R.id.addProductLayout) LinearLayout mLayout;
     @Bind(R.id.toolbar) Toolbar mToolbar;
@@ -94,6 +91,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     private List<Button> mDeleteList;
     //Volley
     private RequestQueue mRequestQueue;
+    //ImageSelection class (TO select image)
+    private ImageSeletion mImageSelection;
 
     //variable to hold camera or gallery
     private Bitmap mSelectedImage = null;
@@ -168,6 +167,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        //Instanciate ImageSelection class
+        mImageSelection = new ImageSeletion(this);
+
         //Set OnClickMethod on productImage(Camera icon)
         mProductImage.setOnClickListener(this);
 
@@ -180,7 +182,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         switch (v.getId()){
             //when Camera image is clicked open ChosePicture alertDialog
             case R.id.productImage:
-                openSelectPictureDialog();
+                mImageSelection.selectImage();
                 break;
             //When add product button is clicked
             case R.id.addProduct:
@@ -288,46 +290,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-
-    /*
-    * Method to
-    * Show a Dialog to Take a picture or chose a picture
-    * */
-    private void openSelectPictureDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(R.array.select_picture_option,new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0: //Take picture
-                        captureImageFromCamera(); //open camera
-                        break;
-                    case 1: //choose picture
-                        selectImageFromGallery(); //open gallary
-                        break;
-                }
-            }
-        }).setNegativeButton(R.string.cancel, null)
-                .show();
-    }
-
-    /*
-    * Code to open gallery and select Image from their
-    * */
-    private void selectImageFromGallery() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, CHOSE_PICTURE);
-    }
-
-    /*
-    * This method will open camera and allow user to take a picture
-    * */
-    private void captureImageFromCamera(){
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent,TAKE_PICTURE);
-    }
-
     /*
     * When image is selected from the gallery
     * set image to mProductImage (imageView)
@@ -336,13 +298,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //camera
-        if(requestCode == TAKE_PICTURE && resultCode == RESULT_OK && data != null){
+        if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK && data != null){
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mProductImage.setImageBitmap(photo);
 
             //set Camera image into Member varialble
             mSelectedImage = photo;
-        }else if(requestCode == CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
+        }else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
             Uri selectedImage = data.getData();
             mProductImage.setImageURI(selectedImage);
 
@@ -351,7 +313,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 mSelectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e(TAG,"HUS: exception "+e.getMessage());
+                Log.e(TAG,"HUS: onActivityResult "+e.getMessage());
                 Toast.makeText(getApplication(),getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
             }
         }

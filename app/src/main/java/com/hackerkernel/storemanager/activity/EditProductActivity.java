@@ -1,9 +1,14 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,12 +43,14 @@ import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.ImageSeletion;
 import com.hackerkernel.storemanager.util.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +60,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class EditProductActivity extends AppCompatActivity {
+public class EditProductActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = EditProductActivity.class.getSimpleName();
 
     @Bind(R.id.layout) LinearLayout mLayout;
@@ -80,6 +87,10 @@ public class EditProductActivity extends AppCompatActivity {
     private List<EditText> mSizeList;
     private List<EditText> mQuantityList;
     private List<ImageButton> mDeleteList;
+
+    //ImageSelection class with will help in selecting image
+    private ImageSeletion mImageSelection;
+    private Bitmap mImageBitmap; //variable to store selected image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +133,8 @@ public class EditProductActivity extends AppCompatActivity {
         //Get Loggedin userId
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
 
+        //Instanciate ImageSelection class which will help in selecting image
+        mImageSelection = new ImageSeletion(this);
 
         checkInternetAndFetchProduct();
 
@@ -138,12 +151,70 @@ public class EditProductActivity extends AppCompatActivity {
 
             }
         });
+
+        //add ClickListener for Done Button
+        mDone.setOnClickListener(this);
+
+        mProductImage.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //when done button is pressed
+            case R.id.done:
+                doneProductEditing();
+                break;
+            //when image is clicked
+            case R.id.productImage:
+                //Select image
+                mImageSelection.selectImage();
+                break;
+        }
     }
 
     /*
-    * Method to set Category Spinner From SQlite database
+    * This method will run when a user has selected an image
+    * this method will set the selected image to the views
+    * and store the selected image in a member varaible
     * */
-    public void setUpCategorySpinner(String categoryId) {
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //take picture (camera)
+        if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK && data != null){
+            //get bitmap
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            //set bitmap to view
+            mProductImage.setImageBitmap(photo);
+
+            //set Bitmap to memeber varaible (for upload)
+            mImageBitmap = photo;
+        }
+        //choose picture (gallery)
+        else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){
+            //get image uri
+            Uri imageUri = data.getData();
+
+            //set image to view
+            mProductImage.setImageURI(imageUri);
+
+            //set to member varaible
+            try {
+                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e(TAG,"HUS: onActivityResult "+e.getMessage());
+                Toast.makeText(getApplication(),getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    /*
+        * Method to set Category Spinner From SQlite database
+        * */
+    private void setUpCategorySpinner(String categoryId) {
         //setup StringList to avoid NullPointerException
         List<String> stringList = new ArrayList<>();
         //Get category data from Sqlite Database
@@ -174,7 +245,7 @@ public class EditProductActivity extends AppCompatActivity {
     /*
     * Method to check internet and fetch fetchProduct
     * */
-    public void checkInternetAndFetchProduct() {
+    private void checkInternetAndFetchProduct() {
         if (Util.isConnectedToInternet(getApplication())) {
             fetchProductInBackground();
         } else {
@@ -185,7 +256,7 @@ public class EditProductActivity extends AppCompatActivity {
     /*
     * Method to fetch product in background
     * */
-    public void fetchProductInBackground() {
+    private void fetchProductInBackground() {
         pd.show(); //show progressDialog
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_PRODUCT, new Response.Listener<String>() {
             @Override
@@ -251,7 +322,7 @@ public class EditProductActivity extends AppCompatActivity {
     /*
     * Method to set the detials of product in the views
     * */
-    public void setUpViews(ProductPojo product) {
+    private void setUpViews(ProductPojo product) {
         mProductName.setText(product.getName());
         mProductCode.setText(product.getCode());
         mProductSP.setText(product.getSp());
@@ -352,7 +423,7 @@ public class EditProductActivity extends AppCompatActivity {
     /*
     * Method to load image From sdcard if avaiable else From THe API
     * */
-    public void setupProductImage(String imageAddress){
+    private void setupProductImage(String imageAddress){
         //check image is set by the user or not for the product
         if(imageAddress != null && !imageAddress.isEmpty()){
             //check image Uri is avaialble or not
@@ -378,7 +449,7 @@ public class EditProductActivity extends AppCompatActivity {
     }
 
 
-    public void fetchImageInBackground(String imageAddress){
+    private void fetchImageInBackground(String imageAddress){
         //check Internet Connection
         if(Util.isConnectedToInternet(getApplication())){
             String imageUrl = ApiUrl.IMAGE_BASE_URL + imageAddress;
@@ -399,6 +470,20 @@ public class EditProductActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+
+    /*
+    *
+    * THis method is called when user press the done button
+    * This method will update the product info
+    * */
+    private void doneProductEditing() {
+        //check internet
+        if(Util.isConnectedToInternet(getApplication())){
+            //TODO:: do check and upload product
+        }else{
+            Toast.makeText(getApplication(),R.string.check_your_internet_and_try_again,Toast.LENGTH_LONG).show();
         }
     }
 

@@ -141,7 +141,6 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mCategoryId = mCategorySimpleList.get(position).getId();
-                Toast.makeText(getApplicationContext(), mCategoryId, Toast.LENGTH_LONG).show();
             }
 
             @Override

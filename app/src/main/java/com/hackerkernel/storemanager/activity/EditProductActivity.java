@@ -1,8 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,7 +74,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private String mProductId;
+    private String mProductId = null;
     private String mUserId;
     private String mCategoryId = null;
     private ProgressDialog pd;
@@ -293,8 +290,10 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
 
                 //Check Response is valid
                 if (current != null) {
-                    //Set Category Id to member variable
+                    //Set Category Id & Product Id to member variable
                     mCategoryId = current.getCategoryId();
+                    mProductId = current.getId();
+
                     String imageAddress = current.getImageAddress();
 
                     //setup category spinner
@@ -557,6 +556,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
+                param.put(Keys.KEY_COM_PRODUCTID,mProductId);
                 param.put(Keys.PRAM_AP_CATEGORYID,mCategoryId);
                 param.put(Keys.PRAM_AP_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);

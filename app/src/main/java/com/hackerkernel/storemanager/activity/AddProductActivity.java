@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -10,10 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -47,7 +44,6 @@ import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.ImageSeletion;
 import com.hackerkernel.storemanager.util.Util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -460,7 +456,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * */
     private void parseAddProductResponse(String response){
         //parse response and store the result in a list
-        List<SimplePojo> list = JsonParser.simpleParse(response);
+        List<SimplePojo> list = JsonParser.simpleParser(response);
 
         //check the response list is not null
         if(list != null){

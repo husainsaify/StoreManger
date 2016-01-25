@@ -562,6 +562,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
                 //Handle Volley error
                 Log.e(TAG,"HUS: doneEditingInBackground: "+error.getMessage());
 
@@ -569,6 +570,9 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 if(errorString != null){
                     Util.redSnackbar(getApplicationContext(),mLayout,errorString);
                 }
+
+                //Delete old product data from sqlite
+                deleteOldProductData();
             }
         }){
             @Override
@@ -591,17 +595,15 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void parseDoneEditingResponse(String response) {
-        List<SimplePojo> list = JsonParser.simpleParse(response);
+        List<SimplePojo> list = JsonParser.simpleParser(response);
         if(list != null){
             SimplePojo current = list.get(0);
             if(current.getReturned()){
                 //success
                 Toast.makeText(getApplicationContext(),current.getMessage(),Toast.LENGTH_LONG).show();
 
-                //Delete old product data from SQLite database
-                db.deleteProduct(mUserId,mProductId);
-                db.deleteSQ(mUserId, mProductId);
-                db.deleteProductUri(mUserId,mProductId);
+                //Delete old product data from sqlite
+                deleteOldProductData();
 
                 //Start Product activity
                 Intent productIntent = new Intent(getApplication(),ProductActivity.class);
@@ -615,6 +617,16 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
         }else{
             Toast.makeText(getApplicationContext(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+    * Method to delete old product data from SQLITE
+    * */
+    private void deleteOldProductData(){
+        //Delete old product data from SQLite database
+        db.deleteProduct(mUserId,mProductId);
+        db.deleteSQ(mUserId, mProductId);
+        db.deleteProductUri(mUserId,mProductId);
     }
 
     @Override

@@ -140,7 +140,7 @@ public class AddCategoryActivity extends AppCompatActivity {
 
     private void parseAddCategoryResponse(String response) {
         //parse response and store the result in a list
-        categoryList = JsonParser.simpleParse(response);
+        categoryList = JsonParser.simpleParser(response);
 
         //check the response list is not null
         if(categoryList != null){

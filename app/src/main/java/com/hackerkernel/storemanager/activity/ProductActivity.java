@@ -432,7 +432,7 @@ public class ProductActivity extends AppCompatActivity {
     * Parse delete response
     * */
     private void parseDeleteResponse(String response) {
-        List<SimplePojo> list = JsonParser.simpleParse(response);
+        List<SimplePojo> list = JsonParser.simpleParser(response);
         if(list != null){
            SimplePojo current = list.get(0);
             //Check (Return) Response is true or false

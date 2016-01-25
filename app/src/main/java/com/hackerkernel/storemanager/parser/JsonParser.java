@@ -30,7 +30,7 @@ public class JsonParser {
 
     private static final String TAG = JsonParser.class.getSimpleName();
 
-    public static List<SimplePojo> simpleParse(String json){
+    public static List<SimplePojo> simpleParser(String json){
         try {
             JSONObject jo = new JSONObject(json);
             List<SimplePojo> list = new ArrayList<>();
@@ -44,12 +44,12 @@ public class JsonParser {
             return list;
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d(TAG,"HUS: simpleParse: "+e.getMessage());
+            Log.d(TAG,"HUS: simpleParser: "+e.getMessage());
             return null;
         }
     }
 
-    public static List<SignupPojo> signupParse(String json){
+    public static List<SignupPojo> signupParser(String json){
         try {
             JSONObject jo = new JSONObject(json);
             List<SignupPojo> list = new ArrayList<>();

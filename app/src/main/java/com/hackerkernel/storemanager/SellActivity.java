@@ -416,7 +416,7 @@ public class SellActivity extends AppCompatActivity {
             String jsonString = GetJson.request(ApiUrl.ADD_SELL, data, "POST");
             Log.d(TAG,"HUS: JSON "+jsonString);
             //parse Json
-            List<SimplePojo> list = JsonParser.simpleParse(jsonString);
+            List<SimplePojo> list = JsonParser.simpleParser(jsonString);
             assert list != null;
             return list.get(0);
         }

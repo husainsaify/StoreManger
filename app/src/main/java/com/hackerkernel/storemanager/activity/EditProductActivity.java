@@ -459,11 +459,11 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG,"HUS: fetchImageInBackground: "+error.getMessage());
+                    Log.d(TAG, "HUS: fetchImageInBackground: " + error.getMessage());
                     //Handle volley error
                     String errorString = VolleySingleton.handleVolleyError(error);
-                    if(errorString != null){
-                        Util.redSnackbar(getApplication(),mLayout,errorString);
+                    if (errorString != null) {
+                        Util.redSnackbar(getApplication(), mLayout, errorString);
                     }
                 }
             });
@@ -483,16 +483,22 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                     sp = mProductSP.getText().toString().trim(),
                     cp = mProductCP.getText().toString().trim();
 
-            //code to convert image to Base64
-            String encodedImage = "";
-            if(mImageBitmap != null){
-                encodedImage = mImageSelection.compressImageToBase64(mImageBitmap);
-            }
-
             // if any field is empty
             if(name.isEmpty() || cp.isEmpty() || sp.isEmpty()){
                 Util.redSnackbar(getApplication(), mLayout, getString(R.string.fillin_all_fields));
                 return;
+            }
+
+            //check categoryId & productId is not null
+            if(mCategoryId == null || mProductId == null){
+                Util.redSnackbar(getApplication(), mLayout, getString(R.string.please_check_your_internt));
+                return;
+            }
+
+            //code to convert image to Base64
+            String encodedImage = "";
+            if(mImageBitmap != null){
+                encodedImage = mImageSelection.compressImageToBase64(mImageBitmap);
             }
 
             //check name is more then 3 char long

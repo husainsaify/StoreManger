@@ -369,7 +369,7 @@ public class Database {
         cv.put(DatabaseHelper.COL_URI_PRODUCT_ID, productId);
 
         //Insert into product uri table
-        db.insert(DatabaseHelper.TABLE_PRODUCT_URI,null,cv);
+        db.insert(DatabaseHelper.TABLE_PRODUCT_URI, null, cv);
         db.close();
     }
 
@@ -391,6 +391,14 @@ public class Database {
         }
         cursor.close();
         return null;
+    }
+
+    //method to delete product uri
+    public int deleteProductUri(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String where = DatabaseHelper.COL_URI_USER_ID + "=? AND " + DatabaseHelper.COL_URI_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+        return db.delete(DatabaseHelper.TABLE_PRODUCT_URI,where,args);
     }
 
     private class DatabaseHelper extends SQLiteOpenHelper {

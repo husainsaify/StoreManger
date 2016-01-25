@@ -38,6 +38,7 @@ import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.ImageSeletion;
@@ -77,6 +78,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     private String mProductId = null;
     private String mUserId;
     private String mCategoryId = null;
+    private String mProductCode = null;
     private ProgressDialog pd;
     private Database db;
     private List<SimpleListPojo> mCategorySimpleList;
@@ -290,9 +292,10 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
 
                 //Check Response is valid
                 if (current != null) {
-                    //Set Category Id & Product Id to member variable
+                    //Set Category Id & Product Id & ProductCode to member variable
                     mCategoryId = current.getCategoryId();
                     mProductId = current.getId();
+                    mProductCode = current.getCode();
 
                     String imageAddress = current.getImageAddress();
 
@@ -547,16 +550,25 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     * This method will edit the product details in API
     * */
     private void doneEditingInBackground(final String encodedImage, final String name, final String cp, final String sp, final String size, final String quantity){
+        //show progressbar
+        pd.show();
+
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.EDIT_PRODUCT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
-                Log.d(TAG,"HUS: "+response);
+                pd.dismiss(); //hide progressDialog
+                parseDoneEditingResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(),error.getMessage(),Toast.LENGTH_LONG).show();
+                //Handle Volley error
+                Log.e(TAG,"HUS: doneEditingInBackground: "+error.getMessage());
+
+                String errorString = VolleySingleton.handleVolleyError(error);
+                if(errorString != null){
+                    Util.redSnackbar(getApplicationContext(),mLayout,errorString);
+                }
             }
         }){
             @Override
@@ -567,6 +579,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 param.put(Keys.PRAM_AP_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);
                 param.put(Keys.PRAM_AP_NAME,name);
+                param.put(Keys.PRAM_AP_CODE,mProductCode);
                 param.put(Keys.PRAM_AP_CP,cp);
                 param.put(Keys.PRAM_AP_SP,sp);
                 param.put(Keys.PRAM_AP_SIZE,size);
@@ -575,6 +588,33 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             }
         };
         mRequestQueue.add(request);
+    }
+
+    private void parseDoneEditingResponse(String response) {
+        List<SimplePojo> list = JsonParser.simpleParse(response);
+        if(list != null){
+            SimplePojo current = list.get(0);
+            if(current.getReturned()){
+                //success
+                Toast.makeText(getApplicationContext(),current.getMessage(),Toast.LENGTH_LONG).show();
+
+                //Delete old product data from SQLite database
+                db.deleteProduct(mUserId,mProductId);
+                db.deleteSQ(mUserId, mProductId);
+                db.deleteProductUri(mUserId,mProductId);
+
+                //Start Product activity
+                Intent productIntent = new Intent(getApplication(),ProductActivity.class);
+                productIntent.putExtra(Keys.KEY_PL_ID,mProductId);
+                productIntent.putExtra(Keys.KEY_PL_NAME,mProductName.getText().toString().trim());
+                startActivity(productIntent);
+            }else{
+                //failed
+                Util.redSnackbar(getApplicationContext(),mLayout,current.getMessage());
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

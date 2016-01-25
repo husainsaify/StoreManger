@@ -2,7 +2,9 @@ package com.hackerkernel.storemanager.parser;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
@@ -42,6 +44,7 @@ public class JsonParser {
             return list;
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d(TAG,"HUS: simpleParse: "+e.getMessage());
             return null;
         }
     }

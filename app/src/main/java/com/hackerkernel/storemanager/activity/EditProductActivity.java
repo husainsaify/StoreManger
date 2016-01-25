@@ -558,13 +558,15 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             public void onResponse(String response) {
                 pd.dismiss(); //hide progressDialog
                 parseDoneEditingResponse(response);
+                Log.d(TAG,"HUS: doneEditingInBackground "+response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss();
                 //Handle Volley error
-                Log.e(TAG,"HUS: doneEditingInBackground: "+error.getMessage());
+                error.printStackTrace();
+                Log.e(TAG,"HUS: message "+error.getMessage()+"/cause "+error.getCause());
 
                 String errorString = VolleySingleton.handleVolleyError(error);
                 if(errorString != null){
@@ -591,6 +593,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 return param;
             }
         };
+
         mRequestQueue.add(request);
     }
 

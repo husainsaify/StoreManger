@@ -120,9 +120,12 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
 
-        <activity android:name=".activity.EditProductActivity"/>
-
-
+        <activity android:name=".activity.EditProductActivity" />
+        <activity android:name=".activity.AddSalesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

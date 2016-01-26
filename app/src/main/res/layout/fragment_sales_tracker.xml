@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,4 +10,22 @@
         android:layout_height="match_parent"
         android:text="Sales tracker fragment" />
 
-</FrameLayout>
+    <!-- Coordinator layout to store Snackbar and Fab -->
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/clayout"
+        android:layout_alignParentBottom="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddSales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_white"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_gravity="end|bottom"/>
+
+    </android.support.design.widget.CoordinatorLayout>
+    <!-- / Coordinator layout to store Snackbar and Fab -->
+
+</RelativeLayout>

@@ -61,9 +61,9 @@ public class ImageSeletion{
     }
 
     public String compressImageToBase64(Bitmap bitmap){
-        //compress the image into 100% quality
+        //compress the image
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,70,byteArrayOutputStream);
 
         //convert image to  Base64 encoded string
         return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);

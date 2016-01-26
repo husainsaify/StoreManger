@@ -30,8 +30,8 @@ public class AddSalesActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(R.string.add_sales);
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
         //setup View pager
         setupViewPager(mViewPager);

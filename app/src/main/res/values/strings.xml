@@ -110,8 +110,6 @@
     <string name="name_to_short">Name to short</string>
     <string name="name_should_be_less_20">Name should be less then 20 characters</string>
     <string name="no_salesman_added">It\'s seem you haven\'t added any salesman yet! Click on the plus icon to add one</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="category_capital">CATEGORY</string>
     <string name="salestracker_capital">SALES TRACKER</string>

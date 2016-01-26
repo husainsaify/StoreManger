@@ -88,6 +88,8 @@ public class ProductActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(mProductName);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Get userId and check it
         mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
@@ -460,6 +462,10 @@ public class ProductActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
+            //When home Button is pressed in Toolbar
+            case android.R.id.home:
+                finish();
+                break;
             case R.id.action_refresh:
                  refreshProduct();
                 break;

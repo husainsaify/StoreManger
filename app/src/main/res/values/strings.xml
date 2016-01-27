@@ -136,6 +136,7 @@
     <string name="add_sales">Add Sales</string>
     <string name="listed_product_big">LISTED PRODUCT</string>
     <string name="non_listed_product_big">NON LISTED PRODUCT</string>
+    <string name="add_more">Add More</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

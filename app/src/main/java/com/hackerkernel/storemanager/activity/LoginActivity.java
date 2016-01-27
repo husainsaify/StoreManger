@@ -55,6 +55,8 @@ public class LoginActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null; //statement to avoid NullPointerException in Toolbar
         getSupportActionBar().setTitle(getString(R.string.login_small));
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //make a progress dialog
         pd = new ProgressDialog(this);

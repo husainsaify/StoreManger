@@ -106,63 +106,30 @@
 
                 </TableLayout>
 
-                <TableLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="1">
-
-                    <TableRow>
-
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/product_name" />
-
-                        <EditText />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/size" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/quantity" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/cost_price" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/selling_price" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                </TableLayout>
-
             </LinearLayout>
             <!-- /product info container -->
+
+            <!-- sold by area -->
+            <TableLayout
+                android:id="@+id/salesmanSpinnerContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1"
+                android:layout_below="@+id/linearLayout">
+
+                <TableRow>
+                    <TextView
+                        android:text="Sold By"
+                        android:layout_gravity="center"
+                        android:textColor="@color/primaryColor"
+                        />
+                    <Spinner
+                        android:id="@+id/salesmanSpinner"
+                        />
+                </TableRow>
+
+            </TableLayout>
+            <!-- / sold by area -->
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -170,7 +137,7 @@
                 android:text="@string/done"
                 android:textColor="@color/iconColor"
                 android:background="@drawable/primary_button"
-                android:layout_below="@id/linearLayout" />
+                android:layout_below="@id/salesmanSpinnerContainer" />
         </RelativeLayout>
 
     </ScrollView>

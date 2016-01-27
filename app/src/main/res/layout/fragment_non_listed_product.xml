@@ -4,10 +4,126 @@
     android:layout_height="match_parent"
     tools:context="com.hackerkernel.storemanager.fragment.NonListedProductFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Non Listed Product Fragment" />
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layoutCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    style="@style/TextLabel"
+                    android:id="@+id/customerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Customer name" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!-- Product info container -->
+            <Button
+                android:layout_below="@id/layoutCustomerName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add more"
+                android:id="@+id/addMoreFields"
+                android:background="@drawable/primary_button"
+                android:textColor="@color/iconColor"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_alignTop="@+id/addMoreFields"
+                android:layout_toRightOf="@+id/addMoreFields"
+                android:layout_toEndOf="@+id/addMoreFields"
+                android:background="@drawable/white_button"
+                android:textColor="@color/primaryColor"
+                android:layout_marginLeft="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linearLayout"
+                android:layout_below="@id/addMoreFields"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="1">
+
+                    <TableRow>
+
+                        <TextView
+                            android:padding="3dp"
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/product_name" />
+
+                        <EditText />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:padding="3dp"
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/size" />
+
+                        <EditText android:inputType="number" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:padding="3dp"
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/quantity" />
+
+                        <EditText android:inputType="number" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:padding="3dp"
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/cost_price" />
+
+                        <EditText android:inputType="number" />
+                    </TableRow>
+
+                    <TableRow>
+                        <TextView
+                            android:padding="3dp"
+                            android:textColor="@color/primaryColor"
+                            android:text="@string/selling_price" />
+
+                        <EditText android:inputType="number" />
+                    </TableRow>
+
+                </TableLayout>
+
+            </LinearLayout>
+            <!-- /product info container -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/done"
+                android:text="@string/done"
+                android:textColor="@color/iconColor"
+                android:background="@drawable/primary_button"
+                android:layout_below="@id/linearLayout"/>
+        </RelativeLayout>
+
+    </ScrollView>
 
 </FrameLayout>

@@ -128,6 +128,11 @@ public class NonListedProductFragment extends Fragment {
                 if (errrorString != null){
                     Util.redSnackbar(getActivity(),mLayout,errrorString);
                 }
+
+                //display salesman spinner from sqlite
+                mSalesmanList = db.getAllSimpleList(Database.SALESMAN,mUserId);
+                setupSalesmanSpinnerFromList(mSalesmanList);
+
             }
         }){
             @Override

@@ -8,7 +8,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/layout">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/layoutCustomerName"
@@ -20,7 +21,7 @@
                     android:id="@+id/customerName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Customer name" />
+                    android:hint="@string/customer_name" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Product info container -->
@@ -115,11 +116,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:stretchColumns="1"
-                android:layout_below="@+id/linearLayout">
+                android:layout_below="@+id/linearLayout"
+                android:layout_marginBottom="10dp">
 
                 <TableRow>
                     <TextView
                         android:text="Sold By"
+                        android:padding="3dp"
                         android:layout_gravity="center"
                         android:textColor="@color/primaryColor"
                         />
@@ -138,6 +141,7 @@
                 android:textColor="@color/iconColor"
                 android:background="@drawable/primary_button"
                 android:layout_below="@id/salesmanSpinnerContainer" />
+
         </RelativeLayout>
 
     </ScrollView>

@@ -143,11 +143,10 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
                 if(mSalesmanList != null){
                     //Call SetRecyclerView to setup Recyclerview
                     setupRecyclerView(mSalesmanList);
+                    //Store new Salesman list in Sqlite Database
+                    db.deleteAllSimpleList(Database.SALESMAN);
+                    db.insertAllSimpleList(Database.SALESMAN, mSalesmanList);
                 }
-
-                //Store new Salesman list in Sqlite Database
-                db.deleteAllSimpleList(Database.SALESMAN);
-                db.insertAllSimpleList(Database.SALESMAN,mSalesmanList);
             }
         }, new Response.ErrorListener() {
             @Override

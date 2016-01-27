@@ -59,7 +59,7 @@ public class VolleySingleton {
     public static String handleVolleyError(VolleyError error){
         String message = null;
         if(error instanceof TimeoutError || error instanceof NoConnectionError){
-            message = "Connection timeout";
+            message = "Bad network Connection";
         }else if(error instanceof AuthFailureError){
             message = "Failed to perform a request";
         }else if(error instanceof ServerError){

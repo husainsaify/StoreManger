@@ -52,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/linearLayout"
                 android:layout_below="@id/addMore"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
             <include layout="@layout/include_non_listed_product_info"/>

@@ -1,58 +1,69 @@
-<TableLayout
-    android:layout_marginTop="10dp"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:stretchColumns="1"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_marginTop="10dp"
+    android:stretchColumns="1">
 
     <TableRow>
 
         <TextView
             android:padding="3dp"
-            android:textColor="@color/primaryColor"
-            android:text="@string/product_name" />
+            android:text="@string/product_name"
+            android:textColor="@color/primaryColor" />
 
-        <EditText />
+        <EditText android:id="@+id/productName" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:padding="3dp"
-            android:textColor="@color/primaryColor"
-            android:text="@string/size" />
+            android:text="@string/size"
+            android:textColor="@color/primaryColor" />
 
-        <EditText android:inputType="number" />
+        <EditText
+            android:id="@+id/productSize"
+            android:inputType="number" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:padding="3dp"
-            android:textColor="@color/primaryColor"
-            android:text="@string/quantity" />
+            android:text="@string/quantity"
+            android:textColor="@color/primaryColor" />
 
-        <EditText android:inputType="number" />
+        <EditText
+            android:id="@+id/productQuantity"
+            android:inputType="number" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:padding="3dp"
-            android:textColor="@color/primaryColor"
-            android:text="@string/cost_price" />
+            android:text="@string/cost_price"
+            android:textColor="@color/primaryColor" />
 
-        <EditText android:inputType="number" />
+        <EditText
+            android:id="@+id/productCostPrice"
+            android:inputType="number" />
     </TableRow>
 
     <TableRow>
+
         <TextView
             android:padding="3dp"
-            android:textColor="@color/primaryColor"
-            android:text="@string/selling_price" />
+            android:text="@string/selling_price"
+            android:textColor="@color/primaryColor" />
 
-        <EditText android:inputType="number" />
+        <EditText
+            android:id="@+id/productSellingPrice"
+            android:inputType="number" />
     </TableRow>
 
     <View
-        android:layout_marginTop="10dp"
         android:layout_height="1dp"
-        android:background="@color/primaryColor" />
+        android:layout_marginTop="10dp"
+        android:background="@color/accentColor" />
 </TableLayout>

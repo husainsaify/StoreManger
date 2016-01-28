@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -49,6 +50,11 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     @Bind(R.id.linearLayout) LinearLayout mProductInfoContainerLayout;
     @Bind(R.id.addMore) Button mAddMore;
     @Bind(R.id.delete) Button mDelete;
+    @Bind(R.id.productName) EditText mProductNameView;
+    @Bind(R.id.productSize) EditText mProductSizeView;
+    @Bind(R.id.productQuantity) EditText mProductQuanityView;
+    @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
+    @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
 
     //Member variables
     private String mUserId;
@@ -56,6 +62,14 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private String TAG = "NonListedProductFragment";
     private List<SimpleListPojo> mSalesmanList;
     private Database db;
+
+    private int mProductInfoCounter = 0;
+    private List<EditText> mProductNameList = new ArrayList<>();
+    private List<EditText> mProductSizeList = new ArrayList<>();
+    private List<EditText> mProductQuantityList = new ArrayList<>();
+    private List<EditText> mProductCostPriceList = new ArrayList<>();
+    private List<EditText> mProductSellingPriceList = new ArrayList<>();
+
 
 
     public NonListedProductFragment() {
@@ -82,6 +96,14 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
 
         ButterKnife.bind(this, view); //Bind views
 
+        //add product info view to the list
+        mProductNameList.add(mProductNameView);
+        mProductSizeList.add(mProductSizeView);
+        mProductQuantityList.add(mProductQuanityView);
+        mProductCostPriceList.add(mProductCostPriceView);
+        mProductSellingPriceList.add(mProductSellingPriceView);
+        mProductInfoCounter++; //increment the counter
+
         //setup salesman spinner
         setupSalesmanSpinner();
 
@@ -101,7 +123,10 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         switch (v.getId()){
             //add more button is clicked
             case R.id.delete:
-                Toast.makeText(getActivity(),"delete",Toast.LENGTH_LONG).show();
+                String message =  "count "+mProductInfoCounter+"/ name "+mProductCostPriceList.size()+"/" +
+                        " size "+mProductSizeList.size()+"/ quan "+mProductQuantityList.size()+"/ " +
+                        "cp "+mProductCostPriceList.size()+" / sp "+mProductSellingPriceList.size();
+                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -215,8 +240,24 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private void addMoreFields(ViewGroup container){
         //Inflate the ProductInfo field layout
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.include_non_listed_product_info,container,false);
+        View view = inflater.inflate(R.layout.include_non_listed_product_info, container, false);
 
+        //Find view From the layout which is inflated
+        EditText productName = (EditText) view.findViewById(R.id.productName);
+        EditText productSize = (EditText) view.findViewById(R.id.productSize);
+        EditText productQuantity = (EditText) view.findViewById(R.id.productQuantity);
+        EditText productCostPrice = (EditText) view.findViewById(R.id.productCostPrice);
+        EditText productSellingPrice = (EditText) view.findViewById(R.id.productSellingPrice);
+
+        //add view to the list
+        mProductNameList.add(productName);
+        mProductSizeList.add(productSize);
+        mProductQuantityList.add(productQuantity);
+        mProductCostPriceList.add(productCostPrice);
+        mProductSellingPriceList.add(productSellingPrice);
+        mProductInfoCounter++; //increment the counter
+
+        //Append the views to layout
         mProductInfoContainerLayout.addView(view);
     }
 }

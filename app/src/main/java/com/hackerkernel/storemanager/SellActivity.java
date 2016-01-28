@@ -413,7 +413,7 @@ public class SellActivity extends AppCompatActivity {
             //convert it into a encoded url
             String data = Functions.hashMapToEncodedUrl(hashmap);
 
-            String jsonString = GetJson.request(ApiUrl.ADD_SELL, data, "POST");
+            String jsonString = GetJson.request(ApiUrl.ADD_SALES, data, "POST");
             Log.d(TAG,"HUS: JSON "+jsonString);
             //parse Json
             List<SimplePojo> list = JsonParser.simpleParser(jsonString);

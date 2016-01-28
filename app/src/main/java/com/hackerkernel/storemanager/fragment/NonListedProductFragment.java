@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,11 +52,13 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     @Bind(R.id.addMore) Button mAddMore;
     @Bind(R.id.delete) Button mDelete;
     @Bind(R.id.productInfo) View mProductInfo;
+    @Bind(R.id.customerName) EditText mCustomerName;
     @Bind(R.id.productName) EditText mProductNameView;
     @Bind(R.id.productSize) EditText mProductSizeView;
     @Bind(R.id.productQuantity) EditText mProductQuanityView;
     @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
     @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
+    @Bind(R.id.done) Button mDone;
 
     //Member variables
     private String mUserId;
@@ -63,6 +66,8 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private String TAG = "NonListedProductFragment";
     private List<SimpleListPojo> mSalesmanList;
     private Database db;
+    private String mSalesmanId = null;
+    private String mSalesmanName = null;
 
     private int mProductInfoCounter = 0;
     private List<View> mProductInfoList = new ArrayList<>();
@@ -71,7 +76,6 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private List<EditText> mProductQuantityList = new ArrayList<>();
     private List<EditText> mProductCostPriceList = new ArrayList<>();
     private List<EditText> mProductSellingPriceList = new ArrayList<>();
-
 
 
     public NonListedProductFragment() {
@@ -110,6 +114,21 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         //setup salesman spinner
         setupSalesmanSpinner();
 
+        //When Salesman is selected From Spinner
+        mSalesmanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //store salesman id in variable
+                mSalesmanId = mSalesmanList.get(position).getId();
+                mSalesmanName = mSalesmanList.get(position).getName();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         //Set ClickListner to views
         mAddMore.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,6 +137,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
             }
         });
         mDelete.setOnClickListener(this);
+        mDone.setOnClickListener(this);
         return view;
     }
 
@@ -127,6 +147,10 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
             //add more button is clicked
             case R.id.delete:
                     deleteField();
+                break;
+            //when done button is pressed add sales to API
+            case R.id.done:
+                    addSalesToAPI();
                 break;
             /*case R.id.button:
                 String message =  "layout "+mProductInfoList.size()+"/ count "+mProductInfoCounter+"/ name "+mProductNameList.size()+"/" +
@@ -291,4 +315,80 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
             Toast.makeText(getActivity(), R.string.atleast_have_1_product_info,Toast.LENGTH_LONG).show();
         }
     }
+
+    /************************ DONE BUTTON IS PRESSED *************************/
+    private void addSalesToAPI() {
+        //check internet connection
+        if(Util.isConnectedToInternet(getActivity())){
+            //perform check
+
+            //get the Customer name
+            String customerName = mCustomerName.getText().toString().trim();
+
+            //StringBuilder to Store Product info fields stack
+            StringBuilder nameStack = new StringBuilder();
+            StringBuilder sizeStack = new StringBuilder();
+            StringBuilder quantityStack = new StringBuilder();
+            StringBuilder costpriceStack = new StringBuilder();
+            StringBuilder sellingpriceStack = new StringBuilder();
+
+            //Loop throw the list and get the text which are stored in the views
+            for (int i = 0; i < mProductInfoCounter; i++) {
+                //store Product Info details in varaible
+                String name = mProductNameList.get(i).getText().toString().trim();
+                String size = mProductSizeList.get(i).getText().toString().trim();
+                String quantity = mProductQuantityList.get(i).getText().toString().trim();
+                String costprice = mProductCostPriceList.get(i).getText().toString().trim();
+                String sellingprice = mProductSellingPriceList.get(i).getText().toString().trim();
+
+                //check fields are not empty
+                if(name.isEmpty() || size.isEmpty() || quantity.isEmpty() || costprice.isEmpty() || sellingprice.isEmpty()){
+                    Util.redSnackbar(getActivity(),mLayout,getString(R.string.fillin_all_fields));
+                    Log.d(TAG,"HUS: HELLO empty field no "+ i);
+                    return; //to end the loop & method
+                }else{
+                    //add text to stack
+                    nameStack.append(name);
+                    sizeStack.append(size);
+                    quantityStack.append(quantity);
+                    costpriceStack.append(costprice);
+                    sellingpriceStack.append(sellingprice);
+
+                    //check it last element
+                    if(i < mProductInfoCounter-1){
+                        nameStack.append(",");
+                        sizeStack.append(",");
+                        quantityStack.append(",");
+                        costpriceStack.append(",");
+                        sellingpriceStack.append(",");
+                    }
+                }
+            } //FOR
+
+            addSalesInBackground(customerName, nameStack.toString(), sizeStack.toString(), quantityStack.toString(), costpriceStack.toString(), sellingpriceStack.toString(), mSalesmanId, mSalesmanName);
+        }else{
+            //show no internet message
+            Util.noInternetSnackbar(getActivity(), mLayout);
+        }
+    }
+
+    /*
+    *
+    * Method to stores sales information in API
+    * */
+    private void addSalesInBackground(String customerName, String name, String size, String quantity, String costprice, String sellingprice, String salesmanId, String salesmanName) {
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_SALES, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        mRequestQueue.add(request);
+    }
+
 }

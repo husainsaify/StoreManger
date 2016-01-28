@@ -11,7 +11,7 @@
         tools:context="com.hackerkernel.storemanager.activity.LoginActivity"
         android:id="@+id/login_linearlayout">
 
-        <include layout="@layout/tool_bar" android:id="@+id/toolbar"/>
+        <include layout="@layout/include_toolbar" android:id="@+id/toolbar"/>
 
         <LinearLayout
             android:layout_width="match_parent"

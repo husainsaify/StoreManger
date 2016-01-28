@@ -1,0 +1,55 @@
+<TableLayout
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:stretchColumns="1"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:textColor="@color/primaryColor"
+            android:text="@string/product_name" />
+
+        <EditText />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:padding="3dp"
+            android:textColor="@color/primaryColor"
+            android:text="@string/size" />
+
+        <EditText android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:padding="3dp"
+            android:textColor="@color/primaryColor"
+            android:text="@string/quantity" />
+
+        <EditText android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:padding="3dp"
+            android:textColor="@color/primaryColor"
+            android:text="@string/cost_price" />
+
+        <EditText android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:padding="3dp"
+            android:textColor="@color/primaryColor"
+            android:text="@string/selling_price" />
+
+        <EditText android:inputType="number" />
+    </TableRow>
+
+</TableLayout>

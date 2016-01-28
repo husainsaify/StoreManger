@@ -6,7 +6,7 @@
     android:background="#eeeeee">
 
     <!-- toolbar -->
-    <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+    <include android:id="@+id/toolbar" layout="@layout/include_toolbar"/>
     <!-- /toolbar -->
 
     <android.support.v4.widget.SwipeRefreshLayout

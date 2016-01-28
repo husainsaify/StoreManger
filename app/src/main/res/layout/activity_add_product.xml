@@ -10,7 +10,7 @@
         <!-- toolbar -->
         <include
             android:id="@+id/toolbar"
-            layout="@layout/tool_bar"/>
+            layout="@layout/include_toolbar"/>
         <!-- / toolbar -->
 
         <!-- container for views -->

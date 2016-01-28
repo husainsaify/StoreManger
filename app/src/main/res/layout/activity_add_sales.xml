@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <!-- Toolbar -->
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+        <include android:id="@+id/toolbar" layout="@layout/include_toolbar"/>
         <!-- /toolbar -->
         <android.support.design.widget.TabLayout
             android:id="@+id/salesTab"

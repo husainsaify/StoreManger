@@ -24,7 +24,7 @@
                     android:hint="@string/customer_name" />
             </android.support.design.widget.TextInputLayout>
 
-            <!-- Product info container -->
+
             <Button
                 android:layout_below="@id/layoutCustomerName"
                 android:layout_width="wrap_content"
@@ -45,6 +45,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"/>
 
+            <!-- Product info container -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,60 +53,7 @@
                 android:layout_below="@id/addMoreFields"
                 android:orientation="vertical">
 
-                <TableLayout
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:stretchColumns="1">
-
-                    <TableRow>
-
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/product_name" />
-
-                        <EditText />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/size" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/quantity" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/cost_price" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:padding="3dp"
-                            android:textColor="@color/primaryColor"
-                            android:text="@string/selling_price" />
-
-                        <EditText android:inputType="number" />
-                    </TableRow>
-
-                </TableLayout>
+            <include layout="@layout/include_non_listed_product_info"/>
 
             </LinearLayout>
             <!-- /product info container -->

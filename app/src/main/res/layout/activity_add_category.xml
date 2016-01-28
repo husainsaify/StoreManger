@@ -10,7 +10,7 @@
         android:orientation="vertical"
         android:id="@+id/addCategoryLinearLayout">
 
-        <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+        <include android:id="@+id/toolbar" layout="@layout/include_toolbar"/>
 
         <EditText
             android:layout_width="match_parent"

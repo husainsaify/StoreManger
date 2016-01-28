@@ -7,7 +7,7 @@
     android:id="@+id/layout"
     tools:context="com.hackerkernel.storemanager.activity.EditProductActivity">
 
-    <include android:id="@+id/toolbar" layout="@layout/tool_bar"/>
+    <include android:id="@+id/toolbar" layout="@layout/include_toolbar"/>
 
     <!-- Main Scrollbar -->
     <ScrollView

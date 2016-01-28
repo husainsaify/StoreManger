@@ -10,7 +10,7 @@
     <!-- Toolbar -->
     <include
         android:id="@+id/toolbar"
-        layout="@layout/tool_bar" />
+        layout="@layout/include_toolbar" />
     <!-- /Toolbar -->
 
     <android.support.design.widget.CoordinatorLayout

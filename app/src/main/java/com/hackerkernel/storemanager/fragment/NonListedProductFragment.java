@@ -9,8 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,10 +42,13 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NonListedProductFragment extends Fragment {
+public class NonListedProductFragment extends Fragment implements View.OnClickListener {
     //Views
     @Bind(R.id.layout) RelativeLayout mLayout;
     @Bind(R.id.salesmanSpinner) Spinner mSalesmanSpinner;
+    @Bind(R.id.linearLayout) LinearLayout mProductInfoContainerLayout;
+    @Bind(R.id.addMore) Button mAddMore;
+    @Bind(R.id.delete) Button mDelete;
 
     //Member variables
     private String mUserId;
@@ -71,7 +75,7 @@ public class NonListedProductFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_non_listed_product, container, false);
@@ -80,8 +84,29 @@ public class NonListedProductFragment extends Fragment {
 
         //setup salesman spinner
         setupSalesmanSpinner();
+
+        //Set ClickListner to views
+        mAddMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addMoreFields(container);
+            }
+        });
+        mDelete.setOnClickListener(this);
         return view;
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //add more button is clicked
+            case R.id.delete:
+                Toast.makeText(getActivity(),"delete",Toast.LENGTH_LONG).show();
+                break;
+        }
+    }
+
+    /********************** SALESMAN SPINNER ***************/
 
     /*
     * METHOD TO CHECK INTERNET
@@ -184,5 +209,14 @@ public class NonListedProductFragment extends Fragment {
         //set list to spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringList);
         mSalesmanSpinner.setAdapter(adapter);
+    }
+
+    /******************** ADD MORE BUTTON PRESSED *****************/
+    private void addMoreFields(ViewGroup container){
+        //Inflate the ProductInfo field layout
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View view = inflater.inflate(R.layout.include_non_listed_product_info,container,false);
+
+        mProductInfoContainerLayout.addView(view);
     }
 }

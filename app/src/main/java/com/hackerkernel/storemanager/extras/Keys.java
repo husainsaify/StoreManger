@@ -82,4 +82,14 @@ public interface Keys {
             KEY_P_TIME = "time",
             KEY_P_CP = "cp",
             KEY_P_SP = "sp";
+
+    //Add sales (Non listed)
+    String PRAM_NON_LISTED_CUSTOMER_NAME = "customerName",
+            PRAM_NON_LISTED_NAME = "name",
+            PRAM_NON_LISTED_SIZE = "size",
+            PRAM_NON_LISTED_QUANTITY = "quantity",
+            PRAM_NON_LISTED_COSTPRICE = "costprice",
+            PRAM_NON_LISTED_SELLINGPRICE = "sellingprice",
+            PRAM_NON_LISTED_SALESMAN_ID = "salesmanId",
+            PRAM_NON_LISTED_SALESMAN_NAME = "salesmanName";
 }

@@ -376,18 +376,34 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     *
     * Method to stores sales information in API
     * */
-    private void addSalesInBackground(String customerName, String name, String size, String quantity, String costprice, String sellingprice, String salesmanId, String salesmanName) {
+    private void addSalesInBackground(final String customerName, final String name, final String size, final String quantity, final String costprice, final String sellingprice, final String salesmanId, final String salesmanName) {
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_SALES, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
+                Log.d(TAG,"HUS: respionse "+response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(getActivity(),"Error "+error.getMessage(),Toast.LENGTH_LONG).show();
             }
-        });
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+                param.put(Keys.KEY_COM_USERID,mUserId);
+                param.put(Keys.PRAM_NON_LISTED_CUSTOMER_NAME,customerName);
+                param.put(Keys.PRAM_NON_LISTED_NAME,name);
+                param.put(Keys.PRAM_NON_LISTED_SIZE,size);
+                param.put(Keys.PRAM_NON_LISTED_QUANTITY,quantity);
+                param.put(Keys.PRAM_NON_LISTED_COSTPRICE,costprice);
+                param.put(Keys.PRAM_NON_LISTED_SELLINGPRICE,sellingprice);
+                param.put(Keys.PRAM_NON_LISTED_SALESMAN_ID,salesmanId);
+                param.put(Keys.PRAM_NON_LISTED_SALESMAN_NAME,salesmanName);
+                return param;
+            }
+        };
         mRequestQueue.add(request);
     }
 

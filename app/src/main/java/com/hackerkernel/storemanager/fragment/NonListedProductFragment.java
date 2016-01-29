@@ -50,6 +50,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     @Bind(R.id.linearLayout) LinearLayout mProductInfoContainerLayout;
     @Bind(R.id.addMore) Button mAddMore;
     @Bind(R.id.delete) Button mDelete;
+    @Bind(R.id.productInfo) View mProductInfo;
     @Bind(R.id.productName) EditText mProductNameView;
     @Bind(R.id.productSize) EditText mProductSizeView;
     @Bind(R.id.productQuantity) EditText mProductQuanityView;
@@ -64,6 +65,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private Database db;
 
     private int mProductInfoCounter = 0;
+    private List<View> mProductInfoList = new ArrayList<>();
     private List<EditText> mProductNameList = new ArrayList<>();
     private List<EditText> mProductSizeList = new ArrayList<>();
     private List<EditText> mProductQuantityList = new ArrayList<>();
@@ -97,6 +99,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         ButterKnife.bind(this, view); //Bind views
 
         //add product info view to the list
+        mProductInfoList.add(mProductInfo); // All the Views of product INfo
         mProductNameList.add(mProductNameView);
         mProductSizeList.add(mProductSizeView);
         mProductQuantityList.add(mProductQuanityView);
@@ -123,11 +126,14 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         switch (v.getId()){
             //add more button is clicked
             case R.id.delete:
-                String message =  "count "+mProductInfoCounter+"/ name "+mProductCostPriceList.size()+"/" +
+                    deleteField();
+                break;
+            /*case R.id.button:
+                String message =  "layout "+mProductInfoList.size()+"/ count "+mProductInfoCounter+"/ name "+mProductNameList.size()+"/" +
                         " size "+mProductSizeList.size()+"/ quan "+mProductQuantityList.size()+"/ " +
                         "cp "+mProductCostPriceList.size()+" / sp "+mProductSellingPriceList.size();
                 Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
-                break;
+                break;*/
         }
     }
 
@@ -250,6 +256,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         EditText productSellingPrice = (EditText) view.findViewById(R.id.productSellingPrice);
 
         //add view to the list
+        mProductInfoList.add(view);
         mProductNameList.add(productName);
         mProductSizeList.add(productSize);
         mProductQuantityList.add(productQuantity);
@@ -259,5 +266,29 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
 
         //Append the views to layout
         mProductInfoContainerLayout.addView(view);
+    }
+
+    /************************ DELETE BUTTON is pressed *************************/
+    public void deleteField(){
+        int index = mProductInfoCounter - 1;
+        if (index > 0){ //means its not the last View
+            View view = mProductInfoList.get(index);
+
+            //remove from the list
+            mProductInfoList.remove(index);
+            mProductNameList.remove(index);
+            mProductSizeList.remove(index);
+            mProductQuantityList.remove(index);
+            mProductCostPriceList.remove(index);
+            mProductSellingPriceList.remove(index);
+
+            //remove view from parent
+            mProductInfoContainerLayout.removeView(view);
+
+            mProductInfoCounter--; //decrement the counter
+
+        }else{
+            Toast.makeText(getActivity(), R.string.atleast_have_1_product_info,Toast.LENGTH_LONG).show();
+        }
     }
 }

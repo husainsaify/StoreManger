@@ -611,6 +611,9 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 Intent productIntent = new Intent(getApplication(),ProductActivity.class);
                 productIntent.putExtra(Keys.KEY_PL_ID,mProductId);
                 productIntent.putExtra(Keys.KEY_PL_NAME,mProductName.getText().toString().trim());
+                //Clear task
+                productIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                productIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(productIntent);
             }else{
                 //failed

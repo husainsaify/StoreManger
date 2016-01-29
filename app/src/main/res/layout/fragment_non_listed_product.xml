@@ -78,7 +78,7 @@
                         />
                     <Spinner
                         android:id="@+id/salesmanSpinner"
-                        />
+                        android:spinnerMode="dialog" />
                 </TableRow>
 
             </TableLayout>

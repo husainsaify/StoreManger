@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager.fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -67,8 +68,10 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     private String TAG = "NonListedProductFragment";
     private List<SimpleListPojo> mSalesmanList;
     private Database db;
+    private ProgressDialog pd;
     private String mSalesmanId = null;
     private String mSalesmanName = null;
+
 
     private int mProductInfoCounter = 0;
     private List<View> mProductInfoList = new ArrayList<>();
@@ -93,6 +96,11 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
         //database
         db = new Database(getActivity());
+
+        //Create a progressDialog
+        pd = new ProgressDialog(getActivity());
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
     }
 
     @Override
@@ -378,15 +386,18 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     * Method to stores sales information in API
     * */
     private void addSalesInBackground(final String customerName, final String name, final String size, final String quantity, final String costprice, final String sellingprice, final String salesmanId, final String salesmanName) {
+        pd.show();
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_SALES, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                pd.dismiss();
                 Log.d(TAG,"HUS: respionse "+response);
                 parseAddSalesResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                pd.dismiss();
                 //handle volley error
                 Log.d(TAG,"HUS: addSalesInBackground "+error.getMessage());
                 String errorString = VolleySingleton.handleVolleyError(error);

@@ -139,8 +139,8 @@
     <string name="add_more">Add More</string>
     <string name="customer_name">Customer name</string>
     <string name="atleast_have_1_product_info">You should atleast have one product Info fields</string>
-    <string name="costprice_per_product">Cost price (Per Product)</string>
-    <string name="selling_price_per_product">Selling price (Per Product)</string>
+
+    <string name="per_product">(Per Product)</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

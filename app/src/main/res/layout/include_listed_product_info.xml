@@ -1,0 +1,71 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:stretchColumns="1">
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="@string/product_name"
+            android:textColor="@color/primaryColor" />
+
+        <AutoCompleteTextView android:id="@+id/productName" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="@string/size"
+            android:textColor="@color/primaryColor" />
+
+        <EditText
+            android:id="@+id/productSize"
+            android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="@string/quantity"
+            android:textColor="@color/primaryColor" />
+
+        <EditText
+            android:id="@+id/productQuantity"
+            android:inputType="number" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="@string/cost_price"
+            android:textColor="@color/primaryColor" />
+
+        <EditText
+            android:id="@+id/productCostPrice"
+            android:inputType="number"
+            android:hint="@string/per_product"/>
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:padding="3dp"
+            android:text="@string/selling_price"
+            android:textColor="@color/primaryColor" />
+
+        <EditText
+            android:id="@+id/productSellingPrice"
+            android:inputType="number"
+            android:hint="@string/per_product"/>
+    </TableRow>
+
+    <View
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/accentColor" />
+</TableLayout>

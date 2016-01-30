@@ -47,7 +47,8 @@
 
         <EditText
             android:id="@+id/productCostPrice"
-            android:inputType="number" />
+            android:inputType="number"
+            android:hint="@string/costprice_per_product"/>
     </TableRow>
 
     <TableRow>
@@ -59,7 +60,8 @@
 
         <EditText
             android:id="@+id/productSellingPrice"
-            android:inputType="number" />
+            android:inputType="number"
+            android:hint="@string/selling_price_per_product"/>
     </TableRow>
 
     <View

@@ -29,6 +29,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
@@ -380,13 +381,18 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_SALES, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(getActivity(),response,Toast.LENGTH_LONG).show();
                 Log.d(TAG,"HUS: respionse "+response);
+                parseAddSalesResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(),"Error "+error.getMessage(),Toast.LENGTH_LONG).show();
+                //handle volley error
+                Log.d(TAG,"HUS: addSalesInBackground "+error.getMessage());
+                String errorString = VolleySingleton.handleVolleyError(error);
+                if (errorString != null){
+                    Util.redSnackbar(getActivity(),mLayout,errorString);
+                }
             }
         }){
             @Override
@@ -407,4 +413,37 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         mRequestQueue.add(request);
     }
 
+    private void parseAddSalesResponse(String response) {
+        List<SimplePojo> list = JsonParser.simpleParser(response);
+        if (list != null){
+            SimplePojo current = list.get(0);
+            if (current.getReturned()){ //true means succes
+                Toast.makeText(getActivity(), current.getMessage(), Toast.LENGTH_LONG).show();
+
+                //clear data From the fields
+                clearFieldsData();
+            }else{ //false error
+                Util.redSnackbar(getActivity(),mLayout,current.getMessage());
+            }
+        }else{
+            Toast.makeText(getActivity(), R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+    * Method to clear old data from the fields
+    * */
+    private void clearFieldsData() {
+        mCustomerName.setFocusable(true);
+        mCustomerName.setText("");
+
+        //clear all the product info for fields
+        for (int i = 0; i < mProductInfoCounter; i++) {
+            mProductNameList.get(i).setText("");
+            mProductSizeList.get(i).setText("");
+            mProductQuantityList.get(i).setText("");
+            mProductCostPriceList.get(i).setText("");
+            mProductSellingPriceList.get(i).setText("");
+        }
+    }
 }

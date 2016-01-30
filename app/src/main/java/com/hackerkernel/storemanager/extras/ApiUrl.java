@@ -17,7 +17,7 @@ public class ApiUrl {
                 GET_PRODUCT = SERVER + "fetchProduct.php",
                 DELETE_PRODUCT = SERVER + "deleteProduct.php",
                 EDIT_PRODUCT = SERVER + "editProduct.php",
-                AC_PRODUCT_SEARCH = SERVER + "searchProduct.php",
+                AC_PRODUCT_SEARCH = SERVER + "autoCompleteProductSearch.php",
                 ADD_SALES = SERVER + "addSales.php",
                 SALES_TRACKER_DATE_LIST = SERVER + "salesTrackerDatelist.php",
                 GET_SALES_TRACKER = SERVER + "salesTracker.php",

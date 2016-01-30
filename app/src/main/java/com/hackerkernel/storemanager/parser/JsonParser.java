@@ -2,11 +2,9 @@ package com.hackerkernel.storemanager.parser;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.Keys;
-import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
+import com.hackerkernel.storemanager.pojo.AutoCompletProductPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -286,15 +284,15 @@ public class JsonParser {
     }
 
     //ACProductSearch json parser
-    public static List<ACProductSearchPojo> acProductSearchParser(String jsonString){
-        ACProductSearchPojo product = new ACProductSearchPojo();
+    public static List<AutoCompletProductPojo> acProductSearchParser(String jsonString){
+        AutoCompletProductPojo product = new AutoCompletProductPojo();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
             //set message and return
             product.setMessage(jsonObject.getString("message"));
             product.setReturned(jsonObject.getBoolean("return"));
 
-            List<ACProductSearchPojo> productList = new ArrayList<>();
+            List<AutoCompletProductPojo> productList = new ArrayList<>();
 
             //check we have a success or failed "return" and count is greater then > 0
             if(product.getReturned() && jsonObject.getInt("count") > 0){
@@ -306,7 +304,7 @@ public class JsonParser {
                     JSONObject jo = ja.getJSONObject(i);
 
                     //store stuff in Pojo
-                    ACProductSearchPojo p = new ACProductSearchPojo();
+                    AutoCompletProductPojo p = new AutoCompletProductPojo();
                     p.setId(jo.getString("id"));
                     p.setName(jo.getString("name"));
                     p.setCode(jo.getString("code"));

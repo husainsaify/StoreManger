@@ -11,29 +11,44 @@ import android.widget.Filter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.model.GetJson;
+import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.ACProductSearchPojo;
+import com.hackerkernel.storemanager.pojo.AutoCompletProductPojo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
-    private static final String TAG = ACProductAdapter.class.getSimpleName();
+public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductPojo> {
+    private static final String TAG = AutoCompleteProductAdapter.class.getSimpleName();
     private Context context;
-    private List<ACProductSearchPojo> suggestion;
+    private List<AutoCompletProductPojo> suggestion;
     private String userId;
 
-    public ACProductAdapter(Context context, String pName,String userId) {
+    //Volley Request Queue
+    private RequestQueue mRequestQueue;
+
+    public AutoCompleteProductAdapter(Context context, String userId) {
         super(context, R.layout.ac_product_list_layout);
         this.suggestion = new ArrayList<>();
         this.context = context;
         this.userId = userId;
+
+        //setup volley request queue
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
     }
 
     @Override
@@ -42,7 +57,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
     }
 
     @Override
-    public ACProductSearchPojo getItem(int position) {
+    public AutoCompletProductPojo getItem(int position) {
         return suggestion.get(position);
     }
 
@@ -53,19 +68,19 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
 
-                if(constraint != null){
+                if (constraint != null) {
                     String search = constraint.toString();
                     //fetch data from the web
                     try {
-                        suggestion = new ACProductSearchTask().execute(search,userId).get();
+                        suggestion = getProductInBackground(search);
 
-                        if(suggestion.size() < 1){
-                            Toast.makeText(context,"No product found",Toast.LENGTH_SHORT).show();
+                        if (suggestion.size() < 1) {
+                            Toast.makeText(context, "No product found", Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
-                        Log.d(TAG,"HUS: "+e);
+                        Log.d(TAG, "HUS: " + e);
                     }
 
                     // Now assign the values and count to the FilterResults object
@@ -78,10 +93,9 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if(results != null && results.count > 0) {
+                if (results != null && results.count > 0) {
                     notifyDataSetChanged();
-                }
-                else {
+                } else {
                     notifyDataSetInvalidated();
                 }
             }
@@ -96,7 +110,7 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
         View view = inflater.inflate(R.layout.ac_product_list_layout, parent, false);
 
         //get data from my SimpleListPojo
-        ACProductSearchPojo product = suggestion.get(position);
+        AutoCompletProductPojo product = suggestion.get(position);
         TextView name = (TextView) view.findViewById(R.id.ACproductName);
         TextView code = (TextView) view.findViewById(R.id.ACproductCode);
 
@@ -107,18 +121,57 @@ public class ACProductAdapter extends ArrayAdapter<ACProductSearchPojo> {
     }
 
     /*
+    * GET PRODUCT DATA FROM THE API
+    *
+    * */
+    public void getProductInBackground(final String search){
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.AC_PRODUCT_SEARCH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //parse response
+                parseProductResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //handle Volley error
+                String errorString = VolleySingleton.handleVolleyError(error);
+                if(errorString != null){
+                    Toast.makeText(context,errorString,Toast.LENGTH_LONG).show();
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.PRAM_AC_PRODUCTNAME,search);
+                params.put(Keys.KEY_COM_USERID,userId);
+                return params;
+            }
+        };
+
+        mRequestQueue.add(request);
+    }
+
+    //Method to parse response send by the API
+    private List<AutoCompletProductPojo> parseProductResponse(String response) {
+        return JsonParser.acProductSearchParser(response);
+    }
+
+
+    /*
     *
     * ASYNC TASK
     * */
 
-    private class ACProductSearchTask extends AsyncTask<String,Void,List<ACProductSearchPojo>> {
+    private class ACProductSearchTask extends AsyncTask<String, Void, List<AutoCompletProductPojo>> {
 
         @Override
-        protected List<ACProductSearchPojo> doInBackground(String... params) {
+        protected List<AutoCompletProductPojo> doInBackground(String... params) {
             //generate hashmap to send to backend
-            HashMap<String,String> hashMap = new HashMap<>();
+            HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("s", params[0]);
-            hashMap.put("user_id",params[1]);
+            hashMap.put("user_id", params[1]);
             //convert hashmap into encoded url
             String data = Functions.hashMapToEncodedUrl(hashMap);
 

@@ -83,7 +83,7 @@ public class SellActivity extends AppCompatActivity {
 
         String productSearchText = productSearch.getText().toString().trim();
 
-        final ACProductAdapter adapter = new ACProductAdapter(this,productSearchText,userId);
+        final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(this,productSearchText,userId);
         productSearch.setAdapter(adapter);
 
         productSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {

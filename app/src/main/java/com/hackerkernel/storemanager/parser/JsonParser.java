@@ -295,9 +295,9 @@ public class JsonParser {
             * If response message is True and count is greater then 0
             * means some result is found
             * */
-            if(jsonObject.getBoolean("return") && jsonObject.getInt("count") > 0){
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN) && jsonObject.getInt(Keys.KEY_AC_COUNT) > 0){
 
-                JSONArray ja = jsonObject.getJSONArray("result");
+                JSONArray ja = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
 
                 for (int i = 0; i < ja.length(); i++) {
                     //get jsonObject
@@ -305,9 +305,9 @@ public class JsonParser {
 
                     //store stuff in Pojo
                     AutoCompleteProductPojo p = new AutoCompleteProductPojo();
-                    p.setId(jo.getString("id"));
-                    p.setName(jo.getString("name"));
-                    p.setCode(jo.getString("code"));
+                    p.setId(jo.getString(Keys.KEY_AC_ID));
+                    p.setName(jo.getString(Keys.KEY_AC_NAME));
+                    p.setCode(jo.getString(Keys.KEY_AC_CODE));
 
                     //add pojo to the list
                     productList.add(p);
@@ -317,9 +317,9 @@ public class JsonParser {
                 Log.d(TAG, "HUS: acProductSearchParser "+jsonString);
                 //add response value to the pojo class
                 AutoCompleteProductPojo product = new AutoCompleteProductPojo();
-                product.setMessage(jsonObject.getString("message"));
-                product.setReturned(jsonObject.getBoolean("return"));
-                product.setCount(jsonObject.getInt("count"));
+                product.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                product.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
+                product.setCount(jsonObject.getInt(Keys.KEY_AC_COUNT));
 
                 //add pojo to the list
                 productList.add(product);

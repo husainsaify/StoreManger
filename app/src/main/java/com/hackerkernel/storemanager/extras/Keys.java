@@ -93,6 +93,12 @@ public interface Keys {
             PRAM_NON_LISTED_SALESMAN_ID = "salesmanId",
             PRAM_NON_LISTED_SALESMAN_NAME = "salesmanName";
 
-    //Auto Complet Product search PRAM
+    //Auto Complete Product search PRAM
     String PRAM_AC_PRODUCTNAME = "productName";
+
+    //Auto Complete Product search KEYS
+    String KEY_AC_COUNT = "count",
+            KEY_AC_ID = "id",
+            KEY_AC_NAME = "name",
+            KEY_AC_CODE = "code";
 }

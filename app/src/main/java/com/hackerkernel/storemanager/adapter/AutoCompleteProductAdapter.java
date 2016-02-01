@@ -152,7 +152,7 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompleteProduct
             if(!list.get(0).getReturned()){
                 Toast.makeText(context,list.get(0).getMessage(),Toast.LENGTH_LONG).show();
             }else if(list.get(0).getCount() == 0){ //check count
-                Toast.makeText(context,"No Product found",Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"No Product found",Toast.LENGTH_SHORT).show();
             }else{ //means Product is successfully found
                 suggestion = list;
             }

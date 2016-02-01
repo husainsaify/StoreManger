@@ -435,6 +435,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
+        //check sp is not smaller then cp
+        int difference = Integer.parseInt(sp) - Integer.parseInt(cp);
+        if(difference < 0){
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.sp_cannot_be_then_cp));
+            return;
+        }
+
         //generate a StringBuilder for size & quantity
         StringBuilder sizeBuilder = new StringBuilder();
         StringBuilder quantityBuilder = new StringBuilder();

@@ -411,7 +411,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             //compress the image into 70% quality
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            mSelectedImage.compress(Bitmap.CompressFormat.JPEG,80,byteArrayOutputStream);
+            mSelectedImage.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
 
             //convert image to  Base64 encoded string
             encodedImage = Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);

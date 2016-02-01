@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
@@ -59,12 +60,11 @@ public class ProductActivity extends AppCompatActivity {
     private ProgressDialog pd;
     private Database db;
     private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
 
     private Uri productImageUri;
     //list
     List<SimplePojo> deleteProductList;
-    //Pojo for product
-    ProductPojo productPojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +105,7 @@ public class ProductActivity extends AppCompatActivity {
 
         //Instanciate Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+        mImageLoader = VolleySingleton.getInstance().getImageLoader();
 
         fetchProductInBackground();
 
@@ -199,6 +200,7 @@ public class ProductActivity extends AppCompatActivity {
                 if(productPojo != null){
                     //setView with Response
                     setViews(productPojo);
+                    downloadImage(productPojo.getImageAddress());
                     Log.d(TAG,"HUS: productPojo not null");
                 }else{
                     //TODO: to something to notifiy user that we where unable to fetch response
@@ -211,6 +213,26 @@ public class ProductActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+    * Method to Download image
+    * */
+    public void downloadImage(String imageAddress){
+        if(!imageAddress.isEmpty()){
+            String imageUrl = ApiUrl.IMAGE_BASE_URL + imageAddress;
+            mImageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                    mImage.setImageBitmap(response.getBitmap());
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
         }
     }
 

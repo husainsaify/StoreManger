@@ -158,7 +158,7 @@ public class Database {
 
     private class DatabaseHelper extends SQLiteOpenHelper{
         //Database Schema class
-        private static final int DATABASE_VERSION = 4;
+        private static final int DATABASE_VERSION = 5;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -189,6 +189,25 @@ public class Database {
                 COL_PL_CODE = "code",
                 COL_PL_TIME = "time";
 
+        private static final String TABLE_PRODUCT = "product",
+                COL_P_ID = "_id",
+                COL_P_USER_ID = "user_id",
+                COL_P_PRODUCT_ID = "product_id",
+                COL_P_NAME = "name",
+                COL_P_IMAGE_ADDRESS = "image_address",
+                COL_P_IMAGE_URI = "image_uri",
+                COL_P_CODE = "code",
+                COL_P_CP = "cp",
+                COL_P_SP = "sp",
+                COL_P_TIME = "time";
+
+        private static final String TABLE_SQ = "sq",
+                COL_SQ_ID = "_id",
+                COL_SQ_SIZE = "size",
+                COL_SQ_QUANTITY = "quantity",
+                COL_SQ_USER_ID = "user_id",
+                COL_SQ_PRODUCT_ID = "product_id";
+
         /*
         * CREATE TABLE QUERY
         * */
@@ -213,71 +232,33 @@ public class Database {
                 COL_PL_CODE +" TEXT," +
                 COL_PL_TIME +" TEXT);";
 
+        private String CREATE_PRODUCT = "CREATE TABLE " + TABLE_PRODUCT + "(" +
+                COL_P_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_P_USER_ID +" INTEGER," +
+                COL_P_PRODUCT_ID +" INTEGER," +
+                COL_P_NAME + " TEXT," +
+                COL_P_IMAGE_ADDRESS + " TEXT," +
+                COL_P_IMAGE_URI + " TEXT," +
+                COL_P_CODE + " TEXT," +
+                COL_P_CP + " TEXT," +
+                COL_P_SP + " TEXT," +
+                COL_P_TIME + " TEXT);";
+
+        private String CREATE_SQ = "CREATE TABLE "+ TABLE_SQ +"(" +
+                COL_SQ_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_SQ_SIZE + " INTEGER," +
+                COL_SQ_QUANTITY + " INTEGER," +
+                COL_SQ_USER_ID + " INTEGER," +
+                COL_SQ_PRODUCT_ID + " INTEGER);";
+
         /*
         * DROP TABLE QUERY
         * */
         private String DROP_SALESMAN = "DROP TABLE IF EXISTS "+TABLE_SALESMAN;
         private String DROP_CATEGORY = "DROP TABLE IF EXISTS "+TABLE_CATEGORY;
         private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS "+TABLE_PRODUCT_LIST;
-
-        /*private static final String TABLE_USER = "user",
-                COL_ID = "id",
-                COL_NAME = "name",
-                COL_EMAIL = "email",
-                COL_PHONE = "phone",
-                COL_PASSWORD = "password",
-                COL_REGISTER_AT = "register_at",
-                COL_LAST_BILL_PAID = "last_bill_paid",
-                COL_NEXT_DUE_DATE = "next_due_date",
-                COL_ACTIVE = "active";
-        //product Table structure
-        private static final String TABLE_PRODUCT = "product",
-                COL_P_ID = "p_id",
-                COL_P_NAME = "p_name",
-                COL_P_IMAGE_ADDRESS = "p_image_address",
-                COL_P_IMAGE_URI = "p_image_uri",
-                COL_P_CODE = "p_code",
-                COL_P_CP = "p_cp",
-                COL_P_SP = "p_sp",
-                COL_P_TIME = "p_time";
-        //table sq
-        private static final String TABLE_SQ = "sq",
-                COL_SQ_ID = "id",
-                COL_SQ_SIZE = "size",
-                COL_SQ_QUANTITY = "quantity",
-                COL_SQ_USER_ID = "user_id",
-                COL_SQ_PRODUCT_ID = "product_id";*/
-
-        /*String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "(" +
-                COL_ID + " integer primary key not null," +
-                COL_NAME + " text not null," +
-                COL_EMAIL + " text not null," +
-                COL_PHONE + " text not null," +
-                COL_PASSWORD + " text not null," +
-                COL_REGISTER_AT + " text not null," +
-                COL_LAST_BILL_PAID + " text not null," +
-                COL_NEXT_DUE_DATE + " text not null," +
-                COL_ACTIVE + " text not null" +
-                ")";
-        //table for product
-        String CREATE_PRODUCT_TABLE = "CREATE TABLE " + TABLE_PRODUCT + "(" +
-                COL_P_ID + " integer primary key not null," +
-                COL_P_NAME + " text not null," +
-                COL_P_IMAGE_ADDRESS + " text not null," +
-                COL_P_IMAGE_URI + " text not null," +
-                COL_P_CODE + " text not null," +
-                COL_P_CP + " text not null," +
-                COL_P_SP + " text not null," +
-                COL_P_TIME + " text not null" +
-                ")";
-        //create SQ table
-        String CREATE_SQ_TABLE = "CREATE TABLE "+TABLE_SQ+"(" +
-                COL_SQ_ID + " integer primary key autoincrement," +
-                COL_SQ_SIZE + " integer not null," +
-                COL_SQ_QUANTITY + " integer not null," +
-                COL_SQ_USER_ID + " integer not null," +
-                COL_SQ_PRODUCT_ID + " integer not null" +
-                ")";*/
+        private String DROP_PRODUCT = "DROP TABLE IF EXISTS "+TABLE_PRODUCT;
+        private String DROP_SQ = "DROP TABLE IF EXISTS "+TABLE_SQ;
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -290,6 +271,8 @@ public class Database {
             db.execSQL(CREATE_SALESMAN);
             db.execSQL(CREATE_CATEGORY);
             db.execSQL(CREATE_PRODUCT_LIST);
+            db.execSQL(CREATE_PRODUCT);
+            db.execSQL(CREATE_SQ);
             Log.d(TAG, "HUS: onCreate");
         }
 
@@ -299,83 +282,14 @@ public class Database {
             db.execSQL(DROP_SALESMAN);
             db.execSQL(DROP_CATEGORY);
             db.execSQL(DROP_PRODUCT_LIST);
+            db.execSQL(DROP_PRODUCT);
+            db.execSQL(DROP_SQ);
             Log.d(TAG, "HUS: onUpgrade");
             //Call onCreate to recreate tables
             onCreate(db);
         }
 
-        /*/*//*************************** TABLE_USER
-         //insert user information in the database
-         public void login(LoginPojo user) {
-         db = this.getWritableDatabase();
-         // set values in the contentValues
-         ContentValues values = new ContentValues();
-         values.put(COL_ID, user.getId());
-         values.put(COL_NAME, user.getName());
-         values.put(COL_EMAIL, user.getEmail());
-         values.put(COL_PHONE, user.getPhone());
-         values.put(COL_PASSWORD, user.getPassword());
-         values.put(COL_REGISTER_AT, user.getRegisterAt());
-         values.put(COL_ACTIVE, user.getActive());
-         //insert into the database
-         db.insert(TABLE_USER, null, values);
-         db.close();
-         }
-         //check user
-         public boolean loginStatus() {
-         db = this.getReadableDatabase();
-         String q = "select * from " + TABLE_USER;
-         Cursor cursor = db.rawQuery(q, null);
-         if (cursor.getCount() <= 0) {
-         cursor.close();
-         db.close();
-         return false;
-         }
-         cursor.close();
-         db.close();
-         return true;
-         }
-         //delete user
-         public int logout() {
-         db = this.getWritableDatabase();
-         return db.delete(TABLE_USER, null, null);
-         }
-         //get all user info
-         public ArrayMap<String, String> getAllUserInfo() {
-         //array list to store data
-         ArrayMap<String, String> value = new ArrayMap<>();
-         db = this.getReadableDatabase();
-         Cursor cursor = db.rawQuery("select * from " + TABLE_USER, null);
-         if (cursor.moveToFirst()) {
-         do {
-         value.put("id", cursor.getString(0));
-         value.put("name", cursor.getString(1));
-         value.put("email", cursor.getString(2));
-         value.put("phone", cursor.getString(3));
-         value.put("password", cursor.getString(4));
-         value.put("register_at", cursor.getString(5));
-         value.put("last_bill_paid", cursor.getString(6));
-         value.put("next_due_date", cursor.getString(7));
-         value.put("active", cursor.getString(8));
-         } while (cursor.moveToNext());
-         }
-         cursor.close();
-         db.close();
-         return value;
-         }
-         //function to get user id
-         public String getUserID() {
-         db = this.getReadableDatabase();
-         Cursor cursor = db.rawQuery("select id from " + TABLE_USER, null);
-         String id = null;
-         if (cursor.moveToFirst()) {
-         id = cursor.getString(0);
-         }
-         cursor.close();
-         db.close();
-         return id;
-         }
-         /*//************************************ TABLE_PRODUCT
+        /************************************ TABLE_PRODUCT
          //check  product exits in the database
          public boolean checkProduct(String productId) {
          db = this.getReadableDatabase();

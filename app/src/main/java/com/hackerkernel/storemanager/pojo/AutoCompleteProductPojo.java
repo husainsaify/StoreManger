@@ -1,6 +1,6 @@
 package com.hackerkernel.storemanager.pojo;
 
-public class AutoCompletProductPojo {
+public class AutoCompleteProductPojo {
     private String  message,
                     id,
                     name,

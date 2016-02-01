@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hackerkernel.storemanager.extras.Keys;
-import com.hackerkernel.storemanager.pojo.AutoCompletProductPojo;
+import com.hackerkernel.storemanager.pojo.AutoCompleteProductPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -284,11 +284,11 @@ public class JsonParser {
     }
 
     //ACProductSearch json parser
-    public static List<AutoCompletProductPojo> acProductSearchParser(String jsonString){
+    public static List<AutoCompleteProductPojo> acProductSearchParser(String jsonString){
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
 
-            List<AutoCompletProductPojo> productList = new ArrayList<>();
+            List<AutoCompleteProductPojo> productList = new ArrayList<>();
             Log.d(TAG,"HUS: "+jsonString);
 
             /*
@@ -304,7 +304,7 @@ public class JsonParser {
                     JSONObject jo = ja.getJSONObject(i);
 
                     //store stuff in Pojo
-                    AutoCompletProductPojo p = new AutoCompletProductPojo();
+                    AutoCompleteProductPojo p = new AutoCompleteProductPojo();
                     p.setId(jo.getString("id"));
                     p.setName(jo.getString("name"));
                     p.setCode(jo.getString("code"));
@@ -316,7 +316,7 @@ public class JsonParser {
                 //no result found
                 Log.d(TAG, "HUS: acProductSearchParser "+jsonString);
                 //add response value to the pojo class
-                AutoCompletProductPojo product = new AutoCompletProductPojo();
+                AutoCompleteProductPojo product = new AutoCompleteProductPojo();
                 product.setMessage(jsonObject.getString("message"));
                 product.setReturned(jsonObject.getBoolean("return"));
                 product.setCount(jsonObject.getInt("count"));

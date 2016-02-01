@@ -2,7 +2,6 @@ package com.hackerkernel.storemanager.adapter;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,18 +23,17 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.AutoCompletProductPojo;
+import com.hackerkernel.storemanager.pojo.AutoCompleteProductPojo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductPojo> {
+public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompleteProductPojo> {
     private static final String TAG = AutoCompleteProductAdapter.class.getSimpleName();
     private Context context;
-    private List<AutoCompletProductPojo> suggestion;
+    private List<AutoCompleteProductPojo> suggestion;
     private String userId;
 
     //Volley Request Queue
@@ -57,7 +55,7 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
     }
 
     @Override
-    public AutoCompletProductPojo getItem(int position) {
+    public AutoCompleteProductPojo getItem(int position) {
         return suggestion.get(position);
     }
 
@@ -100,7 +98,7 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
         View view = inflater.inflate(R.layout.ac_product_list_layout, parent, false);
 
         //get data from my SimpleListPojo
-        AutoCompletProductPojo product = suggestion.get(position);
+        AutoCompleteProductPojo product = suggestion.get(position);
         TextView name = (TextView) view.findViewById(R.id.ACproductName);
         TextView code = (TextView) view.findViewById(R.id.ACproductCode);
 
@@ -146,7 +144,7 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
     //Method to parse response send by the API
     private void parseProductResponse(String response) {
         //parse the response
-        List<AutoCompletProductPojo> list = JsonParser.acProductSearchParser(response);
+        List<AutoCompleteProductPojo> list = JsonParser.acProductSearchParser(response);
 
         //check list is not null
         if(list != null){ //json parse was succesfull
@@ -170,10 +168,10 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
     * ASYNC TASK
     * */
 
-    private class ACProductSearchTask extends AsyncTask<String, Void, List<AutoCompletProductPojo>> {
+    private class ACProductSearchTask extends AsyncTask<String, Void, List<AutoCompleteProductPojo>> {
 
         @Override
-        protected List<AutoCompletProductPojo> doInBackground(String... params) {
+        protected List<AutoCompleteProductPojo> doInBackground(String... params) {
             //generate hashmap to send to backend
             HashMap<String, String> hashMap = new HashMap<>();
             hashMap.put("s", params[0]);

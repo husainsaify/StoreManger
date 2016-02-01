@@ -89,21 +89,6 @@
                         android:inputType="text" />
                 </TableRow>
 
-                <TableRow>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/product_code"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginEnd="5dp"
-                        />
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/productCode"
-                        android:inputType="text" />
-                </TableRow>
 
                 <TableRow>
                     <TextView

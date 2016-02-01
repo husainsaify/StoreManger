@@ -43,7 +43,7 @@ public class ListedProductFragment extends Fragment {
 
         String productSearchText = mProductName.getText().toString().trim();
 
-        final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(getActivity(),productSearchText,mUserId);
+        final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(getActivity(),mUserId);
         mProductName.setAdapter(adapter);
 
         return view;

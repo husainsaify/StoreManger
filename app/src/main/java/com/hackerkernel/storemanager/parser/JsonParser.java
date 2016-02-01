@@ -285,17 +285,17 @@ public class JsonParser {
 
     //ACProductSearch json parser
     public static List<AutoCompletProductPojo> acProductSearchParser(String jsonString){
-        AutoCompletProductPojo product = new AutoCompletProductPojo();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
-            //set message and return
-            product.setMessage(jsonObject.getString("message"));
-            product.setReturned(jsonObject.getBoolean("return"));
 
             List<AutoCompletProductPojo> productList = new ArrayList<>();
+            Log.d(TAG,"HUS: "+jsonString);
 
-            //check we have a success or failed "return" and count is greater then > 0
-            if(product.getReturned() && jsonObject.getInt("count") > 0){
+            /*
+            * If response message is True and count is greater then 0
+            * means some result is found
+            * */
+            if(jsonObject.getBoolean("return") && jsonObject.getInt("count") > 0){
 
                 JSONArray ja = jsonObject.getJSONArray("result");
 
@@ -313,8 +313,16 @@ public class JsonParser {
                     productList.add(p);
                 }
             }else{
-                //log message for debugging
-                Log.d(TAG,"HUS: "+product.getMessage());
+                //no result found
+                Log.d(TAG, "HUS: acProductSearchParser "+jsonString);
+                //add response value to the pojo class
+                AutoCompletProductPojo product = new AutoCompletProductPojo();
+                product.setMessage(jsonObject.getString("message"));
+                product.setReturned(jsonObject.getBoolean("return"));
+                product.setCount(jsonObject.getInt("count"));
+
+                //add pojo to the list
+                productList.add(product);
             }
 
             return productList;

@@ -70,18 +70,8 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
 
                 if (constraint != null) {
                     String search = constraint.toString();
-                    //fetch data from the web
-                    try {
-                        suggestion = getProductInBackground(search);
-
-                        if (suggestion.size() < 1) {
-                            Toast.makeText(context, "No product found", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "HUS: " + e);
-                    }
+                    //fetch data from the web & set to the list
+                    getProductInBackground(search);
 
                     // Now assign the values and count to the FilterResults object
                     filterResults.values = suggestion;
@@ -154,8 +144,24 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompletProductP
     }
 
     //Method to parse response send by the API
-    private List<AutoCompletProductPojo> parseProductResponse(String response) {
-        return JsonParser.acProductSearchParser(response);
+    private void parseProductResponse(String response) {
+        //parse the response
+        List<AutoCompletProductPojo> list = JsonParser.acProductSearchParser(response);
+
+        //check list is not null
+        if(list != null){ //json parse was succesfull
+            //check return
+            if(!list.get(0).getReturned()){
+                Toast.makeText(context,list.get(0).getMessage(),Toast.LENGTH_LONG).show();
+            }else if(list.get(0).getCount() == 0){ //check count
+                Toast.makeText(context,"No Product found",Toast.LENGTH_LONG).show();
+            }else{ //means Product is successfully found
+                suggestion = list;
+            }
+        }else{
+            //json parsing failed
+            Toast.makeText(context,R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 
 

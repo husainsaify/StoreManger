@@ -161,28 +161,4 @@ public class AutoCompleteProductAdapter extends ArrayAdapter<AutoCompleteProduct
             Toast.makeText(context,R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
         }
     }
-
-
-    /*
-    *
-    * ASYNC TASK
-    * */
-
-    private class ACProductSearchTask extends AsyncTask<String, Void, List<AutoCompleteProductPojo>> {
-
-        @Override
-        protected List<AutoCompleteProductPojo> doInBackground(String... params) {
-            //generate hashmap to send to backend
-            HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("s", params[0]);
-            hashMap.put("user_id", params[1]);
-            //convert hashmap into encoded url
-            String data = Functions.hashMapToEncodedUrl(hashMap);
-
-            //get data from the backend
-            String jsonString = GetJson.request(ApiUrl.AC_PRODUCT_SEARCH, data, "POST");
-            //parse json
-            return JsonParser.acProductSearchParser(jsonString);
-        }
-    }
 }

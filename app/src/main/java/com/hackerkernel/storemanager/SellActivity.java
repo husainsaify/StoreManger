@@ -295,7 +295,7 @@ public class SellActivity extends AppCompatActivity {
             * *//*
 
             //1. get image uri from database
-            Uri uri = db.getProductImageUri(productId);
+            Uri uri = db.getProductUri(productId);
 
             //2. check image is avaialble in sdcard or not deleted
             if(uri != null){

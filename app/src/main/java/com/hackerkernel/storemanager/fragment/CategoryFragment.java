@@ -78,7 +78,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
 
         //Database
         db = new Database(getActivity());
-
     }
 
     @Override

@@ -175,7 +175,6 @@ public class Database {
         cv.put(DatabaseHelper.COL_P_PRODUCT_ID, product.getId());
         cv.put(DatabaseHelper.COL_P_NAME, product.getName());
         cv.put(DatabaseHelper.COL_P_IMAGE_ADDRESS, product.getImageAddress());
-        cv.put(DatabaseHelper.COL_P_IMAGE_URI, "");
         cv.put(DatabaseHelper.COL_P_CODE, product.getCode());
         cv.put(DatabaseHelper.COL_P_CP, product.getCp());
         cv.put(DatabaseHelper.COL_P_SP, product.getSp());
@@ -190,7 +189,6 @@ public class Database {
         SQLiteDatabase db = helper.getWritableDatabase();
         String[] columns = {DatabaseHelper.COL_P_NAME,
                 DatabaseHelper.COL_P_IMAGE_ADDRESS,
-                DatabaseHelper.COL_P_IMAGE_URI,
                 DatabaseHelper.COL_P_CODE,
                 DatabaseHelper.COL_P_TIME,
                 DatabaseHelper.COL_P_CP,
@@ -206,7 +204,6 @@ public class Database {
             //get value from the database
             String name = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_NAME));
             String imageAddress = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_IMAGE_ADDRESS));
-            String imageUri = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_IMAGE_URI));
             String code = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_CODE));
             String cp = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_CP));
             String sp = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_P_SP));
@@ -217,7 +214,6 @@ public class Database {
 
             product.setName(name);
             product.setImageAddress(imageAddress);
-            product.setImageUri(imageUri);
             product.setCode(code);
             product.setCp(cp);
             product.setSp(sp);
@@ -261,40 +257,6 @@ public class Database {
         String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
         String[] args = {userId, productId};
         db.delete(DatabaseHelper.TABLE_PRODUCT, where, args);
-    }
-
-    //store image uri to Database
-    public void insertProductImageUri(String userId,String productId, Uri productUri) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-
-        //Conditions
-        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
-        String[] args = {userId, productId};
-
-        ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.COL_P_IMAGE_URI, String.valueOf(productUri));
-        db.update(DatabaseHelper.TABLE_PRODUCT, cv, where, args);
-        db.close();
-    }
-
-    //get product image uri from database
-    public Uri getProductImageUri(String userId,String productId) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-
-        //Conditions
-        String[] col = {DatabaseHelper.COL_P_IMAGE_URI};
-        String where = DatabaseHelper.COL_P_USER_ID + "=? AND " + DatabaseHelper.COL_P_PRODUCT_ID + "=?";
-        String[] args = {userId, productId};
-
-        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT,col,where,args,null,null,null);
-
-        if (cursor.moveToFirst()) {
-            String imageUri = cursor.getString(0);
-            cursor.close();
-            return Uri.parse(imageUri);
-        }
-        cursor.close();
-        return null;
     }
 
     //************* SQ (Size and Quantity)
@@ -375,9 +337,65 @@ public class Database {
         return null;
     }
 
+    //********************** PRODUCT_URI
+    //Method to check product image uri of a particular product is avaialble or not
+    public boolean checkProductUri(String userId,String productId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Conditions
+        String[] col = {DatabaseHelper.COL_URI_IMAGE_URI};
+        String where = DatabaseHelper.COL_URI_USER_ID + "=? AND " + DatabaseHelper.COL_URI_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_URI, col, where, args, null, null, null);
+
+        if (cursor.getCount() <= 0) {
+            cursor.close();
+            db.close();
+            return false; //not available
+        }
+        cursor.close();
+        db.close();
+        return true; //available
+    }
+
+    //store image uri to Database
+    public void insertProductUri(String userId, String productId, Uri productUri) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.COL_URI_IMAGE_URI, String.valueOf(productUri));
+        cv.put(DatabaseHelper.COL_URI_USER_ID, userId);
+        cv.put(DatabaseHelper.COL_URI_PRODUCT_ID, productId);
+
+        //Insert into product uri table
+        db.insert(DatabaseHelper.TABLE_PRODUCT_URI,null,cv);
+        db.close();
+    }
+
+    //get product image uri from database
+    public Uri getProductUri(String userId, String productId) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        //Conditions
+        String[] col = {DatabaseHelper.COL_URI_IMAGE_URI};
+        String where = DatabaseHelper.COL_URI_USER_ID + "=? AND " + DatabaseHelper.COL_URI_PRODUCT_ID + "=?";
+        String[] args = {userId, productId};
+
+        Cursor cursor = db.query(DatabaseHelper.TABLE_PRODUCT_URI, col, where, args, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            String imageUri = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_URI_IMAGE_URI));
+            cursor.close();
+            return Uri.parse(imageUri);
+        }
+        cursor.close();
+        return null;
+    }
+
     private class DatabaseHelper extends SQLiteOpenHelper {
         //Database Schema class
-        private static final int DATABASE_VERSION = 5;
+        private static final int DATABASE_VERSION = 6;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -414,7 +432,6 @@ public class Database {
                 COL_P_PRODUCT_ID = "product_id",
                 COL_P_NAME = "name",
                 COL_P_IMAGE_ADDRESS = "image_address",
-                COL_P_IMAGE_URI = "image_uri",
                 COL_P_CODE = "code",
                 COL_P_CP = "cp",
                 COL_P_SP = "sp",
@@ -426,6 +443,12 @@ public class Database {
                 COL_SQ_QUANTITY = "quantity",
                 COL_SQ_USER_ID = "user_id",
                 COL_SQ_PRODUCT_ID = "product_id";
+
+        private static final String TABLE_PRODUCT_URI = "product_uri",
+                COL_URI_ID = "_id",
+                COL_URI_IMAGE_URI = "image_uri",
+                COL_URI_USER_ID = "user_id",
+                COL_URI_PRODUCT_ID = "product_id";
 
         /*
         * CREATE TABLE QUERY
@@ -457,7 +480,6 @@ public class Database {
                 COL_P_PRODUCT_ID + " INTEGER," +
                 COL_P_NAME + " TEXT," +
                 COL_P_IMAGE_ADDRESS + " TEXT," +
-                COL_P_IMAGE_URI + " TEXT," +
                 COL_P_CODE + " TEXT," +
                 COL_P_CP + " TEXT," +
                 COL_P_SP + " TEXT," +
@@ -470,6 +492,12 @@ public class Database {
                 COL_SQ_USER_ID + " INTEGER," +
                 COL_SQ_PRODUCT_ID + " INTEGER);";
 
+        private String CREATE_PRODUCT_URI = "CREATE TABLE " + TABLE_PRODUCT_URI + "(" +
+                COL_URI_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_URI_IMAGE_URI + " TEXT," +
+                COL_URI_USER_ID + " INTEGER," +
+                COL_URI_PRODUCT_ID + " INTEGER);";
+
         /*
         * DROP TABLE QUERY
         * */
@@ -478,6 +506,7 @@ public class Database {
         private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS " + TABLE_PRODUCT_LIST;
         private String DROP_PRODUCT = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
         private String DROP_SQ = "DROP TABLE IF EXISTS " + TABLE_SQ;
+        private String DROP_PRODUCT_URI = "DROP TABLE IF EXISTS "+TABLE_PRODUCT_URI;
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -492,6 +521,7 @@ public class Database {
             db.execSQL(CREATE_PRODUCT_LIST);
             db.execSQL(CREATE_PRODUCT);
             db.execSQL(CREATE_SQ);
+            db.execSQL(CREATE_PRODUCT_URI);
             Log.d(TAG, "HUS: onCreate");
         }
 
@@ -503,27 +533,10 @@ public class Database {
             db.execSQL(DROP_PRODUCT_LIST);
             db.execSQL(DROP_PRODUCT);
             db.execSQL(DROP_SQ);
+            db.execSQL(DROP_PRODUCT_URI);
             Log.d(TAG, "HUS: onUpgrade");
             //Call onCreate to recreate tables
             onCreate(db);
         }
-
-        /************************************ TABLE_PRODUCT
-         //method to delete all product from the database
-         public int deleteAllProduct(){
-         db = this.getWritableDatabase();
-         int result = db.delete(TABLE_PRODUCT,null,null);
-         db.close();
-         return result;
-         }
-         //store product image Uri into database
-         */
-        /*//********************************** TABLE SQ
-
-        public void deleteAllSQ(){
-            db = this.getWritableDatabase();
-            db.delete(TABLE_SQ,null,null);
-            db.close();
-        }*/
     }
 }

@@ -21,7 +21,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
-import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
@@ -116,7 +115,7 @@ public class ProductActivity extends AppCompatActivity {
         if(!pImageAddress.isEmpty()){
 
             //get the image Uri from the SQlite database
-            Uri imageUri = db.getProductImageUri(mProductId);
+            Uri imageUri = db.getProductUri(mProductId);
 
             //display image which is stored in sdcard using uri
             if(imageUri != null){
@@ -178,8 +177,12 @@ public class ProductActivity extends AppCompatActivity {
             if (db.checkProduct(mUserId, mProductId)) {
                 //Get product from database
                 ProductPojo productPojo = db.getProduct(mUserId, mProductId);
+
                 //set the views
                 setProductViews(productPojo);
+
+                //Call setImage Method to set the image if Available in SdCard
+                setImage(productPojo.getImageAddress());
             } else {
                 Toast.makeText(getApplication(), R.string.unable_display_product_info_check_inetnet, Toast.LENGTH_LONG).show();
             }
@@ -266,25 +269,29 @@ public class ProductActivity extends AppCompatActivity {
     *       else show default image
     * */
     public void setImage(String imageAddress){
-        Uri imageUri = db.getProductImageUri(mUserId,mProductId);
-        if(imageUri != null){
-            Log.d(TAG, "HUS: setImage- uri avaiable in database");
-            //Get image from sdcard
+        if(db.checkProductUri(mUserId,mProductId)){
+            Log.d(TAG, "HUS: setImage - uri avaiable in database");
+
+            //Get uri from database
+            Uri imageUri = db.getProductUri(mUserId, mProductId);
+            String imageUriString = String.valueOf(imageUri);
+
+            Log.d(TAG,"HUS: uri: "+imageUri);
+            Log.d(TAG,"HUS: uriString: "+imageUriString);
 
             //check is image is available & not deleted from sdcard
-            String imageUriString = String.valueOf(imageUri);
             File file = new File(URI.create(imageUriString).getPath());
 
             if(file.exists()){
                 //if file is in sdcard
                 mImage.setImageURI(imageUri);
-                Log.d(TAG, "HUS: setImage- image available in sdcard");
+                Log.d(TAG, "HUS: setImage - image available in sdcard");
             }else{ //image is deleted, Download a new image if internet is availabe
-                Log.d(TAG,"HUS: setImage- image not available in sdcard");
+                Log.d(TAG,"HUS: setImage - image not available in sdcard");
                 checkInternetAndDownloadImage(imageAddress);
             }
         }else{
-            Log.d(TAG, "HUS: setImage- uri not avaiable in database");
+            Log.d(TAG, "HUS: setImage - uri not avaiable in database");
             //If URI is null
             checkInternetAndDownloadImage(imageAddress);
         }
@@ -298,10 +305,10 @@ public class ProductActivity extends AppCompatActivity {
     private void checkInternetAndDownloadImage(String imageAddress){
         if(Util.isConnectedToInternet(getApplication())){ //internet avaialble
             downloadImage(imageAddress);
-            Log.d(TAG,"HUS: checkInternetAndDownloadImage- internet avaialble");
+            Log.d(TAG,"HUS: checkInternetAndDownloadImage - internet avaialble");
         }else{ //internet not avaialbe
             Toast.makeText(getApplication(), R.string.check_your_internet_and_try_again,Toast.LENGTH_LONG).show();
-            Log.d(TAG, "HUS: checkInternetAndDownloadImage- internet not avaialble");
+            Log.d(TAG, "HUS: checkInternetAndDownloadImage - internet not avaialble");
         }
     }
 
@@ -325,10 +332,8 @@ public class ProductActivity extends AppCompatActivity {
                         //Store image in Sdcard
                         Uri imageUri = Util.saveImageToExternalStorage(getApplication(), bitmap);
 
-                        if (imageUri != null) {
-                            //Store image Uri in Local Sqlite database
-                            db.insertProductImageUri(mUserId, mProductId, imageUri);
-                        }
+                        //Store image Uri in Local Sqlite database
+                        db.insertProductUri(mUserId, mProductId, imageUri);
                     } else {
                         Log.d(TAG, "HUS: Bitmap is null");
                     }

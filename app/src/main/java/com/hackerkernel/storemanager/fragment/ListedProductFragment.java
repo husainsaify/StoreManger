@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.adapter.AutoCompleteProductAdapter;
@@ -23,13 +22,17 @@ import butterknife.ButterKnife;
  */
 public class ListedProductFragment extends Fragment {
 
-    @Bind(R.id.customerName) EditText mCustomerName;
-    @Bind(R.id.productName) AutoCompleteTextView mProductName;
+    @Bind(R.id.customerName) EditText mCustomerNameView;
+    @Bind(R.id.productName) AutoCompleteTextView mProductNameView;
+    @Bind(R.id.productSize) EditText mProductSizeView;
+    @Bind(R.id.productQuantity) EditText mProductQuantityView;
+    @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
+    @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
 
     private String mUserId;
-    private String productName;
-    private String productId;
-    private String productCostPrice;
+    private String mProductName;
+    private String mProductId;
+    private String mProductCostPrice;
 
     public ListedProductFragment() {
         // Required empty public constructor
@@ -47,23 +50,22 @@ public class ListedProductFragment extends Fragment {
         mUserId = MySharedPreferences.getInstance(getActivity()).getUserId();
 
         final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(getActivity(), mUserId);
-        mProductName.setAdapter(adapter);
+        mProductNameView.setAdapter(adapter);
 
-        mProductName.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mProductNameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //get the name of the item selected from AC
-                productName = adapter.getItem(position).getName();
+                mProductName = adapter.getItem(position).getName();
                 //store productId & cost price
-                productId = adapter.getItem(position).getId();
-                productCostPrice = adapter.getItem(position).getCp();
+                mProductId = adapter.getItem(position).getId();
+                mProductCostPrice = adapter.getItem(position).getCp();
 
                 //set item to dropdown
-                mProductName.setText(productName);
+                mProductNameView.setText(mProductName);
 
-                Toast.makeText(getActivity(),productId+"/"+productCostPrice,Toast.LENGTH_LONG).show();
-                //fetch product
-                //getProductData(productId);
+                //set Cost price to its EditText and disable it
+
             }
         });
         return view;

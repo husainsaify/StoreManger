@@ -65,7 +65,11 @@ public class ListedProductFragment extends Fragment {
                 mProductNameView.setText(mProductName);
 
                 //set Cost price to its EditText and disable it
+                mProductCostPriceView.setText(mProductCostPrice);
+                mProductCostPriceView.setEnabled(false);
 
+                //set focus to Size EditText
+                mProductSizeView.requestFocus();
             }
         });
         return view;

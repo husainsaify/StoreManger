@@ -24,33 +24,12 @@
                 android:hint="@string/customer_name" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:layout_below="@id/layoutCustomerName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_more"
-            android:id="@+id/addMore"
-            android:background="@drawable/primary_button"
-            android:textColor="@color/iconColor"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/delete"
-            android:id="@+id/delete"
-            android:layout_alignTop="@+id/addMore"
-            android:layout_toRightOf="@+id/addMore"
-            android:layout_toEndOf="@+id/addMore"
-            android:background="@drawable/white_button"
-            android:textColor="@color/primaryColor"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
-
         <!-- product info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/linearLayout"
-            android:layout_below="@id/addMore"
+            android:layout_below="@id/layoutCustomerName"
             android:animateLayoutChanges="true"
             android:orientation="vertical">
 

@@ -17,9 +17,6 @@ import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ListedProductFragment extends Fragment {
 
     @Bind(R.id.customerName) EditText mCustomerNameView;

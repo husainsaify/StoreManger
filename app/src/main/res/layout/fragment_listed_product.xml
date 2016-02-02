@@ -38,6 +38,8 @@
         </LinearLayout>
         <!-- / product info -->
 
+        <!-- sold by & add sales btn -->
+        <include layout="@layout/include_sold_by_and_addsales_btn"/>
     </RelativeLayout>
     <!-- / main container layout -->
 </ScrollView>

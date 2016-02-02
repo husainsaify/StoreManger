@@ -4,10 +4,19 @@ public class AutoCompleteProductPojo {
     private String  message,
                     id,
                     name,
-                    code;
+                    code,
+                    cp;
     private boolean returned = true;
 
     private int count = -1;
+
+    public String getCp() {
+        return cp;
+    }
+
+    public void setCp(String cp) {
+        this.cp = cp;
+    }
 
     public int getCount() {
         return count;

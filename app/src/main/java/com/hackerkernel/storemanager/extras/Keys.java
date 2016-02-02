@@ -100,5 +100,6 @@ public interface Keys {
     String KEY_AC_COUNT = "count",
             KEY_AC_ID = "id",
             KEY_AC_NAME = "name",
-            KEY_AC_CODE = "code";
+            KEY_AC_CODE = "code",
+            KEY_AC_CP = "CP";
 }

@@ -308,6 +308,7 @@ public class JsonParser {
                     p.setId(jo.getString(Keys.KEY_AC_ID));
                     p.setName(jo.getString(Keys.KEY_AC_NAME));
                     p.setCode(jo.getString(Keys.KEY_AC_CODE));
+                    p.setCp(jo.getString(Keys.KEY_AC_CP));
 
                     //add pojo to the list
                     productList.add(p);

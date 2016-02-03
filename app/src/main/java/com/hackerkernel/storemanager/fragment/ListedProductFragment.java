@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.layout) RelativeLayout mLayout;
     @Bind(R.id.customerName) EditText mCustomerNameView;
     @Bind(R.id.productName) AutoCompleteTextView mProductNameView;
-    @Bind(R.id.productSize) EditText mProductSizeView;
+    @Bind(R.id.productSize) Spinner mProductSizeView;
     @Bind(R.id.productQuantity) EditText mProductQuantityView;
     @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
     @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
@@ -59,6 +60,8 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
     private String mProductCostPrice = "";
     private String mSalesmanId = null;
     private String mSalesmanName = null;
+    private String mSize = "";
+    private String[] mSizeArray;
     private RequestQueue mRequestQueue;
     private ProgressDialog pd;
     private static final String TAG = ListedProductFragment.class.getSimpleName();
@@ -115,12 +118,21 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //get the name of the item selected from AC
                 mProductName = adapter.getItem(position).getName();
-                //store productId & cost price
+                //store productId & cost price & sizeArray
                 mProductId = adapter.getItem(position).getId();
                 mProductCostPrice = adapter.getItem(position).getCp();
+                mSizeArray = adapter.getItem(position).getSizeArray();
 
                 //set item to dropdown
                 mProductNameView.setText(mProductName);
+
+                //set size spinner
+
+                //if sizeArray is zero
+                ArrayAdapter<String> sizeArrayAdapter = new ArrayAdapter<>(getActivity(),
+                        android.R.layout.simple_spinner_dropdown_item,
+                        mSizeArray);
+                mProductSizeView.setAdapter(sizeArrayAdapter);
 
                 //set Cost price to its EditText and disable it
                 mProductCostPriceView.setText(mProductCostPrice);
@@ -128,6 +140,19 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
 
                 //set focus to Size EditText
                 mProductSizeView.requestFocus();
+            }
+        });
+
+        //When size spinner item is selected
+        mProductSizeView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSize = mSizeArray[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -154,28 +179,27 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
         //check internet connection
         if(Util.isConnectedToInternet(getActivity())){
             String customerName = mCustomerNameView.getText().toString().trim();
-            String size = mProductSizeView.getText().toString().trim();
             String quantity = mProductQuantityView.getText().toString().trim();
             String sellingprice = mProductSellingPriceView.getText().toString().trim();
 
             //check all required fields are filled
-            if(size.isEmpty() || quantity.isEmpty() || sellingprice.isEmpty()){
+            if(quantity.isEmpty() || sellingprice.isEmpty()){
                 Util.redSnackbar(getActivity(), mLayout, getString(R.string.fillin_all_fields));
                 return;
             }
 
-            if (mProductName.isEmpty() || mProductCostPrice.isEmpty() || mProductId.isEmpty()){
+            if (mProductName.isEmpty() || mProductCostPrice.isEmpty() || mProductId.isEmpty() || mSize.isEmpty()){
                 Util.redSnackbar(getActivity(), mLayout, getString(R.string.select_valid_prroduct_from_product_name));
                 return;
             }
 
-            addSalesInBackground(customerName,size,quantity,sellingprice);
+            addSalesInBackground(customerName,quantity,sellingprice);
         }else{
             Util.noInternetSnackbar(getActivity(),mLayout);
         }
     }
 
-    private void addSalesInBackground(final String customerName, final String size, final String quantity, final String sellingprice){
+    private void addSalesInBackground(final String customerName, final String quantity, final String sellingprice){
         pd.show();
         final StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_SALES, new Response.Listener<String>() {
             @Override
@@ -202,7 +226,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 param.put(Keys.PRAM_NON_LISTED_CUSTOMER_NAME,customerName);
                 param.put(Keys.KEY_COM_PRODUCTID,mProductId);
                 param.put(Keys.PRAM_NON_LISTED_NAME,mProductName);
-                param.put(Keys.PRAM_NON_LISTED_SIZE,size);
+                param.put(Keys.PRAM_NON_LISTED_SIZE,mSize);
                 param.put(Keys.PRAM_NON_LISTED_QUANTITY,quantity);
                 param.put(Keys.PRAM_NON_LISTED_COSTPRICE,mProductCostPrice);
                 param.put(Keys.PRAM_NON_LISTED_SELLINGPRICE,sellingprice);
@@ -243,11 +267,15 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
         mProductId = "";
         mProductName = "";
         mProductCostPrice = "";
+        mSize = "";
         mProductNameView.setText("");
-        mProductSizeView.setText("");
         mProductQuantityView.setText("");
         mProductCostPriceView.setText("");
         mProductSellingPriceView.setText("");
+
+
+        //size spinner
+        mProductSizeView.setAdapter(null);
 
         //Enable CostPrice view
         mProductCostPriceView.setEnabled(true);

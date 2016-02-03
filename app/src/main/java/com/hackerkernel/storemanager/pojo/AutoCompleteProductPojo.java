@@ -8,7 +8,17 @@ public class AutoCompleteProductPojo {
                     cp;
     private boolean returned = true;
 
+    private String[] sizeArray;
+
     private int count = -1;
+
+    public String[] getSizeArray() {
+        return sizeArray;
+    }
+
+    public void setSizeArray(String[] sizeArray) {
+        this.sizeArray = sizeArray;
+    }
 
     public String getCp() {
         return cp;

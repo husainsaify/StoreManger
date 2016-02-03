@@ -104,5 +104,6 @@ public interface Keys {
             KEY_AC_ID = "id",
             KEY_AC_NAME = "name",
             KEY_AC_CODE = "code",
-            KEY_AC_CP = "CP";
+            KEY_AC_CP = "CP",
+            KEY_AC_SIZE = "size";
 }

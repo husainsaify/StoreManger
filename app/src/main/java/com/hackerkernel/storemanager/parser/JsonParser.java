@@ -289,7 +289,6 @@ public class JsonParser {
             JSONObject jsonObject = new JSONObject(jsonString);
 
             List<AutoCompleteProductPojo> productList = new ArrayList<>();
-            Log.d(TAG,"HUS: "+jsonString);
 
             /*
             * If response message is True and count is greater then 0
@@ -309,6 +308,11 @@ public class JsonParser {
                     p.setName(jo.getString(Keys.KEY_AC_NAME));
                     p.setCode(jo.getString(Keys.KEY_AC_CODE));
                     p.setCp(jo.getString(Keys.KEY_AC_CP));
+
+                    //parse size response & set to POJO
+                    String sizeStack = jo.getString(Keys.KEY_AC_SIZE);
+                    String[] sizeArray = sizeStack.split(",");
+                    p.setSizeArray(sizeArray);
 
                     //add pojo to the list
                     productList.add(p);

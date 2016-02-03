@@ -64,14 +64,6 @@
                 android:value=".activity.HomeActivity" />
         </activity>
         <activity
-            android:name=".SellActivity"
-            android:parentActivityName=".activity.HomeActivity"
-            android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.HomeActivity" />
-        </activity>
-        <activity
             android:name=".SaleTrackerActivity"
             android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">

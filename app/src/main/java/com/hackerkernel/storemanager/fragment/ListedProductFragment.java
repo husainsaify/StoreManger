@@ -54,6 +54,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
     @Bind(R.id.salesmanSpinner) Spinner mSalesmanSpinner;
     @Bind(R.id.done) Button mDone;
 
+    ArrayAdapter<String> sizeArrayAdapter;
     private String mUserId;
     private String mProductName = "";
     private String mProductId = "";
@@ -129,9 +130,10 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 //set size spinner
 
                 //if sizeArray is zero
-                ArrayAdapter<String> sizeArrayAdapter = new ArrayAdapter<>(getActivity(),
+                sizeArrayAdapter = new ArrayAdapter<>(getActivity(),
                         android.R.layout.simple_spinner_dropdown_item,
                         mSizeArray);
+                sizeArrayAdapter.notifyDataSetChanged();
                 mProductSizeView.setAdapter(sizeArrayAdapter);
 
                 //set Cost price to its EditText and disable it
@@ -275,7 +277,10 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
 
 
         //size spinner
+        mSizeArray = new String[0];
+        sizeArrayAdapter.notifyDataSetChanged();
         mProductSizeView.setAdapter(null);
+
 
         //Enable CostPrice view
         mProductCostPriceView.setEnabled(true);

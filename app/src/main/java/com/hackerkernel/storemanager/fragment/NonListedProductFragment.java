@@ -33,6 +33,7 @@ import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.GetSalesman;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.ArrayList;
@@ -120,16 +121,19 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
         mProductSellingPriceList.add(mProductSellingPriceView);
         mProductInfoCounter++; //increment the counter
 
-        //setup salesman spinner
-        setupSalesmanSpinner();
+        //SETUP Salesman Spinner
+        final GetSalesman getSalesman = new GetSalesman(getActivity(),mLayout,mSalesmanSpinner);
+        getSalesman.setupSalesmanSpinner();
 
         //When Salesman is selected From Spinner
         mSalesmanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //store salesman id in variable
-                mSalesmanId = mSalesmanList.get(position).getId();
-                mSalesmanName = mSalesmanList.get(position).getName();
+                //Get the current salesman selected
+                SimpleListPojo salesman = getSalesman.getSalesman(position);
+
+                mSalesmanId = salesman.getId();
+                mSalesmanName = salesman.getName();
             }
 
             @Override
@@ -161,118 +165,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
             case R.id.done:
                     addSalesToAPI();
                 break;
-            /*case R.id.button:
-                String message =  "layout "+mProductInfoList.size()+"/ count "+mProductInfoCounter+"/ name "+mProductNameList.size()+"/" +
-                        " size "+mProductSizeList.size()+"/ quan "+mProductQuantityList.size()+"/ " +
-                        "cp "+mProductCostPriceList.size()+" / sp "+mProductSellingPriceList.size();
-                Toast.makeText(getActivity(),message,Toast.LENGTH_LONG).show();
-                break;*/
         }
-    }
-
-    /********************** SALESMAN SPINNER ***************/
-
-    /*
-    * METHOD TO CHECK INTERNET
-    * IF AVAILABLE FETCH SALESMAN FROM API AND DISPLAY IN A SPINNER
-    * IF NOT GET DATA FROM SQLITE
-    * */
-    private void setupSalesmanSpinner(){
-        //check internet
-        if(Util.isConnectedToInternet(getActivity())){
-            //fetch list from api
-            fetchSalesmanInBackground();
-        }else{
-            //display spinner from sqlite
-            mSalesmanList = db.getAllSimpleList(Database.SALESMAN,mUserId);
-            setupSalesmanSpinnerFromList(mSalesmanList);
-
-            //display no internet Toast
-            Toast.makeText(getActivity(),R.string.please_check_your_internt,Toast.LENGTH_LONG).show();
-        }
-    }
-
-    /*
-    * METHOD TO FETCH SALESMAN LIST FROM THE API &
-    * STORE THEM IN THE SQLITE DATABASE
-    * */
-    private void fetchSalesmanInBackground(){
-        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALESMAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mSalesmanList = parseSalesmanResponse(response);
-                if (mSalesmanList != null){
-                    setupSalesmanSpinnerFromList(mSalesmanList);
-                    //store fresh result in database
-                    db.deleteAllSimpleList(Database.SALESMAN);
-                    db.insertAllSimpleList(Database.SALESMAN,mSalesmanList);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Handle Volley error
-                Log.e(TAG,"ERROR "+error.getMessage());
-                String errrorString = VolleySingleton.handleVolleyError(error);
-                if (errrorString != null){
-                    Util.redSnackbar(getActivity(),mLayout,errrorString);
-                }
-
-                //display salesman spinner from sqlite
-                mSalesmanList = db.getAllSimpleList(Database.SALESMAN,mUserId);
-                setupSalesmanSpinnerFromList(mSalesmanList);
-
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put(Keys.KEY_COM_USERID,mUserId);
-                return params;
-            }
-        };
-
-        //add to queue
-        mRequestQueue.add(request);
-    }
-
-    private List<SimpleListPojo> parseSalesmanResponse(String response) {
-        List<SimpleListPojo> list = JsonParser.simpleListParser(response);
-
-        if(list != null){
-            //If json Response Return false Display message in SnackBar
-            if(!list.get(0).isReturned()){
-                Util.redSnackbar(getActivity(),mLayout,list.get(0).getMessage());
-                return null;
-            }else if(list.get(0).getCount() == 0){ //Count (Number of saleman returned)
-                /*
-                * If count return 0 means no salesman added
-                * */
-                Toast.makeText(getActivity(),"No salesman added yet",Toast.LENGTH_LONG).show();
-                return null;
-            }else{ //if we get true results
-                /*
-                * If result found
-                * */
-                return list;
-            }
-        }else{ // when return null
-            Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
-            return null;
-        }
-    }
-
-
-    private void setupSalesmanSpinnerFromList(List<SimpleListPojo> list){
-        //create a string List
-        List<String> stringList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            stringList.add(list.get(i).getName());
-        }
-
-        //set list to spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_spinner_dropdown_item,stringList);
-        mSalesmanSpinner.setAdapter(adapter);
     }
 
     /******************** ADD MORE BUTTON PRESSED *****************/

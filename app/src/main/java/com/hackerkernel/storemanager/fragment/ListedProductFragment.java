@@ -2,6 +2,7 @@ package com.hackerkernel.storemanager.fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,32 +10,47 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.adapter.AutoCompleteProductAdapter;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.GetSalesman;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class ListedProductFragment extends Fragment {
-
+    @Bind(R.id.layout) RelativeLayout mLayout;
     @Bind(R.id.customerName) EditText mCustomerNameView;
     @Bind(R.id.productName) AutoCompleteTextView mProductNameView;
     @Bind(R.id.productSize) EditText mProductSizeView;
     @Bind(R.id.productQuantity) EditText mProductQuantityView;
     @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
     @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
+    @Bind(R.id.salesmanSpinner) Spinner mSalesmanSpinner;
 
     private String mUserId;
     private String mProductName;
     private String mProductId;
     private String mProductCostPrice;
+    private String mSalesmanId = null;
+    private String mSalesmanName = null;
 
     public ListedProductFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Get userId
+        mUserId = MySharedPreferences.getInstance(getActivity()).getUserId();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,8 +59,25 @@ public class ListedProductFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_listed_product, container, false);
         ButterKnife.bind(this, view);
 
-        //Get userid
-        mUserId = MySharedPreferences.getInstance(getActivity()).getUserId();
+        //SETUP Salesman Spinner
+        final GetSalesman getSalesman = new GetSalesman(getActivity(),mLayout,mSalesmanSpinner);
+        getSalesman.setupSalesmanSpinner();
+
+        mSalesmanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Get the current salesman selected
+                SimpleListPojo salesman = getSalesman.getSalesman(position);
+
+                mSalesmanId = salesman.getId();
+                mSalesmanName = salesman.getName();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(getActivity(), mUserId);
         mProductNameView.setAdapter(adapter);

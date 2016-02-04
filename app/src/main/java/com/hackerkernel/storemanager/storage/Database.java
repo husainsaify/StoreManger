@@ -339,7 +339,7 @@ public class Database {
 
     //********************** PRODUCT_URI
     //Method to check product image uri of a particular product is avaialble or not
-    public boolean checkProductUri(String userId,String productId){
+    public boolean checkProductUri(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
         //Conditions
@@ -394,16 +394,16 @@ public class Database {
     }
 
     //method to delete product uri
-    public int deleteProductUri(String userId,String productId){
+    public int deleteProductUri(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
         String where = DatabaseHelper.COL_URI_USER_ID + "=? AND " + DatabaseHelper.COL_URI_PRODUCT_ID + "=?";
         String[] args = {userId, productId};
-        return db.delete(DatabaseHelper.TABLE_PRODUCT_URI,where,args);
+        return db.delete(DatabaseHelper.TABLE_PRODUCT_URI, where, args);
     }
 
     private class DatabaseHelper extends SQLiteOpenHelper {
         //Database Schema class
-        private static final int DATABASE_VERSION = 6;
+        private static final int DATABASE_VERSION = 7;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
         /*
@@ -458,6 +458,13 @@ public class Database {
                 COL_URI_USER_ID = "user_id",
                 COL_URI_PRODUCT_ID = "product_id";
 
+        //Sales tracker Datelist
+        private static final String TABLE_ST_DATELIST = "sales_tracker_datelist",
+                COL_ST_DATELIST_ID = "_id",
+                COL_ST_DATELIST_DATE = "date",
+                COL_ST_DATELIST_DATEID = "date_id",
+                COL_ST_USER_ID = "user_id";
+
         /*
         * CREATE TABLE QUERY
         * */
@@ -506,6 +513,12 @@ public class Database {
                 COL_URI_USER_ID + " INTEGER," +
                 COL_URI_PRODUCT_ID + " INTEGER);";
 
+        private String CREATE_ST_DATELIST = "CREATE TABLE " + TABLE_ST_DATELIST + "(" +
+                COL_ST_DATELIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COL_ST_DATELIST_DATE + " TEXT," +
+                COL_ST_DATELIST_DATEID + " TEXT," +
+                COL_ST_USER_ID + " INTEGER);";
+
         /*
         * DROP TABLE QUERY
         * */
@@ -514,7 +527,8 @@ public class Database {
         private String DROP_PRODUCT_LIST = "DROP TABLE IF EXISTS " + TABLE_PRODUCT_LIST;
         private String DROP_PRODUCT = "DROP TABLE IF EXISTS " + TABLE_PRODUCT;
         private String DROP_SQ = "DROP TABLE IF EXISTS " + TABLE_SQ;
-        private String DROP_PRODUCT_URI = "DROP TABLE IF EXISTS "+TABLE_PRODUCT_URI;
+        private String DROP_PRODUCT_URI = "DROP TABLE IF EXISTS " + TABLE_PRODUCT_URI;
+        private String DROP_ST_DATELIST = "DROP TABLE IF EXISTS " + TABLE_ST_DATELIST;
 
         public DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -530,6 +544,7 @@ public class Database {
             db.execSQL(CREATE_PRODUCT);
             db.execSQL(CREATE_SQ);
             db.execSQL(CREATE_PRODUCT_URI);
+            db.execSQL(CREATE_ST_DATELIST);
             Log.d(TAG, "HUS: onCreate");
         }
 
@@ -542,6 +557,7 @@ public class Database {
             db.execSQL(DROP_PRODUCT);
             db.execSQL(DROP_SQ);
             db.execSQL(DROP_PRODUCT_URI);
+            db.execSQL(DROP_ST_DATELIST);
             Log.d(TAG, "HUS: onUpgrade");
             //Call onCreate to recreate tables
             onCreate(db);

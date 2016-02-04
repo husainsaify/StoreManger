@@ -3,35 +3,16 @@ package com.hackerkernel.storemanager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hackerkernel.storemanager.extras.ApiUrl;
-import com.hackerkernel.storemanager.adapter.SalesTrackerAdapter;
-import com.hackerkernel.storemanager.model.GetJson;
-import com.hackerkernel.storemanager.parser.JsonParser;
-import com.hackerkernel.storemanager.pojo.STdatePojo;
+import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
-import com.hackerkernel.storemanager.storage.Database;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,7 +28,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
     @Bind(R.id.sellingPrice) TextView mSellingPriceValue;
 
 
-    private List<STdatePojo> mDropdownList;
+    private List<SalesTrackerDatePojo> mDropdownList;
     private String mUserId,
             mDate,
             mDateId,
@@ -223,7 +204,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
             //request the web
             String jsonString = GetJson.request(ApiUrl.SALES_TRACKER_DATE_LIST, data, "POST");
             //parse json
-            mDropdownList = JsonParser.stDateParser(jsonString);
+            mDropdownList = JsonParser.salesTrackerDateParser(jsonString);
             List<String> stringList = new ArrayList<>();
 
             if(mDropdownList.size() != 0){

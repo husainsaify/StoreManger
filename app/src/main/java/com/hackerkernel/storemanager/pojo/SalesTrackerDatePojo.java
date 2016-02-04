@@ -3,7 +3,7 @@ package com.hackerkernel.storemanager.pojo;
 /**
  * A plain java object to hold sales tacker date
  */
-public class STdatePojo {
+public class SalesTrackerDatePojo {
     private String  date,
                     dateId,
                     message;

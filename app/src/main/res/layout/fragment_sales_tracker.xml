@@ -4,17 +4,40 @@
     android:layout_height="match_parent"
     tools:context="com.hackerkernel.storemanager.fragment.SalesTrackerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Sales tracker fragment" />
+        android:id="@+id/placeholderWhenNoSalesAdded"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_sales_click_on_plus_to_add"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:padding="10dp"/>
 
-    <!-- Coordinator layout to store Snackbar and Fab -->
+    <!-- date spinner -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateSpinnerLayout"
+        android:padding="10dp">
+
+        <TableRow>
+            <TextView
+                android:id="@+id/textView2"
+                android:text="@string/select_date"
+                android:textColor="@color/primaryColor"
+                android:layout_gravity="center_vertical"
+                style="@style/TextAppearance.AppCompat.Medium" />
+            <Spinner
+                android:id="@+id/dateDropDown" />
+        </TableRow>
+
+    </TableLayout>
+    <!-- / date spinner -->
+    <!--Coordinator layout to store Snackbar and Fab -->
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/clayout"
+        android:id="@+id/layout"
         android:layout_alignParentBottom="true">
 
         <android.support.design.widget.FloatingActionButton

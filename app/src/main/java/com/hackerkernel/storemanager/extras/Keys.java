@@ -1,7 +1,7 @@
 package com.hackerkernel.storemanager.extras;
 
 /**
- * a interface to store API Keys
+ * a interface to store API Keys & PRAM
  */
 public interface Keys {
     //common Keys
@@ -10,6 +10,7 @@ public interface Keys {
     String KEY_COM_USERID = "userId";
     String KEY_COM_DATA = "data";
     String KEY_COM_PRODUCTID = "productId";
+    String KEY_COM_COUNT = "count";
     String KEY_DEFAULT = "";
 
 
@@ -100,10 +101,13 @@ public interface Keys {
     String PRAM_AC_PRODUCTNAME = "productName";
 
     //Auto Complete Product search KEYS
-    String KEY_AC_COUNT = "count",
-            KEY_AC_ID = "id",
+    String KEY_AC_ID = "id",
             KEY_AC_NAME = "name",
             KEY_AC_CODE = "code",
             KEY_AC_CP = "CP",
             KEY_AC_SIZE = "size";
+
+    //Sales Tracker Date KEYS
+    String KEY_ST_DATELIST_DATE = "date",
+            KEY_ST_DATELIST_DATE_ID = "date_id";
 }

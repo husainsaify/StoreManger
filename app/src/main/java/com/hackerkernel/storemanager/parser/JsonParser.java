@@ -9,7 +9,7 @@ import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
-import com.hackerkernel.storemanager.pojo.STdatePojo;
+import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.pojo.SignupPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
@@ -294,7 +294,7 @@ public class JsonParser {
             * If response message is True and count is greater then 0
             * means some result is found
             * */
-            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN) && jsonObject.getInt(Keys.KEY_AC_COUNT) > 0){
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN) && jsonObject.getInt(Keys.KEY_COM_COUNT) > 0){
 
                 JSONArray ja = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
 
@@ -324,7 +324,7 @@ public class JsonParser {
                 AutoCompleteProductPojo product = new AutoCompleteProductPojo();
                 product.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
                 product.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
-                product.setCount(jsonObject.getInt(Keys.KEY_AC_COUNT));
+                product.setCount(jsonObject.getInt(Keys.KEY_COM_COUNT));
 
                 //add pojo to the list
                 productList.add(product);
@@ -339,33 +339,32 @@ public class JsonParser {
         }
     }
 
-    public static List<STdatePojo> stDateParser(String jsonParser){
+    public static List<SalesTrackerDatePojo> salesTrackerDateParser(JSONObject jsonObject){
         try {
-            JSONObject jsonObject = new JSONObject(jsonParser);
-            STdatePojo STdate = new STdatePojo();
-            List<STdatePojo> list = new ArrayList<>();
-            //parse
-            STdate.setMessage(jsonObject.getString("message"));
-            STdate.setReturned(jsonObject.getBoolean("return"));
 
-            //check if we return true
-            if(jsonObject.getBoolean("return")){
-                JSONArray jsonArray = jsonObject.getJSONArray("date");
+            //check if we return true & count greater then zero
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN) && jsonObject.getInt(Keys.KEY_COM_COUNT) > 0){
+                List<SalesTrackerDatePojo> list = new ArrayList<>();
+
+                JSONArray jsonArray = jsonObject.getJSONArray(Keys.KEY_COM_DATA);
+                //loop the data list
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jo = jsonArray.getJSONObject(i);
-                    STdatePojo stdate = new STdatePojo();
-                    stdate.setDate(jo.getString("date"));
-                    stdate.setDateId(jo.getString("date_id"));
+                    //create pojo and store it in list
+                    SalesTrackerDatePojo date = new SalesTrackerDatePojo();
+                    date.setDate(jo.getString(Keys.KEY_ST_DATELIST_DATE));
+                    date.setDateId(jo.getString(Keys.KEY_ST_DATELIST_DATE_ID));
 
                     //add to list
-                    list.add(stdate);
+                    list.add(date);
                 }
+                return list;
             }else{
-                list.add(STdate);
+                return null;
             }
-            return list;
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.e(TAG,"HUS: salesTrackerDateParser: "+e.getMessage());
             return null;
         }
     }

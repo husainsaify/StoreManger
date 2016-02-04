@@ -6,47 +6,50 @@
 
     <TextView
         android:id="@+id/placeholderWhenNoSalesAdded"
+        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:padding="10dp"
         android:text="@string/no_sales_click_on_plus_to_add"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:padding="10dp"/>
+        android:visibility="gone" />
 
     <!-- date spinner -->
     <TableLayout
+        android:id="@+id/dateSpinnerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dateSpinnerLayout"
         android:padding="10dp">
 
         <TableRow>
+
             <TextView
                 android:id="@+id/textView2"
-                android:text="@string/select_date"
-                android:textColor="@color/primaryColor"
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_gravity="center_vertical"
-                style="@style/TextAppearance.AppCompat.Medium" />
+                android:text="@string/select_date"
+                android:textColor="@color/primaryColor" />
+
             <Spinner
-                android:id="@+id/dateDropDown" />
+                android:id="@+id/dateSpinner"
+                android:spinnerMode="dialog" />
         </TableRow>
 
     </TableLayout>
     <!-- / date spinner -->
     <!--Coordinator layout to store Snackbar and Fab -->
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:id="@+id/layout"
         android:layout_alignParentBottom="true">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabAddSales"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_white"
+            android:layout_gravity="end|bottom"
             android:layout_margin="@dimen/fab_margin"
-            android:layout_gravity="end|bottom"/>
+            android:src="@drawable/ic_add_white" />
 
     </android.support.design.widget.CoordinatorLayout>
     <!-- / Coordinator layout to store Snackbar and Fab -->

@@ -13,9 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,7 +31,6 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
-import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
@@ -49,10 +49,12 @@ import butterknife.ButterKnife;
  * Fragment to for sales tracker
  */
 public class SalesTrackerFragment extends Fragment implements View.OnClickListener {
+    @Bind(R.id.layout) CoordinatorLayout mLayout;
     @Bind(R.id.fabAddSales) FloatingActionButton mFabAddSales;
     @Bind(R.id.placeholderWhenNoSalesAdded) TextView mPlaceholderWhenNoSalesAdded;
     @Bind(R.id.dateSpinnerLayout) TableLayout mDateSpinnerLayout;
-    @Bind(R.id.layout) CoordinatorLayout mLayout;
+    @Bind(R.id.dateSpinner) Spinner mDateSpinner;
+
 
     private static final String TAG = SalesTrackerFragment.class.getSimpleName();
     private String mUserid;
@@ -87,7 +89,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sales_tracker, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
         fetchDateListInBackground();
 
@@ -120,7 +122,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             public void onErrorResponse(VolleyError error) {
                 pd.dismiss(); //hide progressbar
                 //handle volley errorString
-                Log.e(TAG,"fetchDateListInBackground "+error.getMessage());
+                Log.e(TAG,"fetchDateListInBackground: "+error.getMessage());
                 String errrorString = VolleySingleton.handleVolleyError(error);
                 if (errrorString != null){
                     Util.redSnackbar(getActivity(), mLayout, errrorString);
@@ -153,7 +155,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             * */
             if(mDateList != null){
                 //Setup date spinner
-                Log.d(TAG, "HUS: HHH 1");
+                setUpDateSpinnerFromList(mDateList);
             }else{
                 //check count is smaller then zero or return false
                 String message = jsonObject.getString(Keys.KEY_COM_MESSAGE);
@@ -180,6 +182,17 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             mPlaceholderWhenNoSalesAdded.setText(R.string.unable_to_parse_response);
             mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);
         }
+    }
+
+    private void setUpDateSpinnerFromList(List<SalesTrackerDatePojo> list){
+        //create a String List For spinner
+        List<String> stringList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            stringList.add(list.get(i).getDate());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_dropdown_item_1line,stringList);
+        mDateSpinner.setAdapter(adapter);
     }
 }
 

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
+import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
 import java.util.ArrayList;
@@ -337,8 +338,9 @@ public class Database {
         return null;
     }
 
-    //********************** PRODUCT_URI
-    //Method to check product image uri of a particular product is avaialble or not
+    /********************** PRODUCT_URI **************************/
+
+     //Method to check product image uri of a particular product is avaialble or not
     public boolean checkProductUri(String userId, String productId) {
         SQLiteDatabase db = helper.getWritableDatabase();
 
@@ -401,8 +403,68 @@ public class Database {
         return db.delete(DatabaseHelper.TABLE_PRODUCT_URI, where, args);
     }
 
+    /************************* SALES TRACKER DATELIST *********************************/
+    //insert all datelist to the SQLite database
+    public void insertSalesTrackerDateList(List<SalesTrackerDatePojo> list,String userId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //loop through the list
+        if (list != null){
+            for (int i = 0; i < list.size(); i++) {
+                SalesTrackerDatePojo current = list.get(i);
+                //insert into database
+                ContentValues cv = new ContentValues();
+                cv.put(DatabaseHelper.COL_ST_DATELIST_DATE,current.getDate());
+                cv.put(DatabaseHelper.COL_ST_DATELIST_DATEID,current.getDateId());
+                cv.put(DatabaseHelper.COL_ST_DATELIST_USER_ID,userId);
+
+                db.insert(DatabaseHelper.TABLE_ST_DATELIST,null,cv);
+            }
+        }
+        //close database
+        db.close();
+    }
+
+    //delete all salesTracker datelist
+    public void insertSalesTrackerDateList(String userId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String whereClause = DatabaseHelper.COL_ST_DATELIST_USER_ID +" = ?";
+        String[] whereArgs = {userId};
+        db.delete(DatabaseHelper.TABLE_ST_DATELIST,whereClause,whereArgs);
+        db.close();
+    }
+
+    //method to get all the salestracker datelist
+    public List<SalesTrackerDatePojo> getSalesTrackerDateList(String userId){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String[] col = {DatabaseHelper.COL_ST_DATELIST_DATE,DatabaseHelper.COL_ST_DATELIST_DATEID};
+        String where = DatabaseHelper.COL_ST_DATELIST_USER_ID + "=?";
+        String[] args = {userId};
+        String orderBy = DatabaseHelper.COL_ST_DATELIST_ID+" DESC";
+        Cursor cursor = db.query(DatabaseHelper.TABLE_ST_DATELIST, col, where, args, null, null, orderBy);
+
+        List<SalesTrackerDatePojo> list = new ArrayList<>();
+        while (cursor.moveToNext()){
+            String date = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_ST_DATELIST_DATE));
+            String dateid = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COL_ST_DATELIST_DATEID));
+
+            SalesTrackerDatePojo pojo = new SalesTrackerDatePojo();
+            pojo.setDateId(dateid);
+            pojo.setDate(date);
+
+            //add to list
+            list.add(pojo);
+        }
+
+        //close cursor
+        cursor.close();
+        db.close();
+
+        return list;
+    }
+
+
+    /*********************** DATABASE SCHEMA CLASS **********************************/
     private class DatabaseHelper extends SQLiteOpenHelper {
-        //Database Schema class
         private static final int DATABASE_VERSION = 7;
         private static final String DATABASE_NAME = "storemanager";
         private final String TAG = DatabaseHelper.class.getSimpleName();
@@ -463,7 +525,7 @@ public class Database {
                 COL_ST_DATELIST_ID = "_id",
                 COL_ST_DATELIST_DATE = "date",
                 COL_ST_DATELIST_DATEID = "date_id",
-                COL_ST_USER_ID = "user_id";
+                COL_ST_DATELIST_USER_ID = "user_id";
 
         /*
         * CREATE TABLE QUERY
@@ -517,7 +579,7 @@ public class Database {
                 COL_ST_DATELIST_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COL_ST_DATELIST_DATE + " TEXT," +
                 COL_ST_DATELIST_DATEID + " TEXT," +
-                COL_ST_USER_ID + " INTEGER);";
+                COL_ST_DATELIST_USER_ID + " INTEGER);";
 
         /*
         * DROP TABLE QUERY

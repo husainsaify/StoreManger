@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -19,11 +20,12 @@ import com.hackerkernel.storemanager.adapter.AutoCompleteProductAdapter;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.GetSalesman;
+import com.hackerkernel.storemanager.util.Util;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ListedProductFragment extends Fragment {
+public class ListedProductFragment extends Fragment implements View.OnClickListener {
     @Bind(R.id.layout) RelativeLayout mLayout;
     @Bind(R.id.customerName) EditText mCustomerNameView;
     @Bind(R.id.productName) AutoCompleteTextView mProductNameView;
@@ -32,11 +34,12 @@ public class ListedProductFragment extends Fragment {
     @Bind(R.id.productCostPrice) EditText mProductCostPriceView;
     @Bind(R.id.productSellingPrice) EditText mProductSellingPriceView;
     @Bind(R.id.salesmanSpinner) Spinner mSalesmanSpinner;
+    @Bind(R.id.done) Button mDone;
 
     private String mUserId;
-    private String mProductName;
-    private String mProductId;
-    private String mProductCostPrice;
+    private String mProductName = "";
+    private String mProductId = "";
+    private String mProductCostPrice = "";
     private String mSalesmanId = null;
     private String mSalesmanName = null;
 
@@ -102,7 +105,48 @@ public class ListedProductFragment extends Fragment {
                 mProductSizeView.requestFocus();
             }
         });
+
+        mDone.setOnClickListener(this);
         return view;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            //when done is clicked
+            case R.id.done:
+                addSales();
+                break;
+        }
+    }
+
+    /************************ ADD SALES WHEN DONE BUTTON IS CLICKED **********************/
+
+    /*
+    * Method to validate inputs
+    * */
+    public void addSales(){
+        //check internet connection
+        if(Util.isConnectedToInternet(getActivity())){
+            String customerName = mCustomerNameView.getText().toString().trim();
+            String size = mProductSizeView.getText().toString().trim();
+            String quantity = mProductQuantityView.getText().toString().trim();
+            String sellingprice = mProductSellingPriceView.getText().toString().trim();
+
+            //check all required fields are filled
+            if(size.isEmpty() || quantity.isEmpty() || sellingprice.isEmpty()){
+                Util.redSnackbar(getActivity(), mLayout, getString(R.string.fillin_all_fields));
+                return;
+            }
+
+            if (mProductName.isEmpty() || mProductCostPrice.isEmpty() || mProductId.isEmpty()){
+                Util.redSnackbar(getActivity(), mLayout, getString(R.string.select_valid_prroduct_from_product_name));
+                return;
+            }
+
+            Toast.makeText(getActivity(),"add",Toast.LENGTH_LONG).show();
+        }else{
+            Util.noInternetSnackbar(getActivity(),mLayout);
+        }
+    }
 }

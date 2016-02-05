@@ -111,7 +111,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 mDate = mDateList.get(position).getDate();
                 mDateId = mDateList.get(position).getDateId();
 
-                Toast.makeText(getActivity(),mDateId+"/"+mDate,Toast.LENGTH_SHORT).show();
+                fetchSalesTrackerInBackground();
             }
 
             @Override
@@ -241,6 +241,31 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),android.R.layout.simple_dropdown_item_1line,stringList);
         mDateSpinner.setAdapter(adapter);
+    }
+
+    /************************* SALES TRACKER RECYCLERVIEW *********************/
+    public void fetchSalesTrackerInBackground(){
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALES_TRACKER, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG,"HUS: fetchSalesTrackerInBackground: "+response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,"HUS: fetchSalesTrackerInBackground: "+error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+                param.put(Keys.KEY_COM_USERID,mUserid);
+                param.put(Keys.KEY_ST_DATELIST_DATE_ID,mDateId);
+                return param;
+            }
+        };
+
+        mRequestQueue.add(request);
     }
 }
 

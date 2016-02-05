@@ -1,7 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.hackerkernel.storemanager.fragment.SalesTrackerFragment">
 
     <TextView
@@ -18,7 +19,8 @@
         android:id="@+id/dateSpinnerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TableRow>
 
@@ -27,15 +29,97 @@
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_gravity="center_vertical"
                 android:text="@string/select_date"
-                android:textColor="@color/primaryColor" />
+                android:textColor="@color/primaryColor"
+                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"/>
 
             <Spinner
+                android:layout_weight="1"
                 android:id="@+id/dateSpinner"
                 android:spinnerMode="dialog" />
         </TableRow>
 
     </TableLayout>
     <!-- / date spinner -->
+
+    <!-- Cp Sp profit or loss -->
+    <LinearLayout
+        android:layout_below="@id/dateDropDown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_margin="10dp"
+        android:id="@+id/linearLayout">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_sales"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="----"
+                android:id="@+id/sellingPrice" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="----"
+                android:id="@+id/costPrice" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="----"
+                android:id="@+id/profitOrLossLabel"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="----"
+                android:id="@+id/profitOrLoss" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <!-- / Cp sp profit or loss -->
+
     <!--Coordinator layout to store Snackbar and Fab -->
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layout"
@@ -54,4 +138,4 @@
     </android.support.design.widget.CoordinatorLayout>
     <!-- / Coordinator layout to store Snackbar and Fab -->
 
-</RelativeLayout>
+</LinearLayout>

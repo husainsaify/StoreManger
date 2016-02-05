@@ -28,12 +28,15 @@ import com.hackerkernel.storemanager.adapter.AutoCompleteProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.GetSalesman;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -178,8 +181,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
             @Override
             public void onResponse(String response) {
                 pd.dismiss();
-                Log.d(TAG, "HUS: respionse " + response);
-
+                parseAddSalesResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -211,5 +213,43 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
             }
         };
         mRequestQueue.add(request);
+    }
+
+    private void parseAddSalesResponse(String response) {
+        List<SimplePojo> list = JsonParser.simpleParser(response);
+        if(list!= null){
+            SimplePojo current = list.get(0);
+            if (current.getReturned()){ //true means succes
+                Toast.makeText(getActivity(), current.getMessage(), Toast.LENGTH_LONG).show();
+
+                //clear data From the fields
+                clearFieldsData();
+            }else{ //false error
+                Util.redSnackbar(getActivity(),mLayout,current.getMessage());
+            }
+        }else{
+            Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+            //Log the response
+            Log.e(TAG,"HUS: parseAddSalesResponse "+response);
+        }
+    }
+
+    /*
+    * Method to clear old data from the fields
+    * */
+    private void clearFieldsData() {
+        mCustomerNameView.requestFocus();
+        mCustomerNameView.setText("");
+        mProductId = "";
+        mProductName = "";
+        mProductCostPrice = "";
+        mProductNameView.setText("");
+        mProductSizeView.setText("");
+        mProductQuantityView.setText("");
+        mProductCostPriceView.setText("");
+        mProductSellingPriceView.setText("");
+
+        //Enable CostPrice view
+        mProductCostPriceView.setEnabled(true);
     }
 }

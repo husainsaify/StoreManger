@@ -338,7 +338,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
     * Method to clear old data from the fields
     * */
     private void clearFieldsData() {
-        mCustomerName.setFocusable(true);
+        mCustomerName.requestFocus();
         mCustomerName.setText("");
 
         //clear all the product info for fields

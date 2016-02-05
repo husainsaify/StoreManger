@@ -93,6 +93,9 @@ public interface Keys {
             PRAM_NON_LISTED_SALESMAN_ID = "salesmanId",
             PRAM_NON_LISTED_SALESMAN_NAME = "salesmanName";
 
+    //Add sales (Listed)
+    String PRAM_LISTED_SALES_TYPE = "salesType";
+
     //Auto Complete Product search PRAM
     String PRAM_AC_PRODUCTNAME = "productName";
 

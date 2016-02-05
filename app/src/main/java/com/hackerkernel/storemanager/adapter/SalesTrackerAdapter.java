@@ -33,8 +33,8 @@ public class SalesTrackerAdapter extends ArrayAdapter<SalesTrackerPojo> {
         TextView porl = (TextView) view.findViewById(R.id.productPorL);
 
         //calculate profit or loss
-        int currentSales = Integer.parseInt(current.getCurrentSales());
-        int currentCp = Integer.parseInt(current.getCurrentCp());
+        int currentSales = Integer.parseInt(current.getSellingprice());
+        int currentCp = Integer.parseInt(current.getCostprice());
         String pl;
         if(currentCp > currentSales){//loss
             //cal loss

@@ -272,7 +272,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
                     mTotalSales = Integer.parseInt(jo.getString("total_sales"));
                     mTotalCP = Integer.parseInt(jo.getString("total_cp"));
                     //parse json for SalesTrackerList
-                    mSalesList = JsonParser.SalesTrackerParser(SaleTrackerActivity.this,jsonString);
+                    mSalesList = JsonParser.salesTrackerParser(SaleTrackerActivity.this,jsonString);
                     return mSalesList;
                 }else{
                     *//*

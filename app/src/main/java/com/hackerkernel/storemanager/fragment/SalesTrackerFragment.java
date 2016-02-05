@@ -33,6 +33,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
+import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
@@ -64,6 +65,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     private RequestQueue mRequestQueue;
     private ProgressDialog pd;
     private List<SalesTrackerDatePojo> mDateList;
+    private List<SalesTrackerPojo> mSalesTrackerList;
     private Database db;
 
     private String mDate = null;
@@ -91,7 +93,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         db = new Database(getActivity());
 
         mDateList = new ArrayList<>();
-
+        mSalesTrackerList = new ArrayList<>();
     }
 
     @Override
@@ -111,6 +113,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 mDate = mDateList.get(position).getDate();
                 mDateId = mDateList.get(position).getDateId();
 
+                //method to fetch Sales Tracker
                 fetchSalesTrackerInBackground();
             }
 
@@ -248,7 +251,8 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALES_TRACKER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG,"HUS: fetchSalesTrackerInBackground: "+response);
+                //parse SalesTracker Respone
+                parseSalesTrackerResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -266,6 +270,26 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         };
 
         mRequestQueue.add(request);
+    }
+
+    private void parseSalesTrackerResponse(String response) {
+        mSalesTrackerList = JsonParser.salesTrackerParser(response);
+
+        //check list is not null
+        if(mSalesTrackerList != null){
+            //check returned
+            Log.d(TAG,"HUS: "+mSalesTrackerList.get(0).getReturned());
+            if (!mSalesTrackerList.get(0).getReturned()){
+                Util.redSnackbar(getActivity(),mLayout,mSalesTrackerList.get(0).getMessage());
+            }else{
+                for (int i = 0; i < mSalesTrackerList.size(); i++) {
+                    Log.d(TAG,"HUS: "+mSalesTrackerList.get(i).getProductName());
+                }
+            }
+        }else{
+            Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+            Log.e(TAG,"HUS: parseSalesTrackerResponse: "+response);
+        }
     }
 }
 

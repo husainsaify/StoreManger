@@ -111,5 +111,19 @@ public interface Keys {
     String KEY_ST_DATELIST_DATE = "date",
             KEY_ST_DATELIST_DATE_ID = "date_id";
 
-    //Sales Tracker
+    //Sales Tracker KEYS
+    String KEY_ST_TOTAL_COSTPRICE = "total_costprice",
+            KEY_ST_TOTAL_SELLINGPRICE = "total_sellingprice",
+            KEY_ST_SALES = "sales",
+            KEY_ST_SALES_ID = "sales_id",
+            KEY_ST_CUSTOMER_NAME = "customer_name",
+            KEY_ST_SALESMAN_ID = "salesman_id",
+            KEY_ST_SALESMAN_NAME = "salesman_name",
+            KEY_ST_TIME = "time",
+            KEY_ST_PRODUCT_ID = "product_id",
+            KEY_ST_PRODUCT_NAME = "product_name",
+            KEY_ST_SIZE = "size",
+            KEY_ST_QUANTITY = "quantity",
+            KEY_ST_COSTPRICE = "costprice",
+            KEY_ST_SELLINGPRICE = "sellingprice";
 }

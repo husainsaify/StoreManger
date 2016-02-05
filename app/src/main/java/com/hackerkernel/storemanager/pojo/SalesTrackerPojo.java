@@ -1,21 +1,29 @@
 package com.hackerkernel.storemanager.pojo;
 
 public class SalesTrackerPojo {
-    private String message,
-            sellId,
-            quantity,
-            price_per,
+    Boolean returned = true;
+    String message,
+            totalCostprice,
+            totalSellingprice,
+            salesId,
+            customerName,
+            salesmanId,
+            salesmanName,
+            time,
             productId,
-            productImageAddress,
             productName,
-            productCode,
-            productCp,
-            productSp,
-            currentSales,
-            currentCp,
-            totalSales,
-            totalCp;
-    private boolean returned;
+            size,
+            quantity,
+            costprice,
+            sellingprice;
+
+    public Boolean getReturned() {
+        return returned;
+    }
+
+    public void setReturned(Boolean returned) {
+        this.returned = returned;
+    }
 
     public String getMessage() {
         return message;
@@ -25,28 +33,60 @@ public class SalesTrackerPojo {
         this.message = message;
     }
 
-    public String getSellId() {
-        return sellId;
+    public String getTotalCostprice() {
+        return totalCostprice;
     }
 
-    public void setSellId(String sellId) {
-        this.sellId = sellId;
+    public void setTotalCostprice(String totalCostprice) {
+        this.totalCostprice = totalCostprice;
     }
 
-    public String getQuantity() {
-        return quantity;
+    public String getTotalSellingprice() {
+        return totalSellingprice;
     }
 
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
+    public void setTotalSellingprice(String totalSellingprice) {
+        this.totalSellingprice = totalSellingprice;
     }
 
-    public String getPrice_per() {
-        return price_per;
+    public String getSalesId() {
+        return salesId;
     }
 
-    public void setPrice_per(String price_per) {
-        this.price_per = price_per;
+    public void setSalesId(String salesId) {
+        this.salesId = salesId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getSalesmanId() {
+        return salesmanId;
+    }
+
+    public void setSalesmanId(String salesmanId) {
+        this.salesmanId = salesmanId;
+    }
+
+    public String getSalesmanName() {
+        return salesmanName;
+    }
+
+    public void setSalesmanName(String salesmanName) {
+        this.salesmanName = salesmanName;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getProductId() {
@@ -57,14 +97,6 @@ public class SalesTrackerPojo {
         this.productId = productId;
     }
 
-    public String getProductImageAddress() {
-        return productImageAddress;
-    }
-
-    public void setProductImageAddress(String productImageAddress) {
-        this.productImageAddress = productImageAddress;
-    }
-
     public String getProductName() {
         return productName;
     }
@@ -73,67 +105,35 @@ public class SalesTrackerPojo {
         this.productName = productName;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getSize() {
+        return size;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setSize(String size) {
+        this.size = size;
     }
 
-    public String getProductCp() {
-        return productCp;
+    public String getQuantity() {
+        return quantity;
     }
 
-    public void setProductCp(String productCp) {
-        this.productCp = productCp;
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
-    public String getProductSp() {
-        return productSp;
+    public String getCostprice() {
+        return costprice;
     }
 
-    public void setProductSp(String productSp) {
-        this.productSp = productSp;
+    public void setCostprice(String costprice) {
+        this.costprice = costprice;
     }
 
-    public String getCurrentSales() {
-        return currentSales;
+    public String getSellingprice() {
+        return sellingprice;
     }
 
-    public void setCurrentSales(String currentSales) {
-        this.currentSales = currentSales;
-    }
-
-    public String getCurrentCp() {
-        return currentCp;
-    }
-
-    public void setCurrentCp(String currentCp) {
-        this.currentCp = currentCp;
-    }
-
-    public String getTotalSales() {
-        return totalSales;
-    }
-
-    public void setTotalSales(String totalSales) {
-        this.totalSales = totalSales;
-    }
-
-    public String getTotalCp() {
-        return totalCp;
-    }
-
-    public void setTotalCp(String totalCp) {
-        this.totalCp = totalCp;
-    }
-
-    public boolean isReturned() {
-        return returned;
-    }
-
-    public void setReturned(boolean returned) {
-        this.returned = returned;
+    public void setSellingprice(String sellingprice) {
+        this.sellingprice = sellingprice;
     }
 }

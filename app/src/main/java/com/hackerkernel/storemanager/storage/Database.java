@@ -425,7 +425,7 @@ public class Database {
     }
 
     //delete all salesTracker datelist
-    public void insertSalesTrackerDateList(String userId){
+    public void deleteSalesTrackerDateList(String userId){
         SQLiteDatabase db = helper.getWritableDatabase();
         String whereClause = DatabaseHelper.COL_ST_DATELIST_USER_ID +" = ?";
         String[] whereArgs = {userId};
@@ -439,7 +439,7 @@ public class Database {
         String[] col = {DatabaseHelper.COL_ST_DATELIST_DATE,DatabaseHelper.COL_ST_DATELIST_DATEID};
         String where = DatabaseHelper.COL_ST_DATELIST_USER_ID + "=?";
         String[] args = {userId};
-        String orderBy = DatabaseHelper.COL_ST_DATELIST_ID+" DESC";
+        String orderBy = DatabaseHelper.COL_ST_DATELIST_ID+" ASC";
         Cursor cursor = db.query(DatabaseHelper.TABLE_ST_DATELIST, col, where, args, null, null, orderBy);
 
         List<SalesTrackerDatePojo> list = new ArrayList<>();

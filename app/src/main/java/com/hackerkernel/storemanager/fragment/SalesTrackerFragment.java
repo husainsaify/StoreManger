@@ -13,10 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -31,6 +33,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
+import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
@@ -61,6 +64,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     private RequestQueue mRequestQueue;
     private ProgressDialog pd;
     private List<SalesTrackerDatePojo> mDateList;
+    private Database db;
+
+    private String mDate = null;
+    private String mDateId = null;
 
     public SalesTrackerFragment() {
         // Required empty public constructor
@@ -81,7 +88,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        db = new Database(getActivity());
+
         mDateList = new ArrayList<>();
+
     }
 
     @Override
@@ -91,7 +101,24 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_sales_tracker, container, false);
         ButterKnife.bind(this, view);
 
-        fetchDateListInBackground();
+        //SalesTracker Date List
+        checkInternetAndSetupDateSpinner();
+
+        //When salesTracker date Spinner is selected
+        mDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mDate = mDateList.get(position).getDate();
+                mDateId = mDateList.get(position).getDateId();
+
+                Toast.makeText(getActivity(),mDateId+"/"+mDate,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         mFabAddSales.setOnClickListener(this);
         return view;
@@ -107,6 +134,19 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     }
 
     /*************************** DATE LIST ************************************/
+
+    private void checkInternetAndSetupDateSpinner(){
+        if(Util.isConnectedToInternet(getActivity())){
+            //download fresh date list bra
+            fetchDateListInBackground();
+        }else{ //no Internet avaiable
+            Util.noInternetSnackbar(getActivity(),mLayout);
+
+            //get DateList From SQLite database
+            mDateList = db.getSalesTrackerDateList(mUserid);
+            setUpDateSpinnerFromList(mDateList);
+        }
+    }
 
     private void fetchDateListInBackground(){
         pd.show(); //show progressbar
@@ -127,6 +167,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 if (errrorString != null){
                     Util.redSnackbar(getActivity(), mLayout, errrorString);
                 }
+
+                //get DateList From SQLite database
+                mDateList = db.getSalesTrackerDateList(mUserid);
+                setUpDateSpinnerFromList(mDateList);
             }
         }){
             @Override
@@ -156,6 +200,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             if(mDateList != null){
                 //Setup date spinner
                 setUpDateSpinnerFromList(mDateList);
+
+                //Data SalesTracker date list into SQLite database
+                db.deleteSalesTrackerDateList(mUserid);
+                db.insertSalesTrackerDateList(mDateList,mUserid);
             }else{
                 //check count is smaller then zero or return false
                 String message = jsonObject.getString(Keys.KEY_COM_MESSAGE);

@@ -55,19 +55,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1.2">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/total_sales"
+                android:text="Total Selling price"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="----"
-                android:id="@+id/sellingPrice" />
+                android:id="@+id/totalSellingPrice" />
 
         </LinearLayout>
 
@@ -75,19 +75,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1.2">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cp"
+                android:text="Total Cost price"
                 android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="----"
-                android:id="@+id/costPrice" />
+                android:id="@+id/totalCostPrice" />
 
         </LinearLayout>
 
@@ -95,7 +95,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight=".6">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -122,16 +122,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recyclerview"/>
-
-    <TextView
-        android:layout_below="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_margin="10dp"
-        android:visibility="gone"
-        android:id="@+id/noSalesAdded"
-        android:text="@string/no_sales_click_on_plus_to_add"/>
     <!-- Recycler View -->
 
     <!--Coordinator layout to store Snackbar and Fab -->

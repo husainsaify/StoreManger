@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -62,7 +63,11 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     @Bind(R.id.dateSpinnerLayout) TableLayout mDateSpinnerLayout;
     @Bind(R.id.dateSpinner) Spinner mDateSpinner;
     @Bind(R.id.recyclerview) RecyclerView mSalesTrackerRecyclerView;
-    @Bind(R.id.noSalesAdded) TextView mNoSalesAdded;
+    @Bind(R.id.linearLayout) LinearLayout mProfitOrLossLayout;
+    @Bind(R.id.totalSellingPrice) TextView mProfitOrLossSellingprice;
+    @Bind(R.id.totalCostPrice) TextView mProfitOrLossCostprice;
+    @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
+    @Bind(R.id.profitOrLoss) TextView mProfitOrLoss;
 
 
     private static final String TAG = SalesTrackerFragment.class.getSimpleName();
@@ -225,12 +230,15 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 //returned false
                 if(!returned){
                     mDateSpinnerLayout.setVisibility(View.GONE);
+                    mProfitOrLossLayout.setVisibility(View.GONE);
+
                     mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
                     mPlaceholderWhenNoSalesAdded.setText(message);
                     mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);
                 }else if(count <= 0){
-                    //hide date spinner and show placeholder
+                    //hide date spinner & profit or loss layout and show placeholder
                     mDateSpinnerLayout.setVisibility(View.GONE);
+                    mProfitOrLossLayout.setVisibility(View.GONE);
                     mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
                 }
             }
@@ -293,6 +301,8 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 Util.redSnackbar(getActivity(),mLayout,mSalesTrackerList.get(0).getMessage());
             }else{
                 setupSalesTrackerRecyclerViewFromList(mSalesTrackerList);
+                //Set Profit & Loss State
+                setProfitOrLossState(mSalesTrackerList.get(0).getTotalCostprice(),mSalesTrackerList.get(0).getTotalSellingprice());
             }
         }else{
             Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
@@ -304,6 +314,37 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         SalesTrackerAdapter adapter = new SalesTrackerAdapter(getActivity());
         adapter.setList(list);
         mSalesTrackerRecyclerView.setAdapter(adapter);
+    }
+
+    /*
+    * Method to cal profit loss from total cp & sp and display it
+    * */
+    public void setProfitOrLossState(String totalCp, String totalSp){
+        int cp = Integer.parseInt(totalCp);
+        int sp = Integer.parseInt(totalSp);
+
+        String label;
+        int value;
+        if(cp > sp){//loss
+            //cal loss
+            value = cp - sp;
+            label = "Loss";
+        }else {
+            if (sp > cp) { //profit
+                //call profit
+                value = sp - cp;
+                label = "Profit";
+            } else { // neutral CP = sales
+                value = 0;
+                label = "Break Even";
+            }
+        }
+
+        //set Label and value to TextView
+        mProfitOrLossLabel.setText(label);
+        mProfitOrLoss.setText(String.valueOf(value));
+        mProfitOrLossCostprice.setText(String.valueOf(cp));
+        mProfitOrLossSellingprice.setText(String.valueOf(sp));
     }
 }
 

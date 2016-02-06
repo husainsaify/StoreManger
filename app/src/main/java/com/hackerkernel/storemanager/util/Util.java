@@ -181,6 +181,10 @@ public class Util {
         spinner.setSelection(postion);
     }
 
+    /*
+    *
+    * Method to cal Profit or loss On Product which have multiple sales
+    * */
     public static String calProfitLossOrBreakeven(String costprice, String sellingprice, String quantity) {
 
         //create a int array for sp & cp

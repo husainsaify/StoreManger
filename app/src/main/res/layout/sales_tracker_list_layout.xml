@@ -6,7 +6,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginTop="10dp"
     android:padding="10dp"
-    android:background="@drawable/background_border">
+    android:background="@drawable/background_border"
+    android:clickable="true">
 
     <TextView
         android:layout_width="wrap_content"

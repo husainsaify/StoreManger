@@ -380,6 +380,11 @@ public class JsonParser {
                 for (int i = 0; i < ja.length(); i++) {
                     JSONObject jo = ja.getJSONObject(i);
                     SalesTrackerPojo current = new SalesTrackerPojo();
+
+                    //set Total costPrice & selling price
+                    current.setTotalCostprice(jsonObject.getString(Keys.KEY_ST_TOTAL_COSTPRICE));
+                    current.setTotalSellingprice(jsonObject.getString(Keys.KEY_ST_TOTAL_SELLINGPRICE));
+
                     //set sales
                     current.setSalesId(jo.getString(Keys.KEY_ST_SALES_ID));
                     current.setCustomerName(jo.getString(Keys.KEY_ST_CUSTOMER_NAME));

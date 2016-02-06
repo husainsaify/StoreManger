@@ -163,7 +163,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
     }
 
     //method to update total sales cp & profit & loss
-    public void updateTotalStats(){
+    public void setProfitOrLossState(){
         String label;
         int value;
         if(mTotalCP > mTotalSales){//loss
@@ -296,7 +296,7 @@ public class SaleTrackerActivity extends AppCompatActivity {
                 SalesTrackerAdapter adapter = new SalesTrackerAdapter(getApplication(),R.layout.sales_tracker_list_layout,list);
                 mSalesListView.setAdapter(adapter);
                 //call updateSalesState to calculate and set total Sales Total CP & p or l
-                updateTotalStats();
+                setProfitOrLossState();
             }else{
                 Toast.makeText(getApplication(),mFailedMessage,Toast.LENGTH_LONG).show();
             }

@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Dummy text"
-        android:textColor="@color/abc_primary_text_material_light"
-        android:id="@+id/productName"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"/>
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    android:padding="10dp"
+    android:background="@drawable/background_border">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dummy text"
-        android:textColor="@color/abc_primary_text_material_light"
-        android:id="@+id/productPorL"
-        android:layout_margin="10dp"
-        android:layout_gravity="right" />
-</LinearLayout>
+        android:text="Husain saify"
+        android:textColor="@color/primaryColor"
+        android:id="@+id/customerName"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:layout_below="@id/customerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Relaxo\nAdda"
+        android:id="@+id/productName"/>
+
+    <TextView
+        android:layout_below="@id/customerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/salesmanName"
+        android:text="Sold By: Husain"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profitOrLoss"
+        android:text="Profit: Rs 5000"
+        android:layout_below="@id/salesmanName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

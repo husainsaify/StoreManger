@@ -282,9 +282,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             if (!mSalesTrackerList.get(0).getReturned()){
                 Util.redSnackbar(getActivity(),mLayout,mSalesTrackerList.get(0).getMessage());
             }else{
-                for (int i = 0; i < mSalesTrackerList.size(); i++) {
-                    Log.d(TAG,"HUS: "+mSalesTrackerList.get(i).getProductName());
-                }
+
             }
         }else{
             Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();

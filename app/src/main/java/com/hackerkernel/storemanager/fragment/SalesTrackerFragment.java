@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.AddSalesActivity;
+import com.hackerkernel.storemanager.adapter.SalesTrackerAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
@@ -58,6 +61,8 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     @Bind(R.id.placeholderWhenNoSalesAdded) TextView mPlaceholderWhenNoSalesAdded;
     @Bind(R.id.dateSpinnerLayout) TableLayout mDateSpinnerLayout;
     @Bind(R.id.dateSpinner) Spinner mDateSpinner;
+    @Bind(R.id.recyclerview) RecyclerView mSalesTrackerRecyclerView;
+    @Bind(R.id.noSalesAdded) TextView mNoSalesAdded;
 
 
     private static final String TAG = SalesTrackerFragment.class.getSimpleName();
@@ -102,6 +107,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sales_tracker, container, false);
         ButterKnife.bind(this, view);
+
+        //set Layout manager to recyclerView
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        mSalesTrackerRecyclerView.setLayoutManager(manager);
 
         //SalesTracker Date List
         checkInternetAndSetupDateSpinner();
@@ -258,6 +267,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG,"HUS: fetchSalesTrackerInBackground: "+error.getMessage());
+
             }
         }){
             @Override
@@ -282,12 +292,18 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             if (!mSalesTrackerList.get(0).getReturned()){
                 Util.redSnackbar(getActivity(),mLayout,mSalesTrackerList.get(0).getMessage());
             }else{
-
+                setupSalesTrackerRecyclerViewFromList(mSalesTrackerList);
             }
         }else{
             Toast.makeText(getActivity(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
             Log.e(TAG,"HUS: parseSalesTrackerResponse: "+response);
         }
+    }
+
+    private void setupSalesTrackerRecyclerViewFromList(List<SalesTrackerPojo> list){
+        SalesTrackerAdapter adapter = new SalesTrackerAdapter(getActivity());
+        adapter.setList(list);
+        mSalesTrackerRecyclerView.setAdapter(adapter);
     }
 }
 

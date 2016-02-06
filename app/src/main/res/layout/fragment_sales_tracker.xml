@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.hackerkernel.storemanager.fragment.SalesTrackerFragment">
 
     <TextView
@@ -117,6 +116,24 @@
     </LinearLayout>
     <!-- / Cp sp profit or loss -->
 
+    <!-- Recycler View -->
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recyclerview"/>
+
+    <TextView
+        android:layout_below="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:id="@+id/noSalesAdded"
+        android:text="@string/no_sales_click_on_plus_to_add"/>
+    <!-- Recycler View -->
+
     <!--Coordinator layout to store Snackbar and Fab -->
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/layout"
@@ -128,7 +145,7 @@
             android:id="@+id/fabAddSales"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
+            android:layout_gravity="center_vertical|bottom"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_add_white" />
 

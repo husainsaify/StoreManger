@@ -1,57 +1,72 @@
 package com.hackerkernel.storemanager.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
+import com.hackerkernel.storemanager.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SalesTrackerAdapter extends ArrayAdapter<SalesTrackerPojo> {
-    private static final String TAG = SalesTrackerAdapter.class.getSimpleName();
-    Context mContext;
-    List<SalesTrackerPojo> mList;
-    public SalesTrackerAdapter(Context context, int resource, List<SalesTrackerPojo> objects) {
-        super(context, resource, objects);
-        mContext = context;
-        mList = objects;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
+public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapter.SalesTrackerViewHolder> {
+    List<SalesTrackerPojo> mList = new ArrayList<>();
+    LayoutInflater mInflator;
+
+    public SalesTrackerAdapter(Context context){
+        mInflator = LayoutInflater.from(context);
+    }
+
+    public void setList(List<SalesTrackerPojo> list){
+        mList = list;
+        //update RecyclerView
+        notifyDataSetChanged();
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.sales_tracker_list_layout,parent, false);
+    public SalesTrackerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflator.inflate(R.layout.sales_tracker_list_layout,parent,false);
+        return new SalesTrackerViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(SalesTrackerViewHolder holder, int position) {
         SalesTrackerPojo current = mList.get(position);
-        TextView name = (TextView) view.findViewById(R.id.productName);
-        TextView porl = (TextView) view.findViewById(R.id.productPorL);
 
-        //calculate profit or loss
-        int currentSales = Integer.parseInt(current.getSellingprice());
-        int currentCp = Integer.parseInt(current.getCostprice());
-        String pl;
-        if(currentCp > currentSales){//loss
-            //cal loss
-            int loss = currentCp - currentSales;
-            pl = "Loss of "+loss;
-        }else {
-            if (currentSales > currentCp) { //profit
-                //call profit
-                int profit = currentSales - currentCp;
-                pl = "Profit of " + profit;
-            } else { // neutral CP = sales
-                pl = "Break Even";
-            }
+        //set to views
+        holder.customerName.setText(current.getCustomerName());
+        holder.productName.setText(current.getProductName());
+        holder.salesmanName.setText("Sold By: " + current.getSalesmanName());
+        //cal profit , loss or break even
+        String r = Util.calProfitLossOrBreakeven(current.getCostprice(),current.getSellingprice(),current.getQuantity());
+        holder.profitOrLoss.setText(r);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mList.size();
+    }
+
+    /**************** VIEW HOLDER ******************/
+    class SalesTrackerViewHolder extends RecyclerView.ViewHolder{
+        //List layout views
+        @Bind(R.id.customerName) TextView customerName;
+        @Bind(R.id.productName) TextView productName;
+        @Bind(R.id.salesmanName) TextView salesmanName;
+        @Bind(R.id.profitOrLoss) TextView profitOrLoss;
+
+        public SalesTrackerViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
         }
-
-        name.setText(current.getProductName());
-        porl.setText(pl);
-        return view;
     }
 }

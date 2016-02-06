@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toRightOf="@+id/categoryIcon"
+        android:layout_toEndOf="@id/categoryIcon"
         android:gravity="center_vertical"
         android:text="Kids Shoes"
         android:textColor="@color/primaryTextColor" />

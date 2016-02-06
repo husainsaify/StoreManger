@@ -65,6 +65,7 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
 
     class SimpleListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.SimpleListText) TextView name;
+
         public SimpleListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

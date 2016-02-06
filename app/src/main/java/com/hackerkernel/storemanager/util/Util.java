@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -19,15 +18,12 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
-import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -35,36 +31,37 @@ import java.util.Locale;
 public class Util {
     public static final String TAG = Util.class.getSimpleName();
 
-    public static void redSnackbar(Context context,View layout,String text){
-        Snackbar snackbar = Snackbar.make(layout,text,Snackbar.LENGTH_LONG);
+    public static void redSnackbar(Context context, View layout, String text) {
+        Snackbar snackbar = Snackbar.make(layout, text, Snackbar.LENGTH_LONG);
         View snack = snackbar.getView();
         snack.setBackgroundColor(context.getResources().getColor(R.color.error_color));
         snackbar.show();
     }
 
-    public static void greenSnackbar(Context context,View layout,String text){
-        Snackbar snackbar = Snackbar.make(layout,text,Snackbar.LENGTH_LONG);
+    public static void greenSnackbar(Context context, View layout, String text) {
+        Snackbar snackbar = Snackbar.make(layout, text, Snackbar.LENGTH_LONG);
         View snack = snackbar.getView();
         snack.setBackgroundColor(context.getResources().getColor(R.color.successColor));
         snackbar.show();
     }
 
     //check email address
-    public static boolean isValidEmail(CharSequence email){
-        return  Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    public static boolean isValidEmail(CharSequence email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     //check phone number
     public static boolean isValidPhoneNumber(String phone) {
         return !(phone.length() < 6 || phone.length() > 13) && Patterns.PHONE.matcher(phone).matches();
     }
+
     //method to check user is connected to internet
-    public static boolean isConnectedToInternet(Context context){
+    public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         //if the phone can be connected to internet
-        if(connectivity != null){
+        if (connectivity != null) {
             NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if(info != null){
+            if (info != null) {
                 for (NetworkInfo anInfo : info) {
                     if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
                         return true;
@@ -75,7 +72,7 @@ public class Util {
         return false;
     }
 
-    public static void noInternetSnackbar(Context context,View layout){
+    public static void noInternetSnackbar(Context context, View layout) {
         final Snackbar snack = Snackbar.make(layout, context.getString(R.string.please_check_your_internt), Snackbar.LENGTH_INDEFINITE);
         snack.setAction(context.getString(R.string.retry_big), new View.OnClickListener() {
             @Override
@@ -90,7 +87,7 @@ public class Util {
     /*
      * Method to send the user to HomeActivity
      * */
-    public static void goToHomeActivity(Context context){
+    public static void goToHomeActivity(Context context) {
         Intent categoryIntent = new Intent(context, HomeActivity.class);
         categoryIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         categoryIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -99,7 +96,7 @@ public class Util {
 
 
     //logout
-    public static void logout(Context context){
+    public static void logout(Context context) {
         //delete the user data from Shared Prefernece
         MySharedPreferences.getInstance(context).deleteUser();
         //send user to mainActivity
@@ -111,16 +108,17 @@ public class Util {
     }
 
     //method to check External is available to write
-    private static boolean isExternalStorageAvailable(){
+    private static boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
+
     /*
     * Method to save image to Sdcard
     * */
-    public static Uri saveImageToExternalStorage(Context context,Bitmap bitmap){
+    public static Uri saveImageToExternalStorage(Context context, Bitmap bitmap) {
         //Check external storage is avaialble
-        if(isExternalStorageAvailable()){
+        if (isExternalStorageAvailable()) {
             OutputStream output;
             String appName = context.getString(R.string.app_name);
 
@@ -128,12 +126,12 @@ public class Util {
             File filePath = Environment.getExternalStorageDirectory();
 
             //2. Create our subdirectory
-            File dir = new File(filePath.getAbsolutePath()+"/"+appName+"/");
-            if(!dir.exists()){
+            File dir = new File(filePath.getAbsolutePath() + "/" + appName + "/");
+            if (!dir.exists()) {
                 boolean result = dir.mkdirs();
-                if(!result){
+                if (!result) {
                     Log.d(TAG, "HUS: failed to create directory");
-                    Toast.makeText(context, R.string.failed_create_directory,Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.failed_create_directory, Toast.LENGTH_LONG).show();
                     return null;
                 }
             }
@@ -143,12 +141,12 @@ public class Util {
             String filename = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(date);
 
             //4. Create a file
-            File file = new File(dir,"IMG_"+filename+".jpg");
+            File file = new File(dir, "IMG_" + filename + ".jpg");
 
             try {
                 output = new FileOutputStream(file);
 
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,output);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output);
                 output.flush();
                 output.close();
                 Toast.makeText(context, R.string.image_saved_successfully, Toast.LENGTH_SHORT).show();
@@ -160,7 +158,7 @@ public class Util {
                 Toast.makeText(context, R.string.unable_to_save_image, Toast.LENGTH_SHORT).show();
                 return null;
             }
-        }else{
+        } else {
             Toast.makeText(context, R.string.external_storage_not_available, Toast.LENGTH_SHORT).show();
             return null;
         }
@@ -169,11 +167,11 @@ public class Util {
     /*
     * Method to select a Category Spinner to categoryId
     * */
-    public static void setSpinnerPostionToCategoryID(List<SimpleListPojo> mCategorySimpleList,String mCategoryId,Spinner spinner) {
+    public static void setSpinnerPostionToCategoryID(List<SimpleListPojo> mCategorySimpleList, String mCategoryId, Spinner spinner) {
         int i = 0;
         int postion = -1;
-        for (SimpleListPojo list : mCategorySimpleList){
-            if(list.getId().equals(mCategoryId)){
+        for (SimpleListPojo list : mCategorySimpleList) {
+            if (list.getId().equals(mCategoryId)) {
                 postion = i;
                 break;
             }
@@ -181,5 +179,42 @@ public class Util {
         }
 
         spinner.setSelection(postion);
+    }
+
+    public static String calProfitLossOrBreakeven(String costprice, String sellingprice, String quantity) {
+
+        //create a int array for sp & cp
+        String[] cpArray = costprice.split("\n");
+        String[] spArray = sellingprice.split("\n");
+        String[] quantityArray = quantity.split("\n");
+
+        //Variables to store total costprice & selling price
+        int totalCostprice = 0;
+        int totalSellingprice = 0;
+
+        //loop through cp & sp array to get cp & sp
+        for (int i = 0; i < cpArray.length; i++) {
+            int currentQuantity = Integer.parseInt(quantityArray[i]);
+            //add current cp & sp to Total cp & sp
+            totalCostprice += (currentQuantity * Integer.parseInt(cpArray[i]));
+            totalSellingprice += (currentQuantity * Integer.parseInt(spArray[i]));
+        }
+
+        String pl;
+        if (totalCostprice > totalSellingprice) {//loss
+            //cal loss
+            int loss = totalCostprice - totalSellingprice;
+            pl = "Loss: RS " + loss;
+        } else {
+            if (totalSellingprice > totalCostprice) { //profit
+                //call profit
+                int profit = totalSellingprice - totalCostprice;
+                pl = "Profit: RS " + profit;
+            } else { // neutral CP = sales
+                pl = "Break Even";
+            }
+        }
+
+        return pl;
     }
 }

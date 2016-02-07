@@ -61,28 +61,17 @@ import butterknife.ButterKnife;
  * Fragment to for sales tracker
  */
 public class SalesTrackerFragment extends Fragment implements View.OnClickListener {
-    @Bind(R.id.layout)
-    CoordinatorLayout mLayout;
-    @Bind(R.id.fabAddSales)
-    FloatingActionButton mFabAddSales;
-    @Bind(R.id.placeholderWhenNoSalesAdded)
-    TextView mPlaceholderWhenNoSalesAdded;
-    @Bind(R.id.dateSpinnerLayout)
-    TableLayout mDateSpinnerLayout;
-    @Bind(R.id.dateSpinner)
-    Spinner mDateSpinner;
-    @Bind(R.id.recyclerview)
-    RecyclerView mSalesTrackerRecyclerView;
-    @Bind(R.id.linearLayout)
-    LinearLayout mProfitOrLossLayout;
-    @Bind(R.id.totalSellingPrice)
-    TextView mProfitOrLossSellingprice;
-    @Bind(R.id.totalCostPrice)
-    TextView mProfitOrLossCostprice;
-    @Bind(R.id.profitOrLossLabel)
-    TextView mProfitOrLossLabel;
-    @Bind(R.id.profitOrLoss)
-    TextView mProfitOrLoss;
+    @Bind(R.id.layout) CoordinatorLayout mLayout;
+    @Bind(R.id.fabAddSales) FloatingActionButton mFabAddSales;
+    @Bind(R.id.placeholderWhenNoSalesAdded) TextView mPlaceholderWhenNoSalesAdded;
+    @Bind(R.id.dateSpinnerLayout) TableLayout mDateSpinnerLayout;
+    @Bind(R.id.dateSpinner) Spinner mDateSpinner;
+    @Bind(R.id.recyclerview) RecyclerView mSalesTrackerRecyclerView;
+    @Bind(R.id.linearLayout) LinearLayout mProfitOrLossLayout;
+    @Bind(R.id.totalSellingPrice) TextView mProfitOrLossSellingprice;
+    @Bind(R.id.totalCostPrice) TextView mProfitOrLossCostprice;
+    @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
+    @Bind(R.id.profitOrLoss) TextView mProfitOrLoss;
 
 
     private static final String TAG = SalesTrackerFragment.class.getSimpleName();

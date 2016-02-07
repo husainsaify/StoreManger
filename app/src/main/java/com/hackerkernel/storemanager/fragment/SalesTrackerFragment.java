@@ -354,7 +354,8 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     }
 
     private void setupSalesTrackerRecyclerViewFromList(List<SalesTrackerPojo> list) {
-        adapter = new SalesTrackerAdapter(getActivity());
+        showSalesTrackerVisible(true); //set ST visible
+        SalesTrackerAdapter adapter = new SalesTrackerAdapter(getActivity());
         adapter.setList(list);
         mSalesTrackerRecyclerView.setAdapter(adapter);
     }
@@ -400,9 +401,22 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             parseSalesTrackerResponse(jsonResponse);
         } else {
             Toast.makeText(getActivity(), R.string.check_internt_failed_to_get_st_from_local, Toast.LENGTH_LONG).show();
+            showSalesTrackerVisible(false);
         }
     }
 
+    /*
+    * Method to toggle ST RecyclerView and ProfitOrLoss layout
+    * */
+    private void showSalesTrackerVisible(boolean para){
+        if (para){ //true display
+            mProfitOrLossLayout.setVisibility(View.VISIBLE);
+            mSalesTrackerRecyclerView.setVisibility(View.VISIBLE);
+        }else{ //false hide
+            mProfitOrLossLayout.setVisibility(View.GONE);
+            mSalesTrackerRecyclerView.setVisibility(View.GONE);
+        }
+    }
 
     /************************
      * Method to store and retrive SalesTracker json response in cache

@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -220,5 +221,16 @@ public class Util {
         }
 
         return pl;
+    }
+
+    /*
+    * Method to make progressbar visible and invisible
+    * */
+    public static void setProgressBarVisible(ProgressBar pb,boolean value){
+        if(value){ //true make visible
+            pb.setVisibility(View.VISIBLE);
+        }else{ //false hide
+            pb.setVisibility(View.GONE);
+        }
     }
 }

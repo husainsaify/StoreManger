@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -72,19 +73,18 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     @Bind(R.id.totalCostPrice) TextView mProfitOrLossCostprice;
     @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
     @Bind(R.id.profitOrLoss) TextView mProfitOrLoss;
-
+    private ProgressBar mToolbarProgressBar;
 
     private static final String TAG = SalesTrackerFragment.class.getSimpleName();
-    private String mUserid;
+    private String mUserId;
     private RequestQueue mRequestQueue;
-    private ProgressDialog pd;
     private List<SalesTrackerDatePojo> mDateList;
     private List<SalesTrackerPojo> mSalesTrackerList;
     private Database db;
-    private SalesTrackerAdapter adapter;
 
     private String mDate = null;
     private String mDateId = null;
+
 
     public SalesTrackerFragment() {
         // Required empty public constructor
@@ -95,15 +95,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         super.onCreate(savedInstanceState);
 
         //Get userId of the logged in user
-        mUserid = MySharedPreferences.getInstance(getActivity()).getUserId();
+        mUserId = MySharedPreferences.getInstance(getActivity()).getUserId();
 
         //Instanciate Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
-
-        //Setup ProgressDialog
-        pd = new ProgressDialog(getActivity());
-        pd.setMessage(getString(R.string.pleasewait));
-        pd.setCancelable(true);
 
         db = new Database(getActivity());
 
@@ -117,6 +112,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sales_tracker, container, false);
         ButterKnife.bind(this, view);
+
+        //get the refernce of the Toolbar Porgressbar
+        mToolbarProgressBar = (ProgressBar) getActivity().findViewById(R.id.toolbarProgressBar);
 
         //set Layout manager to recyclerView
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
@@ -167,24 +165,24 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             Util.noInternetSnackbar(getActivity(), mLayout);
 
             //get DateList From SQLite database
-            mDateList = db.getSalesTrackerDateList(mUserid);
+            mDateList = db.getSalesTrackerDateList(mUserId);
             setUpDateSpinnerFromList(mDateList);
         }
     }
 
     private void fetchDateListInBackground() {
-        pd.show(); //show progressbar
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
 
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.SALES_TRACKER_DATE_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                pd.dismiss(); //hide progressbar
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
                 parseDateListResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                pd.dismiss(); //hide progressbar
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
                 //handle volley errorString
                 Log.e(TAG, "fetchDateListInBackground: " + error.getMessage());
                 String errrorString = VolleySingleton.handleVolleyError(error);
@@ -193,14 +191,14 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 }
 
                 //get DateList From SQLite database
-                mDateList = db.getSalesTrackerDateList(mUserid);
+                mDateList = db.getSalesTrackerDateList(mUserId);
                 setUpDateSpinnerFromList(mDateList);
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param = new HashMap<>();
-                param.put(Keys.KEY_COM_USERID, mUserid);
+                param.put(Keys.KEY_COM_USERID, mUserId);
                 return param;
             }
         };
@@ -226,8 +224,8 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 setUpDateSpinnerFromList(mDateList);
 
                 //Data SalesTracker date list into SQLite database
-                db.deleteSalesTrackerDateList(mUserid);
-                db.insertSalesTrackerDateList(mDateList, mUserid);
+                db.deleteSalesTrackerDateList(mUserId);
+                db.insertSalesTrackerDateList(mDateList, mUserId);
             } else {
                 //check count is smaller then zero or return false
                 String message = jsonObject.getString(Keys.KEY_COM_MESSAGE);
@@ -287,9 +285,11 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     }
 
     private void fetchSalesTrackerInBackground() {
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALES_TRACKER, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Util.setProgressBarVisible(mToolbarProgressBar,false); //hide progressbar
                 //parse SalesTracker Respone
                 parseSalesTrackerResponse(response);
 
@@ -299,6 +299,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Util.setProgressBarVisible(mToolbarProgressBar,false); //hide progressbar
                 Log.e(TAG, "HUS: fetchSalesTrackerInBackground: " + error.getMessage());
                 //handle volley error
                 String errorString = VolleySingleton.handleVolleyError(error);
@@ -313,7 +314,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param = new HashMap<>();
-                param.put(Keys.KEY_COM_USERID, mUserid);
+                param.put(Keys.KEY_COM_USERID, mUserId);
                 param.put(Keys.KEY_ST_DATELIST_DATE_ID, mDateId);
                 return param;
             }

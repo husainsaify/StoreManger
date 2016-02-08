@@ -169,7 +169,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_refresh:
-                Toast.makeText(getActivity(),"HELLo",Toast.LENGTH_LONG).show();
+                    refreshList();
                 break;
         }
         return true;
@@ -288,6 +288,21 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, stringList);
         mDateSpinner.setAdapter(adapter);
+    }
+
+    /*
+    * Method to check internet and refresh SalesTrackerList
+    *
+    * */
+    public void refreshList(){
+        if(Util.isConnectedToInternet(getActivity())){
+            //refresh DateList
+            fetchDateListInBackground();
+            //refresh SalesTracker
+            fetchSalesTrackerInBackground();
+        }else {
+            Util.noInternetSnackbar(getActivity(),mLayout);
+        }
     }
 
     /*************************

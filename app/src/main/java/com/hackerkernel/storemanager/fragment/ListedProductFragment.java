@@ -82,6 +82,8 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
         pd = new ProgressDialog(getActivity());
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
     }
 
     @Override

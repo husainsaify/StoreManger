@@ -110,6 +110,8 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
     }
 
+    /********** MENU *****/
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_product_list,menu);
@@ -132,8 +134,6 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         }
         return true;
     }
-
-    /********** MENU *****/
 
 
     /*

@@ -38,7 +38,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ManageSalesmanActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.fabAddSalesman) FloatingActionButton fab;
     @Bind(R.id.clayout) CoordinatorLayout mLayout;
@@ -86,7 +86,7 @@ public class ManageSalesman extends AppCompatActivity implements SwipeRefreshLay
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ManageSalesman.this,AddSalesman.class));
+                startActivity(new Intent(ManageSalesmanActivity.this,AddSalesman.class));
             }
         });
 

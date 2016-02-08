@@ -78,7 +78,7 @@
                 android:value="com.hackerkernel.storemanager.activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ManageSalesman"
+            android:name=".activity.ManageSalesmanActivity"
             android:label="@string/title_activity_manage_salesman"
             android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
@@ -89,11 +89,11 @@
         <activity
             android:name=".activity.AddSalesman"
             android:label="@string/title_activity_add_salesman"
-            android:parentActivityName=".activity.ManageSalesman"
+            android:parentActivityName=".activity.ManageSalesmanActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.hackerkernel.storemanager.activity.ManageSalesman" />
+                android:value=".activity.ManageSalesmanActivity" />
         </activity>
         <activity
             android:name=".activity.HomeActivity"

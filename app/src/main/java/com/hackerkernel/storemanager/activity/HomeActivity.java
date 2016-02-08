@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity{
                         break;
                     case R.id.menu_manage_salesman:
                         mDrawerLayout.closeDrawers();
-                        startActivity(new Intent(getApplication(), ManageSalesman.class));
+                        startActivity(new Intent(getApplication(), ManageSalesmanActivity.class));
                         break;
                     case R.id.menu_sales_tracker:
                         break;

@@ -1,17 +1,16 @@
 package com.hackerkernel.storemanager.parser;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.AutoCompleteProductPojo;
+import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
-import com.hackerkernel.storemanager.pojo.SimpleListPojo;
-import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.pojo.SignupPojo;
+import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.pojo.SimplePojo;
 
 import org.json.JSONArray;

@@ -67,7 +67,7 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
         return mList.size();
     }
 
-    class SimpleListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
+    class SimpleListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.SimpleListText) TextView name;
 
         public SimpleListViewHolder(View itemView) {
@@ -76,12 +76,6 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
 
             /*Item click listener*/
             itemView.setOnClickListener(this);
-
-            //register floating context menu when adapter is used for Category
-            if(mActivityName.equals(CATEGORY)){
-                //context menu
-                itemView.setOnCreateContextMenuListener(this);
-            }
         }
 
         @Override
@@ -99,12 +93,6 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
                 productIntent.putExtra(Keys.PRAM_PL_CATEGORYNAME, current.getName());
                 mContext.startActivity(productIntent);
             }
-        }
-
-        @Override
-        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.add(Menu.NONE,R.id.action_edit, Menu.NONE, R.string.edit_category_name);
-            menu.add(Menu.NONE,R.id.action_delete, Menu.NONE, R.string.delete_category);
         }
     }
 }

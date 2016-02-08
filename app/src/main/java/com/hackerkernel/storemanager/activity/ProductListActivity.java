@@ -3,13 +3,18 @@ package com.hackerkernel.storemanager.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +59,9 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     private Database db;
     private RequestQueue mRequestQueue;
 
+    private EditText mEditCategoryNameEditText;
+    AlertDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +97,44 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         //Instantiate Database
         db = new Database(this);
 
+        //Instanciate edit Category name EditText
+        mEditCategoryNameEditText = new EditText(this);
+        mEditCategoryNameEditText.setText(mCategoryName);
+
+        //Create Edit Category name Dialog
+        createEditCategoryDialog();
+
         //Instantiate SwipeToRefreshLayout
         mSwipeRefresh.setOnRefreshListener(this);
         checkInternetAndDisplayList();
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_product_list,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            //when back button is clicked
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                break;
+            case R.id.action_edit_category_name:
+                showEditCategoryDialog();
+                break;
+            case R.id.action_delete_category:
+                Toast.makeText(getApplication(),"delete cat",Toast.LENGTH_LONG).show();
+                break;
+        }
+        return true;
+    }
+
+    /********** MENU *****/
+
 
     /*
     * Check user has a Internet connected
@@ -243,5 +285,18 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
                 }
             });
         }
+    }
+
+    /******************** Edit Category name *****************/
+    private void createEditCategoryDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.edit_category_name)
+                .setView(mEditCategoryNameEditText)
+                .setPositiveButton(R.string.edit,null)
+                .setNegativeButton(R.string.cancel,null);
+        dialog = builder.create();
+    }
+    private void showEditCategoryDialog(){
+        dialog.show();
     }
 }

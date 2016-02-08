@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +63,7 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
     private List<SimpleListPojo> mCategoryList;
     private RequestQueue mRequestQueue;
     private MySharedPreferences mySharedPreferences;
+    private EditText mEditCategoryNameEditText;
 
 
     private static final String TAG = CategoryFragment.class.getSimpleName();
@@ -120,19 +124,6 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.action_refresh).setVisible(false);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_edit:
-                Toast.makeText(getActivity(),"Edit",Toast.LENGTH_LONG).show();
-                break;
-            case R.id.action_delete:
-                Toast.makeText(getActivity(),"delete",Toast.LENGTH_LONG).show();
-                break;
-        }
-        return super.onContextItemSelected(item);
     }
 
     /*

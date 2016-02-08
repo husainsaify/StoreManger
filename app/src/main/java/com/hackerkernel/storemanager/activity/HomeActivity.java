@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_sales_tracker_fragment,menu);
-        return false;
+        return true;
     }
 
     /*

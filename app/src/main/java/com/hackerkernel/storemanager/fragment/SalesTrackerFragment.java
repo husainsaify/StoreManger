@@ -1,7 +1,6 @@
 package com.hackerkernel.storemanager.fragment;
 
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -104,6 +106,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
         mDateList = new ArrayList<>();
         mSalesTrackerList = new ArrayList<>();
+
+        //indicate the Fragment will participate in menu creation
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -151,6 +156,23 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 startActivity(new Intent(getActivity(), AddSalesActivity.class));
                 break;
         }
+    }
+
+    /* Create Menu on HomeActivity toolbar */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_sales_tracker_fragment, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                Toast.makeText(getActivity(),"HELLo",Toast.LENGTH_LONG).show();
+                break;
+        }
+        return true;
     }
 
     /***************************

@@ -23,7 +23,7 @@ import com.hackerkernel.storemanager.util.Util;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity{
 
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.tabs) TabLayout tabs;
@@ -116,10 +116,9 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-
     /*
-    * Method to go to AddCategoryActivity
-    * */
+     * Method to go to AddCategoryActivity
+     * */
     private void goToAddCategoryActivity() {
         startActivity(new Intent(getApplication(), AddCategoryActivity.class));
     }

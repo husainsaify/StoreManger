@@ -306,7 +306,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     }
 
     /*************************
-     * SALES TRACKER RECYCLERVIEW
+     * SALES TRACKER RECYCLER VIEW
      *********************/
     /*
     *

@@ -369,7 +369,7 @@ public class ProductActivity extends AppCompatActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(ProductActivity.this);
             builder.setTitle(R.string.delete)
                     .setMessage(getString(R.string.are_your_sure_you_want_to_delete_this))
-                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -386,7 +386,7 @@ public class ProductActivity extends AppCompatActivity {
 
                         }
                     })
-                    .setNegativeButton(getString(R.string.no), null);
+                    .setNegativeButton(R.string.cancel, null);
             AlertDialog dialog = builder.create();
             dialog.show();
         }else{ //Not avaialble

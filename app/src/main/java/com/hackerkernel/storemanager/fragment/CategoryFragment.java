@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -113,12 +114,25 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         return view;
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_edit:
+                Toast.makeText(getActivity(),"Edit",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_delete:
+                Toast.makeText(getActivity(),"delete",Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
     /*
-    * Check user has a Internet connected
-    * if yes Fetch fresh salesman list from api and store it in sqlite database
-    * if no Go to Sqlitedatabase and get the salesman list
-    * if no data in SqliteDatabase show a message
-    * */
+        * Check user has a Internet connected
+        * if yes Fetch fresh salesman list from api and store it in sqlite database
+        * if no Go to Sqlitedatabase and get the salesman list
+        * if no data in SqliteDatabase show a message
+        * */
     private void checkInternetAndDisplayList() {
         if(Util.isConnectedToInternet(getActivity())){ //connected
             fetchCategoryInBackground(); //fetch data

@@ -131,7 +131,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 mDateId = mDateList.get(position).getDateId();
 
                 //method to fetch Sales Tracker
-                fetchSalesTrackerInBackground();
+                checkInternetAndSetupSalesTrackerList(mDateId);
             }
 
             @Override
@@ -385,7 +385,6 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     * METHOD TO DISPLAY SALES TRACKER LIST FROM CACHE
     * */
     private void setupSalesTrackerListFromCache(String dateId) {
-        Toast.makeText(getActivity(), R.string.no_internet_getting_st_from_local_storage, Toast.LENGTH_LONG).show();
         String jsonResponse = getSalesTrackerFromCache(dateId);
         if (jsonResponse != null) {
             parseSalesTrackerResponse(jsonResponse);

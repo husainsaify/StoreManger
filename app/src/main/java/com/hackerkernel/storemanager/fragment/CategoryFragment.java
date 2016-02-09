@@ -81,8 +81,8 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         //Database
         db = new Database(getActivity());
 
-        //indicate the Fragment will not participate in menu creation
-        setHasOptionsMenu(false);
+        //indicate the Fragment will participate in menu creation
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -112,6 +112,14 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         checkInternetAndDisplayList();
 
         return view;
+    }
+
+    /*
+    * Hide menu item on HomeActivity
+    * */
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_refresh).setVisible(false);
     }
 
     @Override

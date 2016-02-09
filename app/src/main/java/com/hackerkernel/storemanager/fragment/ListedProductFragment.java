@@ -193,7 +193,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
             }
 
             if (mProductName.isEmpty() || mProductCostPrice.isEmpty() || mProductId.isEmpty() || mSize.isEmpty()){
-                Util.redSnackbar(getActivity(), mLayout, getString(R.string.select_valid_prroduct_from_product_name));
+                Util.redSnackbar(getActivity(), mLayout, getString(R.string.select_valid_product_from_product_name));
                 return;
             }
 

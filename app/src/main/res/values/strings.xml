@@ -142,13 +142,13 @@
 
     <string name="per_product">(Per Product)</string>
     <string name="sold_by">Sold By</string>
-    <string name="select_valid_prroduct_from_product_name">Select a valid product from Product name</string>
+    <string name="select_valid_product_from_product_name">Select a valid product from Product name</string>
     <string name="select_date">Select Date</string>
     <string name="no_sales_click_on_plus_to_add">It seems your haven\'t added any sales yet. Click on the plus icon to add one</string>
     <string name="no_internet_getting_st_from_local_storage">No internet avaialble. Getting SalesTracker From local storage.</string>
     <string name="check_internt_failed_to_get_st_from_local">Check your internet connection. Failed to get SalesTracker From local storage</string>
-    <string name="edit_category_name">Edit category name</string>
-    <string name="delete_category">Delete category</string>
+    <string name="edit_category_name">Edit Category Name</string>
+    <string name="delete_category">Delete Category</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

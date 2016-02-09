@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -97,9 +98,15 @@ public class HomeActivity extends AppCompatActivity{
         headerFullName.setText(mSharedPreferences.getUserFullname());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sales_tracker_fragment,menu);
+        return false;
+    }
+
     /*
-    * Create a HamBurger icon for NavigationDrawer
-    * */
+        * Create a HamBurger icon for NavigationDrawer
+        * */
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

@@ -158,11 +158,12 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    /* Create Menu on HomeActivity toolbar */
+    /*
+    * Show menu item on HomeActivity
+    * */
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_sales_tracker_fragment, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.action_refresh).setVisible(true);
     }
 
     @Override

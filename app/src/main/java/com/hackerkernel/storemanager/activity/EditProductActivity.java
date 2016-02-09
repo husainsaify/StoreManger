@@ -334,8 +334,8 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
         //Add EditText bassed on sizeArray length
         for (int i = 0; i < sizeArray.length; i++) {
             //Add editText to size & quantity layout and Button to delete layout
-            EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
-            EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+            EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
+            EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
 
             //get Size & Quantity
             String s = sizeArray[i];
@@ -366,8 +366,8 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     * Method to add more Size, Quantity and Delete button to Their respective layout
     * */
     private void loadMore() {
-        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
-        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
+        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
         ImageButton deleteButton = new ImageButton(getApplication());
         deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
         deleteButton.setTag(mSizeList.size() + 1);

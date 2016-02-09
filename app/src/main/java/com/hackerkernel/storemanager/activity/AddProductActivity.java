@@ -207,8 +207,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         //set size & quantity
-        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
-        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style, null);
+        EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
+        EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
 
         //add to list
         mSizeList.add(size);

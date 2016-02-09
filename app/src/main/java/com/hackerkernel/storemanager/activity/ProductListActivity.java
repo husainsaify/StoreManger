@@ -34,6 +34,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
@@ -50,7 +51,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     //Global variable
     private static final String TAG = ProductListActivity.class.getSimpleName();
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.layout) CoordinatorLayout mLayout;
     @Bind(R.id.swipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.productRecyclerView) RecyclerView mRecyclerView;
@@ -84,7 +85,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         }
 
         //set the Toolbar
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(mCategoryName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -103,7 +104,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         db = new Database(this);
 
         //Instanciate edit Category name EditText
-        mEditCategoryNameEditText = (EditText) LayoutInflater.from(this).inflate(R.layout.edit_text_style,null);
+        mEditCategoryNameEditText = (EditText) LayoutInflater.from(this).inflate(R.layout.edit_text_style_text,null);
         mEditCategoryNameEditText.setText(mCategoryName);
         mEditCategoryNameEditText.setSelection(mEditCategoryNameEditText.getText().length()); //Set curose to the last alphabet of the editText
 
@@ -301,8 +302,8 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
                 .setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //call EditCategoryNameInBackground method
-                        editCategoryNameInBackground();
+                        //Validate new Category name
+                        validateCategoryName();
                     }
                 })
                 .setNegativeButton(R.string.cancel,null);
@@ -321,27 +322,88 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     }
 
     /*
+    * Method to validate new Category name
+    * */
+    private void validateCategoryName(){
+        //get new category name
+        String newCategoryName = mEditCategoryNameEditText.getText().toString().trim();
+
+        //check new category is does not match old category name
+        if (newCategoryName.equals(mCategoryName)){
+            Util.redSnackbar(getApplication(), mLayout, "Enter a new name for category");
+        }
+        else if(newCategoryName.length() <= 3){ //categoryname should not be to short
+            Util.redSnackbar(getApplication(),mLayout,"Category name should be more then 3 characters");
+        }
+        else if(newCategoryName.length() > 20){
+            Util.redSnackbar(getApplication(),mLayout,"Category name should not be more then 20 characters");
+        }else{
+            //Call method to Update category name on API
+            editCategoryNameInBackground(newCategoryName);
+        }
+    }
+
+    /*
     * Method to connect with API and edit Category name is Background
     * */
-    private void editCategoryNameInBackground() {
-        Util.setProgressBarVisible(mToolbarProgressBar,true); //make progressbar visible
+    private void editCategoryNameInBackground(final String newCategoryName) {
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.EDIT_CATEGORY_NAME, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
+                //parse response & check response was success or not
+                if(parseEditCategoryResponse(response)){
+                    //set new category name to the title
+                    assert getSupportActionBar() != null;
+                    getSupportActionBar().setTitle(newCategoryName);
+                    //set new category name to Edit category dialog
+                    mEditCategoryNameEditText.setText("");
+                    mEditCategoryNameEditText.append(newCategoryName);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
+                Log.e(TAG, "HUS: editCategoryNameInBackground " + error.getMessage());
+                //handle error
+                String stringError = VolleySingleton.handleVolleyError(error);
+                if(stringError != null){
+                    Util.redSnackbar(getApplicationContext(),mLayout,stringError);
+                }
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
+                params.put(Keys.KEY_COM_CATEGORYNAME,newCategoryName);
+                params.put(Keys.KEY_COM_USERID,mUserId);
+                return params;
             }
         };
 
         mRequestQueue.add(request);
+    }
+
+    private boolean parseEditCategoryResponse(String json) {
+        boolean response = false;
+        List<SimplePojo> list = JsonParser.simpleParser(json);
+        if(list != null){
+            SimplePojo current = list.get(0);
+            //check return is true or false
+            if (current.getReturned()){ //success
+                Util.greenSnackbar(getApplicationContext(),mLayout,current.getMessage());
+                //set response to true because operation was succesfull
+                response = true;
+            }else { //false
+                Util.redSnackbar(getApplicationContext(), mLayout, current.getMessage());
+            }
+        }else{
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
+
+        return response;
     }
 }

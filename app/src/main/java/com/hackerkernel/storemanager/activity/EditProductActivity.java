@@ -272,7 +272,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put(Keys.KEY_COM_USERID, mUserId);
-                params.put(Keys.KEY_PL_ID, mProductId);
+                params.put(Keys.KEY_COM_PRODUCTID, mProductId);
                 return params;
             }
         };
@@ -581,7 +581,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
                 param.put(Keys.KEY_COM_PRODUCTID,mProductId);
-                param.put(Keys.PRAM_AP_CATEGORYID,mCategoryId);
+                param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
                 param.put(Keys.PRAM_AP_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);
                 param.put(Keys.PRAM_AP_NAME,name);
@@ -610,7 +610,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
 
                 //Start Product activity
                 Intent productIntent = new Intent(getApplication(),ProductActivity.class);
-                productIntent.putExtra(Keys.KEY_PL_ID, mProductId);
+                productIntent.putExtra(Keys.KEY_COM_PRODUCTID, mProductId);
                 productIntent.putExtra(Keys.KEY_PL_NAME, mProductName.getText().toString().trim());
                 //Clear task
                 productIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

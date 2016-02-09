@@ -192,9 +192,9 @@ public class JsonParser {
                         //Set all the fetched json values to the ProductListPojo
                         ProductListPojo productListPojo = new ProductListPojo();
 
-                        productListPojo.setProductId(jo.getString(Keys.KEY_PL_ID));
+                        productListPojo.setProductId(jo.getString(Keys.KEY_COM_PRODUCTID));
                         productListPojo.setUserId(jo.getString(Keys.KEY_COM_USERID));
-                        productListPojo.setCategoryId(jo.getString(Keys.KEY_PL_CATEGORY_ID));
+                        productListPojo.setCategoryId(jo.getString(Keys.KEY_COM_CATEGORYID));
                         productListPojo.setProductName(jo.getString(Keys.KEY_PL_NAME));
                         productListPojo.setProductImage(jo.getString(Keys.KEY_PL_IMAGE));
                         productListPojo.setProductCode(jo.getString(Keys.KEY_PL_CODE));
@@ -242,7 +242,7 @@ public class JsonParser {
                 //add more item
                 product.setUserId(jo.getString(Keys.KEY_COM_USERID));
                 product.setId(jo.getString(Keys.KEY_P_ID));
-                product.setCategoryId(jo.getString(Keys.KEY_P_CATEGORYID));
+                product.setCategoryId(jo.getString(Keys.KEY_COM_CATEGORYID));
                 product.setName(jo.getString(Keys.KEY_P_NAME));
                 product.setImageAddress(jo.getString(Keys.KEY_P_IMAGE));
                 product.setCode(jo.getString(Keys.KEY_P_CODE));

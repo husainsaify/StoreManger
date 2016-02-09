@@ -89,8 +89,8 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
                 //go to product activity
                 Intent productIntent = new Intent(mContext, ProductListActivity.class);
                 //set categoryId and CategoryName in intenet
-                productIntent.putExtra(Keys.PRAM_PL_CATEGORYID, current.getId());
-                productIntent.putExtra(Keys.PRAM_PL_CATEGORYNAME, current.getName());
+                productIntent.putExtra(Keys.KEY_COM_CATEGORYID, current.getId());
+                productIntent.putExtra(Keys.KEY_COM_CATEGORYNAME, current.getName());
                 mContext.startActivity(productIntent);
             }
         }

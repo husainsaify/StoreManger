@@ -1,5 +1,6 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -11,10 +12,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     @Bind(R.id.swipeRefresh) SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.productRecyclerView) RecyclerView mRecyclerView;
     @Bind(R.id.emptyRecyclerView) TextView mEmptyRecyclerView;
+    @Bind(R.id.toolbarProgressBar) ProgressBar mToolbarProgressBar;
 
     private String mCategoryId;
     private String mCategoryName;
@@ -59,8 +63,9 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
     private Database db;
     private RequestQueue mRequestQueue;
 
+    //Edit Category name Dialog
     private EditText mEditCategoryNameEditText;
-    AlertDialog dialog;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +74,9 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         ButterKnife.bind(this);
 
         //get the categoryId & categoryName
-        if(getIntent().hasExtra(Keys.PRAM_PL_CATEGORYID) && getIntent().hasExtra(Keys.PRAM_PL_CATEGORYNAME)){
-            mCategoryId = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYID);
-            mCategoryName = getIntent().getExtras().getString(Keys.PRAM_PL_CATEGORYNAME);
+        if(getIntent().hasExtra(Keys.KEY_COM_CATEGORYID) && getIntent().hasExtra(Keys.KEY_COM_CATEGORYNAME)){
+            mCategoryId = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYID);
+            mCategoryName = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYNAME);
         }else{
             Toast.makeText(getApplication(), R.string.internal_error_restart_app,Toast.LENGTH_LONG).show();
             finish();
@@ -98,9 +103,9 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         db = new Database(this);
 
         //Instanciate edit Category name EditText
-        mEditCategoryNameEditText = new EditText(this);
-        mEditCategoryNameEditText.setText("");
-        mEditCategoryNameEditText.append(mCategoryName); //Set curose to the last alphabet of the editText
+        mEditCategoryNameEditText = (EditText) LayoutInflater.from(this).inflate(R.layout.edit_text_style,null);
+        mEditCategoryNameEditText.setText(mCategoryName);
+        mEditCategoryNameEditText.setSelection(mEditCategoryNameEditText.getText().length()); //Set curose to the last alphabet of the editText
 
         //Create Edit Category name Dialog
         createEditCategoryDialog();
@@ -195,7 +200,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
                 param.put(Keys.KEY_COM_USERID,mUserId);
-                param.put(Keys.PRAM_PL_CATEGORYID,mCategoryId);
+                param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
                 return param;
             }
         };
@@ -205,7 +210,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
     private void showListFromSqliteDatabase() {
         //Display List From SQlite database
-        List<ProductListPojo> list = db.getProductList(mUserId,mCategoryId);
+        List<ProductListPojo> list = db.getProductList(mUserId, mCategoryId);
         if(list != null){
             setupRecyclerView(list);
         }
@@ -293,11 +298,50 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.edit_category_name)
                 .setView(mEditCategoryNameEditText)
-                .setPositiveButton(R.string.edit,null)
+                .setPositiveButton(R.string.edit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //call EditCategoryNameInBackground method
+                        editCategoryNameInBackground();
+                    }
+                })
                 .setNegativeButton(R.string.cancel,null);
         dialog = builder.create();
     }
+
+    /*
+    * Check internet connection and show Edit Category name dialog
+    * */
     private void showEditCategoryDialog(){
-        dialog.show();
+        if(Util.isConnectedToInternet(getApplication())){
+            dialog.show();
+        }else {
+            Toast.makeText(getApplicationContext(),R.string.please_check_your_internt,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+    * Method to connect with API and edit Category name is Background
+    * */
+    private void editCategoryNameInBackground() {
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //make progressbar visible
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.EDIT_CATEGORY_NAME, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return super.getParams();
+            }
+        };
+
+        mRequestQueue.add(request);
     }
 }

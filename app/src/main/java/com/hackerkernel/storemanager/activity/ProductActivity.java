@@ -75,8 +75,8 @@ public class ProductActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         //get the ProductId & productName
-        if (getIntent().hasExtra(Keys.KEY_PL_ID) && getIntent().hasExtra(Keys.KEY_PL_NAME)) {
-            mProductId = getIntent().getExtras().getString(Keys.KEY_PL_ID);
+        if (getIntent().hasExtra(Keys.KEY_COM_PRODUCTID) && getIntent().hasExtra(Keys.KEY_PL_NAME)) {
+            mProductId = getIntent().getExtras().getString(Keys.KEY_COM_PRODUCTID);
             mProductName = getIntent().getExtras().getString(Keys.KEY_PL_NAME);
         } else {
             Toast.makeText(getApplication(), R.string.internal_error_restart_app, Toast.LENGTH_LONG).show();
@@ -169,7 +169,7 @@ public class ProductActivity extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put(Keys.KEY_COM_USERID, mUserId);
-                params.put(Keys.KEY_PL_ID, mProductId);
+                params.put(Keys.KEY_COM_PRODUCTID, mProductId);
                 return params;
             }
         };

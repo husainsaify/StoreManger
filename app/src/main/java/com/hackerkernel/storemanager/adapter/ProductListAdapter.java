@@ -113,7 +113,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             ProductListPojo p = mList.get(position);
             Intent intent = new Intent(mContext, ProductActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra(Keys.KEY_PL_ID,p.getProductId());
+            intent.putExtra(Keys.KEY_COM_PRODUCTID,p.getProductId());
             intent.putExtra(Keys.KEY_PL_NAME,p.getProductName());
             mContext.startActivity(intent);
         }

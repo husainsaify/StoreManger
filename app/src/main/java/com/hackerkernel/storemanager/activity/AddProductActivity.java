@@ -125,9 +125,9 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         * Check intent has send categoryId & categoryName
         * if yes store them in Member variables
         * */
-        if(getIntent().hasExtra(Keys.PRAM_AP_CATEGORYID) && getIntent().hasExtra(Keys.PRAM_AP_CATEGORYNAME)){
-            mCategoryId = getIntent().getExtras().getString(Keys.PRAM_AP_CATEGORYID);
-            mCategoryName = getIntent().getExtras().getString(Keys.PRAM_AP_CATEGORYNAME);
+        if(getIntent().hasExtra(Keys.KEY_COM_CATEGORYID) && getIntent().hasExtra(Keys.KEY_COM_CATEGORYNAME)){
+            mCategoryId = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYID);
+            mCategoryName = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYNAME);
 
             //Set spinner to category Id
             Util.setSpinnerPostionToCategoryID(mCategorySimpleList,mCategoryId,mCategorySpinner);
@@ -434,8 +434,8 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> param = new HashMap<>();
-                param.put(Keys.PRAM_AP_CATEGORYNAME,mCategoryName);
-                param.put(Keys.PRAM_AP_CATEGORYID,mCategoryId);
+                param.put(Keys.KEY_COM_CATEGORYNAME,mCategoryName);
+                param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
                 param.put(Keys.PRAM_AP_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);
                 param.put(Keys.PRAM_AP_NAME,name);

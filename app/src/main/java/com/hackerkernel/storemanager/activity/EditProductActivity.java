@@ -323,7 +323,8 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     * Method to set the detials of product in the views
     * */
     private void setUpViews(ProductPojo product) {
-        mProductName.setText(product.getName());
+        mProductName.setText("");
+        mProductName.append(product.getName()); //set cursor to the last element of editText
         mProductSP.setText(product.getSp());
         mProductCP.setText(product.getCp());
 

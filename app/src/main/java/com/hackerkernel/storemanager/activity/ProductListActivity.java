@@ -99,7 +99,8 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
         //Instanciate edit Category name EditText
         mEditCategoryNameEditText = new EditText(this);
-        mEditCategoryNameEditText.setText(mCategoryName);
+        mEditCategoryNameEditText.setText("");
+        mEditCategoryNameEditText.append(mCategoryName); //Set curose to the last alphabet of the editText
 
         //Create Edit Category name Dialog
         createEditCategoryDialog();

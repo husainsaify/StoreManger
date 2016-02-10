@@ -66,7 +66,10 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
     //Edit Category name Dialog
     private EditText mEditCategoryNameEditText;
-    private AlertDialog dialog;
+    private AlertDialog mEditDialog;
+
+    //delete category
+    private AlertDialog mDeleteDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +113,8 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
 
         //Create Edit Category name Dialog
         createEditCategoryDialog();
+        //create Delete category dialog
+        createDeleteCategoryDialog();
 
         //Instantiate SwipeToRefreshLayout
         mSwipeRefresh.setOnRefreshListener(this);
@@ -136,7 +141,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
                 showEditCategoryDialog();
                 break;
             case R.id.action_delete_category:
-                Toast.makeText(getApplication(),"delete cat",Toast.LENGTH_LONG).show();
+                showDeleteCategoryDialog();
                 break;
         }
         return true;
@@ -307,15 +312,15 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
                     }
                 })
                 .setNegativeButton(R.string.cancel,null);
-        dialog = builder.create();
+        mEditDialog = builder.create();
     }
 
     /*
-    * Check internet connection and show Edit Category name dialog
+    * Check internet connection and show Edit Category name mEditDialog
     * */
     private void showEditCategoryDialog(){
         if(Util.isConnectedToInternet(getApplication())){
-            dialog.show();
+            mEditDialog.show();
         }else {
             Toast.makeText(getApplicationContext(),R.string.please_check_your_internt,Toast.LENGTH_LONG).show();
         }
@@ -357,7 +362,7 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
                     //set new category name to the title
                     assert getSupportActionBar() != null;
                     getSupportActionBar().setTitle(newCategoryName);
-                    //set new category name to Edit category dialog
+                    //set new category name to Edit category mEditDialog
                     mEditCategoryNameEditText.setText("");
                     mEditCategoryNameEditText.append(newCategoryName);
                 }
@@ -405,5 +410,86 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         }
 
         return response;
+    }
+
+    /************************ DELETE CATEGORY *************************/
+    private void createDeleteCategoryDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete)
+                .setMessage("Are you sure? you want to delete this category. Deleting this category will automatically delete all its product")
+                .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //call delete method to delete Category from api
+                        deleteCategoryNameInBackground();
+                    }
+                })
+                .setNegativeButton(R.string.cancel,null);
+        mDeleteDialog = builder.create();
+    }
+
+    /*
+    * Check internet connection and show delete Category
+    * */
+    private void showDeleteCategoryDialog(){
+        if(Util.isConnectedToInternet(getApplication())){
+            mDeleteDialog.show();
+        }else {
+            Toast.makeText(getApplicationContext(),R.string.please_check_your_internt,Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /*
+    * METHOD TO CONNECT TO API AND DELETE PRODUCT
+    * */
+    private void deleteCategoryNameInBackground() {
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.DELETE_CATEGORY, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
+                //parse response & check response was success or not
+                parseDeleteCategoryResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
+                Log.e(TAG, "HUS: editCategoryNameInBackground " + error.getMessage());
+                //handle error
+                String stringError = VolleySingleton.handleVolleyError(error);
+                if(stringError != null){
+                    Util.redSnackbar(getApplicationContext(),mLayout,stringError);
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
+                params.put(Keys.KEY_COM_USERID,mUserId);
+                return params;
+            }
+        };
+
+        mRequestQueue.add(request);
+    }
+
+    /*
+    * Method to parse Response from Delete Product in background
+    * */
+    private void parseDeleteCategoryResponse(String json) {
+        List<SimplePojo> list = JsonParser.simpleParser(json);
+        if(list != null){
+            SimplePojo pojo = list.get(0);
+            if (pojo.getReturned()){ //success
+                //Close activity
+                NavUtils.navigateUpFromSameTask(ProductListActivity.this);
+            }else{ //failed
+                Util.redSnackbar(getApplicationContext(),mLayout,pojo.getMessage());
+            }
+        }else{
+            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        }
     }
 }

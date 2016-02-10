@@ -24,7 +24,7 @@ public class ApiUrl {
             PRODUCT_SEARCH = SERVER + "search.php",
             ADD_SALESMAN = SERVER + "addSalesman.php",
             GET_SALESMAN = SERVER + "salesmanList.php",
-            EDIT_CATEGORY_NAME = SERVER + "edtCategory.php";
-
+            EDIT_CATEGORY_NAME = SERVER + "edtCategory.php",
+            DELETE_CATEGORY = SERVER + "deleteCategory.php";
 }
 

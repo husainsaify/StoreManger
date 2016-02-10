@@ -149,6 +149,7 @@
     <string name="check_internt_failed_to_get_st_from_local">Check your internet connection. Failed to get SalesTracker From local storage</string>
     <string name="edit_category_name">Edit category name</string>
     <string name="delete_category">Delete category</string>
+    <string name="total_selling_price">Total Selling price</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

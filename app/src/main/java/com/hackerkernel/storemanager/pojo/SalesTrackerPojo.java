@@ -12,6 +12,7 @@ public class SalesTrackerPojo {
             time,
             productId,
             productName,
+            productCode,
             size,
             quantity,
             costprice,
@@ -135,5 +136,13 @@ public class SalesTrackerPojo {
 
     public void setSellingprice(String sellingprice) {
         this.sellingprice = sellingprice;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 }

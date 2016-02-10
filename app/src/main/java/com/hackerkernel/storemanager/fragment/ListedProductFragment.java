@@ -58,6 +58,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
     private String mUserId;
     private String mProductName = "";
     private String mProductId = "";
+    private String mProductCode = "";
     private String mProductCostPrice = "";
     private String mSalesmanId = null;
     private String mSalesmanName = null;
@@ -113,6 +114,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
             }
         });
 
+        //Product AutoComplete Spinner
         final AutoCompleteProductAdapter adapter = new AutoCompleteProductAdapter(getActivity(), mUserId);
         mProductNameView.setAdapter(adapter);
 
@@ -123,6 +125,8 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 mProductName = adapter.getItem(position).getName();
                 //store productId & cost price & sizeArray
                 mProductId = adapter.getItem(position).getId();
+                mProductCode = adapter.getItem(position).getCode();
+
                 mProductCostPrice = adapter.getItem(position).getCp();
                 mSizeArray = adapter.getItem(position).getSizeArray();
 
@@ -229,6 +233,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 param.put(Keys.KEY_COM_USERID,mUserId);
                 param.put(Keys.PRAM_NON_LISTED_CUSTOMER_NAME,customerName);
                 param.put(Keys.KEY_COM_PRODUCTID,mProductId);
+                param.put(Keys.PRAM_NON_LISTED_PRODUCTCODE,mProductCode);
                 param.put(Keys.PRAM_NON_LISTED_NAME,mProductName);
                 param.put(Keys.PRAM_NON_LISTED_SIZE,mSize);
                 param.put(Keys.PRAM_NON_LISTED_QUANTITY,quantity);

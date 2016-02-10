@@ -48,7 +48,7 @@ public interface Keys {
             KEY_SL_COUNT = "count";
 
     //Add products
-    String  PRAM_AP_USERID = "userId",
+    String PRAM_AP_USERID = "userId",
             PRAM_AP_IMAGE = "pImage",
             PRAM_AP_NAME = "pName",
             PRAM_AP_CODE = "pCode",
@@ -77,6 +77,7 @@ public interface Keys {
 
     //Add sales (Non listed)
     String PRAM_NON_LISTED_CUSTOMER_NAME = "customerName",
+            PRAM_NON_LISTED_PRODUCTCODE = "productCode",
             PRAM_NON_LISTED_NAME = "name",
             PRAM_NON_LISTED_SIZE = "size",
             PRAM_NON_LISTED_QUANTITY = "quantity",
@@ -113,6 +114,7 @@ public interface Keys {
             KEY_ST_TIME = "time",
             KEY_ST_PRODUCT_ID = "product_id",
             KEY_ST_PRODUCT_NAME = "product_name",
+            KEY_ST_PRODUCT_CODE = "product_code",
             KEY_ST_SIZE = "size",
             KEY_ST_QUANTITY = "quantity",
             KEY_ST_COSTPRICE = "costprice",

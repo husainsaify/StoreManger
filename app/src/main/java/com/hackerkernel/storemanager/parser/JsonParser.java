@@ -394,6 +394,7 @@ public class JsonParser {
                     //get sales_product_info
                     String productId = "",
                             productName = "",
+                            productCode = "",
                             size = "",
                             quantity = "",
                             costprice = "",
@@ -410,6 +411,13 @@ public class JsonParser {
                             productId += infoObj.getString(Keys.KEY_ST_PRODUCT_ID)+"\n";
                         }
 
+                        //if product code is empty store N/A
+                        if(infoObj.getString(Keys.KEY_ST_PRODUCT_CODE).isEmpty()){
+                            productCode += "N/A\n";
+                        }else{
+                            productCode += infoObj.getString(Keys.KEY_ST_PRODUCT_CODE)+"\n";
+                        }
+
                         productName += infoObj.getString(Keys.KEY_ST_PRODUCT_NAME)+"\n";
                         size += infoObj.getString(Keys.KEY_ST_SIZE)+"\n";
                         quantity += infoObj.getString(Keys.KEY_ST_QUANTITY)+"\n";
@@ -419,6 +427,7 @@ public class JsonParser {
 
                     current.setProductId(productId);
                     current.setProductName(productName);
+                    current.setProductCode(productCode);
                     current.setSize(size);
                     current.setQuantity(quantity);
                     current.setCostprice(costprice);

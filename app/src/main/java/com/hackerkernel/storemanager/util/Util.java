@@ -224,6 +224,23 @@ public class Util {
     }
 
     /*
+    * Method to cal Total Price weather its costprice or selling price
+    * */
+    public static int calTotalPrice(String price,String quantity){
+        String[] priceArray = price.split("\n");
+        String[] quantityArray = quantity.split("\n");
+
+        int calPrice = 0;
+        for (int i = 0; i < priceArray.length; i++) {
+            int currentPrice = Integer.parseInt(priceArray[i]);
+            int currentQuantity = Integer.parseInt(quantityArray[i]);
+
+            calPrice += (currentPrice * currentQuantity);
+        }
+        return calPrice;
+    }
+
+    /*
     * Method to make progressbar visible and invisible
     * */
     public static void setProgressBarVisible(ProgressBar pb,boolean value){

@@ -1,151 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    >
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TableLayout
+        android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:stretchColumns="1"
-        android:id="@+id/table">
-        <TableRow
-            android:layout_marginBottom="5dp">
+        android:stretchColumns="1">
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/product_name" />
+                android:text="@string/product_name"
+                android:textColor="@color/primaryColor" />
 
             <TextView
+                android:id="@+id/productName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="end"
-                android:id="@+id/pName" />
+                android:gravity="end" />
         </TableRow>
-        <TableRow android:layout_marginBottom="5dp">
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/product_code" />
+                android:text="@string/product_code"
+                android:textColor="@color/primaryColor" />
 
             <TextView
+                android:id="@+id/productCode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="end"
-                android:id="@+id/pCode" />
+                android:gravity="end" />
         </TableRow>
-        <TableRow android:layout_marginBottom="5dp">
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/quantity" />
+                android:text="@string/size"
+                android:textColor="@color/primaryColor" />
 
             <TextView
+                android:id="@+id/productSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="end"
-                android:id="@+id/pQuantity" />
+                android:gravity="end" />
         </TableRow>
-        <TableRow android:layout_marginBottom="5dp">
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/selling_price" />
+                android:text="@string/quantity"
+                android:textColor="@color/primaryColor" />
 
             <TextView
+                android:id="@+id/productQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="end"
-                android:id="@+id/pSp" />
+                android:gravity="end" />
         </TableRow>
-        <TableRow android:layout_marginBottom="5dp">
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/cost_price" />
+                android:text="@string/selling_price"
+                android:textColor="@color/primaryColor" />
+
+            <TextView
+                android:id="@+id/sellingPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end" />
+        </TableRow>
+
+        <TableRow>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="end"
-                android:id="@+id/pCp" />
+                android:text="@string/cost_price"
+                android:textColor="@color/primaryColor" />
+
+            <TextView
+                android:id="@+id/costPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end" />
         </TableRow>
     </TableLayout>
 
     <LinearLayout
-        android:layout_below="@id/table"
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:id="@+id/linear">
+        android:weightSum="3">
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="0.9"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/total_sales"/>
+                android:text="Total SP"
+                android:textColor="@color/primaryColor" />
+
             <TextView
+                android:id="@+id/totalSellingPrice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/pTotalSales"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total CP"
+                android:textColor="@color/primaryColor" />
+
+            <TextView
+                android:id="@+id/totalCostPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1.2"
-            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/profitOrLoss"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_cost_price"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/pTotalCP"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.8"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profitOrLossLabel"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/profitOrLoss"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
     </LinearLayout>
-</RelativeLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/sold_by"
+            android:textColor="@color/primaryColor" />
+
+        <TextView
+            android:id="@+id/soldBy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </TableRow>
+</LinearLayout>

@@ -14,7 +14,7 @@ public class CalculateCommissionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_commission_counter);
+        setContentView(R.layout.activity_calculate_commission);
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);

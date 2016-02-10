@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hackerkernel.storemanager.activity.CommissionCounterActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+
+    <!-- Salesman spinner -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp">
+
+        <TableRow>
+            <TextView
+                android:layout_height="match_parent"
+                style="@style/TextAppearance.AppCompat.Medium"
+                android:text="@string/select_salesman"
+                android:gravity="center_vertical"
+                android:textColor="@color/primaryColor" />
+
+            <Spinner
+                android:id="@+id/salesmanSpinner"
+                android:spinnerMode="dialog" />
+        </TableRow>
+
+
+    </TableLayout>
+    <!-- /salesman spinner -->
+
+
+</RelativeLayout>

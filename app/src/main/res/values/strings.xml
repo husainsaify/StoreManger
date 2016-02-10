@@ -150,6 +150,8 @@
     <string name="edit_category_name">Edit category name</string>
     <string name="delete_category">Delete category</string>
     <string name="total_selling_price">Total Selling price</string>
+    <string name="calculate_commission">Calculate commission</string>
+    <string name="select_salesman">Select Salesman</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

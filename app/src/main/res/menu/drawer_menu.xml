@@ -14,9 +14,9 @@
             android:icon="@drawable/ic_salesman_black"
             android:title="@string/manage_salesman" />
         <item
-            android:id="@+id/menu_sales_tracker"
+            android:id="@+id/menu_calculate_commission"
             android:icon="@drawable/ic_sales_tracker_black"
-            android:title="@string/sale_tracker" />
+            android:title="@string/calculate_commission" />
         <item
             android:id="@+id/menu_setting"
             android:icon="@drawable/ic_settings_black"

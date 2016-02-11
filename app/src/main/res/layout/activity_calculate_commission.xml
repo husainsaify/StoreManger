@@ -87,4 +87,38 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="10dp"/>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fromDateLabel"
+        android:id="@+id/commissionPercentagelayout"
+        android:layout_margin="10dp"
+        android:stretchColumns="1">
+        <TableRow>
+            <TextView
+                android:text="@string/commission_percentage"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/primaryColor"
+                android:layout_marginEnd="5dp"/>
+
+            <EditText
+                android:id="@+id/commissionPercentageEditText"
+                android:layout_width="match_parent"
+                android:inputType="numberDecimal"
+                />
+        </TableRow>
+    </TableLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/calculate_commission"
+        android:layout_below="@id/commissionPercentagelayout"
+        android:background="@drawable/primary_button"
+        android:textColor="@color/iconColor"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+
+
+
 </RelativeLayout>

@@ -154,6 +154,7 @@
     <string name="select_salesman">Select Salesman</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="commission_percentage">Commission percentage</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

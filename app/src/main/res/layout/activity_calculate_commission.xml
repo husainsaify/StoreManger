@@ -1,125 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<ScrollView
     android:layout_height="match_parent"
-    android:id="@+id/layout"
-    tools:context="com.hackerkernel.storemanager.activity.CommissionCounterActivity">
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/include_toolbar" />
-
-    <!-- Salesman spinner -->
-    <TableLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/salesmanSpinnerLayout"
-        android:layout_below="@id/toolbar"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp">
+        android:id="@+id/layout"
+        tools:context="com.hackerkernel.storemanager.activity.CommissionCounterActivity">
 
-        <TableRow>
-            <TextView
-                android:layout_height="match_parent"
-                style="@style/TextAppearance.AppCompat.Medium"
-                android:text="@string/select_salesman"
-                android:gravity="center_vertical"
-                android:textColor="@color/primaryColor" />
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/include_toolbar" />
 
-            <Spinner
-                android:id="@+id/salesmanSpinner"
-                android:spinnerMode="dialog" />
-        </TableRow>
+        <!-- Salesman spinner -->
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/salesmanSpinnerLayout"
+            android:layout_below="@id/toolbar"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
 
+            <TableRow>
+                <TextView
+                    android:layout_height="match_parent"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:text="@string/select_salesman"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/primaryColor" />
 
-    </TableLayout>
-    <!-- /salesman spinner -->
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/selectDateLabel"
-        android:layout_below="@id/salesmanSpinnerLayout"
-        android:gravity="center_horizontal"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/primaryColor"
-        android:text="@string/select_date"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fromDateButton"
-        android:layout_below="@id/selectDateLabel"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:background="@drawable/primary_button"
-        android:textColor="@color/iconColor"
-        android:text="@string/from"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toDateButton"
-        android:layout_below="@id/selectDateLabel"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/primary_button"
-        android:textColor="@color/iconColor"
-        android:text="@string/to"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fromDateLabel"
-        android:layout_below="@id/fromDateButton"
-        android:layout_margin="10dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/toDateLabel"
-        android:layout_below="@id/toDateButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="10dp"/>
-
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/fromDateLabel"
-        android:id="@+id/commissionPercentagelayout"
-        android:layout_margin="10dp"
-        android:stretchColumns="1">
-        <TableRow>
-            <TextView
-                android:text="@string/commission_percentage"
-                android:layout_marginRight="5dp"
-                android:textColor="@color/primaryColor"
-                android:layout_marginEnd="5dp"/>
-
-            <EditText
-                android:id="@+id/commissionPercentageEditText"
-                android:layout_width="match_parent"
-                android:inputType="numberDecimal"
-                />
-        </TableRow>
-    </TableLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/calculate_commission"
-        android:id="@+id/calculateCommission"
-        android:layout_below="@id/commissionPercentagelayout"
-        android:background="@drawable/primary_button"
-        android:textColor="@color/iconColor"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
+                <Spinner
+                    android:id="@+id/salesmanSpinner"
+                    android:spinnerMode="dialog" />
+            </TableRow>
 
 
+        </TableLayout>
+        <!-- /salesman spinner -->
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/selectDateLabel"
+            android:layout_below="@id/salesmanSpinnerLayout"
+            android:gravity="center_horizontal"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/primaryColor"
+            android:text="@string/select_date"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fromDateButton"
+            android:layout_below="@id/selectDateLabel"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/primary_button"
+            android:textColor="@color/iconColor"
+            android:text="@string/from"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toDateButton"
+            android:layout_below="@id/selectDateLabel"
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/primary_button"
+            android:textColor="@color/iconColor"
+            android:text="@string/to"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fromDateLabel"
+            android:layout_below="@id/fromDateButton"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toDateLabel"
+            android:layout_below="@id/toDateButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="10dp"/>
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fromDateLabel"
+            android:id="@+id/commissionPercentagelayout"
+            android:layout_margin="10dp"
+            android:stretchColumns="1">
+            <TableRow>
+                <TextView
+                    android:text="@string/commission_percentage"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/primaryColor"
+                    android:layout_marginEnd="5dp"/>
+
+                <EditText
+                    android:id="@+id/commissionPercentageEditText"
+                    android:layout_width="match_parent"
+                    android:inputType="numberDecimal"
+                    />
+            </TableRow>
+        </TableLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/calculate_commission"
+            android:id="@+id/calculateCommission"
+            android:layout_below="@id/commissionPercentagelayout"
+            android:background="@drawable/primary_button"
+            android:textColor="@color/iconColor"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+
+
+    </RelativeLayout>
+
+</ScrollView>

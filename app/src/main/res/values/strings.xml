@@ -155,7 +155,7 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="commission_percentage">Commission percentage</string>
-    <string name="select_from_date">Select from date</string>
+    <string name="select_from_date">Select From date</string>
     <string name="select_to_date">Select TO date</string>
     <string name="select_from_to_date">Select different From and TO dates</string>
     <string name="from_date_cannot_be_after_to">FROM date cannot be after TO date</string>

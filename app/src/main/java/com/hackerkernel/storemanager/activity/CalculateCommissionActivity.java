@@ -14,15 +14,28 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
+import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.GetSalesman;
 import com.hackerkernel.storemanager.util.Util;
 
+import java.security.Key;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -41,6 +54,8 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
 
 
     private String mSalesmanId = "";
+    private String mUserId;
+    private RequestQueue mRequestQueue;
 
     private DatePickerDialog mFromDatePickerDialog;
     private DatePickerDialog mToDatePickerDialog;
@@ -73,8 +88,6 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
         final GetSalesman getSalesman = new GetSalesman(this,mLayoutForSnackbar,mSalesmanSpinner);
         getSalesman.setupSalesmanSpinner();
 
-
-
         //when Salesman is selected from spinnner
         mSalesmanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -88,7 +101,13 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
             }
         });
 
-        //get Todays date
+        //Get user id
+        mUserId = MySharedPreferences.getInstance(getApplication()).getUserId();
+
+        //Volley
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+
+        //get Today date
         Calendar calendar = Calendar.getInstance();
         mYear = calendar.get(Calendar.YEAR);
         mMonth = calendar.get(Calendar.MONTH);
@@ -234,10 +253,40 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
             }
             //request api
             else{
-                Toast.makeText(getApplication(),"Register",Toast.LENGTH_LONG).show();
+                calculateCommmissionInBackground(percentage);
             }
         }else{
             Util.noInternetSnackbar(getApplication(),mLayoutForSnackbar);
         }
+    }
+
+    /*
+    * Method to send Commission date to API backend
+    * */
+    private void calculateCommmissionInBackground(final String percentage){
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.CAL_SALESMAN_COMMISSION, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_USERID,mUserId);
+                params.put("salesmanId",mSalesmanId);
+                params.put("fromDateId",mFromDateId);
+                params.put("toDateId",mToDateId);
+                params.put("percentage",percentage);
+                return params;
+            }
+        };
+
+        mRequestQueue.add(request);
     }
 }

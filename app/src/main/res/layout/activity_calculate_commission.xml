@@ -113,6 +113,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/calculate_commission"
+        android:id="@+id/calculateCommission"
         android:layout_below="@id/commissionPercentagelayout"
         android:background="@drawable/primary_button"
         android:textColor="@color/iconColor"

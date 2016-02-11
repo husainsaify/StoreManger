@@ -55,6 +55,8 @@ public class GetSalesman {
         db = new Database(context);
         //Create ProgressDialog
         pd = new ProgressDialog(context);
+        pd.setMessage(context.getString(R.string.pleasewait));
+        pd.setCancelable(true);
 
         //store reference of the context & layout & spinner
         this.mContext = context;

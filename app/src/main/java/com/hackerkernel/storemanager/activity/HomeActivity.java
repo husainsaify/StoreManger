@@ -79,7 +79,7 @@ public class HomeActivity extends AppCompatActivity{
                         break;
                     case R.id.menu_calculate_commission:
                         mDrawerLayout.closeDrawers();
-                        startActivity(new Intent(getApplication(), CommissionCounterActivity.class));
+                        startActivity(new Intent(getApplication(), CalculateCommissionActivity.class));
                         break;
                     case R.id.menu_setting:
                         break;

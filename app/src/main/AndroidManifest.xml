@@ -110,7 +110,7 @@
         </activity>
 
         <activity
-            android:name=".activity.CommissionCounterActivity"
+            android:name=".activity.CalculateCommissionActivity"
             android:parentActivityName="com.hackerkernel.storemanager.activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

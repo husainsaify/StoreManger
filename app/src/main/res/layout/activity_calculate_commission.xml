@@ -14,6 +14,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/salesmanSpinnerLayout"
         android:layout_below="@id/toolbar"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -36,5 +37,54 @@
     </TableLayout>
     <!-- /salesman spinner -->
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/selectDateLabel"
+        android:layout_below="@id/salesmanSpinnerLayout"
+        android:gravity="center_horizontal"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/primaryColor"
+        android:text="@string/select_date"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fromDateButton"
+        android:layout_below="@id/selectDateLabel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/primary_button"
+        android:textColor="@color/iconColor"
+        android:text="@string/from"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toDateButton"
+        android:layout_below="@id/selectDateLabel"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/primary_button"
+        android:textColor="@color/iconColor"
+        android:text="@string/to"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fromDateLabel"
+        android:layout_below="@id/fromDateButton"
+        android:layout_margin="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/toDateLabel"
+        android:layout_below="@id/toDateButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="10dp"/>
 
 </RelativeLayout>

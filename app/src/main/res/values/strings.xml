@@ -152,6 +152,8 @@
     <string name="total_selling_price">Total Selling price</string>
     <string name="calculate_commission">Calculate commission</string>
     <string name="select_salesman">Select Salesman</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

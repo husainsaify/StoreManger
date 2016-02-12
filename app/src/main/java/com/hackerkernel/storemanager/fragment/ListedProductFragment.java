@@ -239,7 +239,7 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 param.put(Keys.PRAM_NON_LISTED_QUANTITY,quantity);
                 param.put(Keys.PRAM_NON_LISTED_COSTPRICE,mProductCostPrice);
                 param.put(Keys.PRAM_NON_LISTED_SELLINGPRICE,sellingprice);
-                param.put(Keys.PRAM_NON_LISTED_SALESMAN_ID,mSalesmanId);
+                param.put(Keys.KEY_COM_SALESMANID,mSalesmanId);
                 param.put(Keys.PRAM_NON_LISTED_SALESMAN_NAME,mSalesmanName);
                 param.put(Keys.PRAM_LISTED_SALES_TYPE,"listed");
                 return param;

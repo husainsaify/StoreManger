@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/layout"
         tools:context="com.hackerkernel.storemanager.activity.CommissionCounterActivity">
 
         <include
@@ -17,20 +17,21 @@
 
         <!-- Salesman spinner -->
         <TableLayout
+            android:id="@+id/salesmanSpinnerLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/salesmanSpinnerLayout"
             android:layout_below="@id/toolbar"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp">
 
             <TableRow>
+
                 <TextView
-                    android:layout_height="match_parent"
                     style="@style/TextAppearance.AppCompat.Medium"
-                    android:text="@string/select_salesman"
+                    android:layout_height="match_parent"
                     android:gravity="center_vertical"
+                    android:text="@string/select_salesman"
                     android:textColor="@color/primaryColor" />
 
                 <Spinner
@@ -43,90 +44,184 @@
         <!-- /salesman spinner -->
 
         <TextView
+            android:id="@+id/selectDateLabel"
+            style="@style/TextAppearance.AppCompat.Medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/selectDateLabel"
             android:layout_below="@id/salesmanSpinnerLayout"
             android:gravity="center_horizontal"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/primaryColor"
-            android:text="@string/select_date"/>
+            android:text="@string/select_date"
+            android:textColor="@color/primaryColor" />
 
         <Button
+            android:id="@+id/fromDateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/fromDateButton"
             android:layout_below="@id/selectDateLabel"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
             android:background="@drawable/primary_button"
-            android:textColor="@color/iconColor"
-            android:text="@string/from"/>
+            android:text="@string/from"
+            android:textColor="@color/iconColor" />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/toDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/selectDateLabel"
-            android:layout_marginRight="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
             android:background="@drawable/primary_button"
-            android:textColor="@color/iconColor"
-            android:text="@string/to"/>
+            android:text="@string/to"
+            android:textColor="@color/iconColor" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/fromDateLabel"
-            android:layout_below="@id/fromDateButton"
-            android:layout_margin="10dp"/>
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/fromDateButton"
+            android:layout_margin="10dp" />
+
+        <TextView
             android:id="@+id/toDateLabel"
-            android:layout_below="@id/toDateButton"
-            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"/>
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/toDateButton"
+            android:layout_margin="10dp" />
 
         <TableLayout
+            android:id="@+id/commissionPercentagelayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fromDateLabel"
-            android:id="@+id/commissionPercentagelayout"
-            android:layout_margin="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:stretchColumns="1">
+
             <TableRow>
+
                 <TextView
-                    android:text="@string/commission_percentage"
+                    android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:textColor="@color/primaryColor"
-                    android:layout_marginEnd="5dp"/>
+                    android:text="@string/commission_percentage"
+                    android:textColor="@color/primaryColor" />
 
                 <EditText
                     android:id="@+id/commissionPercentageEditText"
                     android:layout_width="match_parent"
-                    android:inputType="numberDecimal"
-                    />
+                    android:inputType="numberDecimal" />
             </TableRow>
         </TableLayout>
 
         <Button
+            android:id="@+id/calculateCommission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/calculate_commission"
-            android:id="@+id/calculateCommission"
             android:layout_below="@id/commissionPercentagelayout"
-            android:background="@drawable/primary_button"
-            android:textColor="@color/iconColor"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:background="@drawable/primary_button"
+            android:text="@string/calculate_commission"
+            android:textColor="@color/iconColor" />
 
+        <!-- Views to display info -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/errorMessage"
+            android:layout_below="@id/calculateCommission"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:visibility="gone"/>
 
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/commissionInfoTable"
+            android:layout_below="@id/calculateCommission"
+            android:visibility="gone"
+            android:layout_margin="10dp"
+            android:stretchColumns="1">
 
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="@string/commission_amount"
+                    android:textColor="@color/primaryColor" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/commissionAmount" />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="@string/total_selling_price"
+                    android:textColor="@color/primaryColor" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/totalSellingPrice"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="@string/total_cost_price"
+                    android:textColor="@color/primaryColor" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/totalCostPrice"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="@string/total_sales"
+                    android:textColor="@color/primaryColor" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/totalSales"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:text="@string/total_product_sold"
+                    android:textColor="@color/primaryColor" />
+                <TextView
+                    android:gravity="end"
+                    android:id="@+id/totalProductSold"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginBottom="5dp">
+
+                <TextView />
+                <TextView
+                    android:gravity="end"
+                    style="@style/TextAppearance.AppCompat.Medium"
+                    android:id="@+id/profitOrLoss"
+                    android:textColor="@color/primaryColor"
+                    />
+            </TableRow>
+
+        </TableLayout>
+        <!-- / Views to display info -->
     </RelativeLayout>
 
 </ScrollView>

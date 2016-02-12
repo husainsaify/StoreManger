@@ -309,7 +309,7 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
                 param.put(Keys.PRAM_NON_LISTED_QUANTITY,quantity);
                 param.put(Keys.PRAM_NON_LISTED_COSTPRICE,costprice);
                 param.put(Keys.PRAM_NON_LISTED_SELLINGPRICE,sellingprice);
-                param.put(Keys.PRAM_NON_LISTED_SALESMAN_ID,salesmanId);
+                param.put(Keys.KEY_COM_SALESMANID,salesmanId);
                 param.put(Keys.PRAM_NON_LISTED_SALESMAN_NAME,salesmanName);
                 return param;
             }

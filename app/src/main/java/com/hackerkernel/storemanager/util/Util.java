@@ -250,4 +250,37 @@ public class Util {
             pb.setVisibility(View.GONE);
         }
     }
+
+    /*
+    * Method to take day , month & year and generate a DateId
+    * */
+    public static String createDateId(int day,int month,int year,int type){
+        /*
+        * Type
+        * 1 = 06012016
+        * 2 = 06/01/2016
+        * */
+
+        String m = String.valueOf(month);
+        String d = String.valueOf(day);
+
+        //check month is single character or double because we have to prepend 0 if single
+
+        //single char
+        if(day < 10){
+            d = 0+d;
+        }
+
+        //single char
+        if(month < 10){
+            m = 0+m;
+        }
+
+        //create dateId
+        if(type == 1){
+            return d + m + year;
+        }else{
+            return d +"/"+ m +"/"+ year;
+        }
+    }
 }

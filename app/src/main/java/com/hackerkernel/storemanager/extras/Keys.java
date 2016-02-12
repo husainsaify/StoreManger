@@ -13,6 +13,7 @@ public interface Keys {
     String KEY_COM_COUNT = "count";
     String KEY_COM_CATEGORYID = "categoryId";
     String KEY_COM_CATEGORYNAME = "categoryName";
+    String KEY_COM_SALESMANID = "salesmanId";
     String KEY_DEFAULT = "";
 
 
@@ -83,7 +84,6 @@ public interface Keys {
             PRAM_NON_LISTED_QUANTITY = "quantity",
             PRAM_NON_LISTED_COSTPRICE = "costprice",
             PRAM_NON_LISTED_SELLINGPRICE = "sellingprice",
-            PRAM_NON_LISTED_SALESMAN_ID = "salesmanId",
             PRAM_NON_LISTED_SALESMAN_NAME = "salesmanName";
 
     //Add sales (Listed)
@@ -119,4 +119,14 @@ public interface Keys {
             KEY_ST_QUANTITY = "quantity",
             KEY_ST_COSTPRICE = "costprice",
             KEY_ST_SELLINGPRICE = "sellingprice";
+
+    //PRAM For Calculate Commission
+    String PRAM_COMMISSION_FROMDATE = "fromDate",
+            PRAM_COMMISSION_TODATE = "toDate";
+
+    //Keys for Calculate commission
+    String KEY_COMMISSION_COSTPRICE = "total_costprice",
+            KEY_COMMISSION_SELLINGPRICE = "total_sellingprice",
+            KEY_COMMISSION_ITEM_SOLD = "total_item_sold",
+            KEY_COMMISSION_NO_OF_SALES = "total_item_sold_to_customers";
 }

@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,16 +26,18 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
+import com.hackerkernel.storemanager.parser.JsonParser;
+import com.hackerkernel.storemanager.pojo.CalculateCommissionPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.GetSalesman;
 import com.hackerkernel.storemanager.util.Util;
 
-import java.security.Key;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -51,6 +55,15 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
     @Bind(R.id.fromDateLabel) TextView mFromDateLabel;
     @Bind(R.id.calculateCommission) Button mCalculateCommission;
     @Bind(R.id.commissionPercentageEditText) EditText mCommissionPercentageEditText;
+    //Info
+    @Bind(R.id.errorMessage) TextView mErrorMessageInfo;
+    @Bind(R.id.commissionInfoTable) TableLayout mCommissionInfoLayout;
+    @Bind(R.id.commissionAmount) TextView mCommissionAmountInfo;
+    @Bind(R.id.totalSellingPrice) TextView mTotalSellingPriceInfo;
+    @Bind(R.id.totalCostPrice) TextView mTotalCostPriceInfo;
+    @Bind(R.id.profitOrLoss) TextView mProfitOrLossInfo;
+    @Bind(R.id.totalSales) TextView mTotalSalesInfo;
+    @Bind(R.id.totalProductSold) TextView mTotalProductSoldInfo;
 
 
     private String mSalesmanId = "";
@@ -63,14 +76,21 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
     private int mMonth;
     private int mDay;
 
-    //Varaible to store from & to date
+    //Varaible to store from & to date id Ex: 06012016
     private String mFromDateId = "";
     private String mToDateId = "";
+    private String mPercentage = "";
+
+    //Variable to store from & to date Ex: 06/01/2016
+    private String mFromDate = "";
+    private String mToDate = "";
+
 
     //Field to cal From date is not greater then TO date
     private SimpleDateFormat simpleDateFormat;
     private Date mDateFrom;
     private Date mDateTo;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +108,7 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
         final GetSalesman getSalesman = new GetSalesman(this,mLayoutForSnackbar,mSalesmanSpinner);
         getSalesman.setupSalesmanSpinner();
 
-        //when Salesman is selected from spinnner
+        //when Salesman is selected from spinner
         mSalesmanSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -113,6 +133,11 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
 
+        //create ProgressDialog
+        pd = new ProgressDialog(this);
+        pd.setMessage(getString(R.string.pleasewait));
+        pd.setCancelable(true);
+
         simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
 
         setOnClickOnView();
@@ -130,7 +155,7 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
                 mToDatePickerDialog.show();
                 break;
             case R.id.calculateCommission:
-                calculateCommmission();
+                calculateCommission();
                 break;
         }
     }
@@ -152,7 +177,9 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
             public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 monthOfYear += 1; //add one to month because month start with zero index
 
-                mFromDateId = createDateId(dayOfMonth,monthOfYear,year);
+                mFromDateId = Util.createDateId(dayOfMonth,monthOfYear,year,1);
+                mFromDate = Util.createDateId(dayOfMonth, monthOfYear, year, 2);
+
                 //set selected Date to label
                 mFromDateLabel.setText(new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear).append("/").append(year));
                 //set date
@@ -175,7 +202,9 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
             public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 monthOfYear += 1; //add one to month because month start with zero index
 
-                mToDateId = createDateId(dayOfMonth,monthOfYear,year);
+                mToDateId = Util.createDateId(dayOfMonth,monthOfYear,year,1);
+                mToDate = Util.createDateId(dayOfMonth, monthOfYear, year, 2);
+
                 //set selected Date to label
                 mToDateLabel.setText(new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear).append("/").append(year));
                 //set date
@@ -192,36 +221,14 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
         mToDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
     }
 
-    /*
-    * Method to take day , month & year and generate a DateId
-    * */
-    private String createDateId(int day,int month,int year){
-        String m = String.valueOf(month);
-        String d = String.valueOf(day);
-
-        //check month is single character or double because we have to prepend 0 if single
-
-        //single char
-        if(day < 10){
-            d = 0+d;
-        }
-
-        //single char
-        if(month < 10){
-            m = 0+m;
-        }
-
-        //create dateId
-        return d + m + year;
-    }
 
     /*
     * METHOD TO PERFORM CHECK AND CALCULATE COMMISSION
     * */
-    private void calculateCommmission() {
+    private void calculateCommission() {
         //check internet connection
         if(Util.isConnectedToInternet(getApplication())){
-            String percentage = mCommissionPercentageEditText.getText().toString().trim();
+            mPercentage = mCommissionPercentageEditText.getText().toString().trim();
 
             //check salesman
             if (mSalesmanId.isEmpty()){
@@ -235,25 +242,21 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
             else if (mToDateId.isEmpty()){
                 Util.redSnackbar(getApplicationContext(),mLayoutForSnackbar,getString(R.string.select_to_date));
             }
-            //check from and to date are not same
-            else if (Integer.parseInt(mFromDateId) == Integer.parseInt(mToDateId)){
-                Util.redSnackbar(getApplicationContext(),mLayoutForSnackbar,getString(R.string.select_from_to_date));
-            }
             //check to date is
             else if (mDateFrom.compareTo(mDateTo) > 0){
                 Util.redSnackbar(getApplicationContext(),mLayoutForSnackbar,getString(R.string.from_date_cannot_be_after_to));
             }
             //check Commission editText is not empty
-            else if(percentage.isEmpty()){
+            else if(mPercentage.isEmpty()){
                 Util.redSnackbar(getApplicationContext(),mLayoutForSnackbar,getString(R.string.enter_commission_percentage));
             }
             //check percentage in not more then 100
-            else if(Integer.parseInt(percentage) > 100){
+            else if(Float.parseFloat(mPercentage) > 100){
                 Util.redSnackbar(getApplicationContext(),mLayoutForSnackbar,getString(R.string.commission_per_cannot_be_more_then_100));
             }
             //request api
             else{
-                calculateCommmissionInBackground(percentage);
+                calculateCommissionInBackground();
             }
         }else{
             Util.noInternetSnackbar(getApplication(),mLayoutForSnackbar);
@@ -263,30 +266,98 @@ public class CalculateCommissionActivity extends AppCompatActivity implements Vi
     /*
     * Method to send Commission date to API backend
     * */
-    private void calculateCommmissionInBackground(final String percentage){
+    private void calculateCommissionInBackground(){
+        pd.show(); //show progressbar
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.CAL_SALESMAN_COMMISSION, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                pd.hide(); //hide progressbar
+                parseSalesmanCommissionResponse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                pd.hide(); //hide progressbar
+                Log.e(TAG,"HUS: calculateCommissionInBackground "+error.getMessage());
+                //handle volley error
+                String errorString = VolleySingleton.handleVolleyError(error);
+                if (errorString != null){
+                    Util.redSnackbar(getApplication(),mLayoutForSnackbar,errorString);
+                }
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
                 params.put(Keys.KEY_COM_USERID,mUserId);
-                params.put("salesmanId",mSalesmanId);
-                params.put("fromDateId",mFromDateId);
-                params.put("toDateId",mToDateId);
-                params.put("percentage",percentage);
+                params.put(Keys.PRAM_COMMISSION_FROMDATE,mFromDate);
+                params.put(Keys.PRAM_COMMISSION_TODATE,mToDate);
+                params.put(Keys.KEY_COM_SALESMANID,mSalesmanId);
                 return params;
             }
         };
 
         mRequestQueue.add(request);
     }
+
+    private void parseSalesmanCommissionResponse(String response) {
+        List<CalculateCommissionPojo> list = JsonParser.parseCalculateCommission(response);
+        //check list is not empty
+        if(list != null){
+            if (list.get(0).getReturned()){ //true
+                setupViewsFromList(list);
+            }else{
+                mErrorMessageInfo.setVisibility(View.VISIBLE);
+                mCommissionInfoLayout.setVisibility(View.GONE);
+                mErrorMessageInfo.setText(list.get(0).getMessage());
+            }
+        }else{
+            Toast.makeText(getApplicationContext(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+            Log.e(TAG,"HUS: parseSalesmanCommissionResponse "+response);
+        }
+    }
+
+
+    /*
+    *
+    * Method to setup all view like cost price, sellingprice, Total sales From List
+    * */
+    private void setupViewsFromList(List<CalculateCommissionPojo> list) {
+        //Hide error message and display info layout
+        mErrorMessageInfo.setVisibility(View.GONE);
+        mCommissionInfoLayout.setVisibility(View.VISIBLE);
+
+        CalculateCommissionPojo current = list.get(0);
+
+        //Calculate Percentage
+        float per = (Integer.parseInt(current.getSellingprice()) * Float.parseFloat(mPercentage)) / 100;
+        //calculate profit or loss
+        int costprice = Integer.parseInt(current.getCostprice());
+        int sellingprice = Integer.parseInt(current.getSellingprice());
+
+        String profitOrLoss;
+        if (costprice > sellingprice) {//loss
+            //cal loss
+            int loss = costprice - sellingprice;
+            profitOrLoss = "Loss: RS " + loss;
+        } else {
+            if (sellingprice > costprice) { //profit
+                //call profit
+                int profit = sellingprice - costprice;
+                profitOrLoss = "Profit: RS " + profit;
+            } else { // neutral CP = sales
+                profitOrLoss = "Break Even";
+            }
+        }
+
+        mCommissionAmountInfo.setText(String.valueOf(per));
+        mTotalCostPriceInfo.setText(current.getCostprice());
+        mTotalSellingPriceInfo.setText(current.getSellingprice());
+        mTotalSalesInfo.setText(current.getNoOfSales());
+        mTotalProductSoldInfo.setText(current.getNoOfItemSold());
+        mProfitOrLossInfo.setText(profitOrLoss);
+
+    }
+
+
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.AutoCompleteProductPojo;
+import com.hackerkernel.storemanager.pojo.CalculateCommissionPojo;
 import com.hackerkernel.storemanager.pojo.LoginPojo;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.ProductPojo;
@@ -449,6 +450,43 @@ public class JsonParser {
             return list;
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
+        }
+    }
+
+    /*
+    *
+    * Method to parse SalesmanCommission response
+    * */
+    public static List<CalculateCommissionPojo> parseCalculateCommission(String jsonString){
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            //List of Calculate Commission
+            List<CalculateCommissionPojo> list = new ArrayList<>();
+
+            //check return is true or false
+            if(jsonObject.getBoolean(Keys.KEY_COM_RETURN)){ //true
+                //get all the details
+                CalculateCommissionPojo current = new CalculateCommissionPojo();
+                current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
+                current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                current.setCostprice(jsonObject.getString(Keys.KEY_COMMISSION_COSTPRICE));
+                current.setSellingprice(jsonObject.getString(Keys.KEY_COMMISSION_SELLINGPRICE));
+                current.setNoOfItemSold(jsonObject.getString(Keys.KEY_COMMISSION_ITEM_SOLD));
+                current.setNoOfSales(jsonObject.getString(Keys.KEY_COMMISSION_NO_OF_SALES));
+                list.add(current);
+            }else{
+                CalculateCommissionPojo current = new CalculateCommissionPojo();
+                current.setReturned(jsonObject.getBoolean(Keys.KEY_COM_RETURN));
+                current.setMessage(jsonObject.getString(Keys.KEY_COM_MESSAGE));
+                list.add(current);
+            }
+
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG,"HUS: parseCalculateCommission "+e.getMessage());
             return null;
         }
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,16 +13,24 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
+import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
@@ -35,6 +44,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -48,17 +58,18 @@ public class SearchActivity extends AppCompatActivity {
     @Bind(R.id.search) Button mSearch;
     @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
     @Bind(R.id.searchRecyclerView) RecyclerView mSearchRecyclerView;
+    @Bind(R.id.linearLayout) LinearLayout mLayout;
 
-    //dataBase
-    Database db;
 
     //global variables
+    private Database db;
     private String mUserId;
-    private String mFailedMessage;
-    List<SimpleListPojo> categoryList;
-    List<ProductListPojo> searchList;
+    private List<SimpleListPojo> mCategoryList;
+    private ProgressDialog pd;
+    private RequestQueue mRequestQueue;
 
-    ProgressDialog pd;
+    private String mFailedMessage;
+    List<ProductListPojo> searchList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,47 +95,28 @@ public class SearchActivity extends AppCompatActivity {
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        //set Layout manger to recyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplication());
+        mSearchRecyclerView.setLayoutManager(layoutManager);
+
+        //Instanciate Volley
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+
         //setup Category spinner
-        Util.setupCategorySpinnerFromDb(getBaseContext(),db,mUserId,mCategorySpinner);
+        mCategoryList = Util.setupCategorySpinnerFromDb(getBaseContext(),db,mUserId,mCategorySpinner,true);
+
+        if(mCategoryList == null){
+            Util.redSnackbar(getApplication(),mLayout,getString(R.string.it_seem_your_havent_added_any_category));
+        }
 
         //when search button is pressed
-        /*mSearch.setOnClickListener(new View.OnClickListener() {
+        mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String  productName = mProductNameView.getText().toString().trim(),
-                        productSize = mProductSizeView.getText().toString().trim(),
-                        productCategoryId = null;
-
-                //check product Name is not empty
-                if (productName.isEmpty()) {
-                    Functions.errorAlert(context, getString(R.string.oops), getString(R.string.product_name_not_empty));
-                    return;
-                }
-
-                //get the position of categorySpinner which is selectecd
-                int position = categorySpinner.getSelectedItemPosition();
-                //some category is selected
-                if(position != 0){
-                    *//*
-                    * Create new valid "categorySpinner" position for "categoryList"
-                    * because we have add a placeholder text in "select Category" in "categorySpinner"
-                    * *//*
-                    int newPosition = position - 1;
-                    //fetch CategoryName & CategoryId
-                    productCategoryId = categoryList.get(newPosition).getId();
-                }
-
-                *//*
-                * Search backend to get product
-                * *//*
-                new SearchTask().execute(mUserId,productName,productSize,productCategoryId);
+                //validate fields
+                doSearch();
             }
-        });*/
-
-        /*
-        * Fetch Category list
-        * */
-        //new CategoryTask().execute();
+        });
 
 
         //when searchListView is clicked
@@ -143,6 +135,71 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
+    /*
+    * Method to Valid search Input
+    * */
+    public void doSearch(){
+        //check internet connection
+        if(Util.isConnectedToInternet(getApplication())){
+            String  productName = mProductNameView.getText().toString().trim(),
+                    productSize = mProductSizeView.getText().toString().trim(),
+                    categoryId = null;
+
+            //check product Name is not empty
+            if (productName.isEmpty()) {
+                Util.redSnackbar(getApplication(),mLayout,getString(R.string.product_name_not_empty));
+                return;
+            }
+
+            //get the position of categorySpinner which is selectecd
+            int position = mCategorySpinner.getSelectedItemPosition();
+            //some category is selected
+            if(position != 0){
+                    /*
+                    * Subtract 1 from From Category spinner because we have added a placeholder text their
+                    * */
+
+                int newPosition = position - 1;
+                //fetch CategoryName & CategoryId
+                categoryId = mCategoryList.get(newPosition).getId();
+            }
+
+            /*
+            * Search backend to get product
+            * */
+            doSearchInBackground(mUserId, productName, productSize, categoryId);
+        }else{
+            //Show no internet snackbar
+            Util.noInternetSnackbar(getApplication(),mLayout);
+        }
+    }
+
+    /*
+    * Method to perform search IN API
+    *
+    * */
+    private void doSearchInBackground(String mUserId, String productName, String productSize, String categoryId) {
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.PRODUCT_SEARCH, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                return super.getParams();
+            }
+        };
+
+        mRequestQueue.add(request);
+    }
+
+
     //Background Task to fetch category from the web
     /*private class CategoryTask extends AsyncTask<Void,Void,List<SimpleListPojo>>{
 
@@ -158,8 +215,8 @@ public class SearchActivity extends AppCompatActivity {
             //make a request to the backend
             String jsonResponse = GetJson.request(ApiUrl.GET_CATEGORY,data,"POST");
 
-            categoryList = JsonParser.simpleListParser(jsonResponse);
-            return categoryList;
+            mCategoryList = JsonParser.simpleListParser(jsonResponse);
+            return mCategoryList;
         }
 
         @Override

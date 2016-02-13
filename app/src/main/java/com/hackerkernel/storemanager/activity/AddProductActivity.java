@@ -119,8 +119,13 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
         //setup category Spinner
-        setUpCategorySpinner();
+        mCategorySimpleList = Util.setupCategorySpinnerFromDb(getBaseContext(),db,mUserId,mCategorySpinner,false);
 
+        //check category is not null
+        if (mCategorySimpleList == null){
+            Util.redSnackbar(getApplication(),mLayout,getString(R.string.it_seem_your_havent_added_any_category));
+            return;
+        }
         /*
         * Check intent has send categoryId & categoryName
         * if yes store them in Member variables
@@ -258,33 +263,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             }
         }
     };
-
-    /*
-    * Method to setup category Spinner
-    * */
-    public void setUpCategorySpinner(){
-        //setup StringList to avoid NullPointerException
-        List<String> mCategoryStringList = new ArrayList<>();
-        //Get category data from Sqlite Database
-        mCategorySimpleList = db.getAllSimpleList(Database.CATEGORY,mUserId);
-
-        //mCategorySimpleList is not null
-        if(mCategorySimpleList.size() > 0){
-            //Create a simple
-            for (int i = 0; i < mCategorySimpleList.size(); i++) {
-                SimpleListPojo c = mCategorySimpleList.get(i);
-                //Make a Simple String list which can be used with Default spinner adapter
-                mCategoryStringList.add(c.getName());
-            }
-
-            //setup List to resources
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, mCategoryStringList);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mCategorySpinner.setAdapter(adapter);
-        }else{
-            Toast.makeText(getApplication(),R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
-        }
-    }
 
     /*
     * When image is selected from the gallery

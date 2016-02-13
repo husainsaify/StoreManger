@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:id="@+id/linearLayout"
     tools:context="com.hackerkernel.storemanager.HomeActivity">
 
     <!-- toolbar -->
@@ -18,13 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:stretchColumns="3">
 
         <TableRow>
 
             <EditText
                 android:id="@+id/productName"
-                android:layout_weight="3"
+                android:layout_weight="2"
                 android:hint="@string/product_name_code" />
 
             <EditText
@@ -37,7 +39,7 @@
         <TableRow>
 
             <Spinner
-                android:spinnerMode="dialog"
+                android:spinnerMode="dropdown"
                 android:id="@+id/categorySpinner"
                 android:layout_weight="3" />
 

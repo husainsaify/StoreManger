@@ -290,9 +290,12 @@ public class Util {
     /*
     * Method to setup category Spinner from SQLite database
     * */
-    public static List<SimpleListPojo> setupCategorySpinnerFromDb(Context context,Database db,String userId,Spinner spinner){
+    public static List<SimpleListPojo> setupCategorySpinnerFromDb(Context context,Database db,String userId,Spinner spinner,boolean seDefaultLabel){
         //setup StringList to avoid NullPointerException
         List<String> stringList = new ArrayList<>();
+        if(seDefaultLabel){
+            stringList.add("Select category");
+        }
 
         //Get category data from Sqlite Database
         List<SimpleListPojo> categorySimpleList = db.getAllSimpleList(Database.CATEGORY,userId);

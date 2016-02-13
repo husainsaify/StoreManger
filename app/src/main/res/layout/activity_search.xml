@@ -3,69 +3,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hackerkernel.storemanager.HomeActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.hackerkernel.storemanager.HomeActivity">
 
     <!-- toolbar -->
-    <include android:id="@+id/toolbar" layout="@layout/include_toolbar"/>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
     <!-- / toolbar -->
 
-    <LinearLayout
+    <!-- Search area -->
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:weightSum="4">
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp">
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:id="@+id/pName"
-            android:hint="@string/product_name"/>
+        <TableRow>
 
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:id="@+id/pSize"
-            android:hint="@string/size"/>
+            <EditText
+                android:id="@+id/productName"
+                android:layout_weight="3"
+                android:hint="@string/product_name_code" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/productSize"
+                android:layout_weight="1"
+                android:hint="@string/size"
+                android:inputType="number" />
+        </TableRow>
 
-    <RelativeLayout
+        <TableRow>
+
+            <Spinner
+                android:spinnerMode="dialog"
+                android:id="@+id/categorySpinner"
+                android:layout_weight="3" />
+
+            <Button
+                android:id="@+id/search"
+                android:layout_weight="1"
+                android:background="@drawable/primary_button"
+                android:text="@string/search"
+                android:textColor="@color/iconColor" />
+        </TableRow>
+    </TableLayout>
+    <!--/ Search area -->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        >
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/categorySpinner"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
-
-        </Spinner>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search"
-            android:id="@+id/pSearch"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchListView"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

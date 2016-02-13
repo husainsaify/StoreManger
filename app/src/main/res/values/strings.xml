@@ -163,6 +163,7 @@
     <string name="commission_per_cannot_be_more_then_100">Commission percentage cannot be more then 100%</string>
     <string name="commission_amount">Commission amount</string>
     <string name="total_product_sold">Total product sold</string>
+    <string name="product_name_code">Product name/code</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

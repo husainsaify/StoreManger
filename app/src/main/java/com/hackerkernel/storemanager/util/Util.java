@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -19,12 +20,14 @@ import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.HomeActivity;
 import com.hackerkernel.storemanager.activity.MainActivity;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
+import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -281,6 +284,38 @@ public class Util {
             return d + m + year;
         }else{
             return d +"/"+ m +"/"+ year;
+        }
+    }
+
+    /*
+    * Method to setup category Spinner from SQLite database
+    * */
+    public static List<SimpleListPojo> setupCategorySpinnerFromDb(Context context,Database db,String userId,Spinner spinner){
+        //setup StringList to avoid NullPointerException
+        List<String> stringList = new ArrayList<>();
+
+        //Get category data from Sqlite Database
+        List<SimpleListPojo> categorySimpleList = db.getAllSimpleList(Database.CATEGORY,userId);
+
+        //mCategorySimpleList is not null
+        if(categorySimpleList.size() > 0){
+            //Create a simple
+            for (int i = 0; i < categorySimpleList.size(); i++) {
+                SimpleListPojo c = categorySimpleList.get(i);
+                //Make a Simple String list which can be used with Default spinner adapter
+                stringList.add(c.getName());
+            }
+
+            //setup List to resources
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context,android.R.layout.simple_spinner_item, stringList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+
+            //return the list
+            return categorySimpleList;
+        }else{
+            Toast.makeText(context,R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
+            return null;
         }
     }
 }

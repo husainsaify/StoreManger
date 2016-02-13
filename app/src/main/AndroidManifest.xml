@@ -55,7 +55,7 @@
             android:name=".activity.ProductActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".activity.SearchActivity"
             android:parentActivityName=".activity.HomeActivity"
             android:theme="@style/AppTheme">
             <meta-data

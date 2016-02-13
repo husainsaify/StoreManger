@@ -102,13 +102,23 @@ public class HomeActivity extends AppCompatActivity{
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_sales_tracker_fragment,menu);
+        getMenuInflater().inflate(R.menu.menu_home,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_search:
+                startActivity(new Intent(getApplication(),SearchActivity.class));
+                break;
+        }
         return true;
     }
 
     /*
-        * Create a HamBurger icon for NavigationDrawer
-        * */
+            * Create a HamBurger icon for NavigationDrawer
+            * */
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

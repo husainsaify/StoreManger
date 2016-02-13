@@ -1,11 +1,11 @@
-package com.hackerkernel.storemanager;
+package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,9 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.hackerkernel.storemanager.activity.ProductActivity;
+import com.hackerkernel.storemanager.Functions;
+import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.model.GetJson;
@@ -24,6 +26,8 @@ import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.ProductListPojo;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 import com.hackerkernel.storemanager.storage.Database;
+import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.Util;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,20 +41,19 @@ import butterknife.ButterKnife;
 
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = SearchActivity.class.getSimpleName();
-    private final Context context = this;
 
     @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.pName) EditText pName;
-    @Bind(R.id.pSize) EditText pSize;
-    @Bind(R.id.pSearch) Button search;
-    @Bind(R.id.categorySpinner) Spinner categorySpinner;
-    @Bind(R.id.searchListView) ListView searchListView;
+    @Bind(R.id.productName) TextView mProductNameView;
+    @Bind(R.id.productSize) TextView mProductSizeView;
+    @Bind(R.id.search) Button mSearch;
+    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
+    @Bind(R.id.searchRecyclerView) RecyclerView mSearchRecyclerView;
 
     //dataBase
     Database db;
 
     //global variables
-    private String userId;
+    private String mUserId;
     private String mFailedMessage;
     List<SimpleListPojo> categoryList;
     List<ProductListPojo> searchList;
@@ -67,24 +70,29 @@ public class SearchActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(getString(R.string.search));
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //instanciate database
         db = new Database(this);
-        //get userId from the database
-        //userId = db.getUserID();
+
+        //get logged in userId
+        mUserId = MySharedPreferences.getInstance(getApplicationContext()).getUserId();
 
         //create progressDialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
         pd.setCancelable(true);
 
+        //setup Category spinner
+        Util.setupCategorySpinnerFromDb(getBaseContext(),db,mUserId,mCategorySpinner);
+
         //when search button is pressed
-        search.setOnClickListener(new View.OnClickListener() {
+        /*mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String  productName = pName.getText().toString().trim(),
-                        productSize = pSize.getText().toString().trim(),
+                String  productName = mProductNameView.getText().toString().trim(),
+                        productSize = mProductSizeView.getText().toString().trim(),
                         productCategoryId = null;
 
                 //check product Name is not empty
@@ -97,30 +105,30 @@ public class SearchActivity extends AppCompatActivity {
                 int position = categorySpinner.getSelectedItemPosition();
                 //some category is selected
                 if(position != 0){
-                    /*
+                    *//*
                     * Create new valid "categorySpinner" position for "categoryList"
                     * because we have add a placeholder text in "select Category" in "categorySpinner"
-                    * */
+                    * *//*
                     int newPosition = position - 1;
                     //fetch CategoryName & CategoryId
                     productCategoryId = categoryList.get(newPosition).getId();
                 }
 
-                /*
+                *//*
                 * Search backend to get product
-                * */
-                new SearchTask().execute(userId,productName,productSize,productCategoryId);
+                * *//*
+                new SearchTask().execute(mUserId,productName,productSize,productCategoryId);
             }
-        });
+        });*/
 
         /*
         * Fetch Category list
         * */
-        new CategoryTask().execute();
+        //new CategoryTask().execute();
 
 
         //when searchListView is clicked
-        searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*searchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProductListPojo current = searchList.get(position);
@@ -131,18 +139,18 @@ public class SearchActivity extends AppCompatActivity {
                 intent.putExtra("pImageAddress",current.getProductImage());
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
 
     //Background Task to fetch category from the web
-    private class CategoryTask extends AsyncTask<Void,Void,List<SimpleListPojo>>{
+    /*private class CategoryTask extends AsyncTask<Void,Void,List<SimpleListPojo>>{
 
         @Override
         protected List<SimpleListPojo> doInBackground(Void... params) {
-            //create Hashmap for userId
+            //create Hashmap for mUserId
             HashMap<String,String> hashMap = new HashMap<>();
-            hashMap.put("userId",userId);
+            hashMap.put("mUserId", mUserId);
 
             //convert hashmap into encoded url to send them to database
             String data = Functions.hashMapToEncodedUrl(hashMap);
@@ -183,7 +191,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         protected List<ProductListPojo> doInBackground(String... params) {
             HashMap<String,String> hashmap = new HashMap<>();
-            hashmap.put("userId",params[0]);
+            hashmap.put("mUserId",params[0]);
             hashmap.put("name",params[1]);
             if(!params[2].isEmpty()){ //size is not empty
                 hashmap.put("size",params[2]);
@@ -228,5 +236,5 @@ public class SearchActivity extends AppCompatActivity {
             }
             pd.dismiss();
         }
-    }
+    }*/
 }

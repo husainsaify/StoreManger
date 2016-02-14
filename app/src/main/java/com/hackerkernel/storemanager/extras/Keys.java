@@ -129,4 +129,9 @@ public interface Keys {
             KEY_COMMISSION_SELLINGPRICE = "total_sellingprice",
             KEY_COMMISSION_ITEM_SOLD = "total_item_sold",
             KEY_COMMISSION_NO_OF_SALES = "total_item_sold_to_customers";
+
+    //PRAM for search
+    String PRAM_SEARCH_NAME = "name",
+            PRAM_SEARCH_SIZE = "size";
+
 }

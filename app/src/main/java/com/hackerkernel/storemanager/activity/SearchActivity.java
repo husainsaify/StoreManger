@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,6 +30,7 @@ import com.hackerkernel.storemanager.Functions;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.adapter.ProductAdapter;
 import com.hackerkernel.storemanager.extras.ApiUrl;
+import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.model.GetJson;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
@@ -41,6 +43,7 @@ import com.hackerkernel.storemanager.util.Util;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,7 +146,7 @@ public class SearchActivity extends AppCompatActivity {
         if(Util.isConnectedToInternet(getApplication())){
             String  productName = mProductNameView.getText().toString().trim(),
                     productSize = mProductSizeView.getText().toString().trim(),
-                    categoryId = null;
+                    categoryId = "";
 
             //check product Name is not empty
             if (productName.isEmpty()) {
@@ -153,6 +156,7 @@ public class SearchActivity extends AppCompatActivity {
 
             //get the position of categorySpinner which is selectecd
             int position = mCategorySpinner.getSelectedItemPosition();
+            Toast.makeText(SearchActivity.this, ""+position, Toast.LENGTH_SHORT).show();
             //some category is selected
             if(position != 0){
                     /*
@@ -167,7 +171,7 @@ public class SearchActivity extends AppCompatActivity {
             /*
             * Search backend to get product
             * */
-            doSearchInBackground(mUserId, productName, productSize, categoryId);
+            doSearchInBackground(productName, productSize, categoryId);
         }else{
             //Show no internet snackbar
             Util.noInternetSnackbar(getApplication(),mLayout);
@@ -178,21 +182,26 @@ public class SearchActivity extends AppCompatActivity {
     * Method to perform search IN API
     *
     * */
-    private void doSearchInBackground(String mUserId, String productName, String productSize, String categoryId) {
+    private void doSearchInBackground(final String productName, final String productSize, final String categoryId) {
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.PRODUCT_SEARCH, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
+                Log.d(TAG,"HUS: doSearchInBackground "+response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Log.e(TAG,"HUS: doSearchInBackground "+error.getMessage());
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                return super.getParams();
+                Map<String,String> params = new HashMap<>();
+                params.put(Keys.KEY_COM_USERID,mUserId);
+                params.put(Keys.PRAM_SEARCH_NAME,productName);
+                params.put(Keys.PRAM_SEARCH_SIZE,productSize);
+                params.put(Keys.KEY_COM_CATEGORYID,categoryId);
+                return params;
             }
         };
 

@@ -283,7 +283,7 @@ public class Util {
         if(type == 1){
             return d + m + year;
         }else{
-            return d +"/"+ m +"/"+ year;
+            return d +"-"+ m +"-"+ year;
         }
     }
 

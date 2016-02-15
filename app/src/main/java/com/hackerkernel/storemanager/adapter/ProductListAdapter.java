@@ -29,10 +29,12 @@ import butterknife.ButterKnife;
  * Adapter to display productList in a recyclerview
  */
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder> {
+    private static final String TAG = ProductListAdapter.class.getSimpleName();
     private Context mContext;
     private LayoutInflater mInflater;
     private List<ProductListPojo> mList;
     private ImageLoader mImageLoader;
+
 
     public ProductListAdapter(Context context) {
         this.mInflater = LayoutInflater.from(context);
@@ -75,8 +77,8 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                     //Handle volley error
                     String errorString = VolleySingleton.handleVolleyError(error);
                     if(errorString != null){
-                        Toast.makeText(mContext,errorString,Toast.LENGTH_SHORT).show();
-                        Log.d("HUS","HUS: productList: "+errorString+" volleyError "+error.getMessage());
+                        //Toast.makeText(mContext,errorString,Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,"HUS: productList: "+errorString+" volleyError "+error.getMessage());
                     }
                     //Set default image
                     holder.image.setImageResource(R.drawable.ic_image_not_available);

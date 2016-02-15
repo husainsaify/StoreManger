@@ -58,4 +58,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <!-- Textview to show text when RecyclerView is empty -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="@string/no_result_found"
+        android:id="@+id/emptyRecyclerView"
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:layout_margin="10dp"/>
+
 </LinearLayout>

@@ -165,6 +165,7 @@
     <string name="total_product_sold">Total product sold</string>
     <string name="product_name_code">Product name/code</string>
     <string name="it_seem_your_havent_added_any_category">It\'s seems you haven\'t added any category yet</string>
+    <string name="no_result_found">No result found</string>
     <string-array name="select_picture_option">
         <item>Take Picture</item>
         <item>Choose Picture</item>

@@ -53,7 +53,7 @@
         </activity>
         <activity
             android:name=".activity.ProductActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SearchActivity"
             android:parentActivityName=".activity.HomeActivity"
@@ -94,27 +94,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ManageSalesmanActivity" />
         </activity>
-
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.EditProductActivity" />
-
         <activity
             android:name=".activity.AddSalesActivity"
-            android:parentActivityName="com.hackerkernel.storemanager.activity.HomeActivity">
+            android:parentActivityName=".activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
         </activity>
-
         <activity
             android:name=".activity.CalculateCommissionActivity"
-            android:parentActivityName="com.hackerkernel.storemanager.activity.HomeActivity">
+            android:parentActivityName=".activity.HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
+        </activity>
+        <activity android:name=".activity.SalesmanSalesDetailActivity"
+            android:parentActivityName=".activity.ManageSalesmanActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.hackerkernel.storemanager.activity.ManageSalesmanActivity" />
+
         </activity>
     </application>
 

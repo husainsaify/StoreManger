@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.hackerkernel.storemanager.activity.ProductListActivity;
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.activity.SalesmanSalesDetailActivity;
 import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.pojo.SimpleListPojo;
 
@@ -80,17 +81,25 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
 
         @Override
         public void onClick(View v) {
+            int position = getAdapterPosition();
             /*
             * Check if SimpleListAdapter is used for CATEGORY
             * */
             if(mActivityName.equals(CATEGORY)){
-                int position = getAdapterPosition();
                 SimpleListPojo current = mList.get(position);
                 //go to product activity
                 Intent productIntent = new Intent(mContext, ProductListActivity.class);
                 //set categoryId and CategoryName in intenet
                 productIntent.putExtra(Keys.KEY_COM_CATEGORYID, current.getId());
                 productIntent.putExtra(Keys.KEY_COM_CATEGORYNAME, current.getName());
+                mContext.startActivity(productIntent);
+            }else if (mActivityName.equals(SALESMAN)){
+                SimpleListPojo current = mList.get(position);
+                //go to ManageSalesman
+                Intent productIntent = new Intent(mContext, SalesmanSalesDetailActivity.class);
+                productIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                productIntent.putExtra(Keys.KEY_COM_SALESMANID, current.getId());
+                productIntent.putExtra("name", current.getName());
                 mContext.startActivity(productIntent);
             }
         }

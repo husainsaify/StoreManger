@@ -7,6 +7,12 @@
     app:popupTheme="@style/AppTheme.PopupOverlay"
     app:theme="@style/AppTheme.AppBarOverlay">
 
+    <Spinner
+        android:id="@+id/toolbarSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/toolbarProgressBar"
         android:layout_width="wrap_content"

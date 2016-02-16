@@ -120,7 +120,7 @@
     <string name="select_category_to_continue">Select a category to continue</string>
     <string name="no_product_found">No Product found for this category. Click on plus icon to add one</string>
     <string name="no_data_found_on_local">No data found on local storage. Please check your internet connection and try again</string>
-    <string name="internal_error_restart_app">Internal error. Restart application and Try login again.</string>
+    <string name="internal_error_restart_app">Internal error Unable to start activity. Restart app or try login</string>
     <string name="unable_display_product_info_check_inetnet">Unable to display product information. Check your internet connection</string>
     <string name="failed_create_directory">Failed to create directory</string>
     <string name="unable_to_save_image">Unable to save image</string>

@@ -99,7 +99,6 @@ public class SimpleListAdapter extends RecyclerView.Adapter<SimpleListAdapter.Si
                 Intent productIntent = new Intent(mContext, SalesmanSalesDetailActivity.class);
                 productIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 productIntent.putExtra(Keys.KEY_COM_SALESMANID, current.getId());
-                productIntent.putExtra("name", current.getName());
                 mContext.startActivity(productIntent);
             }
         }

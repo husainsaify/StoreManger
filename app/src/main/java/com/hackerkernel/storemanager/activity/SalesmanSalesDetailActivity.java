@@ -7,6 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
@@ -82,16 +85,47 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
             this.finish();
         }
 
-        //add layout manager to recyclerview
+        //add layout manager to recycler view
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplication());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        fetchSalesmanSalesDateListInBackground();
+        //Setup Sales Date Spinner
+        checkInternetAndSetupDateSpinner();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_salesman_sales_detail,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                checkInternetAndSetupDateSpinner();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /*
+    * Method to check internet and if present fetch list
+    * else Display no internet snackbar
+    * */
+    private void checkInternetAndSetupDateSpinner(){
+        if(Util.isConnectedToInternet(getApplicationContext())){
+            fetchSalesmanSalesDateListInBackground();
+        }else {
+            mToolbarSpinner.setVisibility(View.GONE);
+            Util.noInternetSnackbar(getApplicationContext(),mLayoutForSnackbar);
+        }
     }
 
     /*
-    * Method to fetch SalesmanSalesDateList in background
-    * */
+     * Method to fetch SalesmanSalesDateList in background
+     * */
     public void fetchSalesmanSalesDateListInBackground(){
         Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALESMAN_SALES_DATE_LIST, new Response.Listener<String>() {
@@ -184,6 +218,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
     private void setUpDateSpinnerFromList(List<SalesTrackerDatePojo> list) {
         //create a String List For spinner
         List<String> stringList = new ArrayList<>();
+        stringList.add("All");
         for (int i = 0; i < list.size(); i++) {
             stringList.add(list.get(i).getDate());
         }

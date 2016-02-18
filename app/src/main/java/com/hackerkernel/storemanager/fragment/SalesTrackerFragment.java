@@ -173,12 +173,14 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG,"HUS: onOptionsItemSelected run 1");
         switch (item.getItemId()){
             case R.id.action_refresh:
-                    refreshList();
+                Log.d(TAG,"HUS: onOptionsItemSelected run 2");
+                refreshList();
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     /***************************

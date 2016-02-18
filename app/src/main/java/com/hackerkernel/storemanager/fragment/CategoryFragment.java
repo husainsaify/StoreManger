@@ -133,13 +133,17 @@ public class CategoryFragment extends Fragment implements View.OnClickListener, 
         * if no data in SqliteDatabase show a message
         * */
     private void checkInternetAndDisplayList() {
-        if(Util.isConnectedToInternet(getActivity())){ //connected
+        if(Util.isConnectedToInternet(getActivity())){ //not connected
             fetchCategoryInBackground(); //fetch data
-        }else{ //not connected
+        }else{
             showListFromSqliteDatabase(); //method to display Data in list from Sqlite database
-            Util.noInternetSnackbar(getActivity(),mLayout);
             //method to stop swipeRefreshlayout refresh icon
             stopRefreshing();
+
+            //Show No internet Snackbar
+            Util.noInternetSnackbar(getActivity(),mLayout);
+
+            Toast.makeText(getActivity(),R.string.check_your_internet_and_try_again,Toast.LENGTH_SHORT).show();
         }
     }
 

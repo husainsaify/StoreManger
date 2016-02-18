@@ -113,7 +113,7 @@ public class HomeActivity extends AppCompatActivity{
                 startActivity(new Intent(getApplication(),SearchActivity.class));
                 break;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     /*

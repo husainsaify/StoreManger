@@ -256,6 +256,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 int count = jsonObject.getInt(Keys.KEY_COM_COUNT);
 
                 //returned false
+                //check for error from API
                 if (!returned) {
                     mDateSpinnerLayout.setVisibility(View.GONE);
                     mProfitOrLossLayout.setVisibility(View.GONE);
@@ -263,7 +264,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                     mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
                     mPlaceholderWhenNoSalesAdded.setText(message);
                     mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);
-                } else if (count <= 0) {
+                }
+                //check for no date add. Count will be zero when no sales added
+                else if (count <= 0) {
                     //hide date spinner & profit or loss layout and show placeholder
                     mDateSpinnerLayout.setVisibility(View.GONE);
                     mProfitOrLossLayout.setVisibility(View.GONE);
@@ -274,6 +277,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             Log.e(TAG, "HUS: parseDateListResponse: " + e.getMessage());
             Log.d(TAG, "HUS: parseDateListResponse: " + response);
             mDateSpinnerLayout.setVisibility(View.GONE);
+            mProfitOrLossLayout.setVisibility(View.GONE);
             mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
             mPlaceholderWhenNoSalesAdded.setText(R.string.unable_to_parse_response);
             mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);

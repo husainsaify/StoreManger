@@ -3,8 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout"
     tools:context="com.hackerkernel.storemanager.activity.SalesmanSalesDetailActivity">
 
     <include layout="@layout/include_toolbar" android:id="@+id/toolbar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/errorMessage"
+        android:layout_marginTop="5dp"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:gravity="center_horizontal"
+        android:text="@string/no_sales_found_for_this_salesman"
+        android:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

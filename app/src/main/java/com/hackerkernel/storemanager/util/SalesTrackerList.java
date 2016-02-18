@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -42,6 +43,14 @@ public class SalesTrackerList {
     private Boolean mSaveToCache;
     private List<SalesTrackerPojo> mSalesTrackerList;
     private RecyclerView mSalesTrackerRecyclerView;
+    private Boolean mDisplayProfitOrLossLayout;
+
+    //Profit or loss layout
+    private View mProfitOrLossLayout;
+    private TextView mProfitOrLoss;
+    private TextView mProfitOrLossLabel;
+    private TextView mProfitOrLossCostprice;
+    private TextView mProfitOrLossSellingprice;
 
     //Prams to send to API
     private String mUserId;
@@ -51,13 +60,40 @@ public class SalesTrackerList {
     //Volley
     private RequestQueue mRequestQueue;
 
-
-    public SalesTrackerList(Context context,ProgressBar toolbarProgressBar,View layoutForSnackbar,RecyclerView salesTrackerRecyclerView,Boolean saveToCache){
+    /*
+    * Constructor which does not take Profit & loss layout in account
+    * */
+    public SalesTrackerList(Context context,ProgressBar toolbarProgressBar,View layoutForSnackbar,RecyclerView salesTrackerRecyclerView,Boolean saveToCache,Boolean displayProfitOrLossLayout){
         this.mContext = context;
         this.mToolbarProgressBar = toolbarProgressBar;
         this.mLayout = layoutForSnackbar;
         this.mSalesTrackerRecyclerView = salesTrackerRecyclerView;
         this.mSaveToCache = saveToCache;
+        //Profit or loss
+        this.mDisplayProfitOrLossLayout = displayProfitOrLossLayout;
+
+        //Get UserId & setup Volley
+        mUserId = MySharedPreferences.getInstance(mContext).getUserId();
+        mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
+    }
+
+    /*
+    * Constructor which take profit or loss layout in account
+    * */
+    public SalesTrackerList(Context context,ProgressBar toolbarProgressBar,View layoutForSnackbar,RecyclerView salesTrackerRecyclerView,Boolean saveToCache,Boolean displayProfitOrLossLayout,View profitOrLossLayout,TextView profitOrloss,TextView profitOrLossLabel,TextView profitOrLossCostprice,TextView profitOrLossSellingprice){
+        this.mContext = context;
+        this.mToolbarProgressBar = toolbarProgressBar;
+        this.mLayout = layoutForSnackbar;
+        this.mSalesTrackerRecyclerView = salesTrackerRecyclerView;
+        this.mSaveToCache = saveToCache;
+
+        //Profit or loss
+        this.mDisplayProfitOrLossLayout = displayProfitOrLossLayout;
+        this.mProfitOrLossLayout = profitOrLossLayout;
+        this.mProfitOrLoss = profitOrloss;
+        this.mProfitOrLossLabel = profitOrLossLabel;
+        this.mProfitOrLossCostprice = profitOrLossCostprice;
+        this.mProfitOrLossSellingprice = profitOrLossSellingprice;
 
         //Get UserId & setup Volley
         mUserId = MySharedPreferences.getInstance(mContext).getUserId();
@@ -69,6 +105,7 @@ public class SalesTrackerList {
     * If internet is avaialble get fresh salestracker list
     * else get list from chache or show No internet Snackbar
     * */
+    //Leave salesm
     public void CheckInternetAndSetupSalesTrackerList(String dateId,String salesmanId) {
         //save DateId & SalesmanId
         this.mDateId = dateId;
@@ -81,13 +118,17 @@ public class SalesTrackerList {
         if (Util.isConnectedToInternet(mContext)){
             fetchSalesTrackerInBackground();
         } else {
+            //Hide ProfitOrLossLayout (If mDisplayProfitOrLoss is true)
+            if (mDisplayProfitOrLossLayout){
+                mProfitOrLossLayout.setVisibility(View.GONE);
+            }
             //saveToCache is true
             if(mSaveToCache){
                 setupSalesTrackerListFromCache(mDateId);
             }
             //show no Internet Snackbar
             else{
-                Util.noInternetSnackbar(mContext,mLayout);
+                Util.noInternetSnackbar(mContext, mLayout);
             }
         }
     }
@@ -153,10 +194,14 @@ public class SalesTrackerList {
             //return is false
             if (!mSalesTrackerList.get(0).getReturned()) {
                 Util.redSnackbar(mContext, mLayout, mSalesTrackerList.get(0).getMessage());
-            } else {
+            }
+            else {
                 setupSalesTrackerRecyclerViewFromList(mSalesTrackerList);
-                //Set Profit & Loss State
-                //setProfitOrLossState(mSalesTrackerList.get(0).getTotalCostprice(), mSalesTrackerList.get(0).getTotalSellingprice());
+
+                //Set Profit & Loss State (if mDisplayProfitOrLoss is true)
+                if (mDisplayProfitOrLossLayout){
+                    setProfitOrLossState(mSalesTrackerList.get(0).getTotalCostprice(), mSalesTrackerList.get(0).getTotalSellingprice());
+                }
             }
         } else {
             Toast.makeText(mContext, R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
@@ -165,16 +210,22 @@ public class SalesTrackerList {
     }
 
     private void setupSalesTrackerRecyclerViewFromList(List<SalesTrackerPojo> list) {
-        //showSalesTrackerVisible(true); //set ST visible
+        //If mDisplayProfitOrLoss is true then only display ProfitOrLoss Layout
+        if(mDisplayProfitOrLossLayout){
+            showSalesTrackerVisible(true); //set ST visible
+        }
+
         SalesTrackerAdapter adapter = new SalesTrackerAdapter(mContext);
         adapter.setList(list);
         mSalesTrackerRecyclerView.setAdapter(adapter);
     }
 
+    /*************************** Profit & loss layout **************************/
+
     /*
     * Method to cal profit loss from total cp & sp and display it
     * */
-    /*private void setProfitOrLossState(String totalCp, String totalSp) {
+    private void setProfitOrLossState(String totalCp, String totalSp) {
         int cp = Integer.parseInt(totalCp);
         int sp = Integer.parseInt(totalSp);
 
@@ -200,7 +251,7 @@ public class SalesTrackerList {
         mProfitOrLoss.setText(String.valueOf(value));
         mProfitOrLossCostprice.setText(String.valueOf(cp));
         mProfitOrLossSellingprice.setText(String.valueOf(sp));
-    }*/
+    }
 
     /*
     * METHOD TO DISPLAY SALES TRACKER LIST FROM CACHE
@@ -218,7 +269,7 @@ public class SalesTrackerList {
     /*
     * Method to toggle ST RecyclerView and ProfitOrLoss layout
     * */
-    /*private void showSalesTrackerVisible(boolean para){
+    private void showSalesTrackerVisible(boolean para){
         if (para){ //true display
             mProfitOrLossLayout.setVisibility(View.VISIBLE);
             mSalesTrackerRecyclerView.setVisibility(View.VISIBLE);
@@ -226,7 +277,7 @@ public class SalesTrackerList {
             mProfitOrLossLayout.setVisibility(View.GONE);
             mSalesTrackerRecyclerView.setVisibility(View.GONE);
         }
-    }*/
+    }
 
     /************************
      * Method to store and retrive SalesTracker json response in cache

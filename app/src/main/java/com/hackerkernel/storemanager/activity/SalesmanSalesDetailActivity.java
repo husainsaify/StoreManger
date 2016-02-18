@@ -54,6 +54,12 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
     @Bind(R.id.layout) RelativeLayout mLayoutForSnackbar;
     @Bind(R.id.errorMessage) TextView mErrorMessage;
     @Bind(R.id.recyclerview) RecyclerView mRecyclerView;
+    //Profit or loss layout
+    @Bind(R.id.profitOrLossLayout) View mProfitOrLossLayout;
+    @Bind(R.id.profitOrLoss) TextView mProfitOrLoss;
+    @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
+    @Bind(R.id.totalCostPrice) TextView mProfitOrLossCostPrice;
+    @Bind(R.id.totalSellingPrice) TextView mProfitOrLossSellingPrice;
 
     private String mUserId;
     private String mSalesmanId;
@@ -95,7 +101,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
         checkInternetAndSetupDateSpinner();
 
         //Instanciate SalesTrackerList for setting up Sales Lis
-        final SalesTrackerList salesTrackerList = new SalesTrackerList(getBaseContext(),mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false);
+        final SalesTrackerList salesTrackerList = new SalesTrackerList(getBaseContext(),mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostPrice,mProfitOrLossSellingPrice);
 
 
         /*
@@ -151,6 +157,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
             fetchSalesmanSalesDateListInBackground();
         }else {
             mToolbarSpinner.setVisibility(View.GONE);
+            mProfitOrLossLayout.setVisibility(View.GONE);
             Util.noInternetSnackbar(getApplicationContext(),mLayoutForSnackbar);
         }
     }
@@ -227,10 +234,13 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
                 }
                 //check for no date add. Count will be zero when no sales added
                 else if (count <= 0) {
+
                     mErrorMessage.setVisibility(View.VISIBLE);
+                    //hide ProfitOrLoss layout
+                    mProfitOrLossLayout.setVisibility(View.GONE);
                     /*
-                    * not hiding date spinner and recyclerview because if count is zero the return from api will be false
-                        and if its false recyclerView & Datespinner will be hidden above in If
+                    * not hiding date spinner and recycler view because if count is zero the return from api will be false
+                        and if its false recyclerView & Date spinner will be hidden above in If
                     * */
                 }
             }

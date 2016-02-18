@@ -43,6 +43,7 @@ import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.SalesTrackerList;
 import com.hackerkernel.storemanager.util.Util;
 
 import org.json.JSONException;
@@ -70,7 +71,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     @Bind(R.id.dateSpinnerLayout) TableLayout mDateSpinnerLayout;
     @Bind(R.id.dateSpinner) Spinner mDateSpinner;
     @Bind(R.id.recyclerview) RecyclerView mSalesTrackerRecyclerView;
-    @Bind(R.id.linearLayout) LinearLayout mProfitOrLossLayout;
+    @Bind(R.id.profitOrLossLayout) LinearLayout mProfitOrLossLayout;
     @Bind(R.id.totalSellingPrice) TextView mProfitOrLossSellingprice;
     @Bind(R.id.totalCostPrice) TextView mProfitOrLossCostprice;
     @Bind(R.id.profitOrLossLabel) TextView mProfitOrLossLabel;
@@ -84,8 +85,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     private List<SalesTrackerPojo> mSalesTrackerList;
     private Database db;
 
-    private String mDate = null;
     private String mDateId = null;
+
+    private SalesTrackerList mSalesList;
 
 
     public SalesTrackerFragment() {
@@ -128,15 +130,18 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         //SalesTracker Date List
         checkInternetAndSetupDateSpinner();
 
+        //Setup Sales List
+        mSalesList = new SalesTrackerList(getActivity(),mToolbarProgressBar,mLayout,mSalesTrackerRecyclerView,true,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostprice,mProfitOrLossSellingprice);
+
+
         //When salesTracker date Spinner is selected
         mDateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mDate = mDateList.get(position).getDate();
                 mDateId = mDateList.get(position).getDateId();
 
                 //method to fetch Sales Tracker
-                checkInternetAndSetupSalesTrackerList(mDateId);
+                mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId,"");
             }
 
             @Override
@@ -304,202 +309,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             //refresh DateList
             fetchDateListInBackground();
             //refresh SalesTracker
-            fetchSalesTrackerInBackground();
+            mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId, "");
         }else {
             Util.noInternetSnackbar(getActivity(),mLayout);
-        }
-    }
-
-    /*************************
-     * SALES TRACKER RECYCLER VIEW
-     *********************/
-    /*
-    *
-    * If internet is avaialble get fresh salestracker list
-    * else get list from chache
-    * */
-    public void checkInternetAndSetupSalesTrackerList(String dateId) {
-        if (Util.isConnectedToInternet(getActivity())) {
-            fetchSalesTrackerInBackground();
-        } else {
-            setupSalesTrackerListFromCache(mDateId);
-        }
-    }
-
-    private void fetchSalesTrackerInBackground() {
-        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
-        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.GET_SALES_TRACKER, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Util.setProgressBarVisible(mToolbarProgressBar,false); //hide progressbar
-                //parse SalesTracker Respone
-                parseSalesTrackerResponse(response);
-
-                //store data to chache
-                saveSalesTrackerToCache(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Util.setProgressBarVisible(mToolbarProgressBar,false); //hide progressbar
-                Log.e(TAG, "HUS: fetchSalesTrackerInBackground: " + error.getMessage());
-                //handle volley error
-                String errorString = VolleySingleton.handleVolleyError(error);
-                if (errorString != null) {
-                    Util.redSnackbar(getActivity(), mLayout, errorString);
-                }
-
-                //Display SalesTracker List From cache (Local stroage)
-                setupSalesTrackerListFromCache(mDateId);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> param = new HashMap<>();
-                param.put(Keys.KEY_COM_USERID, mUserId);
-                param.put(Keys.KEY_ST_DATELIST_DATE_ID, mDateId);
-                return param;
-            }
-        };
-
-        mRequestQueue.add(request);
-    }
-
-    private void parseSalesTrackerResponse(String response) {
-        mSalesTrackerList = JsonParser.salesTrackerParser(response);
-
-        //check list is not null
-        if (mSalesTrackerList != null) {
-            //check returned
-            Log.d(TAG, "HUS: " + mSalesTrackerList.get(0).getReturned());
-            if (!mSalesTrackerList.get(0).getReturned()) {
-                Util.redSnackbar(getActivity(), mLayout, mSalesTrackerList.get(0).getMessage());
-            } else {
-                setupSalesTrackerRecyclerViewFromList(mSalesTrackerList);
-                //Set Profit & Loss State
-                setProfitOrLossState(mSalesTrackerList.get(0).getTotalCostprice(), mSalesTrackerList.get(0).getTotalSellingprice());
-            }
-        } else {
-            Toast.makeText(getActivity(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
-            Log.e(TAG, "HUS: parseSalesTrackerResponse: " + response);
-        }
-    }
-
-    private void setupSalesTrackerRecyclerViewFromList(List<SalesTrackerPojo> list) {
-        showSalesTrackerVisible(true); //set ST visible
-        SalesTrackerAdapter adapter = new SalesTrackerAdapter(getActivity());
-        adapter.setList(list);
-        mSalesTrackerRecyclerView.setAdapter(adapter);
-    }
-
-    /*
-    * Method to cal profit loss from total cp & sp and display it
-    * */
-    public void setProfitOrLossState(String totalCp, String totalSp) {
-        int cp = Integer.parseInt(totalCp);
-        int sp = Integer.parseInt(totalSp);
-
-        String label;
-        int value;
-        if (cp > sp) {//loss
-            //cal loss
-            value = cp - sp;
-            label = "Loss";
-        } else {
-            if (sp > cp) { //profit
-                //call profit
-                value = sp - cp;
-                label = "Profit";
-            } else { // neutral CP = sales
-                value = 0;
-                label = "Break Even";
-            }
-        }
-
-        //set Label and value to TextView
-        mProfitOrLossLabel.setText(label);
-        mProfitOrLoss.setText(String.valueOf(value));
-        mProfitOrLossCostprice.setText(String.valueOf(cp));
-        mProfitOrLossSellingprice.setText(String.valueOf(sp));
-    }
-
-    /*
-    * METHOD TO DISPLAY SALES TRACKER LIST FROM CACHE
-    * */
-    private void setupSalesTrackerListFromCache(String dateId) {
-        String jsonResponse = getSalesTrackerFromCache(dateId);
-        if (jsonResponse != null) {
-            parseSalesTrackerResponse(jsonResponse);
-        } else {
-            Toast.makeText(getActivity(), R.string.check_internt_failed_to_get_st_from_local, Toast.LENGTH_LONG).show();
-            showSalesTrackerVisible(false);
-        }
-    }
-
-    /*
-    * Method to toggle ST RecyclerView and ProfitOrLoss layout
-    * */
-    private void showSalesTrackerVisible(boolean para){
-        if (para){ //true display
-            mProfitOrLossLayout.setVisibility(View.VISIBLE);
-            mSalesTrackerRecyclerView.setVisibility(View.VISIBLE);
-        }else{ //false hide
-            mProfitOrLossLayout.setVisibility(View.GONE);
-            mSalesTrackerRecyclerView.setVisibility(View.GONE);
-        }
-    }
-
-    /************************
-     * Method to store and retrive SalesTracker json response in cache
-     ************************/
-    private void saveSalesTrackerToCache(String jsonString) {
-        File cacheDir = getActivity().getCacheDir();
-        File file = new File(cacheDir.getAbsolutePath(), mDateId);
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(file);
-            fos.write(jsonString.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "HUS: saveSalesTrackerToCache: " + e.getMessage());
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG, "HUS: saveSalesTrackerToCache: " + e.getMessage());
-            }
-        }
-    }
-
-    private String getSalesTrackerFromCache(String dateId) {
-        File cacheDir = getActivity().getCacheDir();
-        File file = new File(cacheDir.getAbsolutePath(), dateId);
-        FileInputStream fis = null;
-        try {
-            fis = new FileInputStream(file);
-            int read;
-            StringBuilder sb = new StringBuilder();
-            while ((read = fis.read()) != -1) {
-                sb.append((char) read);
-            }
-            fis.close();
-            return sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e(TAG, "HUS: getSalesTrackerFromCache: " + e.getMessage());
-            return null;
-        } finally {
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "HUS: getSalesTrackerFromCache: " + e.getMessage());
-                }
-            }
         }
     }
 }

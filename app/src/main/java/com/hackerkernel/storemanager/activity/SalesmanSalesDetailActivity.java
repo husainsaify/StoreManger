@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -31,6 +32,7 @@ import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SalesTrackerDatePojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
+import com.hackerkernel.storemanager.util.SalesTrackerList;
 import com.hackerkernel.storemanager.util.Util;
 
 import org.json.JSONException;
@@ -91,6 +93,36 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
 
         //Setup Sales Date Spinner
         checkInternetAndSetupDateSpinner();
+
+        //Instanciate SalesTrackerList for setting up Sales Lis
+        final SalesTrackerList salesTrackerList = new SalesTrackerList(getBaseContext(),mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false);
+
+
+        /*
+        * When a date is selected on Toolbar Spinner
+        * */
+        mToolbarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //Check Selected date is All or specific date(10/2/2016)
+                String dateId;
+                if(position == 0){ //all
+                   dateId = "all";
+                }else { //specific date
+                    //create new position for mDateList because on the first index is All(all sales ) is added
+                    int newPosition = position - 1;
+                    dateId = mDateList.get(newPosition).getDateId();
+                }
+
+                //Setup Sales RecyclerView
+                salesTrackerList.CheckInternetAndSetupSalesTrackerList(dateId,mSalesmanId);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,19 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
         @Bind(R.id.salesmanName) TextView salesmanName;
         @Bind(R.id.profitOrLoss) TextView profitOrLoss;
 
+        //Alert dialog views
+        View alertview;
+        TextView alertName;
+        TextView alertCode;
+        TextView alertSize;
+        TextView alertQuantity;
+        TextView alertSellingPrice;
+        TextView alertCostPrice;
+        TextView alertSoldBy;
+        TextView alertTotalSellingPrice;
+        TextView alertTotalCostPrice;
+        TextView alertProfitOrLoss;
+
         public SalesTrackerViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -78,23 +92,24 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
 
         @Override
         public void onClick(View v) {
+            //create alertDialog
             //get current list
             int pos = getAdapterPosition();
+
             SalesTrackerPojo current = mList.get(pos);
 
-            View alertview = mInflator.inflate(R.layout.sales_tracker_alert_dialog, null);
+            alertview = mInflator.inflate(R.layout.sales_tracker_alert_dialog, null);
 
-            TextView alertName = (TextView) alertview.findViewById(R.id.productName);
-            TextView alertCode = (TextView) alertview.findViewById(R.id.productCode);
-            TextView alertSize = (TextView) alertview.findViewById(R.id.productSize);
-            TextView alertQuantity = (TextView) alertview.findViewById(R.id.productQuantity);
-            TextView alertSellingPrice = (TextView) alertview.findViewById(R.id.sellingPrice);
-            TextView alertCostPrice = (TextView) alertview.findViewById(R.id.costPrice);
-            TextView alertSoldBy = (TextView) alertview.findViewById(R.id.soldBy);
-            TextView alertTotalSellingPrice = (TextView) alertview.findViewById(R.id.totalSellingPrice);
-            TextView alertTotalCostPrice = (TextView) alertview.findViewById(R.id.totalCostPrice);
-            TextView alertProfitOrLoss = (TextView) alertview.findViewById(R.id.profitOrLoss);
-
+            alertName = (TextView) alertview.findViewById(R.id.productName);
+            alertCode = (TextView) alertview.findViewById(R.id.productCode);
+            alertSize = (TextView) alertview.findViewById(R.id.productSize);
+            alertQuantity = (TextView) alertview.findViewById(R.id.productQuantity);
+            alertSellingPrice = (TextView) alertview.findViewById(R.id.sellingPrice);
+            alertCostPrice = (TextView) alertview.findViewById(R.id.costPrice);
+            alertSoldBy = (TextView) alertview.findViewById(R.id.soldBy);
+            alertTotalSellingPrice = (TextView) alertview.findViewById(R.id.totalSellingPrice);
+            alertTotalCostPrice = (TextView) alertview.findViewById(R.id.totalCostPrice);
+            alertProfitOrLoss = (TextView) alertview.findViewById(R.id.profitOrLoss);
             //calculate prfit or loss
             String profitOrLoss = Util.calProfitLossOrBreakeven(current.getCostprice(),current.getSellingprice(),current.getQuantity());
 
@@ -114,8 +129,6 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
             alertTotalSellingPrice.setText(totalSellingPrice+"");
             alertProfitOrLoss.setText(profitOrLoss);
 
-
-            //create alertDialog
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setView(alertview)
                     .setPositiveButton(R.string.ok,null);

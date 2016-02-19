@@ -101,7 +101,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
         checkInternetAndSetupDateSpinner();
 
         //Instanciate SalesTrackerList for setting up Sales Lis
-        final SalesTrackerList salesTrackerList = new SalesTrackerList(getBaseContext(),mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostPrice,mProfitOrLossSellingPrice);
+        final SalesTrackerList salesTrackerList = new SalesTrackerList(this,mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostPrice,mProfitOrLossSellingPrice);
 
 
         /*

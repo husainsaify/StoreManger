@@ -124,17 +124,24 @@ public class SearchActivity extends AppCompatActivity {
                 return;
             }
 
-            //get the position of categorySpinner which is selectecd
-            int position = mCategorySpinner.getSelectedItemPosition();
-            //some category is selected
-            if(position != 0){
+            /*
+            * Get categoryId if category is present
+            * */
+            if(mCategorySpinner != null){
+
+                //get the position of categorySpinner which is selectecd
+                int position = mCategorySpinner.getSelectedItemPosition();
+
+                //some category is selected
+                if((position >= 0) && (mCategoryList!= null)){
                     /*
                     * Subtract 1 from From Category spinner because we have added a placeholder text their
                     * */
 
-                int newPosition = position - 1;
-                //fetch CategoryName & CategoryId
-                categoryId = mCategoryList.get(newPosition).getId();
+                    int newPosition = position - 1;
+                    //fetch CategoryName & CategoryId
+                    categoryId = mCategoryList.get(newPosition).getId();
+                }
             }
 
             /*

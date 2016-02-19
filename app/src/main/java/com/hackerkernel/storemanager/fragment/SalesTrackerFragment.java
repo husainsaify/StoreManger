@@ -82,7 +82,6 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     private String mUserId;
     private RequestQueue mRequestQueue;
     private List<SalesTrackerDatePojo> mDateList;
-    private List<SalesTrackerPojo> mSalesTrackerList;
     private Database db;
 
     private String mDateId = null;
@@ -107,7 +106,6 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         db = new Database(getActivity());
 
         mDateList = new ArrayList<>();
-        mSalesTrackerList = new ArrayList<>();
 
         //indicate the Fragment will participate in menu creation
         setHasOptionsMenu(true);
@@ -173,14 +171,24 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG,"HUS: onOptionsItemSelected run 1");
         switch (item.getItemId()){
             case R.id.action_refresh:
-                Log.d(TAG,"HUS: onOptionsItemSelected run 2");
                 refreshList();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int pos = item.getOrder();
+        switch (item.getItemId()){
+            case R.id.action_delete:
+                //Sales id
+                    Toast.makeText(getActivity(),"Pos "+pos+ " sales id "+mSalesList.getSalesTrackerList(pos).getSalesId(),Toast.LENGTH_LONG).show();
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     /***************************

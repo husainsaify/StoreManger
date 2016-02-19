@@ -220,6 +220,18 @@ public class SalesTrackerList {
         mSalesTrackerRecyclerView.setAdapter(adapter);
     }
 
+    /*
+    * Method to get Sales tracker detail
+    * */
+    public SalesTrackerPojo getSalesTrackerList(int position){
+        if(mSalesTrackerList != null){
+            return mSalesTrackerList.get(position);
+        }else{
+            Log.e(TAG,"HUS: getSalesTrackerList: Sales tracker list is null");
+            return null;
+        }
+    }
+
     /*************************** Profit & loss layout **************************/
 
     /*

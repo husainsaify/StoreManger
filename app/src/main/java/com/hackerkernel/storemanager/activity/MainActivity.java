@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Bind(R.id.goToLogin) Button mGoToLogin;
     @Bind(R.id.goToSignup) Button mGoToSignup;

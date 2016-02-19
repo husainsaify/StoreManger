@@ -1,11 +1,11 @@
 package com.hackerkernel.storemanager.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,8 +13,6 @@ import android.widget.TextView;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
 import com.hackerkernel.storemanager.util.Util;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +61,7 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
     }
 
     /**************** VIEW HOLDER ******************/
-    class SalesTrackerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class SalesTrackerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
         //List layout views
         @Bind(R.id.customerName) TextView customerName;
         @Bind(R.id.productName) TextView productName;
@@ -88,6 +86,9 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
             ButterKnife.bind(this, itemView);
             //set on click for Recycler view item
             itemView.setOnClickListener(this);
+
+            //create context menu
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         @Override
@@ -135,6 +136,14 @@ public class SalesTrackerAdapter extends RecyclerView.Adapter<SalesTrackerAdapte
             AlertDialog dialog = builder.create();
 
             dialog.show();
+        }
+
+        /*
+        * Long press Context menu
+        * */
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.add(Menu.NONE, R.id.action_delete, getAdapterPosition(), R.string.delete);
         }
     }
 }

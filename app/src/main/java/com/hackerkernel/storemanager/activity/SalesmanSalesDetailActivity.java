@@ -1,7 +1,9 @@
 package com.hackerkernel.storemanager.activity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -66,6 +68,9 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private List<SalesTrackerDatePojo> mDateList;
 
+    private AlertDialog.Builder builder;
+    SalesTrackerList mSalesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +90,11 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
         //Instanciate Volley
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
+        //Delete alert dialog
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete)
+                .setMessage("Are you sure? You want to delete this sales");
+
         //get Salesman Id
         if (getIntent().hasExtra(Keys.KEY_COM_SALESMANID)){
             mSalesmanId = getIntent().getExtras().getString(Keys.KEY_COM_SALESMANID);
@@ -101,7 +111,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
         checkInternetAndSetupDateSpinner();
 
         //Instanciate SalesTrackerList for setting up Sales Lis
-        final SalesTrackerList salesTrackerList = new SalesTrackerList(this,mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostPrice,mProfitOrLossSellingPrice);
+        mSalesList = new SalesTrackerList(this,mToolbarProgressBar,mLayoutForSnackbar,mRecyclerView,false,true,mProfitOrLossLayout,mProfitOrLoss,mProfitOrLossLabel,mProfitOrLossCostPrice,mProfitOrLossSellingPrice);
 
 
         /*
@@ -121,7 +131,7 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
                 }
 
                 //Setup Sales RecyclerView
-                salesTrackerList.CheckInternetAndSetupSalesTrackerList(dateId,mSalesmanId);
+                mSalesList.CheckInternetAndSetupSalesTrackerList(dateId,mSalesmanId);
             }
 
             @Override
@@ -147,11 +157,47 @@ public class SalesmanSalesDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //context item is selected
+
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final int pos = item.getOrder();
+        switch (item.getItemId()){
+            case R.id.action_delete:
+                //delete dialog
+                builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mSalesList.checkInternetAndDeleteSales(mSalesList.getSalesTrackerList(pos).getSalesId());
+                        //refresh
+                        refreshList();
+                    }
+                }).setNegativeButton(R.string.cancel,null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
 
     /*
-    * Method to check internet and if present fetch list
-    * else Display no internet snackbar
+    * Method to check internet and refresh list
     * */
+    private void refreshList() {
+        if(Util.isConnectedToInternet(getApplication())){
+            checkInternetAndSetupDateSpinner();
+        }else{
+            Util.noInternetSnackbar(getApplication(),mLayoutForSnackbar);
+        }
+    }
+
+    /*
+        * Method to check internet and if present fetch list
+        * else Display no internet snackbar
+        * */
     private void checkInternetAndSetupDateSpinner(){
         if(Util.isConnectedToInternet(getApplicationContext())){
             fetchSalesmanSalesDateListInBackground();

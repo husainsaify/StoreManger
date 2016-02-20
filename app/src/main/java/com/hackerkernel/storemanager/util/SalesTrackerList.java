@@ -218,6 +218,7 @@ public class SalesTrackerList {
 
         SalesTrackerAdapter adapter = new SalesTrackerAdapter(mContext);
         adapter.setList(list);
+        adapter.notifyDataSetChanged();
         mSalesTrackerRecyclerView.setAdapter(adapter);
     }
 

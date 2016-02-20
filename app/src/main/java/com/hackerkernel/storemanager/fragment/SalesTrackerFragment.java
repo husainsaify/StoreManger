@@ -1,6 +1,7 @@
 package com.hackerkernel.storemanager.fragment;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -87,6 +89,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
     private String mDateId = null;
 
     private SalesTrackerList mSalesList;
+    private AlertDialog.Builder builder;
 
 
     public SalesTrackerFragment() {
@@ -106,6 +109,11 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         db = new Database(getActivity());
 
         mDateList = new ArrayList<>();
+
+        //Delete alert dialog
+        builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.delete)
+                .setMessage("Are you sure? You want to delete this sales");
 
         //indicate the Fragment will participate in menu creation
         setHasOptionsMenu(true);
@@ -181,12 +189,22 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        int pos = item.getOrder();
+        final int pos = item.getOrder();
         switch (item.getItemId()){
             case R.id.action_delete:
-                mSalesList.checkInternetAndDeleteSales(mSalesList.getSalesTrackerList(pos).getSalesId());
-                //refresh
-                refreshList();
+                //delete dialog
+                builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mSalesList.checkInternetAndDeleteSales(mSalesList.getSalesTrackerList(pos).getSalesId());
+                        //refresh
+                        refreshList();
+                    }
+                }).setNegativeButton(R.string.cancel,null);
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 break;
         }
         return super.onContextItemSelected(item);

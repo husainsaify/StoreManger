@@ -14,6 +14,7 @@ public interface Keys {
     String KEY_COM_CATEGORYID = "categoryId";
     String KEY_COM_CATEGORYNAME = "categoryName";
     String KEY_COM_SALESMANID = "salesmanId";
+    String KEY_COM_SALESID = "salesId";
     String KEY_DEFAULT = "";
 
 
@@ -49,8 +50,7 @@ public interface Keys {
             KEY_SL_COUNT = "count";
 
     //Add products
-    String PRAM_AP_USERID = "userId",
-            PRAM_AP_IMAGE = "pImage",
+    String PRAM_AP_IMAGE = "pImage",
             PRAM_AP_NAME = "pName",
             PRAM_AP_CODE = "pCode",
             PRAM_AP_CP = "pCP",
@@ -133,5 +133,4 @@ public interface Keys {
     //PRAM for search
     String PRAM_SEARCH_NAME = "name",
             PRAM_SEARCH_SIZE = "size";
-
 }

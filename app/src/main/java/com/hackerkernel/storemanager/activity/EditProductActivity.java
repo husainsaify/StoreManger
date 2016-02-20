@@ -582,7 +582,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 Map<String,String> param = new HashMap<>();
                 param.put(Keys.KEY_COM_PRODUCTID,mProductId);
                 param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
-                param.put(Keys.PRAM_AP_USERID,mUserId);
+                param.put(Keys.KEY_COM_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);
                 param.put(Keys.PRAM_AP_NAME,name);
                 param.put(Keys.PRAM_AP_CODE,mProductCode);

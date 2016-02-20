@@ -21,6 +21,7 @@ import com.hackerkernel.storemanager.extras.Keys;
 import com.hackerkernel.storemanager.network.VolleySingleton;
 import com.hackerkernel.storemanager.parser.JsonParser;
 import com.hackerkernel.storemanager.pojo.SalesTrackerPojo;
+import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 
 import java.io.File;
@@ -342,6 +343,68 @@ public class SalesTrackerList {
                     Log.e(TAG, "HUS: getSalesTrackerFromCache: " + e.getMessage());
                 }
             }
+        }
+    }
+
+    /************************ DELETE SALES *******************************/
+    /*
+    * check internet
+    * if present delete sales
+    * else show no internet snackbar
+    * */
+    public void checkInternetAndDeleteSales(String salesId){
+        if(Util.isConnectedToInternet(mContext)){
+            deleteSalesInBackground(salesId);
+        }else{
+            Util.noInternetSnackbar(mContext,mLayout);
+        }
+    }
+
+    private void deleteSalesInBackground(final String salesId) {
+        Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.DELETE_SALES, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //parse response
+                parseDeleteSalesResponse(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG,"HUS: deleteSalesInBackground: "+error.getMessage());
+                error.printStackTrace();
+                //Handle volley error
+                String errorString = VolleySingleton.handleVolleyError(error);
+                if (errorString != null){
+                    Util.redSnackbar(mContext,mLayout,errorString);
+                }
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> param = new HashMap<>();
+                param.put(Keys.KEY_COM_USERID,mUserId);
+                param.put(Keys.KEY_COM_SALESID,salesId);
+                return param;
+            }
+        };
+
+        mRequestQueue.add(request);
+    }
+
+    /*
+    * Method to parse delete sales response
+    * */
+    private void parseDeleteSalesResponse(String response) {
+        List<SimplePojo> list = JsonParser.simpleParser(response);
+        if (list != null){
+            if (list.get(0).getReturned()){
+                Util.greenSnackbar(mContext, mLayout, mContext.getString(R.string.sales_deleted_succefully));
+            }else{
+                Util.redSnackbar(mContext,mLayout,list.get(0).getMessage());
+            }
+        }else{
+            Toast.makeText(mContext, R.string.failed_to_delete_sales,Toast.LENGTH_LONG).show();
         }
     }
 }

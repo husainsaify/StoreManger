@@ -27,6 +27,7 @@ public class ApiUrl {
             EDIT_CATEGORY_NAME = SERVER + "edtCategory.php",
             DELETE_CATEGORY = SERVER + "deleteCategory.php",
             CAL_SALESMAN_COMMISSION = SERVER + "calculateCommission.php",
-            GET_SALESMAN_SALES_DATE_LIST = SERVER + "salesmanSalesDateList.php";
+            GET_SALESMAN_SALES_DATE_LIST = SERVER + "salesmanSalesDateList.php",
+            DELETE_SALES = SERVER + "deleteSales.php";
 }
 

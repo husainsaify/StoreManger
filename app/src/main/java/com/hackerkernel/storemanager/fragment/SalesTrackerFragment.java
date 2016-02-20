@@ -184,8 +184,9 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         int pos = item.getOrder();
         switch (item.getItemId()){
             case R.id.action_delete:
-                //Sales id
-                    Toast.makeText(getActivity(),"Pos "+pos+ " sales id "+mSalesList.getSalesTrackerList(pos).getSalesId(),Toast.LENGTH_LONG).show();
+                mSalesList.checkInternetAndDeleteSales(mSalesList.getSalesTrackerList(pos).getSalesId());
+                //refresh
+                refreshList();
                 break;
         }
         return super.onContextItemSelected(item);

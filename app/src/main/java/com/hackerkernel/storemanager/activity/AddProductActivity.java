@@ -414,7 +414,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 Map<String,String> param = new HashMap<>();
                 param.put(Keys.KEY_COM_CATEGORYNAME,mCategoryName);
                 param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
-                param.put(Keys.PRAM_AP_USERID,mUserId);
+                param.put(Keys.KEY_COM_USERID,mUserId);
                 param.put(Keys.PRAM_AP_IMAGE,encodedImage);
                 param.put(Keys.PRAM_AP_NAME,name);
                 param.put(Keys.PRAM_AP_CODE,code);

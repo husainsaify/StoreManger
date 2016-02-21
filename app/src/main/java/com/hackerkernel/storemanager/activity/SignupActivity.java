@@ -1,9 +1,11 @@
 package com.hackerkernel.storemanager.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.extras.ApiUrl;
 import com.hackerkernel.storemanager.extras.Keys;
@@ -25,6 +36,9 @@ import com.hackerkernel.storemanager.pojo.SignupPojo;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +47,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class SignupActivity extends AppCompatActivity {
+    private static final String TAG = SignupActivity.class.getSimpleName();
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.signup_fullname) EditText mFullname;
     @Bind(R.id.signup_storename) EditText mStoreName;
@@ -41,10 +56,14 @@ public class SignupActivity extends AppCompatActivity {
     @Bind(R.id.signup_password) EditText mPassword;
     @Bind(R.id.signup_button) Button mButton;
     @Bind(R.id.signup_layout) LinearLayout mLayout;
+    //fb Login
+    @Bind(R.id.fb_login) LoginButton mFBLoginButton;
+    private CallbackManager callbackManager;
 
     private RequestQueue mRequestQueue;
     private List<SignupPojo> mSignupList;
     private ProgressDialog pd;
+
 
     //Variable to store value enter by the user in the register form
     String storename;
@@ -79,6 +98,45 @@ public class SignupActivity extends AppCompatActivity {
                 checkSignup();
             }
         });
+
+        //When Facebook login button is clicked
+        callbackManager = CallbackManager.Factory.create();
+        mFBLoginButton.setReadPermissions("email");
+        mFBLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken token = loginResult.getAccessToken();
+                GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        Log.d("HUS","HUS: fbResponse "+response.toString());
+                        setFacebookDataToFields(object);
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, first_name, last_name, email"); // Parámetros que pedimos a facebook
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplicationContext(), R.string.cancelled_fb_login,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), "Failed Facebook login "+error.getMessage(),Toast.LENGTH_LONG).show();
+                Log.e(TAG, "HUS: registerCallback(fb login) " + error.getMessage());
+                error.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
     private void checkSignup() {
@@ -182,5 +240,37 @@ public class SignupActivity extends AppCompatActivity {
         }
     }
 
+    /*
+    * METHOD TO send facebook data to signup fields
+    * */
+    public void setFacebookDataToFields(JSONObject data) {
+        try {
+            String firstname = null,
+                    lastname = null,
+                    email = null;
+            if(data.has("first_name") && !data.isNull("first_name")){
+                firstname = data.getString("first_name");
+            }
+            if(data.has("last_name") && !data.isNull("last_name")){
+                lastname = data.getString("last_name");
+            }
+            if(data.has("email") && !data.isNull("email")){
+                email = data.getString("email");
+            }
 
+            //set to fields
+            if(firstname != null || lastname != null){
+                mFullname.setText(firstname + " " + lastname);
+            }
+            if(email != null){
+                mEmail.setText(email);
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), R.string.unable_to_parse_fb_login_rsponse,Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

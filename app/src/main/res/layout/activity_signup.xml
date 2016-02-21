@@ -39,19 +39,6 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_signup_storename"
-                android:theme="@style/TextLabel">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/signup_storename"
-                    android:hint="@string/storename"/>
-            </android.support.design.widget.TextInputLayout>
-
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/layout_signup_email"
                 android:theme="@style/TextLabel">
                 <EditText
@@ -78,6 +65,19 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/layout_signup_storename"
+                android:theme="@style/TextLabel">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/signup_storename"
+                    android:hint="@string/storename"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/layout_signup_password"
                 android:theme="@style/TextLabel">
                 <EditText
@@ -97,6 +97,11 @@
                 android:textColor="@color/iconColor"
                 android:background="@drawable/primary_button"/>
 
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/fb_login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="10dp" />
 
         </LinearLayout>
 

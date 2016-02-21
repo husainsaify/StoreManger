@@ -17,6 +17,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+        <!-- facebook meta data -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <!-- facebook meta data -->
+
+        <!-- fb login activity -->
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:label="@string/app_name" />
+        <!--/ fb login activity -->
+
         <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -113,7 +127,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
         </activity>
-        <activity android:name=".activity.SalesmanSalesDetailActivity"
+        <activity
+            android:name=".activity.SalesmanSalesDetailActivity"
             android:parentActivityName=".activity.ManageSalesmanActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

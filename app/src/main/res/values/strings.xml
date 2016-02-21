@@ -173,4 +173,7 @@
         <item>Take Picture</item>
         <item>Choose Picture</item>
     </string-array>
+    <string name="facebook_app_id">1742993272653713</string>
+    <string name="cancelled_fb_login">Cancelled Facebook login</string>
+    <string name="unable_to_parse_fb_login_rsponse">Unable to parse Facebook login response. Try Signup</string>
 </resources>

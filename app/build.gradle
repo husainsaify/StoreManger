@@ -28,4 +28,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.0.0'
 }

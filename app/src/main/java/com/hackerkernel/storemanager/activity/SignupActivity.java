@@ -106,10 +106,12 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 AccessToken token = loginResult.getAccessToken();
+                pd.show();
                 GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         Log.d("HUS","HUS: fbResponse "+response.toString());
+                        pd.dismiss();
                         setFacebookDataToFields(object);
                     }
                 });

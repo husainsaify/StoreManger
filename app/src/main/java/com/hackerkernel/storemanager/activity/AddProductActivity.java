@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -271,20 +270,21 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     * */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.gc();
         //camera
         if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK && data != null){
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             mProductImage.setImageBitmap(photo);
 
-            //set Camera image into Member varialble
+            //set Camera image into Member variable
             mSelectedImage = photo;
         }else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
-            Uri selectedImage = data.getData();
-            mProductImage.setImageURI(selectedImage);
-
-            //set gallery image into Member varialble
+            Uri selectedImageUri = data.getData();
             try {
-                mSelectedImage = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                //set gallery image into Member varialble
+                mSelectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+                mProductImage.setImageBitmap(mSelectedImage);
+
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.e(TAG,"HUS: onActivityResult "+e.getMessage());

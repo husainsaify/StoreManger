@@ -133,7 +133,7 @@ public class SearchActivity extends AppCompatActivity {
                 int position = mCategorySpinner.getSelectedItemPosition();
 
                 //some category is selected
-                if((position != 0) && (mCategoryList!= null)){
+                if((position > 0) && (mCategoryList!= null)){
                     /*
                     * Subtract 1 from From Category spinner because we have added a placeholder text their
                     * */

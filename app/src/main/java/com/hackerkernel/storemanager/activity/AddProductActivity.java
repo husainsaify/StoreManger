@@ -41,9 +41,11 @@ import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.ImageSeletion;
+import com.hackerkernel.storemanager.util.ImageUtil;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.io.IOException;
+import java.nio.InvalidMarkException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -280,16 +282,16 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             mSelectedImage = photo;
         }else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
             Uri selectedImageUri = data.getData();
-            try {
-                //set gallery image into Member varialble
-                mSelectedImage = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+            //Get path of the image file from it Uri
+            String imagePath = ImageUtil.getFilePathFromUri(getApplication(),selectedImageUri);
+            if (imagePath != null){
+                //Decode image to Low resolution
+                mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath,280,150);
                 mProductImage.setImageBitmap(mSelectedImage);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG,"HUS: onActivityResult "+e.getMessage());
-                Toast.makeText(getApplication(),getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(getApplicationContext(),R.string.file_not_found,Toast.LENGTH_LONG).show();
             }
+
         }
     }
 

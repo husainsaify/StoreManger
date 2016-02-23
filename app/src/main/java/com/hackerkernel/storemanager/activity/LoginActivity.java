@@ -58,6 +58,17 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        /*
+        * Check User is logged in from SharedPreferences
+        * if user Is login send him to HomeActivity
+        * Else be in this screen
+        * */
+        MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
+        if(sharedPreferences.checkUser()){
+            //Go to HomeActivity
+            Util.goToHomeActivity(getApplication());
+        }
+
         //make a progress dialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));

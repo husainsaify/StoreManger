@@ -84,6 +84,18 @@ public class SignupActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+        /*
+        * Check User is logged in from SharedPreferences
+        * if user Is login send him to HomeActivity
+        * Else be in this screen
+        * */
+        MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
+        if(sharedPreferences.checkUser()){
+            //Go to HomeActivity
+            Util.goToHomeActivity(getApplication());
+        }
+
         //make a progress dialog
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.pleasewait));
@@ -110,7 +122,7 @@ public class SignupActivity extends AppCompatActivity {
                 GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.d("HUS","HUS: fbResponse "+response.toString());
+                        Log.d("HUS", "HUS: fbResponse " + response.toString());
                         pd.dismiss();
                         setFacebookDataToFields(object);
                     }
@@ -123,12 +135,12 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void onCancel() {
-                Toast.makeText(getApplicationContext(), R.string.cancelled_fb_login,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.cancelled_fb_login, Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(getApplicationContext(), "Failed Facebook login "+error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Failed Facebook login " + error.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e(TAG, "HUS: registerCallback(fb login) " + error.getMessage());
                 error.printStackTrace();
             }

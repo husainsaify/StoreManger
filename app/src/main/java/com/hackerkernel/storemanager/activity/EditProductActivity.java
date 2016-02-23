@@ -42,6 +42,7 @@ import com.hackerkernel.storemanager.pojo.SimplePojo;
 import com.hackerkernel.storemanager.storage.Database;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.ImageSeletion;
+import com.hackerkernel.storemanager.util.ImageUtil;
 import com.hackerkernel.storemanager.util.Util;
 
 import org.json.JSONException;
@@ -501,7 +502,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             //code to convert image to Base64
             String encodedImage = "";
             if(mImageBitmap != null){
-                encodedImage = mImageSelection.compressImageToBase64(mImageBitmap);
+                encodedImage = ImageUtil.compressImageToBase64(mImageBitmap);
             }
 
             //check name is more then 3 char long

@@ -6,7 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Class to decode image and other stuff
@@ -15,11 +18,11 @@ public class ImageUtil {
     /*
     *  Method to get full path from it Uri
     * */
-    public static String getFilePathFromUri(Context context,Uri uri){
+    public static String getFilePathFromUri(Context context, Uri uri) {
         String filePath = null;
         String[] filePathCol = {MediaStore.Images.Media.DATA};
-        Cursor cursor = context.getContentResolver().query(uri,filePathCol,null,null,null);
-        if (cursor != null){
+        Cursor cursor = context.getContentResolver().query(uri, filePathCol, null, null, null);
+        if (cursor != null) {
             cursor.moveToFirst();
             int colIndex = cursor.getColumnIndex(filePathCol[0]);
             filePath = cursor.getString(colIndex);
@@ -35,7 +38,7 @@ public class ImageUtil {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
-        Log.d("HUS","HUS: IMAGE old: height "+height+" width "+width);
+        Log.d("HUS", "HUS: IMAGE old: height " + height + " width " + width);
         int inSampleSize = 1;
 
         if (height > reqHeight || width > reqWidth) {
@@ -57,12 +60,12 @@ public class ImageUtil {
     /*
     * METHOD to decode HighResolution bitmap
     * */
-    public static Bitmap decodeBitmapFromFilePath(String filePath,int reqWidth, int reqHeight) {
+    public static Bitmap decodeBitmapFromFilePath(String filePath, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath,options);
+        BitmapFactory.decodeFile(filePath, options);
 
         // Calculate inSampleSize
         options.inSampleSize = calculateImageInSampleSize(options, reqWidth, reqHeight);
@@ -70,7 +73,28 @@ public class ImageUtil {
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
         Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
-        Log.d("HUS","HUS: IMAGE new: height "+bitmap.getHeight()+" width "+bitmap.getWidth());
+        Log.d("HUS", "HUS: IMAGE new: height " + bitmap.getHeight() + " width " + bitmap.getWidth());
         return bitmap;
+    }
+
+    /*
+    * METHOD to get image uri from bitmap
+    * */
+    public static Uri getImageUri(Context context, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    /*
+    * METHOD to compress image to Base64 String
+    * */
+    public static String compressImageToBase64(Bitmap bitmap) {
+        //compress the image
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        //convert image to  Base64 encoded string
+        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
     }
 }

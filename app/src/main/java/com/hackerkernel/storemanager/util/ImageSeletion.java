@@ -1,28 +1,38 @@
 package com.hackerkernel.storemanager.util;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.util.Base64;
+import android.widget.Toast;
 
 import com.hackerkernel.storemanager.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Class to handle all the stuff realeated to ImageSelection
  */
-public class ImageSeletion{
+public class ImageSeletion {
 
     public int TAKE_PICTURE = 1; //camera
     public int CHOSE_PICTURE = 2; //gallery
+    public String mCameraImage = null;
     private Context mContext;
 
-    public ImageSeletion(Context context){
+    public ImageSeletion(Context context) {
         this.mContext = context;
     }
 
@@ -40,13 +50,14 @@ public class ImageSeletion{
                         break;
                 }
             }
-        }).setNegativeButton(R.string.cancel,null).show();
+        }).setNegativeButton(R.string.cancel, null).show();
     }
 
     /*
     * Code to open gallery and select Image from their
     * */
     private void selectImageFromGallery() {
+
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         galleryIntent.setType("image/*");
         ((Activity) mContext).startActivityForResult(galleryIntent, CHOSE_PICTURE);
@@ -55,17 +66,44 @@ public class ImageSeletion{
     /*
     * This method will open camera and allow user to take a picture
     * */
-    private void captureImageFromCamera(){
+    private void captureImageFromCamera() {
+
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        ((Activity) mContext).startActivityForResult(cameraIntent, TAKE_PICTURE);
+        //Ensure camera is available
+        if (cameraIntent.resolveActivity(mContext.getPackageManager()) != null){
+            try {
+                File image = createImageTempFile();
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,Uri.fromFile(image));
+                ((Activity) mContext).startActivityForResult(cameraIntent, TAKE_PICTURE);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(mContext, R.string.failed_to_create_camera_image,Toast.LENGTH_LONG).show();
+            }
+        }else{
+            Toast.makeText(mContext, R.string.failed_to_open_camera,Toast.LENGTH_LONG).show();
+        }
     }
 
-    public String compressImageToBase64(Bitmap bitmap){
-        //compress the image
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,70,byteArrayOutputStream);
+    /*
+    * Method to create a temp file for camera where camera image will be saved
+    * */
+    private File createImageTempFile() throws IOException {
+        //create name
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String fileName = "IMG_"+timestamp;
+        //Storage dir for file
+        File storageDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        //convert image to  Base64 encoded string
-        return Base64.encodeToString(byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+        File image =  File.createTempFile(fileName, ".jpg", storageDir);
+        //store image path to Member varaible
+        mCameraImage = image.getAbsolutePath();
+        return image;
     }
+
+    //Method to get Camera Image Path
+    public String getCameraImagePath() {
+        return mCameraImage;
+    }
+
 }

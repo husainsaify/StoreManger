@@ -177,4 +177,7 @@
     <string name="cancelled_fb_login">Cancelled Facebook login</string>
     <string name="unable_to_parse_fb_login_rsponse">Unable to parse Facebook login response. Try Signup</string>
     <string name="sellin_price_cannot_be_zero">Selling price cannot be ZERO</string>
+    <string name="failed_to_open_camera">Failed to open camera</string>
+    <string name="failed_to_create_camera_image">Failed to create camera image</string>
+    <string name="failed_to_load_image">Failed to load image</string>
 </resources>

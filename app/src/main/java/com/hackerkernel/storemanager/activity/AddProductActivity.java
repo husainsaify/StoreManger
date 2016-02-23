@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -44,8 +43,6 @@ import com.hackerkernel.storemanager.util.ImageSeletion;
 import com.hackerkernel.storemanager.util.ImageUtil;
 import com.hackerkernel.storemanager.util.Util;
 
-import java.io.IOException;
-import java.nio.InvalidMarkException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,25 +52,40 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 
-public class AddProductActivity extends AppCompatActivity implements View.OnClickListener{
+public class AddProductActivity extends AppCompatActivity implements View.OnClickListener {
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
 
-    @Bind(R.id.addProductLayout) LinearLayout mLayout;
-    @Bind(R.id.toolbar) Toolbar mToolbar;
-    @Bind(R.id.productImage) ImageView mProductImage;
-    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
-    @Bind(R.id.productName) EditText mProductName;
-    @Bind(R.id.productCode) EditText mProductCode;
-    @Bind(R.id.productCostPrice) EditText mProductCP;
-    @Bind(R.id.productSellingPrice) EditText mProductSP;
-    @Bind(R.id.productSizeLayout) LinearLayout mSizeLayout;
-    @Bind(R.id.productQuantityLayout) LinearLayout mQuantityLayout;
-    @Bind(R.id.productDeleteLayout) LinearLayout mDeleteLayout;
-    @Bind(R.id.productSize) EditText mProductSize;
-    @Bind(R.id.productQuantity) EditText mProductQuantity;
-    @Bind(R.id.productDelete) Button mProductDelete;
-    @Bind(R.id.addProduct) Button mAddProduct;
+    @Bind(R.id.addProductLayout)
+    LinearLayout mLayout;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.productImage)
+    ImageView mProductImage;
+    @Bind(R.id.categorySpinner)
+    Spinner mCategorySpinner;
+    @Bind(R.id.productName)
+    EditText mProductName;
+    @Bind(R.id.productCode)
+    EditText mProductCode;
+    @Bind(R.id.productCostPrice)
+    EditText mProductCP;
+    @Bind(R.id.productSellingPrice)
+    EditText mProductSP;
+    @Bind(R.id.productSizeLayout)
+    LinearLayout mSizeLayout;
+    @Bind(R.id.productQuantityLayout)
+    LinearLayout mQuantityLayout;
+    @Bind(R.id.productDeleteLayout)
+    LinearLayout mDeleteLayout;
+    @Bind(R.id.productSize)
+    EditText mProductSize;
+    @Bind(R.id.productQuantity)
+    EditText mProductQuantity;
+    @Bind(R.id.productDelete)
+    Button mProductDelete;
+    @Bind(R.id.addProduct)
+    Button mAddProduct;
 
 
     private String mUserId;
@@ -93,6 +105,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     //variable to hold camera or gallery
     private Bitmap mSelectedImage = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,23 +133,23 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         mRequestQueue = VolleySingleton.getInstance().getRequestQueue();
 
         //setup category Spinner
-        mCategorySimpleList = Util.setupCategorySpinnerFromDb(getBaseContext(),db,mUserId,mCategorySpinner,false);
+        mCategorySimpleList = Util.setupCategorySpinnerFromDb(getBaseContext(), db, mUserId, mCategorySpinner, false);
 
         //check category is not null
-        if (mCategorySimpleList == null){
-            Util.redSnackbar(getApplication(),mLayout,getString(R.string.it_seem_your_havent_added_any_category));
+        if (mCategorySimpleList == null) {
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.it_seem_your_havent_added_any_category));
             return;
         }
         /*
         * Check intent has send categoryId & categoryName
         * if yes store them in Member variables
         * */
-        if(getIntent().hasExtra(Keys.KEY_COM_CATEGORYID) && getIntent().hasExtra(Keys.KEY_COM_CATEGORYNAME)){
+        if (getIntent().hasExtra(Keys.KEY_COM_CATEGORYID) && getIntent().hasExtra(Keys.KEY_COM_CATEGORYNAME)) {
             mCategoryId = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYID);
             mCategoryName = getIntent().getExtras().getString(Keys.KEY_COM_CATEGORYNAME);
 
             //Set spinner to category Id
-            Util.setSpinnerPostionToCategoryID(mCategorySimpleList,mCategoryId,mCategorySpinner);
+            Util.setSpinnerPostionToCategoryID(mCategorySimpleList, mCategoryId, mCategorySpinner);
         }
 
         //When An item is selected in spinner
@@ -150,7 +163,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                Toast.makeText(getApplicationContext(), R.string.select_category_to_continue,Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.select_category_to_continue, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -181,7 +194,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             //when Camera image is clicked open ChosePicture alertDialog
             case R.id.productImage:
                 mImageSelection.selectImage();
@@ -209,7 +222,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         delete.setOnClickListener(deleteBtnClick);
 
         //set icon
-        Drawable icon = ContextCompat.getDrawable(getApplication(),R.drawable.ic_delete_black);
+        Drawable icon = ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black);
         delete.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         //set size & quantity
@@ -236,7 +249,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         @Override
         public void onClick(View v) {
             //only allow to remove views when its more then one
-            if(mSizeList.size() > 1  && mQuantityList.size() > 1){
+            if (mSizeList.size() > 1 && mQuantityList.size() > 1) {
                 int tag = (int) v.getTag();
                 int index = tag - 1; //because array starts with zero and tag starts with 1
                 //Get the reference of size,Quantity and delete button
@@ -257,10 +270,10 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
                 //reset all the delete button tags
                 for (int i = 0; i < mDeleteList.size(); i++) {
-                    mDeleteList.get(i).setTag(i+1);
+                    mDeleteList.get(i).setTag(i + 1);
                 }
-            }else{
-                Toast.makeText(getApplication(), R.string.atleast_one_size_quantity_field,Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplication(), R.string.atleast_one_size_quantity_field, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -274,27 +287,33 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         System.gc();
         //camera
-        if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK && data != null){
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            mProductImage.setImageBitmap(photo);
+        if (requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK) {
+            //Get camera image Path
+            String imagePath = mImageSelection.getCameraImagePath();
+            if (imagePath != null) {
+                Log.d(TAG,"HUS: PATH "+imagePath);
+                //Get bitmap from file Path
+                mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath, 280, 150);
+                mProductImage.setImageBitmap(mSelectedImage);
+                Toast.makeText(getApplicationContext(),"HUS: IMG height " + mSelectedImage.getHeight() + " Width " + mSelectedImage.getWidth(),Toast.LENGTH_LONG).show();
+            } else {
+                Util.redSnackbar(getApplicationContext(), mLayout, getString(R.string.failed_to_load_image));
+            }
 
-            //set Camera image into Member variable
-            mSelectedImage = photo;
-        }else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){ //gallery
+        } else if (requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null) { //gallery
             Uri selectedImageUri = data.getData();
             //Get path of the image file from it Uri
-            String imagePath = ImageUtil.getFilePathFromUri(getApplication(),selectedImageUri);
-            if (imagePath != null){
+            String imagePath = ImageUtil.getFilePathFromUri(getApplication(), selectedImageUri);
+            if (imagePath != null) {
                 //Decode image to Low resolution
-                mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath,280,150);
+                mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath, 280, 150);
                 mProductImage.setImageBitmap(mSelectedImage);
-            }else {
-                Toast.makeText(getApplicationContext(),R.string.file_not_found,Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.file_not_found, Toast.LENGTH_LONG).show();
             }
 
         }
     }
-
 
 
     @Override
@@ -308,7 +327,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.loadMore:
                 loadMore();
                 break;
@@ -319,7 +338,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
 
     private void addProduct() {
         //get all the texts from the fields
-        String  name = mProductName.getText().toString().trim(),
+        String name = mProductName.getText().toString().trim(),
                 code = mProductCode.getText().toString().trim(),
                 cp = mProductCP.getText().toString().trim(),
                 sp = mProductSP.getText().toString().trim();
@@ -328,32 +347,32 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         * Get image if user has added one
         * */
         String encodedImage = "";
-        if(mSelectedImage != null){
+        if (mSelectedImage != null) {
             //Compress image to Base64
-            encodedImage = mImageSelection.compressImageToBase64(mSelectedImage);
+            encodedImage = ImageUtil.compressImageToBase64(mSelectedImage);
         }
 
         // if any field is empty
-        if(name.isEmpty() || code.isEmpty() || cp.isEmpty() || sp.isEmpty()){
+        if (name.isEmpty() || code.isEmpty() || cp.isEmpty() || sp.isEmpty()) {
             Util.redSnackbar(getApplication(), mLayout, getString(R.string.fillin_all_fields));
             return;
         }
 
         //check name is more then 3 char long
-        if(name.length() < 3){
-            Util.redSnackbar(getApplication(),mLayout,getString(R.string.name_more_then_2));
+        if (name.length() < 3) {
+            Util.redSnackbar(getApplication(), mLayout, getString(R.string.name_more_then_2));
             return;
         }
 
         //check code
-        if(code.length() < 3){
+        if (code.length() < 3) {
             Util.redSnackbar(getApplication(), mLayout, getString(R.string.pcode_more_then_2));
             return;
         }
 
         //check sp is not smaller then cp
         int difference = Integer.parseInt(sp) - Integer.parseInt(cp);
-        if(difference < 0){
+        if (difference < 0) {
             Util.redSnackbar(getApplication(), mLayout, getString(R.string.sp_cannot_be_then_cp));
             return;
         }
@@ -367,11 +386,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             String size = mSizeList.get(i).getText().toString().trim();
             String quantity = mQuantityList.get(i).getText().toString().trim();
 
-            if (size.isEmpty() || quantity.isEmpty()){
+            if (size.isEmpty() || quantity.isEmpty()) {
                 //display error
-                Util.redSnackbar(getApplication(),mLayout,getString(R.string.size_quantity_canot_empty));
+                Util.redSnackbar(getApplication(), mLayout, getString(R.string.size_quantity_canot_empty));
                 return;
-            }else{
+            } else {
                 //add to StringBuilder
                 sizeBuilder.append(size).append(",");
                 quantityBuilder.append(quantity).append(",");
@@ -379,24 +398,24 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }
 
         //Check user has internet connection of not
-        if(Util.isConnectedToInternet(getApplication())){
+        if (Util.isConnectedToInternet(getApplication())) {
             //Call addProductInBackground to add product to API
-            addProductInBackground(encodedImage,name,code,cp,sp,sizeBuilder.toString(),quantityBuilder.toString());
-        }else{
-            Util.noInternetSnackbar(getApplicationContext(),mLayout);
+            addProductInBackground(encodedImage, name, code, cp, sp, sizeBuilder.toString(), quantityBuilder.toString());
+        } else {
+            Util.noInternetSnackbar(getApplicationContext(), mLayout);
         }
     }
 
-     /*
-      * Method to make a call to API and save product data
-      * */
-    private void addProductInBackground(final String encodedImage, final String name, final String code, final String cp, final String sp, final String size, final String quantity){
+    /*
+     * Method to make a call to API and save product data
+     * */
+    private void addProductInBackground(final String encodedImage, final String name, final String code, final String cp, final String sp, final String size, final String quantity) {
         pd.show(); //show progressbar
-        StringRequest request = new StringRequest(Request.Method.POST,ApiUrl.ADD_PRODUCT, new Response.Listener<String>() {
+        StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.ADD_PRODUCT, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 pd.dismiss(); //hide progressbar
-                Log.d(TAG,"HUS: response "+response);
+                Log.d(TAG, "HUS: response " + response);
                 //parse response
                 parseAddProductResponse(response);
             }
@@ -406,24 +425,24 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                 pd.dismiss(); //hide progressbar
                 //handle Volley error
                 String errorMessage = VolleySingleton.handleVolleyError(error);
-                if(errorMessage != null){
-                    Util.redSnackbar(getApplication(),mLayout,errorMessage);
+                if (errorMessage != null) {
+                    Util.redSnackbar(getApplication(), mLayout, errorMessage);
                 }
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> param = new HashMap<>();
-                param.put(Keys.KEY_COM_CATEGORYNAME,mCategoryName);
-                param.put(Keys.KEY_COM_CATEGORYID,mCategoryId);
-                param.put(Keys.KEY_COM_USERID,mUserId);
-                param.put(Keys.PRAM_AP_IMAGE,encodedImage);
-                param.put(Keys.PRAM_AP_NAME,name);
-                param.put(Keys.PRAM_AP_CODE,code);
-                param.put(Keys.PRAM_AP_CP,cp);
-                param.put(Keys.PRAM_AP_SP,sp);
-                param.put(Keys.PRAM_AP_SIZE,size);
-                param.put(Keys.PRAM_AP_QUANTITY,quantity);
+                Map<String, String> param = new HashMap<>();
+                param.put(Keys.KEY_COM_CATEGORYNAME, mCategoryName);
+                param.put(Keys.KEY_COM_CATEGORYID, mCategoryId);
+                param.put(Keys.KEY_COM_USERID, mUserId);
+                param.put(Keys.PRAM_AP_IMAGE, encodedImage);
+                param.put(Keys.PRAM_AP_NAME, name);
+                param.put(Keys.PRAM_AP_CODE, code);
+                param.put(Keys.PRAM_AP_CP, cp);
+                param.put(Keys.PRAM_AP_SP, sp);
+                param.put(Keys.PRAM_AP_SIZE, size);
+                param.put(Keys.PRAM_AP_QUANTITY, quantity);
                 return param;
             }
         };
@@ -434,25 +453,25 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     /*
     * Method to parse addProductInBackground response and display result
     * */
-    private void parseAddProductResponse(String response){
+    private void parseAddProductResponse(String response) {
         //parse response and store the result in a list
         List<SimplePojo> list = JsonParser.simpleParser(response);
 
         //check the response list is not null
-        if(list != null){
+        if (list != null) {
             SimplePojo current = list.get(0);
 
-            if(current.getReturned()){//success
-                Toast.makeText(getApplication(),current.getMessage(),Toast.LENGTH_LONG).show();
+            if (current.getReturned()) {//success
+                Toast.makeText(getApplication(), current.getMessage(), Toast.LENGTH_LONG).show();
                 //restart activity
                 Intent restartIntent = getIntent();
                 finish();
                 startActivity(restartIntent);
-            }else{//error
-                Util.redSnackbar(getApplication(),mLayout,current.getMessage());
+            } else {//error
+                Util.redSnackbar(getApplication(), mLayout, current.getMessage());
             }
-        }else{ //when the list is null show this message
-            Toast.makeText(getApplication(),R.string.unable_to_parse_response,Toast.LENGTH_LONG).show();
+        } else { //when the list is null show this message
+            Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
         }
     }
 }

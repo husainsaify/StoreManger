@@ -243,6 +243,12 @@ public class NonListedProductFragment extends Fragment implements View.OnClickLi
                 String costprice = mProductCostPriceList.get(i).getText().toString().trim();
                 String sellingprice = mProductSellingPriceList.get(i).getText().toString().trim();
 
+                //check selling price is not zero
+                if (Integer.parseInt(sellingprice) <= 0){
+                    Util.redSnackbar(getActivity(), mLayout, getString(R.string.sellin_price_cannot_be_zero));
+                    return;
+                }
+
                 //check fields are not empty
                 if(name.isEmpty() || size.isEmpty() || quantity.isEmpty() || costprice.isEmpty() || sellingprice.isEmpty()){
                     Util.redSnackbar(getActivity(),mLayout,getString(R.string.fillin_all_fields));

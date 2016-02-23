@@ -201,6 +201,12 @@ public class ListedProductFragment extends Fragment implements View.OnClickListe
                 return;
             }
 
+            //check selling price is not zero
+            if (Integer.parseInt(sellingprice) <= 0){
+                Util.redSnackbar(getActivity(), mLayout, getString(R.string.sellin_price_cannot_be_zero));
+                return;
+            }
+
             addSalesInBackground(customerName,quantity,sellingprice);
         }else{
             Util.noInternetSnackbar(getActivity(),mLayout);

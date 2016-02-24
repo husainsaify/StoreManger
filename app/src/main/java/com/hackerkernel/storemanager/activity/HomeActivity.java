@@ -65,29 +65,60 @@ public class HomeActivity extends AppCompatActivity{
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
                 switch (id) {
-                    case R.id.menu_add_category:
+                    //add sales
+                    case R.id.menu_add_sales:
                         mDrawerLayout.closeDrawers();
-                        goToAddCategoryActivity();
+                        startActivity(new Intent(getApplication(),AddSalesActivity.class));
                         break;
-                    case R.id.menu_add_product:
-                        mDrawerLayout.closeDrawers();
-                        startActivity(new Intent(getApplication(),AddProductActivity.class));
-                        break;
+
+                    //manager salesman
                     case R.id.menu_manage_salesman:
                         mDrawerLayout.closeDrawers();
                         startActivity(new Intent(getApplication(), ManageSalesmanActivity.class));
                         break;
+
+                    //add salesman
+                    case R.id.menu_add_salesman:
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(getApplication(),AddSalesman.class));
+                        break;
+
+                    //cal commission
                     case R.id.menu_calculate_commission:
                         mDrawerLayout.closeDrawers();
                         startActivity(new Intent(getApplication(), CalculateCommissionActivity.class));
                         break;
-                    case R.id.menu_setting:
+
+                    //add category
+                    case R.id.menu_add_category:
+                        mDrawerLayout.closeDrawers();
+                        goToAddCategoryActivity();
                         break;
+
+                    //add product
+                    case R.id.menu_add_product:
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(getApplication(),AddProductActivity.class));
+                        break;
+
+                    //search
+                    case R.id.menu_search:
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(getApplication(),SearchActivity.class));
+                        break;
+
+                    //share
+                    case R.id.menu_share:
+                        mDrawerLayout.closeDrawers();
+                        shareAppLink();
+                        break;
+
+                    //logout
                     case R.id.menu_logout:
+                        mDrawerLayout.closeDrawers();
                         Util.logout(getApplication()); //logout
                         break;
-                    case R.id.menu_share:
-                        break;
+
                 }
                 return true;
             }
@@ -140,5 +171,15 @@ public class HomeActivity extends AppCompatActivity{
      * */
     private void goToAddCategoryActivity() {
         startActivity(new Intent(getApplication(), AddCategoryActivity.class));
+    }
+
+    private void shareAppLink(){
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, "Store Manager");
+        String sAux = "Store Manager\nHey check out a new app that help you maintain and manage your shop(Store) with the help of your smartphone\nI am loving it give it a try\n";
+        sAux = sAux + "http://goo.gl/p0n5sB\n";
+        i.putExtra(Intent.EXTRA_TEXT, sAux);
+        startActivity(Intent.createChooser(i, "choose one"));
     }
 }

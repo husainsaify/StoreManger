@@ -2,39 +2,51 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/menu_add_sales"
+            android:icon="@drawable/ic_add_category_black"
+            android:title="@string/add_sales" />
+        <item
+            android:id="@+id/menu_manage_salesman"
+            android:icon="@drawable/ic_salesman_black"
+            android:title="@string/manage_salesman" />
+        <item
+            android:id="@+id/menu_add_salesman"
+            android:icon="@drawable/ic_person_add_black"
+            android:title="@string/add_salesman" />
+
+        <item
+            android:id="@+id/menu_calculate_commission"
+            android:icon="@drawable/ic_sales_tracker_black"
+            android:title="@string/calculate_commission" />
+
+        <item
             android:id="@+id/menu_add_category"
             android:icon="@drawable/ic_add_category_black"
             android:title="@string/add_category" />
         <item
             android:id="@+id/menu_add_product"
             android:icon="@drawable/ic_product_black"
-            android:title="@string/add_product" />
+            android:title="@string/add_product_firstL_uper" />
+
         <item
-            android:id="@+id/menu_manage_salesman"
-            android:icon="@drawable/ic_salesman_black"
-            android:title="@string/manage_salesman" />
-        <item
-            android:id="@+id/menu_calculate_commission"
-            android:icon="@drawable/ic_sales_tracker_black"
-            android:title="@string/calculate_commission" />
-        <item
-            android:id="@+id/menu_setting"
-            android:icon="@drawable/ic_settings_black"
-            android:title="@string/settings" />
+            android:id="@+id/menu_search"
+            android:icon="@drawable/ic_search"
+            android:title="@string/search"/>
+
+
+        <item android:title="@string/social">
+            <menu>
+                <item
+                    android:id="@+id/menu_share"
+                    android:icon="@drawable/ic_share_black"
+                    android:title="@string/share" />
+            </menu>
+        </item>
         <item
             android:id="@+id/menu_logout"
             android:icon="@drawable/ic_logout_black"
             android:title="@string/logout" />
+
     </group>
-
-    <item android:title="Social">
-        <menu>
-            <item
-                android:id="@+id/menu_share"
-                android:icon="@drawable/ic_share_black"
-                android:title="@string/share" />
-        </menu>
-    </item>
-
 
 </menu>

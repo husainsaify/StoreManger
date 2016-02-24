@@ -78,7 +78,7 @@ public class Util {
 
     public static void noInternetSnackbar(Context context, View layout) {
         final Snackbar snack = Snackbar.make(layout, context.getString(R.string.please_check_your_internt), Snackbar.LENGTH_INDEFINITE);
-        snack.setAction(context.getString(R.string.retry_big), new View.OnClickListener() {
+        snack.setAction(R.string.hide, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //dismiss Snackbar

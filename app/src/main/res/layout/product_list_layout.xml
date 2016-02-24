@@ -16,7 +16,8 @@
         android:id="@+id/productImage"
         android:layout_marginRight="5dp"
         android:layout_marginEnd="5dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/product_image"/>
 
     <TextView
         android:layout_width="wrap_content"

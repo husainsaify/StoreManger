@@ -36,6 +36,7 @@
                     android:id="@+id/productImage"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/placeholder"
+                    android:contentDescription="@string/product_image"
                     android:scaleType="centerCrop"/>
 
             </RelativeLayout>
@@ -129,6 +130,7 @@
 
             <!-- size and quantity (Container) -->
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/Addp_linerlayout_margin"

@@ -38,6 +38,7 @@
                         android:layout_height="match_parent"
                         android:id="@+id/productImage"
                         android:scaleType="centerCrop"
+                        android:contentDescription="@string/tap_to_select_product_image"
                         android:src="@drawable/tap_to_select_image" />
 
                 </RelativeLayout>
@@ -147,6 +148,7 @@
 
                 <!-- size and quantity (Container) -->
                 <LinearLayout
+                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/Addp_linerlayout_margin"

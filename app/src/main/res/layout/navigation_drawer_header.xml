@@ -11,6 +11,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/user_icon"
         android:src="@drawable/ic_navigation_drawer_header_icon"
         android:id="@+id/navigationHeaderIcon" />
 

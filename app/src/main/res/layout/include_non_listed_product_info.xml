@@ -11,7 +11,7 @@
             android:text="@string/product_name"
             android:textColor="@color/primaryColor" />
 
-        <EditText android:id="@+id/productName" />
+        <EditText android:id="@+id/productName" android:inputType="text" />
     </TableRow>
 
     <TableRow>

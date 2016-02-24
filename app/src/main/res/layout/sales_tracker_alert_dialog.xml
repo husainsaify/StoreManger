@@ -108,6 +108,7 @@
         </TableLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -123,7 +124,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total SP"
+                    android:text="@string/total_sp"
                     android:textColor="@color/primaryColor" />
 
                 <TextView
@@ -142,7 +143,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total CP"
+                    android:text="@string/total_cp"
                     android:textColor="@color/primaryColor" />
 
                 <TextView

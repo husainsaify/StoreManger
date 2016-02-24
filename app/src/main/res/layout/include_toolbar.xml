@@ -20,6 +20,6 @@
         android:visibility="gone"
         android:indeterminateTint="@color/iconColor"
         android:indeterminateTintMode="src_in"
-        android:layout_gravity="right"/>
+        android:layout_gravity="end"/>
 
 </android.support.v7.widget.Toolbar>

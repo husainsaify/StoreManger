@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:padding="10dp"
+        android:contentDescription="@string/icon"
         android:src="@drawable/ic_format_list_bulleted_black_48dp" />
 
     <TextView

@@ -24,7 +24,6 @@
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:text="@string/no_category_added"
         android:id="@+id/emptyRecyclerView"
-        android:layout_below="@+id/toolbar"
         android:visibility="gone"
         android:layout_margin="10dp"/>
 

@@ -1,19 +1,7 @@
 <resources>
     <string name="app_name">Store Manager</string>
     <string name="login">LOGIN</string>
-    <string name="settings">Settings</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="register">Register!</string>
-    <string name="password_hint">Enter Your Password</string>
-    <string name="email_hint">Enter Your Email</string>
-    <string name="title_activity_register">Register</string>
-    <string name="hello_world">Hello world!</string>
     <string name="fullname">Fullname</string>
-    <string name="enter_your_fullname">Enter Your Fullname</string>
-    <string name="mobile_hint">Enter Your Mobile Number</string>
-    <string name="describe_your_store">Describe Your Store</string>
-    <string name="invite_me">Invite Me</string>
-    <string name="opps">OOPS!!</string>
     <string name="fillin_all_fields">Fill In All The Fields</string>
     <string name="ok">OK</string>
     <string name="add">ADD</string>
@@ -22,9 +10,7 @@
     <string name="name_more_then_2">Name should be more then 2 characters.</string>
     <string name="invalid_email">Invalid email address.</string>
     <string name="invalid_phnumber">Invalid phone number.</string>
-    <string name="invalid_desc">Store description should be more then 6 characters.</string>
     <string name="pleasewait">Please wait</string>
-    <string name="failed_to_insert">Failed to insert records</string>
     <string name="title_activity_home">HomeActivity</string>
     <!-- home -->
     <string name="logout">Logout</string>
@@ -34,20 +20,14 @@
     <string name="category_canot_empty">Category name cannot be empty</string>
     <string name="category_more_3_char">Category name too short.</string>
     <string name="category_more_20_char">Category name should not be more then 20 characters.</string>
-    <string name="oops">OOPS!</string>
     <string name="no_category_added">It\'s seem you haven\'t added any Category yet! Click on the plus icon to add one.</string>
     <string name="title_activity_product">product</string>
     <string name="title_activity_add_product">AddProductActivity</string>
     <!-- add product activity -->
     <string name="add_product">Add product</string>
-    <string name="select_image">Select Image</string>
     <string name="size">Size</string>
     <string name="quantity">Quantity</string>
     <string name="load_more">Load More</string>
-    <string name="enter_prod_name">Enter product name</string>
-    <string name="enter_prod_code">Enter product code</string>
-    <string name="enter_cp">Enter cost price</string>
-    <string name="enter_sp">Enter selling price</string>
     <string name="pcode_more_then_2">Product code must be more then 2 characters</string>
     <string name="size_quantity_canot_empty">Size &amp; Quantity cannot be empty</string>
     <!-- Product Activity -->
@@ -57,41 +37,22 @@
     <string name="delete">Delete</string>
     <string name="product_deleted_successfully">Product deleted successFully</string>
     <string name="error_in_deleting_product">Error in deleting product</string>
-    <string name="title_activity_search">SearchActivity</string>
     <string name="search">Search</string>
-    <string name="enter_product_name">Enter product Name or Code</string>
     <string name="product_name_not_empty">Product name should not be empty</string>
-    <string name="title_activity_sell">SellActivity</string>
-    <string name="sell">Sell</string>
     <string name="sp_cp_profit">SP - CP = Profit</string>
-    <string name="sp_cp_loss">CP - SP = Loss</string>
-    <string name="sp_cp_breakeven">SP - CP = Breakeven</string>
     <string name="external_storage_not_available">External storage not avaialbe</string>
-    <string name="price_per_unit">Price per unit</string>
-    <string name="product_image">Product Image</string>
-    <string name="please_select_product">Please select a product</string>
-    <string name="sale_tracker">Sales Tracker</string>
-    <string name="title_activity_sale_tracker">SaleTrackerActivity</string>
-    <string name="no_sales">It seems you haven\'t entered any sale</string>
-    <string name="sp">Selling Price</string>
     <string name="cp">Cost Price</string>
-    <string name="profit">Profit</string>
-    <string name="loss">Loss</string>
-    <string name="faild_to_load_sales_list">Failed to load salesTracker list</string>
     <string name="total_sales">Total sales</string>
     <string name="product_code">Product Code</string>
     <string name="selling_price">Selling price</string>
     <string name="cost_price">Cost price</string>
     <string name="total_cost_price">Total cost Price</string>
     <string name="product_name">Product Name</string>
-    <string name="break_even">Break even</string>
-    <string name="view_product">View Product</string>
     <string name="signup">SIGNUP</string>
     <string name="password">Password</string>
     <string name="login_small">Login</string>
     <string name="email">Email</string>
     <string name="please_check_your_internt">Check your internet connection</string>
-    <string name="retry_big">RETRY</string>
     <string name="signup_small">Signup</string>
     <string name="phone_number">Phone number</string>
     <string name="storename">Storename</string>
@@ -110,7 +71,6 @@
     <string name="name_to_short">Name to short</string>
     <string name="name_should_be_less_20">Name should be less then 20 characters</string>
     <string name="no_salesman_added">It\'s seem you haven\'t added any salesman yet! Click on the plus icon to add one</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="category_capital">CATEGORY</string>
     <string name="salestracker_capital">SALES TRACKER</string>
     <string name="unable_to_load_category">Unable to load category. Add a category if you haven\'t</string>
@@ -119,7 +79,6 @@
     <string name="file_not_found">File not found</string>
     <string name="select_category_to_continue">Select a category to continue</string>
     <string name="no_product_found">No Product found for this category. Click on plus icon to add one</string>
-    <string name="no_data_found_on_local">No data found on local storage. Please check your internet connection and try again</string>
     <string name="internal_error_restart_app">Internal error Unable to start activity. Restart app or try login</string>
     <string name="unable_display_product_info_check_inetnet">Unable to display product information. Check your internet connection</string>
     <string name="failed_create_directory">Failed to create directory</string>
@@ -127,8 +86,6 @@
     <string name="image_saved_successfully">Image saved successfully!</string>
     <string name="check_your_internet_and_try_again">Check your internet and Try again.</string>
     <string name="are_your_sure_you_want_to_delete_this">Are you sure? You want to delete this product</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="sp_cannot_be_then_cp">Selling price cannot be smaller then cost price</string>
     <string name="edit">Edit</string>
     <string name="done">DONE</string>
@@ -145,7 +102,6 @@
     <string name="select_valid_product_from_product_name">Select a valid product from Product name</string>
     <string name="select_date">Select Date</string>
     <string name="no_sales_click_on_plus_to_add">It seems your haven\'t added any sales yet. Click on the plus icon to add one</string>
-    <string name="no_internet_getting_st_from_local_storage">No internet avaialble. Getting SalesTracker From local storage.</string>
     <string name="check_internt_failed_to_get_st_from_local">Check your internet connection. Failed to get SalesTracker From local storage</string>
     <string name="edit_category_name">Edit category name</string>
     <string name="delete_category">Delete category</string>
@@ -157,7 +113,6 @@
     <string name="commission_percentage">Commission percentage</string>
     <string name="select_from_date">Select From date</string>
     <string name="select_to_date">Select TO date</string>
-    <string name="select_from_to_date">Select different From and TO dates</string>
     <string name="from_date_cannot_be_after_to">FROM date cannot be after TO date</string>
     <string name="enter_commission_percentage">Enter commission percentage</string>
     <string name="commission_per_cannot_be_more_then_100">Commission percentage cannot be more then 100%</string>
@@ -185,4 +140,12 @@
     <string name="hide">hide</string>
     <string name="add_product_firstL_uper">Add Product</string>
     <string name="social">Social</string>
+    <string name="placeholder_dots">----</string>
+    <string name="totalk_cost_price">Total Cost price</string>
+    <string name="total_sp">Total SP</string>
+    <string name="total_cp">Total CP</string>
+    <string name="icon">Icon</string>
+    <string name="user_icon">User icon</string>
+    <string name="tap_to_select_product_image">Tap to select product image</string>
+    <string name="product_image">Product image</string>
 </resources>

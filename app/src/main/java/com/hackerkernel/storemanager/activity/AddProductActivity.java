@@ -299,6 +299,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
                     mProductImage.setImageBitmap(mSelectedImage);
                 else
                     Toast.makeText(getApplicationContext(), R.string.failed_to_decode_image_from_camera,Toast.LENGTH_LONG).show();
+
             } else {
                 Util.redSnackbar(getApplicationContext(), mLayout, getString(R.string.failed_to_load_image));
             }

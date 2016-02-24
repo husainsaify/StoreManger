@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -180,31 +181,46 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //take picture (camera)
-        if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK && data != null){
-            //get bitmap
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+        if(requestCode == mImageSelection.TAKE_PICTURE && resultCode == RESULT_OK){
+            //Get camera image path
+            String imagePath = mImageSelection.getCameraImagePath();
 
-            //set bitmap to view
-            mProductImage.setImageBitmap(photo);
+            //check image path is not null
+            if (imagePath != null){
+                //decode image from file path and store it in member variable
+                mImageBitmap = ImageUtil.decodeBitmapFromFilePath(imagePath,280,150);
 
-            //set Bitmap to member varaible (for upload)
-            mImageBitmap = photo;
+                //check Selected image is not bull
+                if (mImageBitmap != null)
+                    mProductImage.setImageBitmap(mImageBitmap);
+                else
+                    Toast.makeText(getApplicationContext(), R.string.failed_to_decode_image_from_camera,Toast.LENGTH_LONG).show();
+
+            }else{
+                Util.redSnackbar(getApplicationContext(), mLayout, getString(R.string.failed_to_load_image));
+            }
         }
         //choose picture (gallery)
         else if(requestCode == mImageSelection.CHOSE_PICTURE && resultCode == RESULT_OK && data != null){
             //get image uri
             Uri imageUri = data.getData();
 
-            //set image to view
-            mProductImage.setImageURI(imageUri);
+            //Get image path
+            String imagePath = ImageUtil.getFilePathFromUri(getApplicationContext(),imageUri);
 
-            //set to member varaible
-            try {
-                mImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),imageUri);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e(TAG,"HUS: onActivityResult "+e.getMessage());
-                Toast.makeText(getApplication(),getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
+            //check image path is not null
+            if (imagePath != null){
+                //Decode Selected bitmap and store in member variable
+                mImageBitmap = ImageUtil.decodeBitmapFromFilePath(imagePath,280,150);
+
+                //check decoded image is not null
+                if (mImageBitmap != null)
+                    mProductImage.setImageBitmap(mImageBitmap);
+                else
+                    Toast.makeText(getApplicationContext(),R.string.failed_to_decode_image_from_gallery,Toast.LENGTH_LONG).show();
+
+            }else {
+                Toast.makeText(getApplicationContext(), R.string.file_not_found, Toast.LENGTH_LONG).show();
             }
         }
     }

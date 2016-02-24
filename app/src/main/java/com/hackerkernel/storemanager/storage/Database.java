@@ -462,6 +462,20 @@ public class Database {
         return list;
     }
 
+    /*
+    * Method to delete all data
+    * */
+    public void deleteAllData(){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_SALESMAN,null,null);
+        db.delete(DatabaseHelper.TABLE_CATEGORY,null,null);
+        db.delete(DatabaseHelper.TABLE_PRODUCT_LIST,null,null);
+        db.delete(DatabaseHelper.TABLE_PRODUCT,null,null);
+        db.delete(DatabaseHelper.TABLE_SQ,null,null);
+        db.delete(DatabaseHelper.TABLE_PRODUCT_URI,null,null);
+        db.delete(DatabaseHelper.TABLE_ST_DATELIST,null,null);
+    }
+
 
     /*********************** DATABASE SCHEMA CLASS **********************************/
     private class DatabaseHelper extends SQLiteOpenHelper {

@@ -103,6 +103,11 @@ public class Util {
     public static void logout(Context context) {
         //delete the user data from Shared Prefernece
         MySharedPreferences.getInstance(context).deleteUser();
+
+        //Delete all data from Sqlite databae
+        Database db = new Database(context);
+        db.deleteAllData();
+
         //send user to mainActivity
         Intent intent = new Intent(context, MainActivity.class);
         //remove back button

@@ -1,11 +1,13 @@
 package com.hackerkernel.storemanager.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -107,6 +109,9 @@ public class Util {
         //Delete all data from Sqlite databae
         Database db = new Database(context);
         db.deleteAllData();
+
+        //Delete cache which is having salesTracker file
+        deleteCache(context);
 
         //send user to mainActivity
         Intent intent = new Intent(context, MainActivity.class);
@@ -324,6 +329,34 @@ public class Util {
         }else{
             Toast.makeText(context,R.string.unable_to_load_category,Toast.LENGTH_LONG).show();
             return null;
+        }
+    }
+
+    /*
+    * Method to delete application cache
+    * */
+    public static boolean deleteCache(Context context) {
+        File cacheDir = context.getCacheDir();
+        return deleteDir(cacheDir);
+    }
+
+    private static boolean deleteDir(File dir){
+        //Delete cache
+        if (dir != null && dir.isDirectory()){
+            String[] childern = dir.list();
+            for (int i = 0; i < childern.length; i++) {
+                //delete childern
+                Log.d(TAG,"HUS: FILE "+childern[i]);
+                boolean success = deleteDir(new File(dir,childern[i]));
+                if (!success){
+                    return false;
+                }
+            }
+            return dir.delete();
+        }else if (dir != null && dir.isFile()){
+            return dir.delete();
+        }else{
+            return false;
         }
     }
 }

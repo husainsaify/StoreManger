@@ -180,4 +180,6 @@
     <string name="failed_to_open_camera">Failed to open camera</string>
     <string name="failed_to_create_camera_image">Failed to create camera image</string>
     <string name="failed_to_load_image">Failed to load image</string>
+    <string name="failed_to_decode_image_from_gallery">Failed to decode image from gallery. Try again later</string>
+    <string name="failed_to_decode_image_from_camera">Failed to decode image from camera. Try again later</string>
 </resources>

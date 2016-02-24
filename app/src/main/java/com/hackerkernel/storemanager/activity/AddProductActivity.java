@@ -291,11 +291,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             //Get camera image Path
             String imagePath = mImageSelection.getCameraImagePath();
             if (imagePath != null) {
-                Log.d(TAG,"HUS: PATH "+imagePath);
                 //Get bitmap from file Path
                 mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath, 280, 150);
-                mProductImage.setImageBitmap(mSelectedImage);
-                Toast.makeText(getApplicationContext(),"HUS: IMG height " + mSelectedImage.getHeight() + " Width " + mSelectedImage.getWidth(),Toast.LENGTH_LONG).show();
+
+                //check Selected image is not bull
+                if (mSelectedImage != null)
+                    mProductImage.setImageBitmap(mSelectedImage);
+                else
+                    Toast.makeText(getApplicationContext(), R.string.failed_to_decode_image_from_camera,Toast.LENGTH_LONG).show();
             } else {
                 Util.redSnackbar(getApplicationContext(), mLayout, getString(R.string.failed_to_load_image));
             }
@@ -307,7 +310,14 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
             if (imagePath != null) {
                 //Decode image to Low resolution
                 mSelectedImage = ImageUtil.decodeBitmapFromFilePath(imagePath, 280, 150);
-                mProductImage.setImageBitmap(mSelectedImage);
+
+                //check selected bitmap is not null
+                if(mSelectedImage != null){
+                    mProductImage.setImageBitmap(mSelectedImage);
+                }else{
+                    Toast.makeText(getApplicationContext(), R.string.failed_to_decode_image_from_gallery,Toast.LENGTH_LONG).show();
+                }
+
             } else {
                 Toast.makeText(getApplicationContext(), R.string.file_not_found, Toast.LENGTH_LONG).show();
             }

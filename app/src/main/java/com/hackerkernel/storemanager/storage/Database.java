@@ -64,6 +64,12 @@ public class Database {
         return db.delete(tablename, null, null);
     }
 
+    //method to delete only one simpleList
+    public int deleteSimpleList(String tablename,String id){
+        SQLiteDatabase db = helper.getWritableDatabase();
+        return db.delete(tablename,DatabaseHelper.COL_S_ID+"=?",new String[]{id});
+    }
+
     //get all simple list from db
     public List<SimpleListPojo> getAllSimpleList(String table, String userId) {
         SQLiteDatabase db = helper.getWritableDatabase();

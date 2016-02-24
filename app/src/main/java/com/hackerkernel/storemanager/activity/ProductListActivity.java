@@ -483,6 +483,8 @@ public class ProductListActivity extends AppCompatActivity implements SwipeRefre
         if(list != null){
             SimplePojo pojo = list.get(0);
             if (pojo.getReturned()){ //success
+                //Database delete category From sqlite database
+                db.deleteSimpleList(Database.CATEGORY,mCategoryId);
                 //Close activity
                 NavUtils.navigateUpFromSameTask(ProductListActivity.this);
             }else{ //failed

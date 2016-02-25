@@ -148,4 +148,5 @@
     <string name="user_icon">User icon</string>
     <string name="tap_to_select_product_image">Tap to select product image</string>
     <string name="product_image">Product image</string>
+    <string name="no_category_added_yet_add_cat_to_add_product">No category added yet! Add a category in order to add an product</string>
 </resources>

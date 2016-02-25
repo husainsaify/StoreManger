@@ -62,6 +62,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     @Bind(R.id.toolbar) Toolbar mToolbar;
     @Bind(R.id.noCategoryAddedYetPlaceholder) TextView mNoCategoryAddedYetPlaceholder;
     @Bind(R.id.scrollView) ScrollView mScrollView;
+    @Bind(R.id.addCategory) Button mAddCategoryBtn;
     @Bind(R.id.productImage) ImageView mProductImage;
     @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
     @Bind(R.id.productName) EditText mProductName;
@@ -129,6 +130,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if (mCategorySimpleList == null) {
             mScrollView.setVisibility(View.GONE);
             mNoCategoryAddedYetPlaceholder.setVisibility(View.VISIBLE);
+            mAddCategoryBtn.setVisibility(View.VISIBLE);
             return;
         }
         /*
@@ -223,6 +225,7 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         if (mCategorySimpleList == null){
             menu.findItem(R.id.loadMore).setVisible(false);
         }
+
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -484,5 +487,15 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         } else { //when the list is null show this message
             Toast.makeText(getApplication(), R.string.unable_to_parse_response, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+    * Go to add category activity
+    * */
+    public void goToAddCategory(View view){
+        Intent intent = new Intent(AddProductActivity.this,AddCategoryActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

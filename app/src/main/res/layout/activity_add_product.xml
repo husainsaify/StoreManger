@@ -17,9 +17,21 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:id="@+id/noCategoryAddedYetPlaceholder"
-        android:text="No category added yet! Add a category in order to add an product"
+        android:text="@string/no_category_added_yet_add_cat_to_add_product"
         style="@style/TextAppearance.AppCompat.Medium"
         android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/addCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:onClick="goToAddCategory"
+        android:textColor="@color/iconColor"
+        android:text="@string/add_category"
+        android:background="@drawable/primary_button"/>
+
     <!-- container for views -->
     <ScrollView
         android:layout_width="match_parent"

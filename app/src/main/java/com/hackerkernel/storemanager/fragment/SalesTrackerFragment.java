@@ -236,6 +236,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(String response) {
                 Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
+                Log.d(TAG,"HUS: TEST "+response);
                 parseDateListResponse(response);
             }
         }, new Response.ErrorListener() {
@@ -243,7 +244,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             public void onErrorResponse(VolleyError error) {
                 Util.setProgressBarVisible(mToolbarProgressBar, false); //hide progressbar
                 //handle volley errorString
-                Log.e(TAG, "fetchDateListInBackground: " + error.getMessage());
+                Log.e(TAG, "HUS: fetchDateListInBackground: " + error.getMessage());
                 String errrorString = VolleySingleton.handleVolleyError(error);
                 if (errrorString != null) {
                     Util.redSnackbar(getActivity(), mLayout, errrorString);
@@ -279,10 +280,12 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             * or return is false
             * */
             if (mDateList != null) {
+                Log.d(TAG,"HUS: TEST null 1");
                 //display date spinner
                 mDateSpinnerLayout.setVisibility(View.VISIBLE);
                 mProfitOrLossLayout.setVisibility(View.VISIBLE);
                 mPlaceholderWhenNoSalesAdded.setVisibility(View.GONE);
+                mSalesTrackerRecyclerView.setVisibility(View.VISIBLE);
                 //Setup date spinner
                 setUpDateSpinnerFromList(mDateList);
 
@@ -290,31 +293,34 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 db.deleteSalesTrackerDateList(mUserId);
                 db.insertSalesTrackerDateList(mDateList, mUserId);
             } else {
+                mDateSpinnerLayout.setVisibility(View.GONE);
+                mProfitOrLossLayout.setVisibility(View.GONE);
+                mSalesTrackerRecyclerView.setVisibility(View.GONE);
+                mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
+
+                Log.d(TAG,"HUS: TEST null 2");
                 //check count is smaller then zero or return false
                 String message = jsonObject.getString(Keys.KEY_COM_MESSAGE);
                 boolean returned = jsonObject.getBoolean(Keys.KEY_COM_RETURN);
                 int count = jsonObject.getInt(Keys.KEY_COM_COUNT);
 
+                //make dateId null SO that we do not Request API for sales List
+                mDateId = null;
+
+
 
                 //returned false
                 //check for error from API
                 if (!returned) {
-                    mDateSpinnerLayout.setVisibility(View.GONE);
-                    mProfitOrLossLayout.setVisibility(View.GONE);
-
-                    mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
                     mPlaceholderWhenNoSalesAdded.setText(message);
                     mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);
-                }
-                //check for no date add. Count will be zero when no sales added
-                else if (count <= 0) {
-                    //hide date spinner & profit or loss layout and show placeholder
-                    mDateSpinnerLayout.setVisibility(View.GONE);
-                    mProfitOrLossLayout.setVisibility(View.GONE);
-                    mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
+                }else if (count <= 0){
+                    mPlaceholderWhenNoSalesAdded.setText(getString(R.string.no_sales_click_on_plus_to_add));
+                    mPlaceholderWhenNoSalesAdded.setTextColor(Color.GRAY);
                 }
             }
         } catch (JSONException e) {
+            Log.d(TAG,"HUS: TEST null 3");
             Log.e(TAG, "HUS: parseDateListResponse: " + e.getMessage());
             Log.d(TAG, "HUS: parseDateListResponse: " + response);
             mDateSpinnerLayout.setVisibility(View.GONE);
@@ -322,6 +328,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             mPlaceholderWhenNoSalesAdded.setVisibility(View.VISIBLE);
             mPlaceholderWhenNoSalesAdded.setText(R.string.unable_to_parse_response);
             mPlaceholderWhenNoSalesAdded.setTextColor(Color.RED);
+            mSalesTrackerRecyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -346,11 +353,11 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             //refresh DateList
             fetchDateListInBackground();
 
-            //fetch SalesList only when we have date
+            /*//fetch SalesList only when we have date
             if (mDateId != null){
                 //refresh SalesTracker
                 mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId, "");
-            }
+            }*/
         }else {
             Util.noInternetSnackbar(getActivity(),mLayout);
         }

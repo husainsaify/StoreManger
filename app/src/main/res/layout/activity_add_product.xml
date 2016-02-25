@@ -1,253 +1,261 @@
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/addProductLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.AddProductActivity">
+
+    <!-- toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/include_toolbar" />
+    <!-- / toolbar -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:id="@+id/noCategoryAddedYetPlaceholder"
+        android:text="No category added yet! Add a category in order to add an product"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:visibility="gone"/>
+    <!-- container for views -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".activity.AddProductActivity"
-        android:id="@+id/addProductLayout">
+        android:id="@+id/scrollView"
+        android:visibility="visible">
 
-        <!-- toolbar -->
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/include_toolbar"/>
-        <!-- / toolbar -->
-
-        <!-- container for views -->
-        <ScrollView
+        <!--  Main container -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/Addp_linerlayout_margin"
+            android:layout_marginRight="@dimen/Addp_linerlayout_margin"
+            android:orientation="vertical">
 
-            <!--  Main container -->
+            <!-- Image container -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:layout_marginTop="@dimen/Addp_bottom_margin">
+
+                <ImageView
+                    android:id="@+id/productImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/tap_to_select_product_image"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/tap_to_select_image" />
+
+            </RelativeLayout>
+            <!-- / image Container -->
+
+            <!-- Category container -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/Addp_linerlayout_margin"
-                android:layout_marginRight="@dimen/Addp_linerlayout_margin"
-                android:orientation="vertical">
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:background="@drawable/background_border"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
-                <!-- Image container -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:layout_marginTop="@dimen/Addp_bottom_margin"
-                    android:layout_marginBottom="@dimen/Addp_bottom_margin">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/select_category" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/productImage"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/tap_to_select_product_image"
-                        android:src="@drawable/tap_to_select_image" />
-
-                </RelativeLayout>
-                <!-- / image Container -->
-
-                <!-- Category container -->
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/background_border"
-                    android:layout_marginBottom="@dimen/Addp_bottom_margin"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:spinnerMode="dialog" />
+
+            </LinearLayout>
+            <!-- / Category container -->
+
+            <!-- Product Info (Container) -->
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/Addp_bottom_margin"
+                android:background="@drawable/background_border"
+                android:padding="10dp"
+                android:stretchColumns="1">
+
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/select_category"
-                        android:gravity="center_vertical"/>
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/product_name" />
 
-                    <Spinner
+                    <EditText
+                        android:id="@+id/productName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/categorySpinner"
-                        android:spinnerMode="dialog" />
+                        android:inputType="text" />
+                </TableRow>
 
-                </LinearLayout>
-                <!-- / Category container -->
+                <TableRow>
 
-                <!-- Product Info (Container) -->
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/Addp_bottom_margin"
-                    android:background="@drawable/background_border"
-                    android:padding="10dp"
-                    android:stretchColumns="1">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/product_code" />
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/product_name"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            />
+                    <EditText
+                        android:id="@+id/productCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+                </TableRow>
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/productName"
-                            android:inputType="text" />
-                    </TableRow>
+                <TableRow>
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/product_code"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/cost_price" />
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/productCode"
-                            android:inputType="text" />
-                    </TableRow>
+                    <EditText
+                        android:id="@+id/productCostPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </TableRow>
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/cost_price"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            />
+                <TableRow>
 
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:id="@+id/productCostPrice" />
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp"
+                        android:text="@string/selling_price" />
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/selling_price"
-                            android:id="@+id/textView"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginEnd="5dp"
-                            />
-
-                        <EditText
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:id="@+id/productSellingPrice" />
-                    </TableRow>
+                    <EditText
+                        android:id="@+id/productSellingPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+                </TableRow>
 
 
-                </TableLayout>
-                <!-- / Product Info (Container) -->
+            </TableLayout>
+            <!-- / Product Info (Container) -->
 
-                <!-- size and quantity (Container) -->
+            <!-- size and quantity (Container) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/Addp_linerlayout_margin"
+                android:background="@drawable/background_border"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="2">
+
+                <!-- size container -->
                 <LinearLayout
-                    android:baselineAligned="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/Addp_linerlayout_margin"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    android:background="@drawable/background_border"
-                    android:padding="10dp">
+                    android:id="@+id/productSizeLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.9"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical">
 
-                    <!-- size container -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.9"
-                        android:orientation="vertical"
-                        android:animateLayoutChanges="true"
-                        android:id="@+id/productSizeLayout">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/size" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/size"
-                            android:layout_marginBottom="5dp"/>
+                    <EditText
+                        android:id="@+id/productSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
 
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/productSize"
-                            android:inputType="number"/>
-
-                    </LinearLayout>
-                    <!-- /size container -->
-
-                    <!-- quantity container -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.8"
-                        android:orientation="vertical"
-                        android:animateLayoutChanges="true"
-                        android:id="@+id/productQuantityLayout">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/quantity"
-                            android:layout_marginBottom="5dp"/>
-
-                        <EditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/productQuantity"
-                            android:inputType="number"/>
-
-
-                    </LinearLayout>
-                    <!-- / quantity container -->
-
-                    <!-- Delete Container -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.3"
-                        android:orientation="vertical"
-                        android:animateLayoutChanges="true"
-                        android:id="@+id/productDeleteLayout">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"/>
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/ic_delete_black"
-                            android:drawableStart="@drawable/ic_delete_black"
-                            android:id="@+id/productDelete"
-                            android:gravity="center"
-                            />
-
-                    </LinearLayout>
-                    <!-- Delete Container -->
                 </LinearLayout>
-                <!-- / size and quantity (Container) -->
+                <!-- /size container -->
 
-                <!-- Add Product Button -->
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add_product"
-                    android:id="@+id/addProduct"
-                    android:background="@drawable/primary_button"
-                    android:textColor="@color/iconColor"
-                    android:layout_marginBottom="20dp"/>
-                <!-- Add product Button -->
+                <!-- quantity container -->
+                <LinearLayout
+                    android:id="@+id/productQuantityLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.8"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/quantity" />
+
+                    <EditText
+                        android:id="@+id/productQuantity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number" />
+
+
+                </LinearLayout>
+                <!-- / quantity container -->
+
+                <!-- Delete Container -->
+                <LinearLayout
+                    android:id="@+id/productDeleteLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp" />
+
+                    <Button
+                        android:id="@+id/productDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_delete_black"
+                        android:drawableStart="@drawable/ic_delete_black"
+                        android:gravity="center" />
+
+                </LinearLayout>
+                <!-- Delete Container -->
             </LinearLayout>
-            <!-- / main container -->
-        </ScrollView>
-        <!-- / container for views -->
+            <!-- / size and quantity (Container) -->
 
-    </LinearLayout>
+            <!-- Add Product Button -->
+            <Button
+                android:id="@+id/addProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/primary_button"
+                android:text="@string/add_product"
+                android:textColor="@color/iconColor" />
+            <!-- Add product Button -->
+
+        </LinearLayout>
+        <!-- / main container -->
+    </ScrollView>
+    <!-- / container for views -->
+
+</LinearLayout>

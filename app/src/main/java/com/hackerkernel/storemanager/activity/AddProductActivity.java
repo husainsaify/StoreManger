@@ -21,7 +21,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -56,36 +58,23 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
     //Global varaible
     private static final String TAG = AddProductActivity.class.getSimpleName();
 
-    @Bind(R.id.addProductLayout)
-    LinearLayout mLayout;
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-    @Bind(R.id.productImage)
-    ImageView mProductImage;
-    @Bind(R.id.categorySpinner)
-    Spinner mCategorySpinner;
-    @Bind(R.id.productName)
-    EditText mProductName;
-    @Bind(R.id.productCode)
-    EditText mProductCode;
-    @Bind(R.id.productCostPrice)
-    EditText mProductCP;
-    @Bind(R.id.productSellingPrice)
-    EditText mProductSP;
-    @Bind(R.id.productSizeLayout)
-    LinearLayout mSizeLayout;
-    @Bind(R.id.productQuantityLayout)
-    LinearLayout mQuantityLayout;
-    @Bind(R.id.productDeleteLayout)
-    LinearLayout mDeleteLayout;
-    @Bind(R.id.productSize)
-    EditText mProductSize;
-    @Bind(R.id.productQuantity)
-    EditText mProductQuantity;
-    @Bind(R.id.productDelete)
-    Button mProductDelete;
-    @Bind(R.id.addProduct)
-    Button mAddProduct;
+    @Bind(R.id.addProductLayout) LinearLayout mLayout;
+    @Bind(R.id.toolbar) Toolbar mToolbar;
+    @Bind(R.id.noCategoryAddedYetPlaceholder) TextView mNoCategoryAddedYetPlaceholder;
+    @Bind(R.id.scrollView) ScrollView mScrollView;
+    @Bind(R.id.productImage) ImageView mProductImage;
+    @Bind(R.id.categorySpinner) Spinner mCategorySpinner;
+    @Bind(R.id.productName) EditText mProductName;
+    @Bind(R.id.productCode) EditText mProductCode;
+    @Bind(R.id.productCostPrice) EditText mProductCP;
+    @Bind(R.id.productSellingPrice) EditText mProductSP;
+    @Bind(R.id.productSizeLayout) LinearLayout mSizeLayout;
+    @Bind(R.id.productQuantityLayout) LinearLayout mQuantityLayout;
+    @Bind(R.id.productDeleteLayout) LinearLayout mDeleteLayout;
+    @Bind(R.id.productSize) EditText mProductSize;
+    @Bind(R.id.productQuantity) EditText mProductQuantity;
+    @Bind(R.id.productDelete) Button mProductDelete;
+    @Bind(R.id.addProduct) Button mAddProduct;
 
 
     private String mUserId;
@@ -135,9 +124,11 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         //setup category Spinner
         mCategorySimpleList = Util.setupCategorySpinnerFromDb(getBaseContext(), db, mUserId, mCategorySpinner, false);
 
-        //check category is not null
+
+        //hide all the UI is no category is added yet
         if (mCategorySimpleList == null) {
-            Util.redSnackbar(getApplication(), mLayout, getString(R.string.it_seem_your_havent_added_any_category));
+            mScrollView.setVisibility(View.GONE);
+            mNoCategoryAddedYetPlaceholder.setVisibility(View.VISIBLE);
             return;
         }
         /*
@@ -206,9 +197,38 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_add_product, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.loadMore:
+                loadMore();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //if category spinner is null hide load more menu
+        if (mCategorySimpleList == null){
+            menu.findItem(R.id.loadMore).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     /*
-    * Method to dynamically add Size, Quantity and Delete
-    * */
+        * Method to dynamically add Size, Quantity and Delete
+        * */
     private void loadMore() {
         //Set delete button
         Button delete = new Button(getApplication());
@@ -326,26 +346,6 @@ public class AddProductActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_product, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.loadMore:
-                loadMore();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void addProduct() {
         //get all the texts from the fields

@@ -146,8 +146,11 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mDateId = mDateList.get(position).getDateId();
 
-                //method to fetch Sales Tracker
-                mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId,"");
+                //fetch SalesList only when we have date
+                if (mDateId != null){
+                    //method to fetch Sales Tracker
+                    mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId,"");
+                }
             }
 
             @Override
@@ -218,7 +221,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         if (Util.isConnectedToInternet(getActivity())) {
             //download fresh date list bra
             fetchDateListInBackground();
-        } else { //no Internet avaiable
+        } else { //no Internet avaialble
             Util.noInternetSnackbar(getActivity(), mLayout);
 
             //get DateList From SQLite database
@@ -229,7 +232,6 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
 
     private void fetchDateListInBackground() {
         Util.setProgressBarVisible(mToolbarProgressBar,true); //show progressbar
-
         StringRequest request = new StringRequest(Request.Method.POST, ApiUrl.SALES_TRACKER_DATE_LIST, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -277,6 +279,10 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
             * or return is false
             * */
             if (mDateList != null) {
+                //display date spinner
+                mDateSpinnerLayout.setVisibility(View.VISIBLE);
+                mProfitOrLossLayout.setVisibility(View.VISIBLE);
+                mPlaceholderWhenNoSalesAdded.setVisibility(View.GONE);
                 //Setup date spinner
                 setUpDateSpinnerFromList(mDateList);
 
@@ -288,6 +294,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
                 String message = jsonObject.getString(Keys.KEY_COM_MESSAGE);
                 boolean returned = jsonObject.getBoolean(Keys.KEY_COM_RETURN);
                 int count = jsonObject.getInt(Keys.KEY_COM_COUNT);
+
 
                 //returned false
                 //check for error from API
@@ -326,6 +333,7 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_dropdown_item_1line, stringList);
+        adapter.notifyDataSetChanged();
         mDateSpinner.setAdapter(adapter);
     }
 
@@ -337,8 +345,12 @@ public class SalesTrackerFragment extends Fragment implements View.OnClickListen
         if(Util.isConnectedToInternet(getActivity())){
             //refresh DateList
             fetchDateListInBackground();
-            //refresh SalesTracker
-            mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId, "");
+
+            //fetch SalesList only when we have date
+            if (mDateId != null){
+                //refresh SalesTracker
+                mSalesList.CheckInternetAndSetupSalesTrackerList(mDateId, "");
+            }
         }else {
             Util.noInternetSnackbar(getActivity(),mLayout);
         }

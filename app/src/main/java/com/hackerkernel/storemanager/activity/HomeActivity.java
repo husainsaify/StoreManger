@@ -10,8 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
@@ -59,6 +63,21 @@ public class HomeActivity extends AppCompatActivity{
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
+
+        //Add footer to Navigation view
+        ListView listView = (ListView) mNavigationView.getChildAt(0);
+        View toRet = LayoutInflater.from(this).inflate(R.layout.navigation_drawer_footer, listView, false);
+        listView.addFooterView(toRet,null,false);
+
+        /*
+        * Show Navigation drawer if user is using app for the first time
+        * & store the value in shared preference
+        * */
+        if (!mSharedPreferences.getUserLearnedDrawer()){
+            mDrawerLayout.openDrawer(Gravity.LEFT);
+            //Store UserLearnedDrawer value
+            mSharedPreferences.setUserLearnedDrawer();
+        }
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

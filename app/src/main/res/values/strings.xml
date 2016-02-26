@@ -157,6 +157,7 @@
     <string name="hackerkernel.com">HackerKernel.com</string>
     <string name="about_us">About us</string>
     <string name="send_feedback">Send Feedback</string>
+    <string name="a_hackerkernel_product">A HackerKernel product</string>
     <array name="about_us_options">
         <item>Like us on facebook</item>
         <item>Say Hii to Husain Saify</item>

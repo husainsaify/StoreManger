@@ -20,6 +20,8 @@ public class MySharedPreferences {
     private String KEY_USER_EMAIL = "useremail";
     private String KEY_USER_PHONE = "userphonenumber";
     private String KEY_USER_PASWWORD = "userpassword";
+    //key To open navigation drawer for the first time user open the app
+    private String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
     private String KEY_DEFAULT = Keys.KEY_DEFAULT;
     //member variables
     private static MySharedPreferences mInstance = null;
@@ -97,5 +99,21 @@ public class MySharedPreferences {
 
     public void deleteUser(){
         mSharedPreferences.edit().clear().apply();
+    }
+
+    /*
+    * Method to get and User Learned Drawer which help
+    * open navigation drawer for the first time user use the app
+    * */
+    public void setUserLearnedDrawer(){
+        mSharedPreferences.edit().putBoolean(KEY_USER_LEARNED_DRAWER,true).apply();
+    }
+
+    /*
+    * true = user is old to the app
+    * false = user is new show drawer
+    * */
+    public boolean getUserLearnedDrawer(){
+        return mSharedPreferences.getBoolean(KEY_USER_LEARNED_DRAWER,false);
     }
 }

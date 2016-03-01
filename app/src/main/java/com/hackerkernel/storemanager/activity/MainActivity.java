@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
@@ -18,11 +19,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Bind(R.id.goToLogin) Button mGoToLogin;
     @Bind(R.id.goToSignup) Button mGoToSignup;
+    @Bind(R.id.appVersionCode) TextView mVersion;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this); //Bind Views
+
+        //add version code
+        mVersion.append(" "+getString(R.string.app_version_code));
 
         /*
         * Check User is logged in from SharedPreferences

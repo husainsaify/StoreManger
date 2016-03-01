@@ -113,6 +113,22 @@ public class HomeActivity extends AppCompatActivity{
                         shareAppLink();
                         break;
 
+                    //about us
+                    case R.id.menu_about_us:
+                        mDrawerLayout.closeDrawers();
+                        startActivity(new Intent(getApplication(),AboutUsActivity.class));
+                        break;
+
+                    //send feedback
+                    case R.id.menu_send_feedback:
+                        mDrawerLayout.closeDrawers();
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.setType("plain/text");
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "hackerkernel15@gmail.com" });
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "StoreManager Feedback");
+                        startActivity(Intent.createChooser(intent, "Send Feedback"));
+                        break;
+
                     //logout
                     case R.id.menu_logout:
                         mDrawerLayout.closeDrawers();

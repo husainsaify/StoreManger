@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -147,6 +148,7 @@
                 android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
 
         </activity>
+        <activity android:name=".appIntro.ListedNonListedAppIntro"/>
 
 
         <!--

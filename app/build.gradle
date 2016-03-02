@@ -21,7 +21,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    debugCompile 'im.dino:dbinspector:3.2.1@aar'
+    //debugCompile 'im.dino:dbinspector:3.2.1@aar'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:design:22.2.1'
@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
+    compile 'com.google.android.gms:play-services-analytics:8.4.0'
 }

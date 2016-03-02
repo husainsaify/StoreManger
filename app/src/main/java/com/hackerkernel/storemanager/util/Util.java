@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -40,14 +41,14 @@ public class Util {
     public static void redSnackbar(Context context, View layout, String text) {
         Snackbar snackbar = Snackbar.make(layout, text, Snackbar.LENGTH_LONG);
         View snack = snackbar.getView();
-        snack.setBackgroundColor(context.getResources().getColor(R.color.error_color));
+        snack.setBackgroundColor(ContextCompat.getColor(context,R.color.errorColor));
         snackbar.show();
     }
 
     public static void greenSnackbar(Context context, View layout, String text) {
         Snackbar snackbar = Snackbar.make(layout, text, Snackbar.LENGTH_LONG);
         View snack = snackbar.getView();
-        snack.setBackgroundColor(context.getResources().getColor(R.color.successColor));
+        snack.setBackgroundColor(ContextCompat.getColor(context,R.color.successColor));
         snackbar.show();
     }
 
@@ -61,6 +62,7 @@ public class Util {
         return !(phone.length() < 6 || phone.length() > 13) && Patterns.PHONE.matcher(phone).matches();
     }
 
+    //TODO: update this deperated version of network checker
     //method to check user is connected to internet
     public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

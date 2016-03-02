@@ -26,6 +26,7 @@ import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.login_small));
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mLoginList = new LinkedList<>();
 
         /*
         * Check User is logged in from SharedPreferences

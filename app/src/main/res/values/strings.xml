@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Store Manager</string>
-    <string name="app_version_code">1.0</string>
+    <string name="app_version_code">1.1</string>
     <string name="app_version_name">Beta</string>
     <string name="login">LOGIN</string>
     <string name="fullname">Fullname</string>

@@ -65,9 +65,9 @@ public class HomeActivity extends AppCompatActivity{
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
         //Add footer to Navigation view
-        ListView listView = (ListView) mNavigationView.getChildAt(0);
+        /*ListView listView = (ListView) mNavigationView.getChildAt(0);
         View toRet = LayoutInflater.from(this).inflate(R.layout.navigation_drawer_footer, listView, false);
-        listView.addFooterView(toRet,null,false);
+        listView.addFooterView(toRet,null,false);*/
 
         /*
         * Show Navigation drawer if user is using app for the first time
@@ -160,8 +160,9 @@ public class HomeActivity extends AppCompatActivity{
         });
 
         //set user information on the Navigation drawer Header
-        TextView headerStoreName = (TextView) mNavigationView.findViewById(R.id.navigationHeaderShopname);
-        TextView headerFullName = (TextView) mNavigationView.findViewById(R.id.navigationHeaderName);
+        View header = mNavigationView.getHeaderView(0);
+        TextView headerStoreName = (TextView) header.findViewById(R.id.navigationHeaderShopname);
+        TextView headerFullName = (TextView) header.findViewById(R.id.navigationHeaderName);
         headerStoreName.setText(mSharedPreferences.getUserStorename());
         headerFullName.setText(mSharedPreferences.getUserFullname());
     }
@@ -213,7 +214,7 @@ public class HomeActivity extends AppCompatActivity{
         i.setType("text/plain");
         i.putExtra(Intent.EXTRA_SUBJECT, "Store Manager");
         String sAux = "Store Manager\nHey check out a new app that help you maintain and manage your shop(Store) with the help of your smartphone\nI am loving it give it a try\n";
-        sAux = sAux + "http://goo.gl/p0n5sB\n";
+        sAux = sAux + "https://goo.gl/zHPo5g\n";
         i.putExtra(Intent.EXTRA_TEXT, sAux);
         startActivity(Intent.createChooser(i, "choose one"));
     }

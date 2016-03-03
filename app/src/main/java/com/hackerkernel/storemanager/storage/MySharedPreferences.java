@@ -19,14 +19,19 @@ public class MySharedPreferences {
     private String KEY_USER_STORENAME = "userstorename";
     private String KEY_USER_EMAIL = "useremail";
     private String KEY_USER_PHONE = "userphonenumber";
-    private String KEY_USER_PASWWORD = "userpassword";
+    private String KEY_USER_PASSWORD = "userpassword";
+
     //key To open navigation drawer for the first time user open the app
-    private String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
+    public static String KEY_USER_LEARNED_DRAWER = "user_learned_drawer";
+
+    //Key TO show Listed & Non Listed app intro
+    public static String KEY_ADD_SALES_APPINTRO = "add_sales_app_intro";
+
+    //DEFAULT VALUE
     private String KEY_DEFAULT = Keys.KEY_DEFAULT;
     //member variables
     private static MySharedPreferences mInstance = null;
     private static SharedPreferences mSharedPreferences;
-    private static SharedPreferences.Editor mSPEditor;
     private static Context mContext;
 
     private MySharedPreferences(){
@@ -49,7 +54,7 @@ public class MySharedPreferences {
                 .putString(KEY_USER_STORENAME,storename)
                 .putString(KEY_USER_EMAIL,email)
                 .putString(KEY_USER_PHONE,phone)
-                .putString(KEY_USER_PASWWORD,password).apply();
+                .putString(KEY_USER_PASSWORD,password).apply();
         Log.d(TAG,"HUS: Saved data in sharedPref");
     }
 
@@ -60,7 +65,7 @@ public class MySharedPreferences {
                 .putString(KEY_USER_STORENAME,data.getStorename())
                 .putString(KEY_USER_EMAIL,data.getEmail())
                 .putString(KEY_USER_PHONE,data.getPhone())
-                .putString(KEY_USER_PASWWORD,data.getPassword()).apply();
+                .putString(KEY_USER_PASSWORD,data.getPassword()).apply();
     }
 
     /*
@@ -98,22 +103,33 @@ public class MySharedPreferences {
     }
 
     public void deleteUser(){
-        mSharedPreferences.edit().clear().apply();
+        mSharedPreferences.edit()
+                .remove(KEY_USER_ID)
+                .remove(KEY_USER_FULLNAME)
+                .remove(KEY_USER_STORENAME)
+                .remove(KEY_USER_EMAIL)
+                .remove(KEY_USER_PHONE)
+                .remove(KEY_USER_PASSWORD)
+                .apply();
     }
 
     /*
-    * Method to get and User Learned Drawer which help
-    * open navigation drawer for the first time user use the app
+    * Method to set Boolean Values for (Drawer,Appintro etc)
+    *
+    * This method set the value to true for the given key
     * */
-    public void setUserLearnedDrawer(){
-        mSharedPreferences.edit().putBoolean(KEY_USER_LEARNED_DRAWER,true).apply();
+    public void setBooleanKey(String keyname){
+        mSharedPreferences.edit().putBoolean(keyname, true).apply();
     }
 
     /*
-    * true = user is old to the app
-    * false = user is new show drawer
+    * THIS METHOD WILL GET THE BOOLEAN VALUE
+    * TRUE = MEANS USER IS OLD TO THE APP
+    * FALSE = MEANS USER IS NEW (OPEN DRAWER OR SHOW APP INTRO)
     * */
-    public boolean getUserLearnedDrawer(){
-        return mSharedPreferences.getBoolean(KEY_USER_LEARNED_DRAWER,false);
+    public boolean getBooleanKey(String keyname){
+        return mSharedPreferences.getBoolean(keyname,false);
     }
+
+
 }

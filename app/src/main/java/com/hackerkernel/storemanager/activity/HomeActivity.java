@@ -64,19 +64,14 @@ public class HomeActivity extends AppCompatActivity{
 
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
 
-        //Add footer to Navigation view
-        /*ListView listView = (ListView) mNavigationView.getChildAt(0);
-        View toRet = LayoutInflater.from(this).inflate(R.layout.navigation_drawer_footer, listView, false);
-        listView.addFooterView(toRet,null,false);*/
-
         /*
         * Show Navigation drawer if user is using app for the first time
         * & store the value in shared preference
         * */
-        if (!mSharedPreferences.getUserLearnedDrawer()){
+        if (!mSharedPreferences.getBooleanKey(MySharedPreferences.KEY_USER_LEARNED_DRAWER)){
             mDrawerLayout.openDrawer(Gravity.LEFT);
             //Store UserLearnedDrawer value
-            mSharedPreferences.setUserLearnedDrawer();
+            mSharedPreferences.setBooleanKey(MySharedPreferences.KEY_USER_LEARNED_DRAWER);
         }
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

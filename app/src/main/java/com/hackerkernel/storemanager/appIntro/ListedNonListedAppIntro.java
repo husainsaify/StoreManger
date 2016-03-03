@@ -3,13 +3,13 @@ package com.hackerkernel.storemanager.appIntro;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
 import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.hackerkernel.storemanager.R;
 import com.hackerkernel.storemanager.activity.AddSalesActivity;
-import com.hackerkernel.storemanager.activity.MainActivity;
-import com.hackerkernel.storemanager.fragment.AppIntroSlideFragment;
 
 /**
  * Class to show app Intro for Listed & non Listed activity on AddSales
@@ -17,15 +17,17 @@ import com.hackerkernel.storemanager.fragment.AppIntroSlideFragment;
 public class ListedNonListedAppIntro extends AppIntro {
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
-        addSlide(AppIntroSlideFragment.newInstance(R.layout.slide1_listed_nolisted_intro));
-        addSlide(AppIntroSlideFragment.newInstance(R.layout.slide2_listed_nolisted_intro));
 
-        showSkipButton(true);
+        addSlide(AppIntroFragment.newInstance(getString(R.string.listed_product_big),
+                "Sale those product which are already added to Store Manger",R.drawable.listed_app_intro,ContextCompat.getColor(getApplicationContext(), R.color.primaryColor)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.non_listed_product_big),
+                "Sale those product which are not added to Store Manager",R.drawable.non_listed_app_intro, ContextCompat.getColor(getApplicationContext(),R.color.primaryColor)));
+        showSkipButton(false);
         showStatusBar(false);
 
         setVibrate(true);
         setVibrateIntensity(30);
-        setDepthAnimation();
+        setZoomAnimation();
     }
 
     @Override

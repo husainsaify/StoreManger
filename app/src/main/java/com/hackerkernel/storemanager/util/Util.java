@@ -60,22 +60,12 @@ public class Util {
         return !(phone.length() < 6 || phone.length() > 13) && Patterns.PHONE.matcher(phone).matches();
     }
 
-    //TODO: update this deperated version of network checker
     //method to check user is connected to internet
     public static boolean isConnectedToInternet(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        //if the phone can be connected to internet
-        if (connectivity != null) {
-            NetworkInfo[] info = connectivity.getAllNetworkInfo();
-            if (info != null) {
-                for (NetworkInfo anInfo : info) {
-                    if (anInfo.getState() == NetworkInfo.State.CONNECTED) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        ConnectivityManager manager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = manager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public static void noInternetSnackbar(Context context, View layout) {

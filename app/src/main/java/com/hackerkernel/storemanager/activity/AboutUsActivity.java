@@ -40,30 +40,33 @@ public class AboutUsActivity extends AppCompatActivity {
         mVersion.append(versionString);
 
         //when some one click list item
-        final Intent i = new Intent(Intent.ACTION_VIEW);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     //like us on facebook
                     case 0:
+                        Intent i = new Intent(Intent.ACTION_VIEW);
                         i.setData(Uri.parse("https://www.facebook.com/hackerkernel"));
                         startActivity(i);
                         break;
                     //say hi to husain saify
                     case 1:
-                        i.setData(Uri.parse("https://www.facebook.com/hackerkernel"));
-                        startActivity(i);
+                        Intent i1 = new Intent(Intent.ACTION_VIEW);
+                        i1.setData(Uri.parse("https://www.facebook.com/hunk.husain"));
+                        startActivity(i1);
                         break;
                     //subscribe on YT
                     case 2:
-                        i.setData(Uri.parse("https://www.youtube.com/user/hunklessons"));
-                        startActivity(i);
+                        Intent i2 = new Intent(Intent.ACTION_VIEW);
+                        i2.setData(Uri.parse("https://www.youtube.com/user/hunklessons"));
+                        startActivity(i2);
                         break;
                     //Blog
                     case 3:
-                        i.setData(Uri.parse("http://blog.hackerkernel.com/"));
-                        startActivity(i);
+                        Intent i3 = new Intent(Intent.ACTION_VIEW);
+                        i3.setData(Uri.parse("http://blog.hackerkernel.com/"));
+                        startActivity(i3);
                         break;
                     //contact us
                     case 4:

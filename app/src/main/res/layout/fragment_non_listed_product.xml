@@ -28,7 +28,7 @@
                 android:layout_below="@id/layoutCustomerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_more"
+                android:text="@string/add_more_fields"
                 android:id="@+id/addMore"
                 android:background="@drawable/primary_button"
                 android:textColor="@color/iconColor"/>

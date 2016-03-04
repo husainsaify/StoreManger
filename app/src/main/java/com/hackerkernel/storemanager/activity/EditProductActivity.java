@@ -4,17 +4,18 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.Image;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,7 +51,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,7 +86,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     private List<SimpleListPojo> mCategorySimpleList;
     private List<EditText> mSizeList;
     private List<EditText> mQuantityList;
-    private List<ImageButton> mDeleteList;
+    private List<Button> mDeleteList;
 
     //ImageSelection class with will help in selecting image
     private ImageSeletion mImageSelection;
@@ -361,11 +361,15 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
             size.setText(s);
             quantity.setText(q);
 
-            ImageButton deleteButton = new ImageButton(getApplication());
-            deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
-            deleteButton.setTag(i + 1);
+            Button deleteButton = new Button(getApplication());
+            deleteButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             deleteButton.setBackgroundColor(Color.TRANSPARENT);
+            deleteButton.setGravity(Gravity.CENTER);
+            deleteButton.setTag(i + 1);
             deleteButton.setOnClickListener(deleteListner);
+            //set icon
+            Drawable icon = ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black);
+            deleteButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
             //add views to layout
             mSizeLayout.addView(size);
@@ -385,11 +389,19 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
     private void loadMore() {
         EditText size = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
         EditText quantity = (EditText) getLayoutInflater().inflate(R.layout.edit_text_style_number, null);
-        ImageButton deleteButton = new ImageButton(getApplication());
-        deleteButton.setImageDrawable(ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black));
+
+        Button deleteButton = new Button(getApplication());
+        deleteButton.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //set icon and background to button
+        deleteButton.setBackgroundColor(Color.TRANSPARENT);
+        deleteButton.setGravity(Gravity.CENTER);
+
         deleteButton.setTag(mSizeList.size() + 1);
         deleteButton.setOnClickListener(deleteListner);
-        deleteButton.setBackgroundColor(Color.TRANSPARENT);
+
+        //set icon
+        Drawable icon = ContextCompat.getDrawable(getApplication(), R.drawable.ic_delete_black);
+        deleteButton.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null);
 
         //add to layout
         mSizeLayout.addView(size);
@@ -415,7 +427,7 @@ public class EditProductActivity extends AppCompatActivity implements View.OnCli
                 //get the views
                 EditText size = mSizeList.get(index);
                 EditText quantity = mQuantityList.get(index);
-                ImageButton delete = mDeleteList.get(index);
+                Button delete = mDeleteList.get(index);
 
                 //remove from layout
                 mSizeLayout.removeView(size);

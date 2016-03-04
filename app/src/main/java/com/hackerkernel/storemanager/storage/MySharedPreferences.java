@@ -27,6 +27,9 @@ public class MySharedPreferences {
     //Key TO show Listed & Non Listed app intro
     public static String KEY_ADD_SALES_APPINTRO = "add_sales_app_intro";
 
+    //Key to show Main AppIntro
+    public static String KEY_MAIN_APPINTRO = "main_app_intro";
+
     //DEFAULT VALUE
     private String KEY_DEFAULT = Keys.KEY_DEFAULT;
     //member variables

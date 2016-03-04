@@ -148,8 +148,11 @@
                 android:value="com.hackerkernel.storemanager.activity.HomeActivity" />
 
         </activity>
-        <activity android:name=".appIntro.ListedNonListedAppIntro"/>
 
+        <!-- App intro -->
+        <activity android:name=".appIntro.MainAppIntro"/>
+        <activity android:name=".appIntro.ListedNonListedAppIntro"/>
+        <!-- /App intro -->
 
         <!--
           Optionally, register AnalyticsReceiver and AnalyticsService to support background

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.hackerkernel.storemanager.R;
+import com.hackerkernel.storemanager.appIntro.MainAppIntro;
 import com.hackerkernel.storemanager.storage.MySharedPreferences;
 import com.hackerkernel.storemanager.util.Util;
 
@@ -26,6 +27,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this); //Bind Views
 
+        MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
+
+        //Show app intro if he is a first time user
+        if (!sharedPreferences.getBooleanKey(MySharedPreferences.KEY_MAIN_APPINTRO)){
+            //set user has viewed app intro to shared prefernce
+            sharedPreferences.setBooleanKey(MySharedPreferences.KEY_MAIN_APPINTRO);
+
+            //show app intro
+            startActivity(new Intent(getApplicationContext(), MainAppIntro.class));
+        }
+
         //add version code
         mVersion.append(" "+getString(R.string.app_version_code));
 
@@ -34,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         * if user Is login send him to HomeActivity
         * Else be in this screen
         * */
-        MySharedPreferences sharedPreferences = MySharedPreferences.getInstance(getApplication());
         if(sharedPreferences.checkUser()){
             //Go to HomeActivity
             Util.goToHomeActivity(getApplication());
